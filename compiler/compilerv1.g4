@@ -214,7 +214,9 @@ bitwiseAndExpr : equalityExpr ( '&' equalityExpr )* ;
 
 equalityExpr   : shiftExpr ( ( '==' | '!=' ) shiftExpr )* ;
 
-shiftExpr      : relationalExpr ( ( '<<' | '>>' ) relationalExpr )* ;
+shiftExpr      : relationalExpr ( ( '<<' | rightShiftOperator ) relationalExpr )* ;
+
+rightShiftOperator : '>' '>' ;
 
 relationalExpr : addExpr ( ( '<' | '>' | '<=' | '>=' ) addExpr )* ;
 

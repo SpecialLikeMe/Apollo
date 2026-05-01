@@ -4433,13 +4433,22 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             ScheduleTaskInfo task = schedule.mandatoryTasks.get(index);
             builder.append("{\"")
                     .append(escapeCppString(task.name))
-                    .append("\", [&]() {\n")
-                    .append(renderTopLevelLambdaBody(task.block))
-                    .append("}, true}");
+                    .append("\", ")
+                    .append(scheduleTaskHelperName(schedule, task))
+                    .append(", true}");
         }
         builder.append("});");
         return builder.toString();
     }
+
+            private String scheduleTaskHelperName(ScheduleInfo schedule, ScheduleTaskInfo task) {
+            return "__apo_schedule_"
+                + moduleSymbol
+                + "_"
+                + sanitizeModuleSymbol(schedule.name)
+                + "_"
+                + sanitizeModuleSymbol(task.name);
+            }
 
     private void writeRenderedStatement(String rendered) {
         if (rendered == null || rendered.isEmpty()) {
@@ -4455,9 +4464,41 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     }
 
     private void emitScheduleTaskForwardDeclarations() {
+        boolean wroteDeclaration = false;
+        for (ScheduleInfo schedule : schedules.values()) {
+            for (ScheduleTaskInfo task : schedule.mandatoryTasks) {
+                writeLine("static void " + scheduleTaskHelperName(schedule, task) + "();");
+                wroteDeclaration = true;
+            }
+        }
+        if (wroteDeclaration) {
+            write("\n");
+        }
     }
 
     private void emitScheduleTaskDefinitions() {
+        boolean wroteDefinition = false;
+        for (ScheduleInfo schedule : schedules.values()) {
+            for (ScheduleTaskInfo task : schedule.mandatoryTasks) {
+                writeLine("static void " + scheduleTaskHelperName(schedule, task) + "() {");
+                indentLevel++;
+                String body = renderTopLevelLambdaBody(task.block);
+                for (String line : body.split("\\n", -1)) {
+                    if (line.isEmpty()) {
+                        write("\n");
+                    } else {
+                        writeLine(line);
+                    }
+                }
+                indentLevel--;
+                writeLine("}");
+                write("\n");
+                wroteDefinition = true;
+            }
+        }
+        if (wroteDefinition) {
+            write("\n");
+        }
     }
 
     private void emitBlockContents(compilerv1Parser.BlockContext ctx) {

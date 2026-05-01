@@ -1,4 +1,4 @@
-// Generated from ./compilerv1.g4 by ANTLR 4.13.2
+// Generated from compilerv1.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -711,6 +711,12 @@ public interface compilerv1Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitShiftExpr(compilerv1Parser.ShiftExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link compilerv1Parser#rightShiftOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRightShiftOperator(compilerv1Parser.RightShiftOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link compilerv1Parser#relationalExpr}.
 	 * @param ctx the parse tree

@@ -1,4 +1,4 @@
-// Generated from ./compilerv1.g4 by ANTLR 4.13.2
+// Generated from compilerv1.g4 by ANTLR 4.13.2
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -1415,6 +1415,18 @@ public class compilerv1BaseListener implements compilerv1Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitShiftExpr(compilerv1Parser.ShiftExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRightShiftOperator(compilerv1Parser.RightShiftOperatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRightShiftOperator(compilerv1Parser.RightShiftOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

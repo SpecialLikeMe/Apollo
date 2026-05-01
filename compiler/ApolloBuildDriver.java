@@ -85,7 +85,7 @@ public final class ApolloBuildDriver {
         linkCommand.add(env.objectOutput.toString());
         linkCommand.add("-o");
         linkCommand.add(linkOutput.toString());
-        linkCommand.addAll(standaloneLinkFlags());
+        linkCommand.addAll(standaloneLinkFlags(env));
         linkCommand.addAll(gcSupport.linkFlags());
         linkCommand.addAll(pgoLinkFlags(env));
         linkCommand.addAll(linkFlags(env));
@@ -320,15 +320,33 @@ public final class ApolloBuildDriver {
         return pgoFlags(env, false);
     }
 
-    private static List<String> standaloneLinkFlags() {
-        String osName = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
-        if (osName.contains("linux")) {
-            return List.of("-static-libstdc++", "-static-libgcc");
+    private static List<String> standaloneLinkFlags(BuildEnvironment env) {
+        if (isLinuxTarget(env)) {
+            return List.of("-no-pie", "-static-libstdc++", "-static-libgcc");
         }
-        if (!osName.contains("win")) {
+        if (!isWindowsTarget(env)) {
             return List.of();
         }
         return List.of("-static", "-static-libstdc++", "-static-libgcc");
+    }
+
+    private static boolean isLinuxTarget(BuildEnvironment env) {
+        String targetTriple = env.targetTriple;
+        if (!isBlank(targetTriple)) {
+            return targetTriple.toLowerCase(Locale.ROOT).contains("linux");
+        }
+        String osName = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
+        return osName.contains("linux");
+    }
+
+    private static boolean isWindowsTarget(BuildEnvironment env) {
+        String targetTriple = env.targetTriple;
+        if (!isBlank(targetTriple)) {
+            String normalized = targetTriple.toLowerCase(Locale.ROOT);
+            return normalized.contains("windows") || normalized.contains("mingw");
+        }
+        String osName = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
+        return osName.contains("win");
     }
 
     private static List<String> pgoFlags(BuildEnvironment env, boolean compilePhase) {

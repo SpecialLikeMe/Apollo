@@ -1,4 +1,4 @@
-// Generated from ./compilerv1.g4 by ANTLR 4.13.2
+// Generated from compilerv1.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -1176,6 +1176,16 @@ public interface compilerv1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitShiftExpr(compilerv1Parser.ShiftExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link compilerv1Parser#rightShiftOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterRightShiftOperator(compilerv1Parser.RightShiftOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link compilerv1Parser#rightShiftOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitRightShiftOperator(compilerv1Parser.RightShiftOperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link compilerv1Parser#relationalExpr}.
 	 * @param ctx the parse tree

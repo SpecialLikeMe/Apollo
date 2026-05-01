@@ -54,6 +54,14 @@ cleanup_generated() {
     done < "$manifest_path"
 }
 
+run_and_capture_exit() {
+    set +e
+    "$@"
+    status=$?
+    set -e
+    return "$status"
+}
+
 prepare_codegen() {
     cd "$SCRIPT_DIR"
     if [ ! -f "$INPUT_FILE" ]; then
@@ -196,8 +204,11 @@ case "$COMMAND" in
                 printf 'LLVM JIT runner not found: %s\n' "$APOLLO_JIT_EXE" >&2
                 exit 1
             fi
-            "$APOLLO_JIT_EXE" output/output.ll
-            exit_code=$?
+            if run_and_capture_exit "$APOLLO_JIT_EXE" output/output.ll; then
+                exit_code=0
+            else
+                exit_code=$?
+            fi
             cleanup_generated
             exit "$exit_code"
         fi
@@ -211,8 +222,11 @@ case "$COMMAND" in
             exit 0
         fi
 
-        "$LINK_OUTPUT"
-        exit_code=$?
+        if run_and_capture_exit "$LINK_OUTPUT"; then
+            exit_code=0
+        else
+            exit_code=$?
+        fi
         cleanup_generated
         exit "$exit_code"
         ;;
@@ -220,8 +234,11 @@ case "$COMMAND" in
         prepare_codegen
         ASAN_OUTPUT="$SCRIPT_DIR/output/output_asan"
         "$JAVA_EXE" -cp "output/classes:$ANTLR_JAR" ApolloBuildDriver analyze "$INPUT_FILE" "$ASAN_OUTPUT"
-        "$ASAN_OUTPUT"
-        exit_code=$?
+        if run_and_capture_exit "$ASAN_OUTPUT"; then
+            exit_code=0
+        else
+            exit_code=$?
+        fi
         cleanup_generated
         exit "$exit_code"
         ;;
