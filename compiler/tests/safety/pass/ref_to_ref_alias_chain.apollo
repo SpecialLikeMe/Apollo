@@ -1,0 +1,15 @@
+// This should compile: aliasing a mutable reference through another reference should reuse the alias chain,
+// not create a second mutable borrow of the root value.
+
+void touch(nconst i32& value) {
+    sys.println(value);
+    return;
+}
+
+int main() {
+    nconst i32 value = 1;
+    nconst i32& alias = value;
+    nconst i32& alias2 = alias;
+    touch(alias2);
+    return 0;
+}

@@ -1,0 +1,16 @@
+// This should fail: once the parent reference is rebound, the child reference can no longer be used safely.
+
+void touch(nconst i32& value) {
+    sys.println(value);
+    return;
+}
+
+int main() {
+    nconst i32 first = 1;
+    nconst i32 second = 2;
+    nconst i32& alias = first;
+    nconst i32& alias2 = alias;
+    alias = second;
+    touch(alias2);
+    return 0;
+}

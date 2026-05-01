@@ -1,0 +1,14 @@
+extern iostream;
+
+int main() {
+    nconst i64 total = 1;
+    for (nconst i64 index = 1; index < __LIMIT__; index = index + 1) {
+        if ((index % 2) == 0) {
+            total = total + (index / 2);
+        } else {
+            total = total - (index / 3);
+        }
+    }
+    sys.stdout(total);
+    return 0;
+}

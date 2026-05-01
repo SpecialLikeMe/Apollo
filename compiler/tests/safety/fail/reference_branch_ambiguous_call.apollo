@@ -1,0 +1,17 @@
+// This should fail: a helper that may return different reference parameters cannot initialize a reference binding in the current analysis.
+
+str& chooseEither(nconst str& first, nconst str& second, int pick) {
+    if (pick) {
+        return first;
+    }
+    return second;
+}
+
+int main() {
+    nconst str first = "alpha";
+    nconst str second = "beta";
+    int pick = 0;
+    nconst str& alias = chooseEither(&nconst first, &nconst second, pick);
+    sys.println(alias);
+    return 0;
+}

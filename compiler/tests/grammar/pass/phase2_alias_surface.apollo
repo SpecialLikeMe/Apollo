@@ -1,0 +1,34 @@
+extern iostream;
+
+struct Counter {
+    public i32 value;
+
+    public i32 bump() {
+        return value + 1;
+    }
+}
+
+int main() {
+    @unsafe {
+        cxx::std {
+        int __apo_alias_probe() {
+            return 7;
+        }
+        }
+    }
+
+    ato counter = Counter{};
+    counter.bump();
+
+    nconst total := 4;
+    total = total + 1;
+
+    ins pack;
+    pack.push(Counter{});
+    pack.value;
+
+    stat direct = Counter{};
+    direct.value;
+
+    return __apo_alias_probe() + total;
+}

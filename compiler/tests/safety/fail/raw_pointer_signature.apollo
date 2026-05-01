@@ -1,0 +1,9 @@
+// This should fail: raw pointer parameters and returns are not allowed in safe Apollo signatures.
+
+i32* bad(i32* value) {
+    return value;
+}
+
+int main() {
+    return 0;
+}

@@ -1,0 +1,4 @@
+int helper_value() {
+    sys.println(11);
+    return 11;
+}

@@ -1,0 +1,17 @@
+class Box {
+}
+
+void consume(Box value) {
+    return;
+}
+
+i32 main() {
+    Box value = Box{};
+
+    @autofmtdeclare {
+        @induct value;
+        async consume(value);
+    }
+
+    return 0;
+}

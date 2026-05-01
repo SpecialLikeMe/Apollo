@@ -1,0 +1,11 @@
+#[scheduler(eevf)]
+
+@communal memstruct SharedState {
+    i32 counter;
+}
+
+int main() {
+    SharedState state = SharedState{};
+    sys.println(state.counter);
+    return 0;
+}

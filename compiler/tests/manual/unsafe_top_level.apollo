@@ -1,0 +1,11 @@
+// Manual-only probe for top-level executable lowering.
+// This is intentionally not part of the default installer validation suite.
+
+@unsafe {
+    void* heap.alc(1) int;
+    void heap;
+}
+
+int main() {
+    return 0;
+}

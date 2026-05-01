@@ -1,0 +1,7 @@
+extern {support.helper};
+extern gc/gc_cpp.h;
+
+int main() {
+    helper_value();
+    return 0;
+}

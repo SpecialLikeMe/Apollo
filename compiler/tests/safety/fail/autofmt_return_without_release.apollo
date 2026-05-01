@@ -1,0 +1,13 @@
+class Box {
+}
+
+Box keep(Box value) {
+    @autofmtdeclare {
+        @induct value;
+        return value;
+    }
+}
+
+i32 main() {
+    return 0;
+}

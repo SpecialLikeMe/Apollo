@@ -1,0 +1,11 @@
+#include <cstdint>
+#include <iostream>
+
+int main() {
+    std::int64_t total = 0;
+    for (std::int64_t index = 0; index < 200000; ++index) {
+        total += ((index % 7) * 3) - (index % 5);
+    }
+    std::cout << total;
+    return 0;
+}

@@ -1,0 +1,9 @@
+int main() {
+    lto dynamic = 1;
+    i32 total = dynamic + 1;
+
+    nconst lto changing = total;
+    changing = total;
+
+    return changing;
+}

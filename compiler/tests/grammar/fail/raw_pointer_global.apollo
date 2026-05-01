@@ -1,0 +1,5 @@
+global i32* leaked;
+
+int main() {
+    return 0;
+}

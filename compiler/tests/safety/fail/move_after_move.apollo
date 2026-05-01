@@ -1,0 +1,8 @@
+// This should fail: `first` is used after it has been moved into `second`.
+
+int main() {
+    str first = "alpha";
+    str second = first;
+    sys.println(first);
+    return 0;
+}

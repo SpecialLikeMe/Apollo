@@ -1,0 +1,15 @@
+memstruct Buffer {
+    i32 size;
+}
+
+Buffer makeBuffer() {
+    {
+        nconst str arena = "phase3_pool";
+        Buffer value = Buffer{}.uses(arena);
+        return value;
+    }
+}
+
+int main() {
+    return 0;
+}

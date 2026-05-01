@@ -1,0 +1,16 @@
+class Box {
+}
+
+i32 main() {
+    Box value = Box{};
+
+    @autofmtdeclare {
+        @induct value;
+        fn<void()> useValue = lmd-> () {
+            Box copy = value;
+            return;
+        }
+    }
+
+    return 0;
+}

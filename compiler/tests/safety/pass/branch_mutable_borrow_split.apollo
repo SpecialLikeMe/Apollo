@@ -1,0 +1,16 @@
+void touch(nconst i32& value) {
+    sys.println(value);
+    return;
+}
+
+int main() {
+    nconst i32 value = 1;
+    nconst i32& alias = &nconst value;
+    i32 branch = 0;
+    if (branch) {
+        touch(alias);
+    } else {
+        sys.println(value);
+    }
+    return value;
+}

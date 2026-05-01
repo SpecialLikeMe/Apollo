@@ -1,0 +1,16 @@
+#[scheduler(eevf)]
+
+@communal memstruct SharedState {
+    i32 counter;
+}
+
+void tick(SharedState state) {
+    sys.println(state.counter);
+}
+
+int main() {
+    SharedState state = SharedState{};
+    async tick(state);
+    syscall;
+    return 0;
+}

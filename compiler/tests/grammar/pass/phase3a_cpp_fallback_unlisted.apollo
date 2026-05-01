@@ -1,0 +1,7 @@
+#[fallback(allow)]
+
+extern "cstdlib";
+
+int main() {
+    return atoi("7");
+}

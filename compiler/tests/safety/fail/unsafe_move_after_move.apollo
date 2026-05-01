@@ -1,0 +1,10 @@
+// This should fail: unsafe blocks still enforce move safety for safe Apollo bindings.
+
+int main() {
+    str value = "ok";
+    @unsafe {
+        str moved = value;
+        sys.println(value);
+    }
+    return 0;
+}

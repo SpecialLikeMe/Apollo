@@ -1,0 +1,30 @@
+isc write_log() {
+    file handle = open("output/phase2_isc_file.txt", "w");
+    handle.write("hello");
+    handle.close();
+    return terminalcerr("disk full");
+}
+
+isc read_log() {
+    file handle = open("output/phase2_isc_file.txt");
+    str contents = handle.read();
+    handle.close();
+    sys.println(contents);
+    return success;
+}
+
+isc run() {
+    isc status = write_log();
+    autocatch(err) {
+        sys.println(err);
+    }
+    return read_log();
+}
+
+int main() {
+    isc result = run();
+    autocatch(err) {
+        sys.println(err);
+    }
+    return 0;
+}

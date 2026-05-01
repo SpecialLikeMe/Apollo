@@ -1,0 +1,20 @@
+// This should fail: a reference rebound to different origins across an if cannot be used afterward.
+
+void touch(nconst i32& value) {
+    sys.println(value);
+    return;
+}
+
+int main() {
+    nconst i32 first = 1;
+    nconst i32 second = 2;
+    i32 branch = 0;
+    nconst i32& alias = &nconst first;
+    if (branch) {
+        alias = &nconst second;
+    } else {
+        touch(alias);
+    }
+    touch(alias);
+    return first + second;
+}

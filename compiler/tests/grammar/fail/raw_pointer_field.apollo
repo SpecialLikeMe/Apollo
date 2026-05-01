@@ -1,0 +1,7 @@
+class UnsafeField {
+    public i32* raw;
+}
+
+int main() {
+    return 0;
+}
