@@ -2,11 +2,29 @@
 set -eu
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-APOLLO_DIR=${APOLLO_DIR:-$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)}
+RESOLVED_APOLLO_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+APOLLO_DIR=${APOLLO_DIR:-$RESOLVED_APOLLO_DIR}
 ANTLR_JAR="$SCRIPT_DIR/antlr-4.13.2-complete.jar"
 CALLER_DIR=$(pwd)
 TOOLCHAIN_ENV_SH="$SCRIPT_DIR/toolchain-env.sh"
 CONFIG_SH="$APOLLO_DIR/apollo-config.sh"
+MANAGE_SH="$RESOLVED_APOLLO_DIR/apollo-manage.sh"
+
+if [ "${1-}" = "--version" ]; then
+    exec "$MANAGE_SH" version "$RESOLVED_APOLLO_DIR"
+fi
+
+if [ "${1-}" = "--update" ]; then
+    exec "$MANAGE_SH" update "$RESOLVED_APOLLO_DIR"
+fi
+
+if [ "${1-}" = "-m" ]; then
+    if [ "${2-}" = "uninstall" ] && [ -z "${3-}" ]; then
+        exec "$MANAGE_SH" uninstall "$RESOLVED_APOLLO_DIR"
+    fi
+    printf 'Unknown management command. Usage: apollo -m uninstall\n' >&2
+    exit 1
+fi
 
 if [ -f "$TOOLCHAIN_ENV_SH" ]; then
     # shellcheck disable=SC1090
@@ -313,6 +331,9 @@ case "$COMMAND" in
         printf 'Unknown command. Usage: apollo [-bin] <run|ctall> [filename] [outputname]\n' >&2
         printf '                      apollo [filename.apollo] -[L|W|M] outputname\n' >&2
         printf '                      apollo -analyze [filename]\n' >&2
+        printf '                      apollo --version\n' >&2
+        printf '                      apollo --update\n' >&2
+        printf '                      apollo -m uninstall\n' >&2
         exit 1
         ;;
 esac

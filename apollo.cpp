@@ -50,7 +50,10 @@ namespace {
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cerr << "Usage: apollo [-bin] <ctall|run> [filepath] [outputname]\n"
-                  << "       apollo -analyze [filepath]" << std::endl;
+                  << "       apollo -analyze [filepath]\n"
+                  << "       apollo --version\n"
+                  << "       apollo --update\n"
+                  << "       apollo -m uninstall" << std::endl;
         return 1;
     }
 
@@ -78,7 +81,10 @@ int main(int argc, char* argv[]) {
 
         if (argIndex >= argc) {
             std::cerr << "Usage: apollo [-bin] <ctall|run> [filepath] [outputname]\n"
-                      << "       apollo -analyze [filepath]" << std::endl;
+                      << "       apollo -analyze [filepath]\n"
+                      << "       apollo --version\n"
+                      << "       apollo --update\n"
+                      << "       apollo -m uninstall" << std::endl;
             return 1;
         }
 

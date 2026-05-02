@@ -7,6 +7,19 @@
 #include <windows.h>
 
 namespace {
+    bool hasPortableExecutableHeader(const std::filesystem::path& path) {
+        std::ifstream in(path, std::ios::binary);
+        if (!in) {
+            return false;
+        }
+
+        char signature[2] = {};
+        in.read(signature, sizeof(signature));
+        return in.gcount() == static_cast<std::streamsize>(sizeof(signature))
+            && signature[0] == 'M'
+            && signature[1] == 'Z';
+    }
+
     std::filesystem::path getExecutableDir() {
         char buffer[MAX_PATH];
         GetModuleFileNameA(nullptr, buffer, MAX_PATH);
@@ -74,9 +87,9 @@ namespace {
 
     bool isJitSupported(std::string* reason = nullptr) {
         std::filesystem::path jitRunnerPath = getExecutableDir() / "apollo_jit.exe";
-        if (!std::filesystem::exists(jitRunnerPath)) {
+        if (!std::filesystem::exists(jitRunnerPath) || !hasPortableExecutableHeader(jitRunnerPath)) {
             if (reason != nullptr) {
-                *reason = "LLVM JIT support requires apollo_jit.exe in the Apollo install directory.";
+                *reason = "LLVM JIT support requires a valid apollo_jit.exe in the Apollo install directory.";
             }
             return false;
         }

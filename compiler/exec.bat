@@ -2,6 +2,8 @@
 setlocal EnableExtensions EnableDelayedExpansion
 
 :: This script handles the 'apollo' command
+set "MANAGE_SCRIPT=%~dp0..\apollo-manage.ps1"
+set "MANAGE_INSTALL_DIR=%~dp0.."
 set "ANALYZE_MODE=0"
 set "BIN_MODE=0"
 set "BIN_OUTPUT_MODE=host"
@@ -96,6 +98,14 @@ set "APOLLO_PCH_GENERATE_FLAGS="
 set "APOLLO_PCH_USE_FLAGS="
 set "APOLLO_LINK_FLAGS="
 
+if /I "%COMMAND%"=="--version" goto :manage_version
+if /I "%COMMAND%"=="--update" goto :manage_update
+if /I "%COMMAND%"=="-m" (
+    if /I "%RAW_INPUT%"=="uninstall" goto :manage_uninstall
+    echo Unknown management command. Usage: apollo -m uninstall
+    exit /b 1
+)
+
 if exist "%TOOLCHAIN_ENV%" call "%TOOLCHAIN_ENV%"
 
 if not defined APOLLO_CXX_STD set "APOLLO_CXX_STD=c++20"
@@ -189,7 +199,38 @@ if /I "%COMMAND%"=="analyze" goto :analyze
 echo Unknown command. Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
 echo                       apollo -analyze [filename]
 echo                       apollo [filename.apollo] -[^L^|^W^|^M^] outputname
+echo                       apollo --version
+echo                       apollo --update
+echo                       apollo -m uninstall
 exit /b 1
+
+:manage_version
+if not exist "%MANAGE_SCRIPT%" (
+    echo Apollo management script not found: %MANAGE_SCRIPT%
+    exit /b 1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action version -InstallDir "%MANAGE_INSTALL_DIR%"
+exit /b %errorlevel%
+
+:manage_update
+if not exist "%MANAGE_SCRIPT%" (
+    echo Apollo management script not found: %MANAGE_SCRIPT%
+    exit /b 1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action update -InstallDir "%MANAGE_INSTALL_DIR%"
+exit /b %errorlevel%
+
+:manage_uninstall
+if not "%RAW_OUTPUT%"=="" (
+    echo Unexpected extra argument. Usage: apollo -m uninstall
+    exit /b 1
+)
+if not exist "%MANAGE_SCRIPT%" (
+    echo Apollo management script not found: %MANAGE_SCRIPT%
+    exit /b 1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action uninstall -InstallDir "%MANAGE_INSTALL_DIR%"
+exit /b %errorlevel%
 
 :ctall
 if "%BIN_MODE%"=="1" (
