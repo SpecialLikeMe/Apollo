@@ -329,7 +329,7 @@ validate_cli_shims() {
 }
 
 mkdir -p "$COMPILER_DIR"
-chmod +x "$INSTALL_DIR/apollo.sh" "$INSTALL_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh"
+chmod +x "$INSTALL_DIR/apollo.sh" "$INSTALL_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$INSTALL_DIR/apollo-manage.sh"
 publish_cli_shims
 validate_cli_shims
 
