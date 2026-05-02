@@ -548,7 +548,7 @@ These forms are tightly coupled to the compiler runtime and safety phases. Prefe
 
 ## Typedef Opstruct DSL
 
-Apollo includes an experimental Phase 3 DSL surface named `typedef opstruct`.
+Apollo includes an experimental `typedef opstruct` DSL surface.
 
 Example:
 

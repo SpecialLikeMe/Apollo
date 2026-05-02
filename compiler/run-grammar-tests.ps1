@@ -130,8 +130,8 @@ $tests = @(
         Covers = 'globals, templates, interfaces, structs, classes, lambdas, fn types, instances, member access, stdin, blocks, if, while, indexed access, composite literals'
     },
     [pscustomobject]@{
-        Name = 'syntax-phase1-surface'
-        Path = 'tests\grammar\pass\syntax_phase1_surface.apollo'
+        Name = 'syntax-surface'
+        Path = 'tests\grammar\pass\syntax_surface.apollo'
         ShouldPass = $true
         Covers = 'preprocess macro alias, assert statements, ternary expressions, signed i16, and unsigned integer surface types'
         OutputMustContainAll = @(
@@ -142,8 +142,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'syntax-phase1-unsafe-alias'
-        Path = 'tests\grammar\pass\syntax_phase1_unsafe_alias.apollo'
+        Name = 'unsafe-alias-surface'
+        Path = 'tests\grammar\pass\unsafe_alias_surface.apollo'
         ShouldPass = $true
         Covers = 'lang native alias and percent-prefixed unsafe-line sugar lower through existing native and unsafe machinery'
         OutputMustContainAll = @(
@@ -154,8 +154,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-nconst-surface'
-        Path = 'tests\grammar\pass\phase2_nconst_surface.apollo'
+        Name = 'nconst-surface'
+        Path = 'tests\grammar\pass\nconst_surface.apollo'
         ShouldPass = $true
         Covers = 'nconst bindings and &nconst borrows parse and lower through the current mutability model'
         OutputMustContainAll = @(
@@ -165,8 +165,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-control-flow-surface'
-        Path = 'tests\grammar\pass\phase2_control_flow_surface.apollo'
+        Name = 'control-flow-surface'
+        Path = 'tests\grammar\pass\control_flow_surface.apollo'
         ShouldPass = $true
         Covers = 'typed for and for-in loops, switch lowering, try/catch terminalexception surface, and typedef struct aliases'
         OutputMustContainAll = @(
@@ -178,8 +178,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-alias-surface'
-        Path = 'tests\grammar\pass\phase2_alias_surface.apollo'
+        Name = 'alias-sugar-surface'
+        Path = 'tests\grammar\pass\alias_sugar_surface.apollo'
         ShouldPass = $true
         Covers = 'ato and := auto declaration sugar, ins/stat instance aliases, and cxx::std raw C++ aliasing'
         OutputMustContainAll = @(
@@ -191,8 +191,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-src-surface'
-        Path = 'tests\grammar\pass\phase2_src_surface.apollo'
+        Name = 'src-callable-surface'
+        Path = 'tests\grammar\pass\src_callable_surface.apollo'
         ShouldPass = $true
         Covers = 'src first-class function declarations lower to callable lambda values with optional params and return types'
         OutputMustContainAll = @(
@@ -203,18 +203,18 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-mnt-surface'
-        Path = 'tests\grammar\pass\phase2_mnt_surface.apollo'
+        Name = 'manual-new-surface'
+        Path = 'tests\grammar\pass\manual_new_surface.apollo'
         ShouldPass = $true
-        Covers = 'mnt lowers unsafe new-allocation sugar and releases through existing void-name syntax'
+        Covers = 'manual new-allocation sugar lowers through existing void-name release syntax'
         OutputMustContainAll = @(
             'std::int32_t* heap = new std::int32_t(4);',
             'delete heap;'
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-indef-surface'
-        Path = 'tests\grammar\pass\phase2_indef_surface.apollo'
+        Name = 'implicit-this-surface'
+        Path = 'tests\grammar\pass\implicit_this_surface.apollo'
         ShouldPass = $true
         Covers = 'indef lowers self-reference field and method access onto this within class methods'
         OutputMustContainAll = @(
@@ -223,8 +223,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-lto-surface'
-        Path = 'tests\grammar\pass\phase2_lto_surface.apollo'
+        Name = 'any-binding-surface'
+        Path = 'tests\grammar\pass\any_binding_surface.apollo'
         ShouldPass = $true
         Covers = 'lto lowers declaration bindings to std::any and inserts std::any_cast in typed and arithmetic contexts'
         OutputMustContainAll = @(
@@ -235,8 +235,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-lto-typeset-surface'
-        Path = 'tests\grammar\pass\phase2_lto_typeset_surface.apollo'
+        Name = 'any-typeset-surface'
+        Path = 'tests\grammar\pass\any_typeset_surface.apollo'
         ShouldPass = $true
         Covers = 'lto.typeset(type) retargets std::any payload expectations and optional .cast() rebinds through runtime-safe conversions'
         OutputMustContainAll = @(
@@ -247,8 +247,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-directives-surface'
-        Path = 'tests\grammar\pass\phase2_directives_surface.apollo'
+        Name = 'gc-borrow-directives-surface'
+        Path = 'tests\grammar\pass\gc_borrow_directives_surface.apollo'
         ShouldPass = $true
         Covers = '#[gc(total)] forces whole-program GC bootstrap and #[borrow_checker(off)] disables ownership and borrow diagnostics'
         OutputMustContainAll = @(
@@ -259,8 +259,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-directive-alias-surface'
-        Path = 'tests\grammar\pass\phase2_directive_alias_surface.apollo'
+        Name = 'gc-borrow-directive-alias-surface'
+        Path = 'tests\grammar\pass\gc_borrow_directive_alias_surface.apollo'
         ShouldPass = $true
         Covers = '#[gcmode(total)] and #[borrow_check(none)] map onto the existing whole-program GC and borrow checker controls'
         OutputMustContainAll = @(
@@ -271,8 +271,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-total-gc-heap-surface'
-        Path = 'tests\grammar\pass\phase2_total_gc_heap_surface.apollo'
+        Name = 'whole-program-gc-heap-surface'
+        Path = 'tests\grammar\pass\whole_program_gc_heap_surface.apollo'
         ShouldPass = $true
         Covers = '#[gcmode(total)] reroutes the existing percent-prefixed unsafe malloc/new/free sugar through GC-managed allocation and suppresses manual free/delete lowering'
         OutputMustContainAll = @(
@@ -285,8 +285,8 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-total-gc-value-surface'
-        Path = 'tests\grammar\pass\phase2_total_gc_value_surface.apollo'
+        Name = 'whole-program-gc-value-surface'
+        Path = 'tests\grammar\pass\whole_program_gc_value_surface.apollo'
         ShouldPass = $true
         Covers = '#[gcmode(total)] lifts ordinary non-primitive Apollo values onto the whole-program managed-handle runtime with automatic root tracking'
         OutputMustContainAll = @(
@@ -303,14 +303,14 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase2-isc-file-surface'
-        Path = 'tests\grammar\pass\phase2_isc_file_surface.apollo'
+        Name = 'status-file-surface'
+        Path = 'tests\grammar\pass\status_file_surface.apollo'
         ShouldPass = $true
         Covers = 'isc lowers success and cerr helpers, autocatch lowers runtime error handling, and file uses runtime-backed open/read/write/close helpers'
         OutputMustContainAll = @(
             'struct __apo_isc {',
             'struct __apo_file {',
-            '__apo_file handle = __apo_file::open("output/phase2_isc_file.txt", "w");',
+            '__apo_file handle = __apo_file::open("output/status_file.txt", "w");',
             'return __apo_isc::error("disk full", true);',
             'const std::string& err = status.message;',
             'if (status.terminal) return status;',
@@ -318,53 +318,53 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase3a-opstruct-surface'
-        Path = 'tests\grammar\pass\phase3a_opstruct_surface.apollo'
+        Name = 'opstruct-runtime-surface'
+        Path = 'tests\grammar\pass\opstruct_runtime_surface.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3A opstructs, typedef opstruct aliases, typedef opstruct DSL sessions, dynamic macro qualifiers, stdin expression captures, and generic runtime directives lower into runtime registration and typed value construction'
+        Covers = 'opstructs, typedef opstruct aliases, typedef opstruct DSL sessions, dynamic macro qualifiers, stdin expression captures, and runtime directives lower into runtime registration and typed value construction'
         OutputMustContainAll = @(
-            '#include "runtime_support/apo_phase3_runtime.hpp"',
+            '#include "runtime_support/apo_runtime_extensions.hpp"',
             'struct apo_Packet {',
             'using apo_PacketAlias = apo_Packet;',
             'struct apo_cool {',
             'struct __inf {',
-            '__apo_phase3_runtime::instance().set_policy("fallback", "allow");',
-            '__apo_phase3_runtime::instance().set_policy("macro_mode", "runtime");',
-            '__apo_phase3_runtime::instance().register_opstruct("Packet", {{"name", "std::string"}, {"size", "std::int32_t"}});',
-            '__apo_phase3_runtime::instance().register_dynamic_macro("log_packet");',
-            '__apo_phase3_runtime::instance().invoke_dynamic_macro("log_packet", [&]() { return log_packet(packet); })',
+            '__apo_runtime_extensions::instance().set_policy("fallback", "allow");',
+            '__apo_runtime_extensions::instance().set_policy("macro_mode", "runtime");',
+            '__apo_runtime_extensions::instance().register_opstruct("Packet", {{"name", "std::string"}, {"size", "std::int32_t"}});',
+            '__apo_runtime_extensions::instance().register_dynamic_macro("log_packet");',
+            '__apo_runtime_extensions::instance().invoke_dynamic_macro("log_packet", [&]() { return log_packet(packet); })',
             'apo_PacketAlias packet = apo_PacketAlias{};',
             'apo_cool mycool{};',
             'std::getline(std::cin >> std::ws, __apo_stdin_0);'
         )
     },
     [pscustomobject]@{
-        Name = 'phase3a-cpp-fallback-allowed'
-        Path = 'tests\grammar\pass\phase3a_cpp_fallback_allowed.apollo'
+        Name = 'cpp-fallback-allowed'
+        Path = 'tests\grammar\pass\cpp_fallback_allowed.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3A fallback lowers unresolved non-blocked C++ calls through the runtime fallback wrapper when #[fallback(allow)] is active'
+        Covers = 'fallback lowers unresolved non-blocked C++ calls through the runtime fallback wrapper when #[fallback(allow)] is active'
         OutputMustContainAll = @(
             '#include <cstdio>',
-            '__apo_phase3_runtime::instance().set_policy("fallback", "allow");',
-            '__apo_phase3_runtime::instance().unsafe_fallback_call("puts", [&]() { return puts("hello from fallback"); })'
+            '__apo_runtime_extensions::instance().set_policy("fallback", "allow");',
+            '__apo_runtime_extensions::instance().unsafe_fallback_call("puts", [&]() { return puts("hello from fallback"); })'
         )
     },
     [pscustomobject]@{
-        Name = 'phase3a-cpp-fallback-unlisted'
-        Path = 'tests\grammar\pass\phase3a_cpp_fallback_unlisted.apollo'
+        Name = 'cpp-fallback-unlisted'
+        Path = 'tests\grammar\pass\cpp_fallback_unlisted.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3A fallback allows unresolved non-blocked C++ calls even when they are not predeclared in a fallback allowlist'
+        Covers = 'fallback allows unresolved non-blocked C++ calls even when they are not predeclared in a fallback allowlist'
         OutputMustContainAll = @(
             '#include <cstdlib>',
-            '__apo_phase3_runtime::instance().set_policy("fallback", "allow");',
-            '__apo_phase3_runtime::instance().unsafe_fallback_call("atoi", [&]() { return atoi("7"); })'
+            '__apo_runtime_extensions::instance().set_policy("fallback", "allow");',
+            '__apo_runtime_extensions::instance().unsafe_fallback_call("atoi", [&]() { return atoi("7"); })'
         )
     },
     [pscustomobject]@{
-        Name = 'phase3a-typedef-opstruct-dsl'
-        Path = 'tests\grammar\pass\phase3a_typedef_opstruct_dsl.apollo'
+        Name = 'typedef-opstruct-dsl'
+        Path = 'tests\grammar\pass\typedef_opstruct_dsl.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3A typedef opstruct DSL bodies generate private state, phrase sessions, Apollo src payload execution, bracket captures, and expression-form stdin lowering'
+        Covers = 'typedef opstruct DSL bodies generate private state, phrase sessions, Apollo src payload execution, bracket captures, and expression-form stdin lowering'
         OutputMustContainAll = @(
             'struct apo_cool {',
             'struct __inf {',
@@ -374,10 +374,10 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase3a-typedef-opstruct-lifetime-surface'
-        Path = 'tests\grammar\pass\phase3a_typedef_opstruct_lifetime_surface.apollo'
+        Name = 'typedef-opstruct-scope-surface'
+        Path = 'tests\grammar\pass\typedef_opstruct_scope_surface.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3A typedef opstruct DSL instances can be initialized as ordinary declarations and used by later phrase statements within scope'
+        Covers = 'typedef opstruct DSL instances can be initialized as ordinary declarations and used by later phrase statements within scope'
         OutputMustContainAll = @(
             'apo_cool mycool{};',
             'const std::string i = std::string("") + "sys.println(\"Hello, world\");";',
@@ -385,10 +385,10 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase3b-memstruct-allocator-surface'
-        Path = 'tests\grammar\pass\phase3b_memstruct_allocator_surface.apollo'
+        Name = 'memstruct-allocator-surface'
+        Path = 'tests\grammar\pass\memstruct_allocator_surface.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3B allocator foundation lowers memstruct declarations, allocator traits, runtime registration, and .uses(...) construction metadata'
+        Covers = 'allocator foundation lowers memstruct declarations, allocator traits, runtime registration, and .uses(...) construction metadata'
         OutputMustContainAll = @(
             '#include "runtime_support/apo_memstruct_runtime.hpp"',
             'struct apo_Buffer {',
@@ -398,10 +398,10 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase3b-scheduler-communal-surface'
-        Path = 'tests\grammar\pass\phase3b_scheduler_communal_surface.apollo'
+        Name = 'scheduler-communal-surface'
+        Path = 'tests\grammar\pass\scheduler_communal_surface.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3B scheduler/process runtime lowers communal type registration plus EEVF task and process lifecycle hooks on async and syscall surfaces'
+        Covers = 'scheduler/process runtime lowers communal type registration plus EEVF task and process lifecycle hooks on async and syscall surfaces'
         OutputMustContainAll = @(
             '#include "runtime_support/apo_scheduler_eevf_runtime.hpp"',
             '__apo_scheduler_eevf_runtime::instance().register_communal_type("SharedState");',
@@ -410,10 +410,10 @@ $tests = @(
         )
     },
     [pscustomobject]@{
-        Name = 'phase3b-schedule-surface'
-        Path = 'tests\grammar\pass\phase3b_schedule_surface.apollo'
+        Name = 'schedule-surface'
+        Path = 'tests\grammar\pass\schedule_surface.apollo'
         ShouldPass = $true
-        Covers = 'Phase 3B schedule declarations lower mandatory task helpers, schedule registration, instance start, inline insertion, and drain calls'
+        Covers = 'schedule declarations lower mandatory task helpers, schedule registration, instance start, inline insertion, and drain calls'
         OutputMustContainAll = @(
             '#include "runtime_support/apo_scheduler_eevf_runtime.hpp"',
             'static void __apo_schedule_',
@@ -732,60 +732,60 @@ $tests = @(
         Covers = 'field raw pointer rejection'
     },
     [pscustomobject]@{
-        Name = 'phase3a-cpp-fallback-blocked'
-        Path = 'tests\grammar\fail\phase3a_cpp_fallback_blocked.apollo'
+        Name = 'cpp-fallback-blocked'
+        Path = 'tests\grammar\fail\cpp_fallback_blocked.apollo'
         ShouldPass = $false
         Expected = 'fallback call to blocked symbol `system` is not allowed'
-        Covers = 'Phase 3A denylist blocks unsafe fallback symbols even when fallback policy is enabled'
+        Covers = 'denylist blocks unsafe fallback symbols even when fallback policy is enabled'
     },
     [pscustomobject]@{
-        Name = 'phase3a-typedef-opstruct-missing'
-        Path = 'tests\grammar\fail\phase3a_typedef_opstruct_missing.apollo'
+        Name = 'typedef-opstruct-missing'
+        Path = 'tests\grammar\fail\typedef_opstruct_missing.apollo'
         ShouldPass = $false
         Expected = 'typedef opstruct target `Missing` is not declared'
-        Covers = 'Phase 3A typedef opstruct aliases require a declared opstruct target'
+        Covers = 'typedef opstruct aliases require a declared opstruct target'
     },
     [pscustomobject]@{
-        Name = 'phase3a-unknown-directive'
-        Path = 'tests\grammar\fail\phase3a_unknown_directive.apollo'
+        Name = 'unknown-runtime-directive'
+        Path = 'tests\grammar\fail\unknown_runtime_directive.apollo'
         ShouldPass = $false
-        Expected = 'unknown Phase 3 directive `unknown`'
-        Covers = 'Phase 3A rejects unsupported generic runtime directives'
+        Expected = 'unknown runtime directive `unknown`'
+        Covers = 'rejects unsupported generic runtime directives'
     },
     [pscustomobject]@{
-        Name = 'phase3b-uses-requires-memstruct'
-        Path = 'tests\grammar\fail\phase3b_uses_requires_memstruct.apollo'
+        Name = 'uses-requires-memstruct'
+        Path = 'tests\grammar\fail\uses_requires_memstruct.apollo'
         ShouldPass = $false
         Expected = '.uses(...) is only valid on memstruct values'
-        Covers = 'Phase 3B allocator binding stays restricted to memstruct values during foundation lowering'
+        Covers = 'allocator binding stays restricted to memstruct values during foundation lowering'
     },
     [pscustomobject]@{
-        Name = 'phase3b-allocator-return-escape'
-        Path = 'tests\grammar\fail\phase3b_allocator_return_escape.apollo'
+        Name = 'allocator-return-escape'
+        Path = 'tests\grammar\fail\allocator_return_escape.apollo'
         ShouldPass = $false
         Expected = 'cannot return allocator-backed value from this function because allocator `arena` does not live long enough'
-        Covers = 'Phase 3B rejects returning allocator-backed memstruct values whose allocator dies in the current scope'
+        Covers = 'rejects returning allocator-backed memstruct values whose allocator dies in the current scope'
     },
     [pscustomobject]@{
-        Name = 'phase3b-allocator-async-escape'
-        Path = 'tests\grammar\fail\phase3b_allocator_async_escape.apollo'
+        Name = 'allocator-async-escape'
+        Path = 'tests\grammar\fail\allocator_async_escape.apollo'
         ShouldPass = $false
         Expected = 'cannot pass allocator-backed value across async call boundary because allocator `arena` does not live long enough'
-        Covers = 'Phase 3B rejects sending allocator-backed memstruct values across async boundaries when the allocator is not stable'
+        Covers = 'rejects sending allocator-backed memstruct values across async boundaries when the allocator is not stable'
     },
     [pscustomobject]@{
-        Name = 'phase3b-communal-outside-task'
-        Path = 'tests\grammar\fail\phase3b_communal_outside_task.apollo'
+        Name = 'communal-outside-task'
+        Path = 'tests\grammar\fail\communal_outside_task.apollo'
         ShouldPass = $false
         Expected = 'cannot access communal binding `state` outside scheduled task context'
-        Covers = 'Phase 3B rejects communal field access outside async and thread scheduled task reachability'
+        Covers = 'rejects communal field access outside async and thread scheduled task reachability'
     },
     [pscustomobject]@{
-        Name = 'phase3b-communal-requires-scheduler'
-        Path = 'tests\grammar\fail\phase3b_communal_requires_scheduler.apollo'
+        Name = 'communal-requires-scheduler'
+        Path = 'tests\grammar\fail\communal_requires_scheduler.apollo'
         ShouldPass = $false
         Expected = 'communal types require `#[scheduler(eevf)]`'
-        Covers = 'Phase 3B requires explicit scheduler policy before communal type declarations are allowed'
+        Covers = 'requires explicit scheduler policy before communal type declarations are allowed'
     }
 )
 

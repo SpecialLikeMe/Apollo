@@ -1,7 +1,0 @@
-@communal memstruct SharedState {
-    i32 counter;
-}
-
-int main() {
-    return 0;
-}

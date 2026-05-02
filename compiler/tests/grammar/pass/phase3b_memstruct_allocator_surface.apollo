@@ -1,9 +1,0 @@
-memstruct Buffer {
-    i32 size;
-}
-
-int main() {
-    nconst str arena = "phase3_pool";
-    Buffer value = Buffer{}.uses(arena);
-    return 0;
-}

@@ -64,13 +64,13 @@ public class compilerv1BaseListener implements compilerv1Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx) { }
+	@Override public void enterRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx) { }
+	@Override public void exitRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

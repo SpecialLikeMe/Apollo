@@ -13,8 +13,8 @@ $outputRoot = Join-Path $compilerDir 'bench-output'
 $binaryDir = Join-Path $outputRoot 'compile-bin'
 $reportPath = Join-Path $outputRoot 'compile-benchmark-results.csv'
 $fixtures = @(
-    [pscustomobject]@{ Name = 'indef-small'; Path = 'tests\grammar\pass\phase2_indef_surface.apollo' },
-    [pscustomobject]@{ Name = 'typedef-phase3'; Path = 'tests\grammar\pass\phase3a_typedef_opstruct_instance_phrase.apollo' },
+    [pscustomobject]@{ Name = 'implicit-this-small'; Path = 'tests\grammar\pass\implicit_this_surface.apollo' },
+    [pscustomobject]@{ Name = 'typedef-opstruct-phrase'; Path = 'tests\grammar\pass\typedef_opstruct_instance_phrase.apollo' },
     [pscustomobject]@{ Name = 'autofmt-small'; Path = 'tests\grammar\pass\autofmt_surface.apollo' }
 )
 

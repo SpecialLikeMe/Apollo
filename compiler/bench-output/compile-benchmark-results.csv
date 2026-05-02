@@ -1,4 +1,4 @@
 "Fixture","Source","ColdCompileMs","WarmMeanMs","WarmMinMs","WarmMaxMs","WarmRuns"
-"indef-small","tests\grammar\pass\phase2_indef_surface.apollo","5036.058","3030.799","3022.794","3043.065","3"
-"typedef-phase3","tests\grammar\pass\phase3a_typedef_opstruct_instance_phrase.apollo","6053.652","3028.669","3023.514","3031.982","3"
-"autofmt-small","tests\grammar\pass\autofmt_surface.apollo","5056.659","3030.511","3025.835","3033.443","3"
+"implicit-this-small","tests\grammar\pass\implicit_this_surface.apollo","5053.168","3027.619","3014.065","3038.528","3"
+"typedef-opstruct-phrase","tests\grammar\pass\typedef_opstruct_instance_phrase.apollo","5060.574","3029.695","3028.477","3030.414","3"
+"autofmt-small","tests\grammar\pass\autofmt_surface.apollo","5065.729","3025.516","3009.914","3041.409","3"

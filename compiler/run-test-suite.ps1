@@ -88,25 +88,25 @@ if ($LASTEXITCODE -ne 0) {
     throw 'Grammar and safety fixture suite failed.'
 }
 
-$phase3aStandaloneDir = Join-Path $env:TEMP ('apollo-standalone-' + [guid]::NewGuid().ToString('N'))
-New-Item -ItemType Directory -Path $phase3aStandaloneDir | Out-Null
-cmd /c "call .\exec.bat tests\grammar\pass\phase3a_typedef_opstruct_dsl.apollo -W output\phase3a_typedef_opstruct_standalone.exe"
+$typedefOpstructStandaloneDir = Join-Path $env:TEMP ('apollo-standalone-' + [guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $typedefOpstructStandaloneDir | Out-Null
+cmd /c "call .\exec.bat tests\grammar\pass\typedef_opstruct_dsl.apollo -W output\typedef_opstruct_standalone.exe"
 if ($LASTEXITCODE -ne 0) {
-    throw 'Apollo standalone binary build failed for tests\\grammar\\pass\\phase3a_typedef_opstruct_dsl.apollo.'
+    throw 'Apollo standalone binary build failed for tests\\grammar\\pass\\typedef_opstruct_dsl.apollo.'
 }
 
-Copy-Item .\output\phase3a_typedef_opstruct_standalone.exe (Join-Path $phase3aStandaloneDir 'standalone.exe')
-Set-Content -Path (Join-Path $phase3aStandaloneDir 'stdin.txt') -Value 'sys.println("Hello, world");' -NoNewline
+Copy-Item .\output\typedef_opstruct_standalone.exe (Join-Path $typedefOpstructStandaloneDir 'standalone.exe')
+Set-Content -Path (Join-Path $typedefOpstructStandaloneDir 'stdin.txt') -Value 'sys.println("Hello, world");' -NoNewline
 
-Push-Location $phase3aStandaloneDir
+Push-Location $typedefOpstructStandaloneDir
 try {
     cmd /c ".\standalone.exe < stdin.txt > stdout.txt"
     if ($LASTEXITCODE -ne 0) {
         throw 'Apollo standalone typedef opstruct binary failed to run outside the repo directory.'
     }
 
-    $phase3aStandaloneOutput = Get-Content .\stdout.txt -Raw
-    if ($phase3aStandaloneOutput -notmatch 'Hello, world') {
+    $typedefOpstructStandaloneOutput = Get-Content .\stdout.txt -Raw
+    if ($typedefOpstructStandaloneOutput -notmatch 'Hello, world') {
         throw 'Apollo standalone typedef opstruct binary did not execute the stdin-fed Apollo src payload.'
     }
 }

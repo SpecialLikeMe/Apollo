@@ -1,9 +1,0 @@
-#[gcmode(total)]
-
-int main() {
-    %void* raw.alc(i32);
-    %mnt i32 value = 4;
-    %void value;
-    %void raw;
-    return 0;
-}

@@ -1,3 +1,0 @@
-"Benchmark","Workload","RepeatCount","ApolloCompileMs","CppCompileMs","ApolloMeanMs","ApolloMinMs","ApolloMaxMs","CppMeanMs","CppMinMs","CppMaxMs","ApolloVsCppRatio","Output"
-"sum-loop","200000","2","3856.969","299.879","7.823","7.168","8.479","8.394","8.373","8.416","0.932","1399982"
-"branch-mix","200000","2","3846.978","300.773","8.37","7.72","9.02","7.828","7.211","8.444","1.069","1666650001"

@@ -39,7 +39,7 @@ public class compilerv1Parser extends Parser {
 		COMMENT=138;
 	public static final int
 		RULE_program = 0, RULE_directive = 1, RULE_gcDirective = 2, RULE_borrowCheckerDirective = 3, 
-		RULE_phase3Directive = 4, RULE_settingDirective = 5, RULE_settingValue = 6, 
+		RULE_runtimeDirective = 4, RULE_settingDirective = 5, RULE_settingValue = 6, 
 		RULE_importStmt = 7, RULE_instance = 8, RULE_instancepush = 9, RULE_memberaccess = 10, 
 		RULE_accessBase = 11, RULE_instanceValue = 12, RULE_allocatorUseSuffix = 13, 
 		RULE_importPath = 14, RULE_headerPath = 15, RULE_headerPart = 16, RULE_headerPartAtom = 17, 
@@ -85,7 +85,7 @@ public class compilerv1Parser extends Parser {
 		RULE_inheritedType = 147, RULE_virtualMethod = 148;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "directive", "gcDirective", "borrowCheckerDirective", "phase3Directive", 
+			"program", "directive", "gcDirective", "borrowCheckerDirective", "runtimeDirective", 
 			"settingDirective", "settingValue", "importStmt", "instance", "instancepush", 
 			"memberaccess", "accessBase", "instanceValue", "allocatorUseSuffix", 
 			"importPath", "headerPath", "headerPart", "headerPartAtom", "function", 
@@ -764,8 +764,8 @@ public class compilerv1Parser extends Parser {
 		public BorrowCheckerDirectiveContext borrowCheckerDirective() {
 			return getRuleContext(BorrowCheckerDirectiveContext.class,0);
 		}
-		public Phase3DirectiveContext phase3Directive() {
-			return getRuleContext(Phase3DirectiveContext.class,0);
+		public RuntimeDirectiveContext runtimeDirective() {
+			return getRuleContext(RuntimeDirectiveContext.class,0);
 		}
 		public SettingDirectiveContext settingDirective() {
 			return getRuleContext(SettingDirectiveContext.class,0);
@@ -814,7 +814,7 @@ public class compilerv1Parser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(349);
-				phase3Directive();
+				runtimeDirective();
 				}
 				break;
 			case 4:
@@ -966,33 +966,33 @@ public class compilerv1Parser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class Phase3DirectiveContext extends ParserRuleContext {
+	public static class RuntimeDirectiveContext extends ParserRuleContext {
 		public List<TerminalNode> ID() { return getTokens(compilerv1Parser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(compilerv1Parser.ID, i);
 		}
-		public Phase3DirectiveContext(ParserRuleContext parent, int invokingState) {
+		public RuntimeDirectiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_phase3Directive; }
+		@Override public int getRuleIndex() { return RULE_runtimeDirective; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof compilerv1Listener ) ((compilerv1Listener)listener).enterPhase3Directive(this);
+			if ( listener instanceof compilerv1Listener ) ((compilerv1Listener)listener).enterRuntimeDirective(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof compilerv1Listener ) ((compilerv1Listener)listener).exitPhase3Directive(this);
+			if ( listener instanceof compilerv1Listener ) ((compilerv1Listener)listener).exitRuntimeDirective(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof compilerv1Visitor ) return ((compilerv1Visitor<? extends T>)visitor).visitPhase3Directive(this);
+			if ( visitor instanceof compilerv1Visitor ) return ((compilerv1Visitor<? extends T>)visitor).visitRuntimeDirective(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final Phase3DirectiveContext phase3Directive() throws RecognitionException {
-		Phase3DirectiveContext _localctx = new Phase3DirectiveContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_phase3Directive);
+	public final RuntimeDirectiveContext runtimeDirective() throws RecognitionException {
+		RuntimeDirectiveContext _localctx = new RuntimeDirectiveContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_runtimeDirective);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{

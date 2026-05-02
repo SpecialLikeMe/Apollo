@@ -47,15 +47,15 @@ public interface compilerv1Listener extends ParseTreeListener {
 	 */
 	void exitBorrowCheckerDirective(compilerv1Parser.BorrowCheckerDirectiveContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link compilerv1Parser#phase3Directive}.
+	 * Enter a parse tree produced by {@link compilerv1Parser#runtimeDirective}.
 	 * @param ctx the parse tree
 	 */
-	void enterPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx);
+	void enterRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link compilerv1Parser#phase3Directive}.
+	 * Exit a parse tree produced by {@link compilerv1Parser#runtimeDirective}.
 	 * @param ctx the parse tree
 	 */
-	void exitPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx);
+	void exitRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link compilerv1Parser#settingDirective}.
 	 * @param ctx the parse tree

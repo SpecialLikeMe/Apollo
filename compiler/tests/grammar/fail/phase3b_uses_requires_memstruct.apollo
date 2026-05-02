@@ -1,8 +1,0 @@
-struct Plain {
-    i32 size;
-}
-
-int main() {
-    Plain value = Plain{}.uses("phase3_pool");
-    return 0;
-}

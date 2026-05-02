@@ -76,7 +76,7 @@ public final class runtime {
         private final boolean usesFileRuntime;
         private final boolean usesMemstructRuntime;
         private final boolean usesSchedulerRuntime;
-        private final boolean usesPhase3Runtime;
+        private final boolean usesRuntimeExtensions;
         private final boolean totalProgramGc;
         private final boolean borrowCheckerOff;
 
@@ -87,7 +87,7 @@ public final class runtime {
                                        boolean usesFileRuntime,
                                        boolean usesMemstructRuntime,
                                        boolean usesSchedulerRuntime,
-                                       boolean usesPhase3Runtime,
+                                       boolean usesRuntimeExtensions,
                                        boolean totalProgramGc,
                                        boolean borrowCheckerOff) {
             this.usesAutofmtRuntime = usesAutofmtRuntime;
@@ -97,7 +97,7 @@ public final class runtime {
             this.usesFileRuntime = usesFileRuntime;
             this.usesMemstructRuntime = usesMemstructRuntime;
             this.usesSchedulerRuntime = usesSchedulerRuntime;
-            this.usesPhase3Runtime = usesPhase3Runtime;
+            this.usesRuntimeExtensions = usesRuntimeExtensions;
             this.totalProgramGc = totalProgramGc;
             this.borrowCheckerOff = borrowCheckerOff;
         }
@@ -130,8 +130,8 @@ public final class runtime {
             return usesSchedulerRuntime;
         }
 
-        boolean usesPhase3Runtime() {
-            return usesPhase3Runtime;
+        boolean usesRuntimeExtensions() {
+            return usesRuntimeExtensions;
         }
 
         boolean totalProgramGc() {
@@ -152,7 +152,7 @@ public final class runtime {
                     scanner.usesFileRuntime,
                     scanner.usesMemstructRuntime,
                     scanner.usesSchedulerRuntime,
-                    scanner.usesPhase3Runtime,
+                    scanner.usesRuntimeExtensions,
                     scanner.totalProgramGc,
                     scanner.borrowCheckerOff);
         }
@@ -165,7 +165,7 @@ public final class runtime {
             private boolean usesFileRuntime;
             private boolean usesMemstructRuntime;
             private boolean usesSchedulerRuntime;
-            private boolean usesPhase3Runtime;
+            private boolean usesRuntimeExtensions;
             private boolean totalProgramGc;
             private boolean borrowCheckerOff;
 
@@ -207,7 +207,7 @@ public final class runtime {
 
             @Override
             public Void visitOpstruct(compilerv1Parser.OpstructContext ctx) {
-                usesPhase3Runtime = true;
+                usesRuntimeExtensions = true;
                 return super.visitOpstruct(ctx);
             }
 
@@ -230,20 +230,20 @@ public final class runtime {
 
             @Override
             public Void visitTypedefOpstruct(compilerv1Parser.TypedefOpstructContext ctx) {
-                usesPhase3Runtime = true;
+                usesRuntimeExtensions = true;
                 return super.visitTypedefOpstruct(ctx);
             }
 
             @Override
             public Void visitTypedefOpstructSession(compilerv1Parser.TypedefOpstructSessionContext ctx) {
-                usesPhase3Runtime = true;
+                usesRuntimeExtensions = true;
                 usesIrRuntime = true;
                 return super.visitTypedefOpstructSession(ctx);
             }
 
             @Override
             public Void visitTypedefOpstructPhraseStmt(compilerv1Parser.TypedefOpstructPhraseStmtContext ctx) {
-                usesPhase3Runtime = true;
+                usesRuntimeExtensions = true;
                 usesIrRuntime = true;
                 return super.visitTypedefOpstructPhraseStmt(ctx);
             }
@@ -273,14 +273,14 @@ public final class runtime {
             }
 
             @Override
-            public Void visitPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx) {
-                usesPhase3Runtime = true;
+            public Void visitRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx) {
+                usesRuntimeExtensions = true;
                 if (ctx != null && ctx.ID().size() > 1
                         && "scheduler".equals(ctx.ID(0).getText())
                         && "eevf".equals(ctx.ID(1).getText())) {
                     usesSchedulerRuntime = true;
                 }
-                return super.visitPhase3Directive(ctx);
+                return super.visitRuntimeDirective(ctx);
             }
 
             @Override
@@ -291,12 +291,12 @@ public final class runtime {
                 String key = ctx.ID().getText();
                 String value = normalizeSettingValue(ctx.settingValue().getText());
                 if ("scheduler".equals(key)) {
-                    usesPhase3Runtime = true;
+                    usesRuntimeExtensions = true;
                     if ("eevf".equals(value)) {
                         usesSchedulerRuntime = true;
                     }
                 } else if ("fallback".equals(key) || "macro_mode".equals(key)) {
-                    usesPhase3Runtime = true;
+                    usesRuntimeExtensions = true;
                 } else if (("gc".equals(key) || "gcmode".equals(key)) && "total".equals(value)) {
                     totalProgramGc = true;
                 } else if (("borrow_checker".equals(key) || "borrow_check".equals(key))
@@ -328,7 +328,7 @@ public final class runtime {
             @Override
             public Void visitMacro(compilerv1Parser.MacroContext ctx) {
                 if (ctx != null && ctx.macroQualifier() != null && ctx.macroQualifier().getText().contains("dynamic_macro")) {
-                    usesPhase3Runtime = true;
+                    usesRuntimeExtensions = true;
                 }
                 return super.visitMacro(ctx);
             }
@@ -523,7 +523,7 @@ public final class runtime {
 
         private static List<RuntimePhase> defaultPhases() {
             return List.of(
-                    new Phase3SurfacePhase(),
+                    new RuntimeExtensionSurfacePhase(),
                     new UnsafeBoundaryPhase(),
                     new OwnershipPhase(),
                     new BorrowPhase(),
@@ -532,15 +532,15 @@ public final class runtime {
         }
     }
 
-    private static final class Phase3SurfacePhase implements RuntimePhase {
+    private static final class RuntimeExtensionSurfacePhase implements RuntimePhase {
         @Override
         public String phaseName() {
-            return "phase3-surface";
+            return "runtime-extension-surface";
         }
 
         @Override
         public void execute(RuntimeSession session) {
-            new Phase3SurfaceValidator(session.source()).validate(session.tree());
+            new RuntimeExtensionSurfaceValidator(session.source()).validate(session.tree());
         }
     }
 
@@ -568,7 +568,7 @@ public final class runtime {
         }
     }
 
-    private static final class Phase3SurfaceValidator extends compilerv1BaseVisitor<Void> {
+    private static final class RuntimeExtensionSurfaceValidator extends compilerv1BaseVisitor<Void> {
         private final SourceFileContext source;
         private final List<String> diagnostics = new ArrayList<>();
         private final Set<String> declaredOpstructs = new LinkedHashSet<>();
@@ -576,7 +576,7 @@ public final class runtime {
         private final List<ParserRuleContext> communalTypeContexts = new ArrayList<>();
         private boolean schedulerDirectiveEnabled;
 
-        private Phase3SurfaceValidator(SourceFileContext source) {
+        private RuntimeExtensionSurfaceValidator(SourceFileContext source) {
             this.source = source;
         }
 
@@ -629,11 +629,11 @@ public final class runtime {
         }
 
         @Override
-        public Void visitPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx) {
+        public Void visitRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx) {
             String key = ctx.ID(0).getText();
             String value = ctx.ID(1).getText();
-            validatePhase3Setting(ctx, key, value, false);
-            return super.visitPhase3Directive(ctx);
+            validateRuntimeDirective(ctx, key, value, false);
+            return super.visitRuntimeDirective(ctx);
         }
 
         @Override
@@ -654,12 +654,12 @@ public final class runtime {
                             + System.lineSeparator() + "suggested fix: use `#[setting(borrow_checker, off)]` or `#[setting(borrow_check, none)]`");
                 }
             } else {
-                validatePhase3Setting(ctx, key, value, true);
+                validateRuntimeDirective(ctx, key, value, true);
             }
             return super.visitSettingDirective(ctx);
         }
 
-        private void validatePhase3Setting(ParserRuleContext ctx, String key, String value, boolean settingForm) {
+        private void validateRuntimeDirective(ParserRuleContext ctx, String key, String value, boolean settingForm) {
             if ("fallback".equals(key)) {
                 if (!"allow".equals(value) && !"deny".equals(value)) {
                     addDiagnostic(ctx, "unsupported fallback policy `" + value + "`"
@@ -689,7 +689,7 @@ public final class runtime {
                 }
                 return;
             }
-            addDiagnostic(ctx, (settingForm ? "unknown setting `" : "unknown Phase 3 directive `") + key + "`"
+                addDiagnostic(ctx, (settingForm ? "unknown setting `" : "unknown runtime directive `") + key + "`"
                     + System.lineSeparator() + (settingForm
                     ? "suggested fix: use a supported setting such as `gc`, `gcmode`, `borrow_checker`, `borrow_check`, `fallback`, `macro_mode`, or `scheduler`"
                     : "suggested fix: remove the directive or use a supported key such as `fallback`, `macro_mode`, or `scheduler`"));
@@ -755,7 +755,7 @@ public final class runtime {
         }
 
         private void addDiagnostic(ParserRuleContext ctx, String message) {
-            diagnostics.add(source.formatRuleDiagnostic("error", "phase3-surface", ctx, message));
+            diagnostics.add(source.formatRuleDiagnostic("error", "runtime-extension-surface", ctx, message));
         }
 
         private void throwIfErrors() {
@@ -763,7 +763,7 @@ public final class runtime {
                 return;
             }
             StringBuilder builder = new StringBuilder();
-            builder.append("Compilation aborted with ").append(diagnostics.size()).append(" Phase 3 surface error");
+            builder.append("Compilation aborted with ").append(diagnostics.size()).append(" runtime extension error");
             if (diagnostics.size() != 1) {
                 builder.append("s");
             }

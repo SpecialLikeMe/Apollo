@@ -194,7 +194,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     private final Map<String, String> opstructAliases = new LinkedHashMap<>();
     private final Map<String, List<TypedefOpstructCommand>> typedefOpstructCommands = new LinkedHashMap<>();
     private final Map<String, ScheduleInfo> schedules = new LinkedHashMap<>();
-    private final Map<String, String> phase3Policies = new LinkedHashMap<>();
+    private final Map<String, String> runtimePolicies = new LinkedHashMap<>();
     private final Set<String> communalTypes = new LinkedHashSet<>();
     private final Set<String> dynamicMacroNames = new LinkedHashSet<>();
     private final Set<String> unsafeFallbackBlockedSymbols = new LinkedHashSet<>();
@@ -680,7 +680,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
 
     private String renderOpstructRegistration(compilerv1Parser.OpstructContext ctx) {
         StringBuilder builder = new StringBuilder();
-        builder.append("__apo_phase3_runtime::instance().register_opstruct(\"")
+        builder.append("__apo_runtime_extensions::instance().register_opstruct(\"")
                 .append(ctx.ID().getText())
                 .append("\", {");
         List<compilerv1Parser.FieldContext> fields = ctx.opstructBody().field();
@@ -699,12 +699,12 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         return builder.toString();
     }
 
-    private String renderPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx) {
-        return "__apo_phase3_runtime::instance().set_policy(\"" + ctx.ID(0).getText() + "\", \"" + ctx.ID(1).getText() + "\");";
+    private String renderRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx) {
+        return "__apo_runtime_extensions::instance().set_policy(\"" + ctx.ID(0).getText() + "\", \"" + ctx.ID(1).getText() + "\");";
     }
 
     private String renderDynamicMacroRegistration(compilerv1Parser.MacroContext ctx) {
-        return "__apo_phase3_runtime::instance().register_dynamic_macro(\"" + ctx.ID().getText() + "\");";
+        return "__apo_runtime_extensions::instance().register_dynamic_macro(\"" + ctx.ID().getText() + "\");";
     }
 
     private boolean isDynamicMacroName(String name) {
@@ -712,7 +712,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     }
 
     private boolean isFallbackPolicyEnabled() {
-        return "allow".equals(phase3Policies.get("fallback"));
+        return "allow".equals(runtimePolicies.get("fallback"));
     }
 
     private boolean isBlockedFallbackSymbol(String name) {
@@ -743,7 +743,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
 
     private String renderDynamicMacroCall(String functionName, String renderedArguments) {
         String directCall = renderDirectCallExpression(functionName, renderedArguments);
-        return "__apo_phase3_runtime::instance().invoke_dynamic_macro(\"" + functionName + "\", [&]() { return " + directCall + "; })";
+        return "__apo_runtime_extensions::instance().invoke_dynamic_macro(\"" + functionName + "\", [&]() { return " + directCall + "; })";
     }
 
     private boolean isTypedefOpstructDsl(compilerv1Parser.TypedefOpstructContext ctx) {
@@ -961,7 +961,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             throw error(ctx, "fallback call to blocked symbol `" + functionName + "` is not allowed");
         }
         String directCall = renderDirectCallExpression(functionName, renderedArguments);
-        return "__apo_phase3_runtime::instance().unsafe_fallback_call(\"" + functionName + "\", [&]() { return " + directCall + "; })";
+        return "__apo_runtime_extensions::instance().unsafe_fallback_call(\"" + functionName + "\", [&]() { return " + directCall + "; })";
     }
 
     private String renderStdinExpression() {
@@ -970,7 +970,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     }
 
     private String renderTypedefOpstructRegistration(compilerv1Parser.TypedefOpstructContext ctx) {
-        return "__apo_phase3_runtime::instance().register_opstruct(\"" + typedefOpstructPublicName(ctx) + "\", {});";
+        return "__apo_runtime_extensions::instance().register_opstruct(\"" + typedefOpstructPublicName(ctx) + "\", {});";
     }
 
     private String renderTypedefOpstructTemplateBody(compilerv1Parser.TypedefOpstructTemplateBodyContext ctx,
@@ -1370,16 +1370,16 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         }
     }
 
-    private void collectPhase3Policies(compilerv1Parser.ProgramContext ctx) {
-        phase3Policies.clear();
+    private void collectRuntimePolicies(compilerv1Parser.ProgramContext ctx) {
+        runtimePolicies.clear();
         if (ctx == null) {
             return;
         }
         for (compilerv1Parser.DirectiveContext directiveCtx : ctx.directive()) {
-            if (directiveCtx.phase3Directive() != null) {
-                phase3Policies.put(directiveCtx.phase3Directive().ID(0).getText(), directiveCtx.phase3Directive().ID(1).getText());
+            if (directiveCtx.runtimeDirective() != null) {
+                runtimePolicies.put(directiveCtx.runtimeDirective().ID(0).getText(), directiveCtx.runtimeDirective().ID(1).getText());
             } else if (directiveCtx.settingDirective() != null) {
-                phase3Policies.put(directiveCtx.settingDirective().ID().getText(), normalizeSettingValue(directiveCtx.settingDirective().settingValue().getText()));
+                runtimePolicies.put(directiveCtx.settingDirective().ID().getText(), normalizeSettingValue(directiveCtx.settingDirective().settingValue().getText()));
             }
         }
     }
@@ -1443,7 +1443,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     }
 
     private boolean schedulerEevfEnabled() {
-        return "eevf".equals(phase3Policies.get("scheduler"));
+        return "eevf".equals(runtimePolicies.get("scheduler"));
     }
 
     private void loadUnsafeFallbackDatabase() {
@@ -5336,7 +5336,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         boolean usesFileRuntime = runtimeFeatures.usesFileRuntime();
         boolean usesMemstructRuntime = runtimeFeatures.usesMemstructRuntime();
         boolean usesSchedulerRuntime = runtimeFeatures.usesSchedulerRuntime();
-        boolean usesPhase3Runtime = runtimeFeatures.usesPhase3Runtime();
+        boolean usesRuntimeExtensions = runtimeFeatures.usesRuntimeExtensions();
         boolean usesSoaRuntime = optimizationPlan.usesSoaRuntime();
         List<String> topLevelStatements = new ArrayList<>();
         Map<String, compilerv1Parser.GlobalInitContext> globalInitMap = new LinkedHashMap<>();
@@ -5348,7 +5348,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         collectOpstructMetadata(ctx);
         collectTypedefOpstructCommands(ctx);
         collectSchedules(ctx);
-        collectPhase3Policies(ctx);
+        collectRuntimePolicies(ctx);
         collectCommunalTypes(ctx);
         collectAutofmtStorageMutableNames(ctx);
         collectCallableTypes(ctx);
@@ -5412,8 +5412,8 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         if (usesFileRuntime) {
             writeFileRuntimeSupport();
         }
-        if (usesPhase3Runtime) {
-            writeRuntimeInclude("apo_phase3_runtime.hpp");
+        if (usesRuntimeExtensions) {
+            writeRuntimeInclude("apo_runtime_extensions.hpp");
             write("\n");
         }
         if (usesMemstructRuntime) {
@@ -5522,8 +5522,8 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         }
 
         for (compilerv1Parser.DirectiveContext directiveCtx : ctx.directive()) {
-            if (directiveCtx.phase3Directive() != null) {
-                topLevelStatements.add(renderPhase3Directive(directiveCtx.phase3Directive()));
+            if (directiveCtx.runtimeDirective() != null) {
+                topLevelStatements.add(renderRuntimeDirective(directiveCtx.runtimeDirective()));
             }
         }
 

@@ -1,0 +1,9 @@
+memstruct Buffer {
+    i32 size;
+}
+
+int main() {
+    nconst str arena = "arena_pool";
+    Buffer value = Buffer{}.uses(arena);
+    return 0;
+}

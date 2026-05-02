@@ -34,11 +34,11 @@ public interface compilerv1Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBorrowCheckerDirective(compilerv1Parser.BorrowCheckerDirectiveContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link compilerv1Parser#phase3Directive}.
+	 * Visit a parse tree produced by {@link compilerv1Parser#runtimeDirective}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx);
+	T visitRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link compilerv1Parser#settingDirective}.
 	 * @param ctx the parse tree

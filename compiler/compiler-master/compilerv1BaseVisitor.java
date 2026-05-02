@@ -45,7 +45,7 @@ public class compilerv1BaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPhase3Directive(compilerv1Parser.Phase3DirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRuntimeDirective(compilerv1Parser.RuntimeDirectiveContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

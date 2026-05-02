@@ -15,10 +15,10 @@ grammar compilerv1;
 }
 
 program      : (directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interface | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | dircpp | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
-directive    : gcDirective | borrowCheckerDirective | phase3Directive | settingDirective ;
+directive    : gcDirective | borrowCheckerDirective | runtimeDirective | settingDirective ;
 gcDirective  : '#[' (GC_NAME | GCMODE_NAME) '(' ID ')' ']' ;
 borrowCheckerDirective : '#[' (BORROW_CHECKER_NAME | BORROW_CHECK_NAME) '(' ID ')' ']' ;
-phase3Directive : '#[' ID '(' ID ')' ']' ;
+runtimeDirective : '#[' ID '(' ID ')' ']' ;
 settingDirective : '#[' 'setting' '(' ID ',' settingValue ')' ']' ;
 settingValue : ID | INT | STRING ;
 importStmt   : 'extern' (STRING | headerPath | importPath) ('-cpp')* ';'? ;

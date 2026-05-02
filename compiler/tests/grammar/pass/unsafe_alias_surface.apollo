@@ -1,0 +1,19 @@
+extern iostream;
+
+int main() {
+    i32 base = 7;
+    % void* heap.alc(2) int;
+    % i32* alias _&base;
+    % lang {
+        int main() {
+            return 0;
+        }
+    }cpp;
+    % lang -override {
+        int main() {
+            return 0;
+        }
+    }cpp;
+    % void heap;
+    return 0;
+}

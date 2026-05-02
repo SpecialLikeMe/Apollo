@@ -1,0 +1,9 @@
+#[gc(total)]
+#[borrow_checker(off)]
+
+int main() {
+    nconst int value = 1;
+    const int& alias = value;
+    value = 2;
+    return alias;
+}

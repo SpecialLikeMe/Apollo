@@ -6,7 +6,7 @@ public final class RuntimePhaseOrderTest {
 
     public static void main(String[] args) {
         List<String> expected = List.of(
-                "phase3-surface",
+            "runtime-extension-surface",
                 "unsafe-boundary",
                 "ownership",
                 "borrow",

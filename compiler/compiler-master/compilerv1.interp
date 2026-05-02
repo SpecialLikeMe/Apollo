@@ -285,7 +285,7 @@ program
 directive
 gcDirective
 borrowCheckerDirective
-phase3Directive
+runtimeDirective
 settingDirective
 settingValue
 importStmt

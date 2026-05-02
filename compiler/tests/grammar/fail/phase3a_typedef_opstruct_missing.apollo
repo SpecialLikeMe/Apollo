@@ -1,5 +1,0 @@
-typedef opstruct Missing MissingAlias;
-
-int main() {
-    return 0;
-}
