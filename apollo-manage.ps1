@@ -173,16 +173,19 @@ function Update-Apollo {
         throw 'Apollo update requires git on PATH.'
     }
 
+    $hadCheckout = Test-Path (Join-Path $InstallDir '.git')
     $branch = Resolve-OfficialBranch
     Connect-InstallToOfficialRepo -Branch $branch
 
-    $dirtyResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no')
-    if ($dirtyResult.ExitCode -ne 0) {
-        throw (($dirtyResult.Output | Out-String).Trim())
-    }
+    if ($hadCheckout) {
+        $dirtyResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no')
+        if ($dirtyResult.ExitCode -ne 0) {
+            throw (($dirtyResult.Output | Out-String).Trim())
+        }
 
-    if (($dirtyResult.Output | Out-String).Trim().Length -gt 0) {
-        throw 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.'
+        if (($dirtyResult.Output | Out-String).Trim().Length -gt 0) {
+            throw 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.'
+        }
     }
 
     $fetchResult = Invoke-Git -Arguments @('-C', $InstallDir, 'fetch', '--prune', $OfficialRepo, ("refs/heads/{0}" -f $branch))

@@ -38,7 +38,7 @@ print_version() {
         fi
     fi
 
-    printf 'Apollo dev\n'
+    printf 'Apollo deva\n'
     printf 'repo %s\n' "$OFFICIAL_REPO"
 }
 
@@ -74,10 +74,15 @@ update_apollo() {
         exit 1
     fi
 
+    had_checkout=0
+    if [ -d "$INSTALL_DIR/.git" ]; then
+        had_checkout=1
+    fi
+
     branch=$(resolve_official_branch)
     attach_official_checkout "$branch"
 
-    if [ -n "$(git -C "$INSTALL_DIR" status --porcelain --untracked-files=no)" ]; then
+    if [ "$had_checkout" -eq 1 ] && [ -n "$(git -C "$INSTALL_DIR" status --porcelain --untracked-files=no)" ]; then
         printf 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.\n' >&2
         exit 1
     fi
