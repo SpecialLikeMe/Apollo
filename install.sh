@@ -287,6 +287,11 @@ publish_cli_shims() {
         if ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" 2>/dev/null \
             && ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config" 2>/dev/null; then
             system_shims_published=1
+        elif command_exists sudo; then
+            if sudo ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" \
+                && sudo ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config"; then
+                system_shims_published=1
+            fi
         fi
     elif command_exists sudo; then
         if sudo mkdir -p "$SYSTEM_BIN_DIR" \
