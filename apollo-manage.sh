@@ -3,7 +3,7 @@ set -eu
 
 ACTION=${1-}
 INSTALL_DIR=${2-}
-OFFICIAL_REPO=https://github.com/SpecialLikeMe/Apollo.git
+OFFICIAL_REPO=https://github.com/SpecialLikeMe/Apollo.gita
 
 resolve_script_path() {
     target=$1
