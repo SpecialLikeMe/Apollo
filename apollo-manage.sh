@@ -32,7 +32,7 @@ print_version() {
         branch=$(git -C "$INSTALL_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || printf '')
         commit=$(git -C "$INSTALL_DIR" rev-parse --short HEAD 2>/dev/null || printf '')
         if [ -n "$branch" ] && [ -n "$commit" ]; then
-            printf 'Apollo dev (%s@%s)\n' "$branch" "$commit"
+            printf 'Apollo deva (%s@%s)\n' "$branch" "$commit"
             printf 'repo %s\n' "$OFFICIAL_REPO"
             return 0
         fi
