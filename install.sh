@@ -44,23 +44,23 @@ first_existing_dir() {
 
 install_with_brew() {
     write_status 'Installing dependencies with Homebrew'
-    brew install openjdk llvm antlr boehm-gc make
+    brew install git openjdk llvm antlr boehm-gc make
 }
 
 install_with_apt() {
     write_status 'Installing dependencies with apt'
     sudo apt-get update
-    sudo apt-get install -y openjdk-21-jdk clang llvm make antlr4 libgc-dev
+    sudo apt-get install -y git openjdk-21-jdk clang llvm make antlr4 libgc-dev
 }
 
 install_with_dnf() {
     write_status 'Installing dependencies with dnf'
-    sudo dnf install -y java-21-openjdk-devel clang llvm make antlr4 gc-devel
+    sudo dnf install -y git java-21-openjdk-devel clang llvm make antlr4 gc-devel
 }
 
 install_with_pacman() {
     write_status 'Installing dependencies with pacman'
-    sudo pacman -Sy --needed --noconfirm jdk21-openjdk clang llvm make antlr4 gc
+    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make antlr4 gc
 }
 
 ensure_dependencies() {
@@ -208,9 +208,11 @@ dependency_snapshot() {
     java_bin=$(resolve_java_bin)
     llvm_bin=$(resolve_llvm_bin)
     make_bin=$(resolve_make_bin)
+    git_bin=$(command -v git 2>/dev/null || printf '')
     gc_include_dir=$(resolve_gc_include_dir)
     gc_lib_dir=$(resolve_gc_lib_dir)
 
+    [ -n "$git_bin" ] || return 1
     [ -n "$java_bin" ] || return 1
     [ -x "$java_bin/java" ] || return 1
     [ -x "$java_bin/javac" ] || return 1
@@ -231,6 +233,7 @@ dependency_snapshot() {
     resolve_gc_library "$gc_lib_dir" libgc.a libgc.so libgc.dylib >/dev/null || return 1
     resolve_gc_library "$gc_lib_dir" libgccpp.a libgccpp.so libgccpp.dylib >/dev/null || return 1
 
+    printf 'GIT_BIN=%s\n' "$git_bin"
     printf 'JAVA_BIN=%s\n' "$java_bin"
     printf 'LLVM_BIN=%s\n' "$llvm_bin"
     printf 'MAKE_BIN=%s\n' "$make_bin"
@@ -245,6 +248,7 @@ verify_dependencies() {
     fi
 
     eval "$snapshot"
+    write_status "Verified git at $GIT_BIN"
     write_status "Verified Java at $JAVA_BIN"
     write_status "Verified LLVM toolchain at $LLVM_BIN"
     write_status "Verified make at $MAKE_BIN"

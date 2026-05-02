@@ -18,6 +18,46 @@ function Get-WingetCommand {
     return $winget.Source
 }
 
+function Add-ToProcessPath {
+    param([string]$Entry)
+
+    if ([string]::IsNullOrWhiteSpace($Entry) -or -not (Test-Path $Entry)) {
+        return
+    }
+
+    $entries = $env:PATH -split ';' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    if ($entries -contains $Entry) {
+        return
+    }
+
+    $env:PATH = "$Entry;$env:PATH"
+}
+
+function Resolve-GitCommand {
+    $git = Get-Command git -ErrorAction SilentlyContinue
+    if ($git) {
+        return $git.Source
+    }
+
+    $candidates = @(
+        (Join-Path $env:ProgramFiles 'Git\cmd\git.exe'),
+        (Join-Path $env:ProgramFiles 'Git\bin\git.exe'),
+        (Join-Path $env:LOCALAPPDATA 'Programs\Git\cmd\git.exe'),
+        (Join-Path ${env:ProgramFiles(x86)} 'Git\cmd\git.exe')
+    )
+
+    foreach ($candidate in $candidates) {
+        if ([string]::IsNullOrWhiteSpace($candidate)) {
+            continue
+        }
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
 function Install-WingetPackage {
     param(
         [string]$Id,
@@ -77,6 +117,24 @@ function Ensure-Java {
     }
 
     Install-WingetPackage -Id 'Microsoft.OpenJDK.21' -Name 'Microsoft OpenJDK 21'
+}
+
+function Ensure-Git {
+    $git = Resolve-GitCommand
+    if ($git) {
+        Add-ToProcessPath -Entry (Split-Path $git -Parent)
+        Write-Status 'Git already present'
+        return
+    }
+
+    Install-WingetPackage -Id 'Git.Git' -Name 'Git'
+
+    $git = Resolve-GitCommand
+    if (-not $git) {
+        throw 'git.exe could not be located after installing Git.'
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $git -Parent)
 }
 
 function Ensure-Msys2 {
@@ -300,6 +358,7 @@ function Invoke-ApolloValidation {
 $InstallDir = [System.IO.Path]::GetFullPath($InstallDir)
 Write-Status "Bootstrapping dependencies for Apollo at $InstallDir"
 
+Ensure-Git
 Ensure-Java
 $msysRoot = Ensure-Msys2
 Ensure-MingwPackages -MsysRoot $msysRoot

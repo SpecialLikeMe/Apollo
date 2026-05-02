@@ -54,23 +54,34 @@ resolve_official_branch() {
     printf 'main\n'
 }
 
+attach_official_checkout() {
+    branch=$1
+
+    if [ -d "$INSTALL_DIR/.git" ]; then
+        return 0
+    fi
+
+    temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/apollo-update.XXXXXX")
+    git clone --branch "$branch" --single-branch "$OFFICIAL_REPO" "$temp_dir"
+    cp -R "$temp_dir/.git" "$INSTALL_DIR/.git"
+    git -C "$INSTALL_DIR" reset --hard HEAD
+    rm -rf "$temp_dir"
+}
+
 update_apollo() {
     if ! command -v git >/dev/null 2>&1; then
         printf 'Apollo update requires git on PATH.\n' >&2
         exit 1
     fi
 
-    if [ ! -d "$INSTALL_DIR/.git" ]; then
-        printf 'Apollo update requires a git checkout. Clone %s and run the command from that install.\n' "$OFFICIAL_REPO" >&2
-        exit 1
-    fi
+    branch=$(resolve_official_branch)
+    attach_official_checkout "$branch"
 
     if [ -n "$(git -C "$INSTALL_DIR" status --porcelain --untracked-files=no)" ]; then
         printf 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.\n' >&2
         exit 1
     fi
 
-    branch=$(resolve_official_branch)
     git -C "$INSTALL_DIR" fetch --prune "$OFFICIAL_REPO" "refs/heads/$branch"
     git -C "$INSTALL_DIR" merge --ff-only FETCH_HEAD
     print_version | sed '1s/^Apollo dev /Apollo updated to /'

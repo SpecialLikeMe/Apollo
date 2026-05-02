@@ -11,16 +11,91 @@ $ErrorActionPreference = 'Stop'
 $OfficialRepo = 'https://github.com/SpecialLikeMe/Apollo.git'
 $InstallDir = [System.IO.Path]::GetFullPath($InstallDir)
 
+function Resolve-GitCommand {
+    $git = Get-Command git -ErrorAction SilentlyContinue
+    if ($git) {
+        return $git.Source
+    }
+
+    $candidates = @(
+        (Join-Path $env:ProgramFiles 'Git\cmd\git.exe'),
+        (Join-Path $env:ProgramFiles 'Git\bin\git.exe'),
+        (Join-Path $env:LOCALAPPDATA 'Programs\Git\cmd\git.exe'),
+        (Join-Path ${env:ProgramFiles(x86)} 'Git\cmd\git.exe')
+    )
+
+    foreach ($candidate in $candidates) {
+        if ([string]::IsNullOrWhiteSpace($candidate)) {
+            continue
+        }
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
+function Format-ProcessArgument {
+    param(
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyString()]
+        [string]$Value
+    )
+
+    if ($Value.Length -eq 0) {
+        return '""'
+    }
+
+    if ($Value -notmatch '[\s"]') {
+        return $Value
+    }
+
+    return '"' + ($Value -replace '"', '\"') + '"'
+}
+
 function Invoke-Git {
     param(
         [Parameter(Mandatory = $true)]
         [string[]]$Arguments
     )
 
-    $output = & git @Arguments 2>&1
-    $exitCode = $LASTEXITCODE
+    $git = Resolve-GitCommand
+    if (-not $git) {
+        throw 'Apollo update requires git on PATH.'
+    }
+
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = $git
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+    $startInfo.Arguments = (($Arguments | ForEach-Object { Format-ProcessArgument -Value $_ }) -join ' ')
+
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $startInfo
+
+    try {
+        [void]$process.Start()
+        $stdout = $process.StandardOutput.ReadToEnd()
+        $stderr = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        $exitCode = $process.ExitCode
+    } finally {
+        $process.Dispose()
+    }
+
+    $combinedOutput = @()
+    if (-not [string]::IsNullOrWhiteSpace($stdout)) {
+        $combinedOutput += ($stdout -split "`r?`n")
+    }
+    if (-not [string]::IsNullOrWhiteSpace($stderr)) {
+        $combinedOutput += ($stderr -split "`r?`n")
+    }
+
     return [PSCustomObject]@{
-        Output = $output
+        Output = @($combinedOutput | Where-Object { $_ -ne '' })
         ExitCode = $exitCode
     }
 }
@@ -65,14 +140,41 @@ function Resolve-OfficialBranch {
     return 'main'
 }
 
+function Connect-InstallToOfficialRepo {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Branch
+    )
+
+    if (Test-Path (Join-Path $InstallDir '.git')) {
+        return
+    }
+
+    $tempRepo = Join-Path ([System.IO.Path]::GetTempPath()) ("apollo-update-{0}" -f [Guid]::NewGuid().ToString('N'))
+    try {
+        $cloneResult = Invoke-Git -Arguments @('clone', '--branch', $Branch, '--single-branch', $OfficialRepo, $tempRepo)
+        if ($cloneResult.ExitCode -ne 0) {
+            throw (($cloneResult.Output | Out-String).Trim())
+        }
+
+        Copy-Item -LiteralPath (Join-Path $tempRepo '.git') -Destination (Join-Path $InstallDir '.git') -Recurse -Force
+
+        $resetResult = Invoke-Git -Arguments @('-C', $InstallDir, 'reset', '--hard', 'HEAD')
+        if ($resetResult.ExitCode -ne 0) {
+            throw (($resetResult.Output | Out-String).Trim())
+        }
+    } finally {
+        Remove-Item -LiteralPath $tempRepo -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
 function Update-Apollo {
-    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    if (-not (Resolve-GitCommand)) {
         throw 'Apollo update requires git on PATH.'
     }
 
-    if (-not (Test-Path (Join-Path $InstallDir '.git'))) {
-        throw 'Apollo update requires a git checkout. Clone https://github.com/SpecialLikeMe/Apollo and run the command from that install.'
-    }
+    $branch = Resolve-OfficialBranch
+    Connect-InstallToOfficialRepo -Branch $branch
 
     $dirtyResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no')
     if ($dirtyResult.ExitCode -ne 0) {
@@ -83,7 +185,6 @@ function Update-Apollo {
         throw 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.'
     }
 
-    $branch = Resolve-OfficialBranch
     $fetchResult = Invoke-Git -Arguments @('-C', $InstallDir, 'fetch', '--prune', $OfficialRepo, ("refs/heads/{0}" -f $branch))
     if ($fetchResult.ExitCode -ne 0) {
         throw (($fetchResult.Output | Out-String).Trim())
