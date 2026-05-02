@@ -33,7 +33,36 @@ function Remove-PathWithRetries {
     }
 }
 
+function Should-PreserveOutputChild {
+    param(
+        [string]$ChildPath,
+        [string]$NormalizedOutputDir
+    )
+
+    if ([string]::IsNullOrWhiteSpace($ChildPath) -or [string]::IsNullOrWhiteSpace($NormalizedOutputDir)) {
+        return $false
+    }
+
+    $normalizedChild = Get-NormalizedPath $ChildPath
+    if ($null -eq $normalizedChild) {
+        return $false
+    }
+
+    $outputClasses = Join-Path $NormalizedOutputDir 'classes'
+    $outputCache = Join-Path $NormalizedOutputDir 'cache'
+    if ($normalizedChild -ieq $outputClasses -or $normalizedChild -ieq $outputCache) {
+        return $true
+    }
+
+    if ([System.IO.Path]::GetExtension($normalizedChild) -ieq '.pch') {
+        return $true
+    }
+
+    return $false
+}
+
 $preserve = Get-NormalizedPath $PreservePath
+$normalizedOutputDir = Get-NormalizedPath $OutputDir
 $targets = New-Object System.Collections.Generic.List[string]
 
 if (-not [string]::IsNullOrWhiteSpace($ManifestPath) -and (Test-Path -LiteralPath $ManifestPath)) {
@@ -44,9 +73,11 @@ if (-not [string]::IsNullOrWhiteSpace($ManifestPath) -and (Test-Path -LiteralPat
     }
 }
 
-if (-not [string]::IsNullOrWhiteSpace($OutputDir) -and (Test-Path -LiteralPath $OutputDir)) {
+if ($normalizedOutputDir -and (Test-Path -LiteralPath $normalizedOutputDir)) {
     foreach ($child in Get-ChildItem -LiteralPath $OutputDir -Force -ErrorAction SilentlyContinue) {
-        $targets.Add($child.FullName)
+        if (-not (Should-PreserveOutputChild -ChildPath $child.FullName -NormalizedOutputDir $normalizedOutputDir)) {
+            $targets.Add($child.FullName)
+        }
     }
 }
 
@@ -60,10 +91,15 @@ foreach ($target in $uniqueTargets) {
     Remove-PathWithRetries $target
 }
 
-$normalizedOutputDir = Get-NormalizedPath $OutputDir
 if ($normalizedOutputDir -and (Test-Path -LiteralPath $normalizedOutputDir)) {
-    $remaining = Get-ChildItem -LiteralPath $normalizedOutputDir -Force -ErrorAction SilentlyContinue | Select-Object -First 1
+    $remaining = Get-ChildItem -LiteralPath $normalizedOutputDir -Force -ErrorAction SilentlyContinue |
+        Where-Object { -not (Should-PreserveOutputChild -ChildPath $_.FullName -NormalizedOutputDir $normalizedOutputDir) } |
+        Select-Object -First 1
     if ($null -eq $remaining) {
+        $preservedEntries = Get-ChildItem -LiteralPath $normalizedOutputDir -Force -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($null -ne $preservedEntries) {
+            return
+        }
         Remove-PathWithRetries $normalizedOutputDir
     }
 }

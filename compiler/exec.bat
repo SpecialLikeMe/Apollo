@@ -286,30 +286,65 @@ if not exist "%INPUT_FILE%" (
     exit /b 1
 )
 
-"%JAVA_EXE%" -jar "%ANTLR_JAR%" -visitor -Dlanguage=Java -o compiler-master compilerv1.g4
-if errorlevel 1 (
-    popd
-    exit /b %errorlevel%
-)
-
 for %%I in ("%INPUT_FILE%") do set "SOURCE_ROOT=%%~dpI"
 if defined SOURCE_ROOT if "%SOURCE_ROOT:~-1%"=="\" set "SOURCE_ROOT=%SOURCE_ROOT:~0,-1%"
 
 if not exist output mkdir output
 if not exist output\classes mkdir output\classes
 
-pushd compiler-master
-"%JAVAC_EXE%" -d ..\output\classes -cp ".;%ANTLR_JAR%" *.java
-if errorlevel 1 (
-    popd
-    exit /b %errorlevel%
-)
-popd
+set "PARSER_STAMP=output\classes\.apollo_parser.stamp"
+set "PARSER_CLASSES_STAMP=output\classes\.apollo_parser_classes.stamp"
+set "FRONTEND_STAMP=output\classes\.apollo_frontend.stamp"
+set "REBUILD_PARSER="
+set "REBUILD_PARSER_CLASSES="
+set "REBUILD_FRONTEND="
 
-"%JAVAC_EXE%" -d output\classes -cp ".;output\classes;%ANTLR_JAR%" ApolloBuildDriver.java ApolloCodegenOptimizationPlan.java CppCodeGenVisitor.java Main.java runtime.java
-if errorlevel 1 (
+if not exist "compiler-master\compilerv1Parser.java" set "REBUILD_PARSER=1"
+if not exist "compiler-master\compilerv1Lexer.java" set "REBUILD_PARSER=1"
+if not defined REBUILD_PARSER call :needs_rebuild "%PARSER_STAMP%" "compilerv1.g4" "%ANTLR_JAR%"
+if not defined REBUILD_PARSER if not errorlevel 1 set "REBUILD_PARSER=1"
+
+if defined REBUILD_PARSER (
+    "%JAVA_EXE%" -jar "%ANTLR_JAR%" -visitor -Dlanguage=Java -o compiler-master compilerv1.g4
+    if errorlevel 1 (
+        popd
+        exit /b %errorlevel%
+    )
+    call :touch_stamp "%PARSER_STAMP%"
+)
+
+if defined REBUILD_PARSER set "REBUILD_PARSER_CLASSES=1"
+if not exist "output\classes\compilerv1Parser.class" set "REBUILD_PARSER_CLASSES=1"
+if not exist "output\classes\compilerv1Lexer.class" set "REBUILD_PARSER_CLASSES=1"
+if not defined REBUILD_PARSER_CLASSES call :needs_rebuild "%PARSER_CLASSES_STAMP%" "compiler-master\compilerv1BaseListener.java" "compiler-master\compilerv1BaseVisitor.java" "compiler-master\compilerv1Lexer.java" "compiler-master\compilerv1Listener.java" "compiler-master\compilerv1Parser.java" "compiler-master\compilerv1Visitor.java" "%ANTLR_JAR%"
+if not defined REBUILD_PARSER_CLASSES if not errorlevel 1 set "REBUILD_PARSER_CLASSES=1"
+
+if defined REBUILD_PARSER_CLASSES (
+    pushd compiler-master
+    "%JAVAC_EXE%" -d ..\output\classes -cp ".;%ANTLR_JAR%" *.java
+    if errorlevel 1 (
+        popd
+        exit /b %errorlevel%
+    )
     popd
-    exit /b %errorlevel%
+    call :touch_stamp "%PARSER_CLASSES_STAMP%"
+)
+
+if not exist "output\classes\Main.class" set "REBUILD_FRONTEND=1"
+if not exist "output\classes\runtime.class" set "REBUILD_FRONTEND=1"
+if not exist "output\classes\CppCodeGenVisitor.class" set "REBUILD_FRONTEND=1"
+if not exist "output\classes\ApolloBuildDriver.class" set "REBUILD_FRONTEND=1"
+if not exist "output\classes\ApolloCodegenOptimizationPlan.class" set "REBUILD_FRONTEND=1"
+if not defined REBUILD_FRONTEND call :needs_rebuild "%FRONTEND_STAMP%" "Main.java" "runtime.java" "CppCodeGenVisitor.java" "ApolloBuildDriver.java" "ApolloCodegenOptimizationPlan.java" "%PARSER_CLASSES_STAMP%" "%ANTLR_JAR%"
+if not defined REBUILD_FRONTEND if not errorlevel 1 set "REBUILD_FRONTEND=1"
+
+if defined REBUILD_FRONTEND (
+    "%JAVAC_EXE%" -d output\classes -cp ".;output\classes;%ANTLR_JAR%" ApolloBuildDriver.java ApolloCodegenOptimizationPlan.java CppCodeGenVisitor.java Main.java runtime.java
+    if errorlevel 1 (
+        popd
+        exit /b %errorlevel%
+    )
+    call :touch_stamp "%FRONTEND_STAMP%"
 )
 
 "%JAVA_EXE%" -cp "output\classes;%ANTLR_JAR%" Main "%INPUT_FILE%"
@@ -318,6 +353,40 @@ if errorlevel 1 (
     exit /b %errorlevel%
 )
 exit /b 0
+
+:touch_stamp
+if exist "%~1" (
+    copy /b "%~1" +,, >nul
+) else (
+    type nul > "%~1"
+)
+exit /b 0
+
+:needs_rebuild
+setlocal EnableDelayedExpansion
+set "TARGET=%~1"
+shift
+
+if not exist "!TARGET!" (
+    endlocal & exit /b 0
+)
+
+:needs_rebuild_loop
+if "%~1"=="" (
+    endlocal & exit /b 1
+)
+
+if not exist "%~1" (
+    endlocal & exit /b 0
+)
+
+powershell -NoProfile -Command "$target = Get-Item -LiteralPath '%TARGET%'; $dependency = Get-Item -LiteralPath '%~1'; if ($dependency.LastWriteTimeUtc -gt $target.LastWriteTimeUtc) { exit 0 } else { exit 1 }"
+if not errorlevel 1 (
+    endlocal & exit /b 0
+)
+
+shift
+goto :needs_rebuild_loop
 
 :run_jit
 "%JAVA_EXE%" -cp "output\classes;%ANTLR_JAR%" ApolloBuildDriver emit-ll "%INPUT_FILE%"

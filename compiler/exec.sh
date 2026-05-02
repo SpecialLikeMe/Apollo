@@ -54,6 +54,33 @@ cleanup_generated() {
     done < "$manifest_path"
 }
 
+touch_stamp() {
+    stamp_path=$1
+    mkdir -p "$(dirname -- "$stamp_path")"
+    if [ -f "$stamp_path" ]; then
+        touch "$stamp_path"
+    else
+        : > "$stamp_path"
+    fi
+}
+
+needs_rebuild() {
+    target=$1
+    shift
+
+    if [ ! -f "$target" ]; then
+        return 0
+    fi
+
+    for dependency in "$@"; do
+        if [ ! -f "$dependency" ] || [ "$dependency" -nt "$target" ]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 run_and_capture_exit() {
     set +e
     "$@"
@@ -69,15 +96,55 @@ prepare_codegen() {
         exit 1
     fi
 
-    "$JAVA_EXE" -jar "$ANTLR_JAR" -visitor -Dlanguage=Java -o compiler-master compilerv1.g4
     mkdir -p output output/classes
 
-    (
-        cd compiler-master
-        "$JAVAC_EXE" -d ../output/classes -cp ".:../antlr-4.13.2-complete.jar" *.java
-    )
+    parser_source="compiler-master/compilerv1Parser.java"
+    lexer_source="compiler-master/compilerv1Lexer.java"
+    parser_stamp="output/classes/.apollo_parser.stamp"
+    parser_classes_stamp="output/classes/.apollo_parser_classes.stamp"
+    frontend_stamp="output/classes/.apollo_frontend.stamp"
 
-    "$JAVAC_EXE" -d output/classes -cp ".:output/classes:$ANTLR_JAR" ApolloBuildDriver.java ApolloCodegenOptimizationPlan.java CppCodeGenVisitor.java Main.java runtime.java
+    parser_regenerated=0
+    if [ ! -f "$parser_source" ] || [ ! -f "$lexer_source" ] || needs_rebuild "$parser_stamp" compilerv1.g4 "$ANTLR_JAR"; then
+        "$JAVA_EXE" -jar "$ANTLR_JAR" -visitor -Dlanguage=Java -o compiler-master compilerv1.g4
+        parser_regenerated=1
+        touch_stamp "$parser_stamp"
+    fi
+
+    if [ "$parser_regenerated" -eq 1 ] \
+        || [ ! -f "output/classes/compilerv1Parser.class" ] \
+        || [ ! -f "output/classes/compilerv1Lexer.class" ] \
+        || needs_rebuild "$parser_classes_stamp" \
+            compiler-master/compilerv1BaseListener.java \
+            compiler-master/compilerv1BaseVisitor.java \
+            compiler-master/compilerv1Lexer.java \
+            compiler-master/compilerv1Listener.java \
+            compiler-master/compilerv1Parser.java \
+            compiler-master/compilerv1Visitor.java \
+            "$ANTLR_JAR"; then
+        (
+            cd compiler-master
+            "$JAVAC_EXE" -d ../output/classes -cp ".:../antlr-4.13.2-complete.jar" *.java
+        )
+        touch_stamp "$parser_classes_stamp"
+    fi
+
+    if [ ! -f "output/classes/Main.class" ] \
+        || [ ! -f "output/classes/runtime.class" ] \
+        || [ ! -f "output/classes/CppCodeGenVisitor.class" ] \
+        || [ ! -f "output/classes/ApolloBuildDriver.class" ] \
+        || [ ! -f "output/classes/ApolloCodegenOptimizationPlan.class" ] \
+        || needs_rebuild "$frontend_stamp" \
+            Main.java \
+            runtime.java \
+            CppCodeGenVisitor.java \
+            ApolloBuildDriver.java \
+            ApolloCodegenOptimizationPlan.java \
+            "$parser_classes_stamp" \
+            "$ANTLR_JAR"; then
+        "$JAVAC_EXE" -d output/classes -cp ".:output/classes:$ANTLR_JAR" ApolloBuildDriver.java ApolloCodegenOptimizationPlan.java CppCodeGenVisitor.java Main.java runtime.java
+        touch_stamp "$frontend_stamp"
+    fi
     "$JAVA_EXE" -cp "output/classes:$ANTLR_JAR" Main "$INPUT_FILE"
 }
 

@@ -3,11 +3,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public final class ApolloBuildDriver {
+    private static final String BUILD_CACHE_VERSION = "apollo-build-cache-v1";
+
     private ApolloBuildDriver() {
     }
 
@@ -67,9 +71,16 @@ public final class ApolloBuildDriver {
     }
 
     private static void buildAot(BuildEnvironment env, Path linkOutput) throws Exception {
-        emitLl(env);
-
         Files.createDirectories(linkOutput.getParent() != null ? linkOutput.getParent() : env.compilerDir);
+        GcSupport gcSupport = resolveGcSupport(env);
+
+        BuildArtifactCacheEntry cacheEntry = tryLoadBuildArtifactCache(env, gcSupport);
+        if (cacheEntry != null) {
+            restoreCachedBuildArtifact(cacheEntry, linkOutput);
+            return;
+        }
+
+        emitLl(env);
 
         List<String> llcCommand = new ArrayList<>();
         llcCommand.add(env.llcExe);
@@ -79,7 +90,6 @@ public final class ApolloBuildDriver {
         llcCommand.add(env.objectOutput.toString());
         runCommand(llcCommand, env.compilerDir);
 
-        GcSupport gcSupport = resolveGcSupport(env);
         List<String> linkCommand = new ArrayList<>();
         linkCommand.add(env.clangxxExe);
         linkCommand.add(env.objectOutput.toString());
@@ -90,6 +100,8 @@ public final class ApolloBuildDriver {
         linkCommand.addAll(pgoLinkFlags(env));
         linkCommand.addAll(linkFlags(env));
         runCommand(linkCommand, env.compilerDir);
+
+        writeBuildArtifactCache(env, gcSupport, linkOutput);
     }
 
     private static void analyze(BuildEnvironment env, Path outputFile) throws Exception {
@@ -330,6 +342,88 @@ public final class ApolloBuildDriver {
         return List.of("-static", "-static-libstdc++", "-static-libgcc");
     }
 
+    private static BuildArtifactCacheEntry tryLoadBuildArtifactCache(BuildEnvironment env, GcSupport gcSupport) throws Exception {
+        if (!env.enableBuildCache) {
+            return null;
+        }
+
+        Path cacheArtifactPath = buildCacheArtifactPath(env, gcSupport);
+        if (!Files.exists(cacheArtifactPath)) {
+            return null;
+        }
+
+        return new BuildArtifactCacheEntry(cacheArtifactPath);
+    }
+
+    private static void writeBuildArtifactCache(BuildEnvironment env, GcSupport gcSupport, Path linkedBinary) throws Exception {
+        if (!env.enableBuildCache) {
+            return;
+        }
+
+        Path cacheArtifactPath = buildCacheArtifactPath(env, gcSupport);
+        Path parent = cacheArtifactPath.getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
+        Files.copy(linkedBinary, cacheArtifactPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void restoreCachedBuildArtifact(BuildArtifactCacheEntry cacheEntry, Path linkOutput) throws Exception {
+        Path parent = linkOutput.getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
+        Files.copy(cacheEntry.artifactPath, linkOutput, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static Path buildCacheArtifactPath(BuildEnvironment env, GcSupport gcSupport) throws Exception {
+        Path cacheRoot = env.outputDir.resolve("cache").resolve("build-aot");
+        String cacheKey = sha256(buildArtifactSignature(env, gcSupport));
+        return cacheRoot.resolve(cacheKey + ".bin");
+    }
+
+    private static String buildArtifactSignature(BuildEnvironment env, GcSupport gcSupport) throws Exception {
+        List<String> parts = new ArrayList<>();
+        parts.add(BUILD_CACHE_VERSION);
+        parts.add("generatedCpp=" + sha256(Files.readString(env.generatedCpp, StandardCharsets.UTF_8)));
+        parts.add("clang=" + env.clangExe);
+        parts.add("clangxx=" + env.clangxxExe);
+        parts.add("llc=" + env.llcExe);
+        parts.add("std=" + env.cxxStd);
+        parts.add("opt=" + env.optLevel);
+        parts.add("llcOpt=" + env.llcOptLevel);
+        parts.add("target=" + nullSafe(env.targetTriple));
+        parts.add("sysroot=" + nullSafe(env.sysroot));
+        parts.add("usePch=" + env.usePch);
+        parts.add("frontendFlags=" + String.join(" ", frontendFlags(env)));
+        parts.add("llcFlags=" + String.join(" ", llcFlags(env)));
+        parts.add("linkFlags=" + String.join(" ", linkFlags(env)));
+        parts.add("standaloneLinkFlags=" + String.join(" ", standaloneLinkFlags(env)));
+        parts.add("gcCompileFlags=" + String.join(" ", gcSupport.compileFlags()));
+        parts.add("gcLinkFlags=" + String.join(" ", gcSupport.linkFlags()));
+        parts.add("pgoCompileFlags=" + String.join(" ", pgoCompileFlags(env)));
+        parts.add("pgoLinkFlags=" + String.join(" ", pgoLinkFlags(env)));
+        if (env.usePch && Files.exists(env.pchHeader)) {
+            parts.add("pchHeader=" + sha256(Files.readString(env.pchHeader, StandardCharsets.UTF_8)));
+        }
+        return String.join("|", parts);
+    }
+
+    private static String sha256(String text) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] bytes = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+        StringBuilder builder = new StringBuilder(bytes.length * 2);
+        for (byte value : bytes) {
+            builder.append(Character.forDigit((value >>> 4) & 0x0f, 16));
+            builder.append(Character.forDigit(value & 0x0f, 16));
+        }
+        return builder.toString();
+    }
+
+    private static String nullSafe(String value) {
+        return value == null ? "" : value;
+    }
+
     private static boolean isLinuxTarget(BuildEnvironment env) {
         String targetTriple = env.targetTriple;
         if (!isBlank(targetTriple)) {
@@ -440,6 +534,7 @@ public final class ApolloBuildDriver {
         private final String targetTriple;
         private final String sysroot;
         private final boolean usePch;
+        private final boolean enableBuildCache;
 
         private BuildEnvironment(Path compilerDir,
                                  Path sourceRoot,
@@ -457,7 +552,8 @@ public final class ApolloBuildDriver {
                                  String llcOptLevel,
                                  String targetTriple,
                                  String sysroot,
-                                 boolean usePch) {
+                                 boolean usePch,
+                                 boolean enableBuildCache) {
             this.compilerDir = compilerDir;
             this.sourceRoot = sourceRoot;
             this.generatedCpp = generatedCpp;
@@ -475,6 +571,7 @@ public final class ApolloBuildDriver {
             this.targetTriple = targetTriple;
             this.sysroot = sysroot;
             this.usePch = usePch;
+            this.enableBuildCache = enableBuildCache;
         }
 
         private static BuildEnvironment load(Path inputFile) throws IOException {
@@ -493,6 +590,7 @@ public final class ApolloBuildDriver {
             String llcExe = defaulted(firstDefined(System.getenv("LLC_EXE"), System.getenv("APOLLO_LLC_EXE")), "llc");
             String targetTriple = System.getenv("APOLLO_TARGET_TRIPLE");
             String sysroot = System.getenv("APOLLO_SYSROOT");
+                boolean enableBuildCache = !envEnabled("APOLLO_DISABLE_BUILD_CACHE", false);
 
             return new BuildEnvironment(
                     compilerDir,
@@ -511,7 +609,16 @@ public final class ApolloBuildDriver {
                     llcOptLevel,
                     targetTriple,
                     sysroot,
-                    usePch);
+                    usePch,
+                    enableBuildCache);
+        }
+    }
+
+    private static final class BuildArtifactCacheEntry {
+        private final Path artifactPath;
+
+        private BuildArtifactCacheEntry(Path artifactPath) {
+            this.artifactPath = artifactPath;
         }
     }
 
