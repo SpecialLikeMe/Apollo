@@ -296,6 +296,11 @@ validate_cli_shims() {
     fi
 }
 
+mkdir -p "$COMPILER_DIR"
+chmod +x "$INSTALL_DIR/apollo.sh" "$INSTALL_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh"
+publish_cli_shims
+validate_cli_shims
+
 ensure_dependencies
 verify_dependencies
 
@@ -310,7 +315,5 @@ export APOLLO_CXX_STD="c++20"
 EOF
 
 chmod +x "$INSTALL_DIR/apollo.sh" "$INSTALL_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$TOOLCHAIN_ENV_SH"
-publish_cli_shims
-validate_cli_shims
 write_status "Wrote POSIX toolchain environment to $TOOLCHAIN_ENV_SH"
 write_status "Apollo is available as 'apollo' and 'apollo-config' from $USER_BIN_DIR"
