@@ -21,6 +21,7 @@ INSTALL_DIR=$(CDPATH= cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd -P)
 COMPILER_DIR="$INSTALL_DIR/compiler"
 TOOLCHAIN_ENV_SH="$COMPILER_DIR/toolchain-env.sh"
 USER_BIN_DIR=${XDG_BIN_HOME:-$HOME/.local/bin}
+SYSTEM_BIN_DIR=${APOLLO_SYSTEM_BIN_DIR:-/usr/local/bin}
 APOLLO_PATH_SENTINEL="# Added by Apollo installer"
 
 command_exists() {
@@ -59,7 +60,7 @@ install_with_dnf() {
 
 install_with_pacman() {
     write_status 'Installing dependencies with pacman'
-    sudo pacman -Sy --noconfirm jdk21-openjdk clang llvm make antlr4 boehm-gc
+    sudo pacman -Sy --needed --noconfirm jdk21-openjdk clang llvm make antlr4 gc
 }
 
 ensure_dependencies() {
@@ -277,6 +278,20 @@ publish_cli_shims() {
     ln -snf "$INSTALL_DIR/apollo.sh" "$USER_BIN_DIR/apollo"
     ln -snf "$INSTALL_DIR/apollo-config.sh" "$USER_BIN_DIR/apollo-config"
 
+    system_shims_published=0
+    if [ -d "$SYSTEM_BIN_DIR" ] || mkdir -p "$SYSTEM_BIN_DIR" 2>/dev/null; then
+        if ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" 2>/dev/null \
+            && ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config" 2>/dev/null; then
+            system_shims_published=1
+        fi
+    elif command_exists sudo; then
+        if sudo mkdir -p "$SYSTEM_BIN_DIR" \
+            && sudo ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" \
+            && sudo ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config"; then
+            system_shims_published=1
+        fi
+    fi
+
     case ":$PATH:" in
         *":$USER_BIN_DIR:"*) ;;
         *) export PATH="$USER_BIN_DIR:$PATH" ;;
@@ -287,13 +302,30 @@ publish_cli_shims() {
     write_path_profile_snippet "$HOME/.zprofile" "$USER_BIN_DIR"
 
     write_status "Installed Apollo shims to $USER_BIN_DIR"
+    if [ "$system_shims_published" -eq 1 ]; then
+        write_status "Installed Apollo system shims to $SYSTEM_BIN_DIR"
+    else
+        write_status "Could not install system shims to $SYSTEM_BIN_DIR; user shims in $USER_BIN_DIR will be used instead"
+    fi
 }
 
 validate_cli_shims() {
-    if ! "$USER_BIN_DIR/apollo-config" status >/dev/null 2>&1; then
-        printf 'Apollo CLI validation failed: apollo-config could not run from %s\n' "$USER_BIN_DIR" >&2
-        return 1
+    if command -v apollo-config >/dev/null 2>&1; then
+        if apollo-config status >/dev/null 2>&1; then
+            return 0
+        fi
     fi
+
+    if [ -x "$SYSTEM_BIN_DIR/apollo-config" ] && "$SYSTEM_BIN_DIR/apollo-config" status >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if [ -x "$USER_BIN_DIR/apollo-config" ] && "$USER_BIN_DIR/apollo-config" status >/dev/null 2>&1; then
+        return 0
+    fi
+
+    printf 'Apollo CLI validation failed: apollo-config could not run from PATH, %s, or %s\n' "$SYSTEM_BIN_DIR" "$USER_BIN_DIR" >&2
+    return 1
 }
 
 mkdir -p "$COMPILER_DIR"
