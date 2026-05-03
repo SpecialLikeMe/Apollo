@@ -163,7 +163,7 @@ statement    : pointer
              | block ;
 
 typedefOpstructSession : ID ID typedefOpstructCommand+ ;
-typedefOpstructCreateStmt : typedefOpstructWord typedefOpstructWord typedefOpstructWord+ ';' ;
+typedefOpstructCreateStmt : typedefOpstructWord typedefOpstructWord+ ';' ;
 typedefOpstructPhraseStmt : typedefOpstructWord+ typedefOpstructCapture ';' ;
 typedefOpstructCommand : typedefOpstructWord+ typedefOpstructCapture ';' ;
 typedefOpstructCapture : '[' expression ']' ;
