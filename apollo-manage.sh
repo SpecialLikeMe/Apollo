@@ -43,7 +43,7 @@ print_version() {
 }
 
 tracked_user_changes() {
-    git -C "$INSTALL_DIR" status --porcelain --untracked-files=no -- . ':(exclude)compiler/output'
+    git -C "$INSTALL_DIR" status --porcelain --untracked-files=no -- . ':(exclude)compiler/output' ':(exclude)compiler/compiler-master'
 }
 
 resolve_official_branch() {
@@ -122,7 +122,12 @@ remove_link_if_owned() {
     resolved_target=$(resolve_script_path "$link_path")
     case "$resolved_target" in
         "$INSTALL_DIR"/*|"$INSTALL_DIR")
-            rm -f "$link_path"
+            if rm -f "$link_path" 2>/dev/null; then
+                return 0
+            fi
+            if command -v sudo >/dev/null 2>&1; then
+                sudo rm -f "$link_path"
+            fi
             ;;
     esac
 }
@@ -143,7 +148,12 @@ uninstall_apollo() {
     (
         sleep 1
         cd /
-        rm -rf "$INSTALL_DIR"
+        if rm -rf "$INSTALL_DIR" 2>/dev/null; then
+            exit 0
+        fi
+        if command -v sudo >/dev/null 2>&1; then
+            sudo rm -rf "$INSTALL_DIR"
+        fi
     ) >/dev/null 2>&1 &
 
     printf 'Apollo uninstall started. CLI shims were removed and %s will be deleted in the background.\n' "$INSTALL_DIR"

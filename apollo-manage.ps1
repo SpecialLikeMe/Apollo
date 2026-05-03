@@ -118,7 +118,7 @@ function Get-GitMetadata {
 }
 
 function Get-TrackedUserChanges {
-    $statusResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no', '--', '.', ':(exclude)compiler/output')
+    $statusResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no', '--', '.', ':(exclude)compiler/output', ':(exclude)compiler/compiler-master')
     if ($statusResult.ExitCode -ne 0) {
         throw (($statusResult.Output | Out-String).Trim())
     }
