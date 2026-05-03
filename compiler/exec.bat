@@ -341,16 +341,22 @@ if not exist output\classes mkdir output\classes
 set "PARSER_STAMP=output\classes\.apollo_parser.stamp"
 set "PARSER_CLASSES_STAMP=output\classes\.apollo_parser_classes.stamp"
 set "FRONTEND_STAMP=output\classes\.apollo_frontend.stamp"
+set "PARSER_CLASS=output\classes\compilerv1Parser.class"
+set "LEXER_CLASS=output\classes\compilerv1Lexer.class"
 set "REBUILD_PARSER="
 set "REBUILD_PARSER_CLASSES="
 set "REBUILD_FRONTEND="
 
 if not exist "compiler-master\compilerv1Parser.java" set "REBUILD_PARSER=1"
 if not exist "compiler-master\compilerv1Lexer.java" set "REBUILD_PARSER=1"
+if not exist "%PARSER_CLASS%" set "REBUILD_PARSER=1"
+if not exist "%LEXER_CLASS%" set "REBUILD_PARSER=1"
+if not exist "%PARSER_STAMP%" set "REBUILD_PARSER=1"
 if not defined REBUILD_PARSER call :needs_rebuild "%PARSER_STAMP%" "compilerv1.g4" "%ANTLR_JAR%"
 if not defined REBUILD_PARSER if not errorlevel 1 set "REBUILD_PARSER=1"
 
 if defined REBUILD_PARSER (
+    del /q compiler-master\compilerv1*.java compiler-master\compilerv1*.interp compiler-master\compilerv1*.tokens >nul 2>nul
     "%JAVA_EXE%" -jar "%ANTLR_JAR%" -visitor -Dlanguage=Java -o compiler-master compilerv1.g4
     if errorlevel 1 (
         popd
@@ -360,8 +366,8 @@ if defined REBUILD_PARSER (
 )
 
 if defined REBUILD_PARSER set "REBUILD_PARSER_CLASSES=1"
-if not exist "output\classes\compilerv1Parser.class" set "REBUILD_PARSER_CLASSES=1"
-if not exist "output\classes\compilerv1Lexer.class" set "REBUILD_PARSER_CLASSES=1"
+if not exist "%PARSER_CLASS%" set "REBUILD_PARSER_CLASSES=1"
+if not exist "%LEXER_CLASS%" set "REBUILD_PARSER_CLASSES=1"
 if not defined REBUILD_PARSER_CLASSES call :needs_rebuild "%PARSER_CLASSES_STAMP%" "compiler-master\compilerv1BaseListener.java" "compiler-master\compilerv1BaseVisitor.java" "compiler-master\compilerv1Lexer.java" "compiler-master\compilerv1Listener.java" "compiler-master\compilerv1Parser.java" "compiler-master\compilerv1Visitor.java" "%ANTLR_JAR%"
 if not defined REBUILD_PARSER_CLASSES if not errorlevel 1 set "REBUILD_PARSER_CLASSES=1"
 

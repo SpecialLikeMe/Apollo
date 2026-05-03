@@ -118,20 +118,28 @@ prepare_codegen() {
 
     parser_source="compiler-master/compilerv1Parser.java"
     lexer_source="compiler-master/compilerv1Lexer.java"
+    parser_class="output/classes/compilerv1Parser.class"
+    lexer_class="output/classes/compilerv1Lexer.class"
     parser_stamp="output/classes/.apollo_parser.stamp"
     parser_classes_stamp="output/classes/.apollo_parser_classes.stamp"
     frontend_stamp="output/classes/.apollo_frontend.stamp"
 
     parser_regenerated=0
-    if [ ! -f "$parser_source" ] || [ ! -f "$lexer_source" ] || needs_rebuild "$parser_stamp" compilerv1.g4 "$ANTLR_JAR"; then
+    if [ ! -f "$parser_source" ] \
+        || [ ! -f "$lexer_source" ] \
+        || [ ! -f "$parser_class" ] \
+        || [ ! -f "$lexer_class" ] \
+        || [ ! -f "$parser_stamp" ] \
+        || needs_rebuild "$parser_stamp" compilerv1.g4 "$ANTLR_JAR"; then
+        rm -f compiler-master/compilerv1*.java compiler-master/compilerv1*.interp compiler-master/compilerv1*.tokens
         "$JAVA_EXE" -jar "$ANTLR_JAR" -visitor -Dlanguage=Java -o compiler-master compilerv1.g4
         parser_regenerated=1
         touch_stamp "$parser_stamp"
     fi
 
     if [ "$parser_regenerated" -eq 1 ] \
-        || [ ! -f "output/classes/compilerv1Parser.class" ] \
-        || [ ! -f "output/classes/compilerv1Lexer.class" ] \
+        || [ ! -f "$parser_class" ] \
+        || [ ! -f "$lexer_class" ] \
         || needs_rebuild "$parser_classes_stamp" \
             compiler-master/compilerv1BaseListener.java \
             compiler-master/compilerv1BaseVisitor.java \

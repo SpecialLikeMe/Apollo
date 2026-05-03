@@ -78,9 +78,10 @@ using namespace std;
 __apo_gui_runtime::__apo_gui_window render("render");
 
 std::string current = "sc1.png";
+int ext = 0;
 int main() {
     render.show();
-    while (true) {
+    while (ext == 0) {
         render.render("crr", current, 100, 100);
         __apo_gui_runtime::__apo_gui_object_ref crr = render.object_ref("crr");
     }
@@ -93,6 +94,12 @@ static int __apo_init = []() {
     const std::int32_t mouseY = __apo_gui_runtime::current_mouse_y();
     const std::string touchedObject = __apo_gui_runtime::current_touched_object();
     current = "sc2.png";
+});
+    render.on("KEYPRESS_q", [=]() mutable {
+    const std::int32_t mouseX = __apo_gui_runtime::current_mouse_x();
+    const std::int32_t mouseY = __apo_gui_runtime::current_mouse_y();
+    const std::string touchedObject = __apo_gui_runtime::current_touched_object();
+    ext = 1;
 });
     return 0;
 }();
