@@ -43,7 +43,16 @@ print_version() {
 }
 
 tracked_user_changes() {
-    git -C "$INSTALL_DIR" status --porcelain --untracked-files=no -- . ':(exclude)compiler/output' ':(exclude)compiler/compiler-master'
+    git -C "$INSTALL_DIR" status --porcelain --untracked-files=no | while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        path=${line#?? }
+        case "$path" in
+            compiler/output/*|compiler/compiler-master/*|compiler/*.class|compiler/*.interp|compiler/*.tokens)
+                continue
+                ;;
+        esac
+        printf '%s\n' "$line"
+    done
 }
 
 resolve_official_branch() {

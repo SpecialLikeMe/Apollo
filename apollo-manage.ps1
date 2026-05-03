@@ -118,12 +118,29 @@ function Get-GitMetadata {
 }
 
 function Get-TrackedUserChanges {
-    $statusResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no', '--', '.', ':(exclude)compiler/output', ':(exclude)compiler/compiler-master')
+    $statusResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no')
     if ($statusResult.ExitCode -ne 0) {
         throw (($statusResult.Output | Out-String).Trim())
     }
 
-    return $statusResult.Output
+    return @(
+        $statusResult.Output | Where-Object {
+            $line = $_
+            if ([string]::IsNullOrWhiteSpace($line) -or $line.Length -lt 4) {
+                return $false
+            }
+
+            $path = $line.Substring(3)
+            if ($path -like 'compiler/output/*' -or $path -like 'compiler/compiler-master/*') {
+                return $false
+            }
+            if ($path -like 'compiler/*.class' -or $path -like 'compiler/*.interp' -or $path -like 'compiler/*.tokens') {
+                return $false
+            }
+
+            return $true
+        }
+    )
 }
 
 function Show-Version {
