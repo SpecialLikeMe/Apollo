@@ -36,6 +36,8 @@ namespace {
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cerr << "Usage: apollo <ctall|run> [filepath]\n"
+                  << "       apollo [filepath] [-W|-L|-M] <outputname>\n"
+                  << "       apollo -analyze [filepath]\n"
                   << "       apollo --version\n"
                   << "       apollo --update\n"
                   << "       apollo -m uninstall" << std::endl;

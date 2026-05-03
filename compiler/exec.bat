@@ -268,8 +268,13 @@ if "%BIN_MODE%"=="1" (
     exit /b 0
 )
 
-"%LINK_OUTPUT%"
+for %%I in ("%LINK_OUTPUT%") do set "RUN_OUTPUT=%%~fI"
+set "RUN_WORKDIR=%SOURCE_ROOT%"
+if not defined RUN_WORKDIR set "RUN_WORKDIR=%SCRIPT_DIR_NO_SLASH%"
+pushd "%RUN_WORKDIR%"
+"%RUN_OUTPUT%"
 set "EXIT_CODE=%errorlevel%"
+popd
 call :cleanup_generated
 popd
 exit /b %EXIT_CODE%
@@ -450,8 +455,13 @@ if not exist "%APOLLO_JIT_EXE%" (
     exit /b 1
 )
 
-"%APOLLO_JIT_EXE%" output\output.ll
+for %%I in ("output\output.ll") do set "RUN_LL=%%~fI"
+set "RUN_WORKDIR=%SOURCE_ROOT%"
+if not defined RUN_WORKDIR set "RUN_WORKDIR=%SCRIPT_DIR_NO_SLASH%"
+pushd "%RUN_WORKDIR%"
+"%APOLLO_JIT_EXE%" "%RUN_LL%"
 set "EXIT_CODE=%errorlevel%"
+popd
 call :cleanup_generated
 popd
 exit /b %EXIT_CODE%

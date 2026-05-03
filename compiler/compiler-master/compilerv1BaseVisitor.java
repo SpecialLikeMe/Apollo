@@ -605,6 +605,20 @@ public class compilerv1BaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitSchedulerStartStmt(compilerv1Parser.SchedulerStartStmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

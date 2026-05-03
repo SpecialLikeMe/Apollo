@@ -1,0 +1,154 @@
+#include <cstdlib>
+#include <cstdint>
+#include <filesystem>
+#include <fstream>
+#include <exception>
+#include <functional>
+#include <iostream>
+#include <new>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <deque>
+#include <utility>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <array>
+#include <memory>
+#include <any>
+#ifndef __APO_HASH_SUPPORT
+#define __APO_HASH_SUPPORT
+template <typename T>
+inline void __apo_hash_combine(std::size_t& seed, const T& value) {
+    seed ^= value + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
+}
+template <typename T>
+struct __apo_hash {
+    std::size_t operator()(const T& value) const { return std::hash<T>{}(value); }
+};
+template <typename T>
+struct __apo_hash<std::vector<T>> {
+    std::size_t operator()(const std::vector<T>& values) const {
+        std::size_t seed = 0;
+        for (const auto& value : values) {
+            __apo_hash_combine(seed, __apo_hash<T>{}(value));
+        }
+        return seed;
+    }
+};
+template <typename K, typename V, typename H, typename E, typename A>
+struct __apo_hash<std::unordered_map<K, V, H, E, A>> {
+    std::size_t operator()(const std::unordered_map<K, V, H, E, A>& values) const {
+        std::size_t seed = 0;
+        for (const auto& entry : values) {
+            std::size_t entrySeed = __apo_hash<K>{}(entry.first);
+            __apo_hash_combine(entrySeed, __apo_hash<V>{}(entry.second));
+            seed ^= entrySeed + 0x9e3779b97f4a7c15ULL;
+        }
+        return seed;
+    }
+};
+#endif
+
+#ifndef __APO_TEMPLATE_LITERAL_SUPPORT
+#define __APO_TEMPLATE_LITERAL_SUPPORT
+template <typename T>
+static std::string __apo_to_string(const T& value) {
+    std::ostringstream stream;
+    stream << value;
+    return stream.str();
+}
+static std::string __apo_to_string(const std::string& value) { return value; }
+static std::string __apo_to_string(const char* value) { return value != nullptr ? std::string(value) : std::string(); }
+static std::string __apo_to_string(bool value) { return value ? "true" : "false"; }
+#endif
+
+#include "runtime_support/apo_soa_runtime.hpp"
+struct __apo_gc_tracer {};
+template <typename T>
+inline void __apo_gc_trace_value(__apo_gc_tracer&, const T&) {}
+struct apo_CounterStore;
+using apo_Counter = apo_CounterStore;
+
+using namespace std;
+
+struct apo_CounterStore {
+    friend void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_CounterStore& value);
+    friend struct __apo_soa_adapter<apo_CounterStore>;
+    std::int32_t value;
+    int fetch() {
+        return value;
+    }
+
+};
+
+inline void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_CounterStore& value) {
+    __apo_gc_trace_value(tracer, value.value);
+}
+
+template <>
+struct __apo_soa_adapter<apo_CounterStore> {
+    struct storage {
+        std::vector<std::int32_t> value;
+    };
+
+    static void push(storage& storage, const apo_CounterStore& value) {
+        storage.value.push_back(value.value);
+    }
+
+    static apo_CounterStore load(const storage& storage, std::size_t index) {
+        apo_CounterStore value{};
+        value.value = storage.value[index];
+        return value;
+    }
+
+    static void store(storage& storage, std::size_t index, const apo_CounterStore& value) {
+        storage.value[index] = value.value;
+    }
+
+    static std::size_t size(const storage& storage) {
+        return storage.value.size();
+    }
+};
+
+using apo_Counter = apo_CounterStore;
+
+void record(const int value) {
+    const std::int32_t mirror = value;
+    return;
+}
+
+int main() {
+    std::vector<std::int32_t> values;
+    values.push_back(1);
+    values.push_back(2);
+    std::int32_t total = 0;
+    for (std::int32_t index = 0; index < 2; index = index + 1) {
+        total = total + values[index];
+    }
+    for (const std::int32_t entry : values) {
+        total = total + entry;
+    }
+    {
+        auto __apo_switch_value_0 = total;
+        if (__apo_switch_value_0 == 6) {
+            total = total + 1;
+        }
+        else {
+            total = total + 2;
+        }
+    }
+    try {
+        record(total);
+    }
+    catch (const std::exception& ex) {
+        total = total + 4;
+    }
+    const apo_Counter counter = apo_Counter{};
+    counter.fetch();
+    return total;
+}
+

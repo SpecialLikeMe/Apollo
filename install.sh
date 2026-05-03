@@ -44,23 +44,23 @@ first_existing_dir() {
 
 install_with_brew() {
     write_status 'Installing dependencies with Homebrew'
-    brew install git openjdk llvm antlr boehm-gc make
+    brew install git openjdk llvm antlr boehm-gc make sdl2 sdl2_image
 }
 
 install_with_apt() {
     write_status 'Installing dependencies with apt'
     sudo apt-get update
-    sudo apt-get install -y git openjdk-21-jdk clang llvm make antlr4 libgc-dev
+    sudo apt-get install -y git openjdk-21-jdk clang llvm make antlr4 libgc-dev libsdl2-dev libsdl2-image-dev
 }
 
 install_with_dnf() {
     write_status 'Installing dependencies with dnf'
-    sudo dnf install -y git java-21-openjdk-devel clang llvm make antlr4 gc-devel
+    sudo dnf install -y git java-21-openjdk-devel clang llvm make antlr4 gc-devel SDL2-devel SDL2_image-devel
 }
 
 install_with_pacman() {
     write_status 'Installing dependencies with pacman'
-    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make antlr4 gc
+    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make antlr4 gc sdl2 sdl2_image
 }
 
 ensure_dependencies() {

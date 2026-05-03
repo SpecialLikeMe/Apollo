@@ -23,6 +23,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     private static final String NO_ISC_RESULT = "__apo_no_isc_result__";
     private static final String TOTAL_GC_OWNER_NAME = "__apo_total_gc_owner";
     private static final Pattern TYPEDEF_OPSTRUCT_PLACEHOLDER_PATTERN = Pattern.compile("^\\$\\{([A-Za-z_][A-Za-z0-9_]*)\\}$");
+    private static final Pattern GUI_OBJECT_HANDLE_PATTERN = Pattern.compile("^[A-Za-z_][A-Za-z0-9_]*$");
 
     private static final class OpstructFieldInfo {
         private final String name;
@@ -329,6 +330,9 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         if (type == null) {
             return null;
         }
+        if ("__apo_gui_window".equals(type) || "__apo_gui_object_ref".equals(type)) {
+            return "__apo_gui_runtime::" + type;
+        }
         if ("isc".equals(type)) {
             return "__apo_isc";
         }
@@ -367,6 +371,9 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
 
     private String mapTypeForFunction(String type) {
         if (type == null) return "void";
+        if ("__apo_gui_window".equals(type) || "__apo_gui_object_ref".equals(type)) {
+            return "__apo_gui_runtime::" + type;
+        }
         if ("isc".equals(type)) return "__apo_isc";
         if ("file".equals(type)) return "__apo_file";
         if ("str".equals(type)) return "std::string";
@@ -1320,6 +1327,195 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             return variableType;
         }
         return callableTypes.get(name);
+    }
+
+    private ApolloType guiWindowApolloType() {
+        return new ApolloType("__apo_gui_window", List.of());
+    }
+
+    private ApolloType guiObjectApolloType() {
+        return new ApolloType("__apo_gui_object_ref", List.of());
+    }
+
+    private ApolloType guiBoolApolloType() {
+        return new ApolloType("bool", List.of());
+    }
+
+    private ApolloType guiIntApolloType() {
+        return new ApolloType("i32", List.of());
+    }
+
+    private ApolloType guiStringApolloType() {
+        return new ApolloType("str", List.of());
+    }
+
+    private boolean isGuiWindowType(ApolloType type) {
+        return type != null && "__apo_gui_window".equals(type.name);
+    }
+
+    private boolean isGuiObjectType(ApolloType type) {
+        return type != null && "__apo_gui_object_ref".equals(type.name);
+    }
+
+    private String unquoteLiteral(String rawValue) {
+        if (rawValue == null || rawValue.length() < 2) {
+            return rawValue;
+        }
+        if ((rawValue.startsWith("\"") && rawValue.endsWith("\""))
+                || (rawValue.startsWith("'") && rawValue.endsWith("'"))) {
+            return rawValue.substring(1, rawValue.length() - 1);
+        }
+        return rawValue;
+    }
+
+    private String renderGuiStringArgument(compilerv1Parser.ExpressionContext ctx) {
+        String rawText = ctx.getText();
+        if (rawText != null && rawText.length() >= 2
+                && ((rawText.startsWith("\"") && rawText.endsWith("\""))
+                || (rawText.startsWith("'") && rawText.endsWith("'")))) {
+            return rawText;
+        }
+        if (rawText != null && GUI_OBJECT_HANDLE_PATTERN.matcher(rawText).matches() && !isNameDeclared(rawText)) {
+            return "\"" + escapeCppString(rawText) + "\"";
+        }
+        return renderExpression(ctx, guiStringApolloType());
+    }
+
+    private String renderGuiEventName(compilerv1Parser.ExpressionContext ctx) {
+        String rawText = ctx.getText();
+        if (rawText != null && rawText.length() >= 2
+                && ((rawText.startsWith("\"") && rawText.endsWith("\""))
+                || (rawText.startsWith("'") && rawText.endsWith("'")))) {
+            return rawText;
+        }
+        if (rawText != null && GUI_OBJECT_HANDLE_PATTERN.matcher(rawText).matches() && !isNameDeclared(rawText)) {
+            return "\"" + escapeCppString(rawText) + "\"";
+        }
+        throw error(ctx, "GUI event names must be bare identifiers like `MOUSECLICK` or string literals");
+    }
+
+    private String guiObjectHandleName(compilerv1Parser.ExpressionContext ctx) {
+        String rawText = ctx.getText();
+        if (rawText == null) {
+            return null;
+        }
+        String candidate = unquoteLiteral(rawText);
+        if (candidate != null && GUI_OBJECT_HANDLE_PATTERN.matcher(candidate).matches()) {
+            return candidate;
+        }
+        return null;
+    }
+
+    private String renderGuiWindowStatement(compilerv1Parser.RdwindowStmtContext ctx) {
+        String name = ctx.ID().getText();
+        if (isNameDeclared(name)) {
+            throw error(ctx, "window `" + name + "` is already declared in this scope");
+        }
+        bindVariableType(name, guiWindowApolloType(), false);
+        return renderType(guiWindowApolloType()) + " " + name + "(\"" + escapeCppString(name) + "\");";
+    }
+
+    private String renderGuiKeypressCall(compilerv1Parser.FunctionCallContext ctx) {
+        if (ctx.args() == null || ctx.args().expression().size() != 1) {
+            throw error(ctx, "KEYPRESS expects exactly one key argument");
+        }
+        return "__apo_gui_runtime::key_pressed(" + renderGuiStringArgument(ctx.args().expression(0)) + ")";
+    }
+
+    private String renderGuiWindowMemberAccess(String target, compilerv1Parser.FunctionCallContext ctx) {
+        String memberName = ctx.ID().getText();
+        if ("show".equals(memberName) || "hide".equals(memberName)) {
+            if (ctx.args() != null && !ctx.args().expression().isEmpty()) {
+                throw error(ctx, memberName + " does not take arguments");
+            }
+            return target + "." + memberName + "()";
+        }
+        if ("render".equals(memberName)) {
+            if (ctx.args() == null || ctx.args().expression().size() != 4) {
+                throw error(ctx, "render expects object id, image path, x, and y arguments");
+            }
+            List<compilerv1Parser.ExpressionContext> expressions = ctx.args().expression();
+            return target + ".render(" + renderGuiStringArgument(expressions.get(0))
+                    + ", " + renderGuiStringArgument(expressions.get(1))
+                    + ", " + renderExpression(expressions.get(2), guiIntApolloType())
+                    + ", " + renderExpression(expressions.get(3), guiIntApolloType()) + ")";
+        }
+        if ("event".equals(memberName)) {
+            throw error(ctx, "event handlers require block syntax: `window.event(EVENT) { ... }`");
+        }
+        return target + "." + renderFunctionCall(ctx);
+    }
+
+    private String renderGuiObjectMemberAccess(String target, compilerv1Parser.FunctionCallContext ctx) {
+        String memberName = ctx.ID().getText();
+        if ("touches".equals(memberName)) {
+            if (ctx.args() == null || ctx.args().expression().size() != 1) {
+                throw error(ctx, "touches expects exactly one object argument");
+            }
+            return target + ".touches(" + renderExpression(ctx.args().expression(0), guiObjectApolloType()) + ")";
+        }
+        return target + "." + renderFunctionCall(ctx);
+    }
+
+    private String renderGuiRenderBinding(compilerv1Parser.MemberaccessContext ctx) {
+        if (ctx == null || ctx.functionCall() == null || !"render".equals(ctx.functionCall().ID().getText())) {
+            return "";
+        }
+        ApolloType baseType = "indef".equals(ctx.accessBase().getText()) ? null : resolveVariableType(ctx.accessBase().getText());
+        if (!isGuiWindowType(baseType) || ctx.functionCall().args() == null || ctx.functionCall().args().expression().isEmpty()) {
+            return "";
+        }
+        String handleName = guiObjectHandleName(ctx.functionCall().args().expression(0));
+        if (handleName == null) {
+            return "";
+        }
+        String target = resolveVariableReference(ctx.accessBase().getText());
+        String objectId = renderGuiStringArgument(ctx.functionCall().args().expression(0));
+        if (isNameDeclared(handleName)) {
+            return resolveVariableReference(handleName) + " = " + target + ".object_ref(" + objectId + ");";
+        }
+        bindVariableType(handleName, guiObjectApolloType(), false);
+        return renderType(guiObjectApolloType()) + " " + handleName + " = " + target + ".object_ref(" + objectId + ");";
+    }
+
+    private String renderMemberAccessStatement(compilerv1Parser.MemberaccessContext ctx) {
+        String rendered = renderMemberAccess(ctx) + ";";
+        String guiBinding = renderGuiRenderBinding(ctx);
+        if (guiBinding.isEmpty()) {
+            return rendered;
+        }
+        return rendered + "\n" + guiBinding;
+    }
+
+    private void emitGuiEventHandler(compilerv1Parser.EventHandlerStmtContext ctx) {
+        String windowName = ctx.ID().getText();
+        ApolloType windowType = resolveVariableType(windowName);
+        if (!isGuiWindowType(windowType)) {
+            throw error(ctx, "event handlers require an `rdwindow` receiver");
+        }
+
+        writeLine(resolveVariableReference(windowName) + ".on(" + renderGuiEventName(ctx.expression()) + ", [=]() mutable {");
+        indentLevel++;
+        pushTypeScope();
+        try {
+            bindVariableType("mouseX", guiIntApolloType(), true);
+            bindVariableType("mouseY", guiIntApolloType(), true);
+            bindVariableType("touchedObject", guiStringApolloType(), true);
+            writeLine("const std::int32_t mouseX = __apo_gui_runtime::current_mouse_x();");
+            writeLine("const std::int32_t mouseY = __apo_gui_runtime::current_mouse_y();");
+            writeLine("const std::string touchedObject = __apo_gui_runtime::current_touched_object();");
+            for (org.antlr.v4.runtime.tree.ParseTree child : ctx.block().children) {
+                if (child instanceof compilerv1Parser.StatementContext) {
+                    visitStatement((compilerv1Parser.StatementContext) child);
+                } else if (child instanceof compilerv1Parser.ReturnStmtContext) {
+                    visitReturnStmt((compilerv1Parser.ReturnStmtContext) child);
+                }
+            }
+        } finally {
+            popTypeScope();
+            indentLevel--;
+        }
+        writeLine("});");
     }
 
     private ApolloType callableReturnType(ApolloType callableType) {
@@ -3593,6 +3789,9 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
 
     private String renderFunctionCall(compilerv1Parser.FunctionCallContext ctx) {
         String functionName = ctx.ID().getText();
+        if ("KEYPRESS".equals(functionName)) {
+            return renderGuiKeypressCall(ctx);
+        }
         if ("cerr".equals(functionName) || "terminalcerr".equals(functionName)) {
             if (ctx.args() == null || ctx.args().expression().size() != 1) {
                 throw error(ctx, functionName + " expects exactly one message argument");
@@ -3627,6 +3826,9 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             return null;
         }
         String functionName = ctx.ID().getText();
+        if ("KEYPRESS".equals(functionName)) {
+            return guiBoolApolloType();
+        }
         if ("cerr".equals(functionName) || "terminalcerr".equals(functionName)) {
             return new ApolloType("isc", List.of());
         }
@@ -3641,6 +3843,18 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             return null;
         }
         ApolloType baseType = "indef".equals(ctx.accessBase().getText()) ? null : resolveVariableType(ctx.accessBase().getText());
+        if (ctx.functionCall() != null && baseType != null && isGuiWindowType(baseType)) {
+            String memberName = ctx.functionCall().ID().getText();
+            if ("show".equals(memberName) || "hide".equals(memberName) || "render".equals(memberName)) {
+                return new ApolloType("void", List.of());
+            }
+        }
+        if (ctx.functionCall() != null && baseType != null && isGuiObjectType(baseType)) {
+            String memberName = ctx.functionCall().ID().getText();
+            if ("touches".equals(memberName)) {
+                return guiBoolApolloType();
+            }
+        }
         if (ctx.functionCall() != null && baseType != null && "file".equals(baseType.name)) {
             String memberName = ctx.functionCall().ID().getText();
             if ("read".equals(memberName)) {
@@ -3890,6 +4104,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         String instanceMode = instanceModes.get(objectName);
         String target = "indef".equals(objectName) ? "this" : resolveVariableReference(objectName);
         String operator = ".";
+        ApolloType resolvedType = "indef".equals(objectName) ? null : resolveVariableType(objectName);
         if ("indef".equals(objectName)) {
             operator = "->";
         } else if (declaredTypes.contains(objectName) && !isNameDeclared(objectName)) {
@@ -3898,7 +4113,6 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         } else if (instanceType != null && "crt".equals(instanceMode)) {
             target = "std::any_cast<" + instanceType + "&>(" + objectName + ")";
         } else {
-            ApolloType resolvedType = resolveVariableType(objectName);
             if (resolvedType != null && resolvedType.managed) {
                 operator = "->";
             } else if (resolvedType != null && resolvedType.pointerDepth > 0 && !resolvedType.reference) {
@@ -3906,6 +4120,12 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             }
         }
         if (ctx.functionCall() != null) {
+            if (isGuiWindowType(resolvedType)) {
+                return renderGuiWindowMemberAccess(target, ctx.functionCall());
+            }
+            if (isGuiObjectType(resolvedType)) {
+                return renderGuiObjectMemberAccess(target, ctx.functionCall());
+            }
             return target + operator + renderFunctionCall(ctx.functionCall());
         }
         return target + operator + ctx.ID().getText();
@@ -4604,6 +4824,45 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         return builder.toString();
     }
 
+    private String renderTopLevelGuiEventHandler(compilerv1Parser.EventHandlerStmtContext ctx) {
+        String windowName = ctx.ID().getText();
+        ApolloType windowType = resolveVariableType(windowName);
+        if (!isGuiWindowType(windowType)) {
+            throw error(ctx, "event handlers require an `rdwindow` receiver");
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(resolveVariableReference(windowName))
+                .append(".on(")
+                .append(renderGuiEventName(ctx.expression()))
+                .append(", [=]() mutable {\n");
+
+        pushTypeScope();
+        try {
+            bindVariableType("mouseX", guiIntApolloType(), true);
+            bindVariableType("mouseY", guiIntApolloType(), true);
+            bindVariableType("touchedObject", guiStringApolloType(), true);
+            builder.append("    const std::int32_t mouseX = __apo_gui_runtime::current_mouse_x();\n");
+            builder.append("    const std::int32_t mouseY = __apo_gui_runtime::current_mouse_y();\n");
+            builder.append("    const std::string touchedObject = __apo_gui_runtime::current_touched_object();\n");
+            for (org.antlr.v4.runtime.tree.ParseTree child : ctx.block().children) {
+                if (child instanceof compilerv1Parser.StatementContext) {
+                    String rendered = renderTopLevelStatement((compilerv1Parser.StatementContext) child);
+                    if (rendered != null && !rendered.isEmpty()) {
+                        builder.append("    ").append(rendered.replace("\n", "\n    ")).append("\n");
+                    }
+                } else if (child instanceof compilerv1Parser.ReturnStmtContext) {
+                    throw error((compilerv1Parser.ReturnStmtContext) child, "return is not supported inside GUI event handlers");
+                }
+            }
+        } finally {
+            popTypeScope();
+        }
+
+        builder.append("});");
+        return builder.toString();
+    }
+
     private String renderTopLevelStatement(compilerv1Parser.StatementContext ctx) {
         if (ctx.pointer() != null) {
             return renderPointerStatement(ctx.pointer());
@@ -4643,7 +4902,13 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             return renderFunctionCall(ctx.functionCall()) + ";";
         }
         if (ctx.memberaccess() != null) {
-            return renderMemberAccess(ctx.memberaccess()) + ";";
+            return renderMemberAccessStatement(ctx.memberaccess());
+        }
+        if (ctx.rdwindowStmt() != null) {
+            return renderGuiWindowStatement(ctx.rdwindowStmt());
+        }
+        if (ctx.eventHandlerStmt() != null) {
+            return renderTopLevelGuiEventHandler(ctx.eventHandlerStmt());
         }
         if (ctx.init() != null) {
             return renderInitStatement(ctx.init());
@@ -5330,7 +5595,8 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
     public Void visitProgram(compilerv1Parser.ProgramContext ctx) {
         boolean totalProgramGc = runtimeFeatures.totalProgramGc();
         boolean usesAutofmtRuntime = runtimeFeatures.usesAutofmtRuntime() || totalProgramGc;
-        boolean usesGoAsyncRuntime = runtimeFeatures.usesGoAsyncRuntime();
+        boolean usesGuiRuntime = runtimeFeatures.usesGuiRuntime();
+        boolean usesGoAsyncRuntime = runtimeFeatures.usesGoAsyncRuntime() || usesGuiRuntime;
         boolean usesIrRuntime = runtimeFeatures.usesIrRuntime();
         boolean usesIscRuntime = runtimeFeatures.usesIscRuntime();
         boolean usesFileRuntime = runtimeFeatures.usesFileRuntime();
@@ -5416,6 +5682,10 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             writeRuntimeInclude("apo_runtime_extensions.hpp");
             write("\n");
         }
+        if (usesGuiRuntime) {
+            writeRuntimeInclude("apo_gui_runtime.hpp");
+            write("\n");
+        }
         if (usesMemstructRuntime) {
             writeRuntimeInclude("apo_memstruct_runtime.hpp");
             write("\n");
@@ -5471,6 +5741,13 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
 
         if (usesSchedulerRuntime) {
             emitScheduleTaskForwardDeclarations();
+        }
+
+        for (compilerv1Parser.RdwindowStmtContext rdwindowCtx : ctx.rdwindowStmt()) {
+            writeLine(renderGuiWindowStatement(rdwindowCtx));
+        }
+        if (!ctx.rdwindowStmt().isEmpty()) {
+            write("\n");
         }
 
         for (org.antlr.v4.runtime.tree.ParseTree child : ctx.children) {
@@ -5585,8 +5862,10 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
                 topLevelStatements.add(renderReleaseStatement(((compilerv1Parser.ReleaseStmtContext) child).ID().getText(), (compilerv1Parser.ReleaseStmtContext) child));
             } else if (child instanceof compilerv1Parser.InstancepushContext) {
                 topLevelStatements.add(renderInstancePush((compilerv1Parser.InstancepushContext) child));
+            } else if (child instanceof compilerv1Parser.EventHandlerStmtContext) {
+                topLevelStatements.add(renderTopLevelGuiEventHandler((compilerv1Parser.EventHandlerStmtContext) child));
             } else if (child instanceof compilerv1Parser.MemberaccessContext) {
-                topLevelStatements.add(renderMemberAccess((compilerv1Parser.MemberaccessContext) child) + ";");
+                topLevelStatements.add(renderMemberAccessStatement((compilerv1Parser.MemberaccessContext) child));
             } else if (child instanceof compilerv1Parser.NativemodeContext) {
                 compilerv1Parser.NativemodeContext nativeCtx = (compilerv1Parser.NativemodeContext) child;
                 topLevelStatements.add(nativeCtx.OVERRIDE() != null ? renderImmediatePayload(nativeCtx) : renderEnqueuePayload(nativeCtx));
@@ -5956,6 +6235,14 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             visitReleaseStmt(ctx.releaseStmt());
             return null;
         }
+        if (ctx.rdwindowStmt() != null) {
+            writeLine(renderGuiWindowStatement(ctx.rdwindowStmt()));
+            return null;
+        }
+        if (ctx.eventHandlerStmt() != null) {
+            emitGuiEventHandler(ctx.eventHandlerStmt());
+            return null;
+        }
         if (ctx.plcnew() != null) {
             visitPlcnew(ctx.plcnew());
             return null;
@@ -6065,7 +6352,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
                 bindVariableType(resultName, memberType);
                 setLastIscResultName(resultName);
             } else {
-                writeLine(renderMemberAccess(ctx.memberaccess()) + ";");
+                writeRenderedStatement(renderMemberAccessStatement(ctx.memberaccess()));
             }
             return null;
         }

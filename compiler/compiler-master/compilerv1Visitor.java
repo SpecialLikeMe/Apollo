@@ -514,6 +514,18 @@ public interface compilerv1Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypedefOpstructWord(compilerv1Parser.TypedefOpstructWordContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link compilerv1Parser#rdwindowStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link compilerv1Parser#eventHandlerStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link compilerv1Parser#schedulerStartStmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

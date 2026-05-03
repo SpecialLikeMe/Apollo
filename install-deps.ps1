@@ -162,13 +162,15 @@ function Ensure-MingwPackages {
         'mingw-w64-clang-x86_64-compiler-rt',
         'mingw-w64-clang-x86_64-llvm',
         'mingw-w64-clang-x86_64-gc',
-        'mingw-w64-clang-x86_64-make'
+        'mingw-w64-clang-x86_64-make',
+        'mingw-w64-clang-x86_64-SDL2',
+        'mingw-w64-clang-x86_64-SDL2_image'
     )
 
     Write-Status 'Refreshing MSYS2 package metadata'
     Invoke-MsysBash -Root $MsysRoot -Command 'pacman -Sy --noconfirm'
 
-    Write-Status 'Ensuring clang64 clang, compiler-rt, llvm, make, and Boehm GC packages are installed'
+    Write-Status 'Ensuring clang64 clang, compiler-rt, llvm, make, Boehm GC, SDL2, and SDL2_image packages are installed'
     Invoke-MsysBash -Root $MsysRoot -Command ("pacman -S --needed --noconfirm " + ($packages -join ' '))
 }
 

@@ -140,6 +140,7 @@ namespace {
 int main() {
     std::filesystem::path installDirPath = getExecutableDir();
     std::filesystem::path apolloExePath = installDirPath / "apollo.exe";
+    std::filesystem::path apolloConfigExePath = installDirPath / "apollo-config.exe";
     std::filesystem::path compilerScriptPath = installDirPath / "compiler" / "exec.bat";
 
     if (!std::filesystem::exists(apolloExePath)) {
@@ -150,6 +151,11 @@ int main() {
     if (!std::filesystem::exists(compilerScriptPath)) {
         std::cerr << "Install failed: missing compiler script at " << compilerScriptPath.string() << std::endl;
         return 1;
+    }
+
+    if (!std::filesystem::exists(apolloConfigExePath)) {
+        std::cerr << "Install warning: missing apollo-config.exe at " << apolloConfigExePath.string() << std::endl;
+        std::cerr << "Apollo will still run in AOT mode, but mode switching will be unavailable until apollo-config.exe is restored." << std::endl;
     }
 
     std::cout << "CHECKING DEPENDENCIES" << std::endl;
@@ -232,6 +238,9 @@ int main() {
         std::cerr << "Failed to create the Apollo command shim in WindowsApps." << std::endl;
         return 1;
     }
+
+    std::error_code cleanupError;
+    std::filesystem::remove(installDirPath / "config.exe", cleanupError);
 
     std::cout << "Installation complete, Welcome to Apollo!" << std::endl;
     std::cout << "The apollo command now runs through the WindowsApps shim at " << windowsApps << std::endl;

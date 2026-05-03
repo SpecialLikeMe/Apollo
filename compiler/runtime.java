@@ -70,6 +70,7 @@ public final class runtime {
 
     static final class RuntimeFeatureManifest {
         private final boolean usesAutofmtRuntime;
+        private final boolean usesGuiRuntime;
         private final boolean usesGoAsyncRuntime;
         private final boolean usesIrRuntime;
         private final boolean usesIscRuntime;
@@ -81,6 +82,7 @@ public final class runtime {
         private final boolean borrowCheckerOff;
 
         private RuntimeFeatureManifest(boolean usesAutofmtRuntime,
+                           boolean usesGuiRuntime,
                                        boolean usesGoAsyncRuntime,
                                        boolean usesIrRuntime,
                                        boolean usesIscRuntime,
@@ -91,6 +93,7 @@ public final class runtime {
                                        boolean totalProgramGc,
                                        boolean borrowCheckerOff) {
             this.usesAutofmtRuntime = usesAutofmtRuntime;
+            this.usesGuiRuntime = usesGuiRuntime;
             this.usesGoAsyncRuntime = usesGoAsyncRuntime;
             this.usesIrRuntime = usesIrRuntime;
             this.usesIscRuntime = usesIscRuntime;
@@ -104,6 +107,10 @@ public final class runtime {
 
         boolean usesAutofmtRuntime() {
             return usesAutofmtRuntime;
+        }
+
+        boolean usesGuiRuntime() {
+            return usesGuiRuntime;
         }
 
         boolean usesGoAsyncRuntime() {
@@ -146,6 +153,7 @@ public final class runtime {
             RuntimeFeatureScanner scanner = new RuntimeFeatureScanner();
             scanner.visit(tree);
             return new RuntimeFeatureManifest(scanner.usesAutofmtRuntime,
+                    scanner.usesGuiRuntime,
                     scanner.usesGoAsyncRuntime,
                     scanner.usesIrRuntime,
                     scanner.usesIscRuntime,
@@ -159,6 +167,7 @@ public final class runtime {
 
         private static final class RuntimeFeatureScanner extends compilerv1BaseVisitor<Void> {
             private boolean usesAutofmtRuntime;
+            private boolean usesGuiRuntime;
             private boolean usesGoAsyncRuntime;
             private boolean usesIrRuntime;
             private boolean usesIscRuntime;
@@ -201,8 +210,41 @@ public final class runtime {
                     if ("open".equals(functionName)) {
                         usesFileRuntime = true;
                     }
+                    if ("KEYPRESS".equals(functionName)) {
+                        usesGuiRuntime = true;
+                        usesGoAsyncRuntime = true;
+                    }
                 }
                 return super.visitFunctionCall(ctx);
+            }
+
+            @Override
+            public Void visitMemberaccess(compilerv1Parser.MemberaccessContext ctx) {
+                if (ctx != null && ctx.functionCall() != null && ctx.functionCall().ID() != null) {
+                    String memberName = ctx.functionCall().ID().getText();
+                    if ("show".equals(memberName)
+                            || "hide".equals(memberName)
+                            || "render".equals(memberName)
+                            || "touches".equals(memberName)) {
+                        usesGuiRuntime = true;
+                        usesGoAsyncRuntime = true;
+                    }
+                }
+                return super.visitMemberaccess(ctx);
+            }
+
+            @Override
+            public Void visitRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx) {
+                usesGuiRuntime = true;
+                usesGoAsyncRuntime = true;
+                return super.visitRdwindowStmt(ctx);
+            }
+
+            @Override
+            public Void visitEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx) {
+                usesGuiRuntime = true;
+                usesGoAsyncRuntime = true;
+                return super.visitEventHandlerStmt(ctx);
             }
 
             @Override

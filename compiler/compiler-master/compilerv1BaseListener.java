@@ -1024,6 +1024,30 @@ public class compilerv1BaseListener implements compilerv1Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSchedulerStartStmt(compilerv1Parser.SchedulerStartStmtContext ctx) { }
 	/**
 	 * {@inheritDoc}

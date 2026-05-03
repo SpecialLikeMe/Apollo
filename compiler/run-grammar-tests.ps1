@@ -271,6 +271,32 @@ $tests = @(
         )
     },
     [pscustomobject]@{
+        Name = 'gui-surface'
+        Path = 'tests\grammar\pass\gui_surface.apollo'
+        ShouldPass = $true
+        Covers = 'rdwindow declarations, render-bound object handles, KEYPRESS lowering, and async GUI event handlers with implicit mouse payload locals'
+        OutputMustContainAll = @(
+            '__apo_gui_window stage("stage");',
+            '__apo_gui_object_ref hero = stage.object_ref("hero");',
+            'if (__apo_gui_runtime::key_pressed("A")) {',
+            'stage.on("MOUSECLICK", [=]() mutable {',
+            'const std::string touchedObject = __apo_gui_runtime::current_touched_object();'
+        )
+    },
+    [pscustomobject]@{
+        Name = 'gui-global-surface'
+        Path = 'tests\grammar\pass\gui_global_surface.apollo'
+        ShouldPass = $true
+        Covers = 'file-scope rdwindow declarations stay global, and top-level event handlers register against the global window instance'
+        OutputMustContainAll = @(
+            '__apo_gui_window render("render");',
+            'std::string current = "sc1.png";',
+            'render.on("KEYPRESS_w", [=]() mutable {',
+            'current = "sc2.png";',
+            'render.render("crr", current, 100, 100);'
+        )
+    },
+    [pscustomobject]@{
         Name = 'whole-program-gc-heap-surface'
         Path = 'tests\grammar\pass\whole_program_gc_heap_surface.apollo'
         ShouldPass = $true

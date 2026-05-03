@@ -847,6 +847,26 @@ public interface compilerv1Listener extends ParseTreeListener {
 	 */
 	void exitTypedefOpstructWord(compilerv1Parser.TypedefOpstructWordContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link compilerv1Parser#rdwindowStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link compilerv1Parser#rdwindowStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitRdwindowStmt(compilerv1Parser.RdwindowStmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link compilerv1Parser#eventHandlerStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link compilerv1Parser#eventHandlerStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitEventHandlerStmt(compilerv1Parser.EventHandlerStmtContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link compilerv1Parser#schedulerStartStmt}.
 	 * @param ctx the parse tree
 	 */

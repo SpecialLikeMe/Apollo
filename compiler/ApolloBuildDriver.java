@@ -6,11 +6,16 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public final class ApolloBuildDriver {
-    private static final String BUILD_CACHE_VERSION = "apollo-build-cache-v1";
+    private static final String BUILD_CACHE_VERSION = "apollo-build-cache-v2";
 
     private ApolloBuildDriver() {
     }
@@ -56,12 +61,14 @@ public final class ApolloBuildDriver {
 
     private static void emitLl(BuildEnvironment env) throws Exception {
         GcSupport gcSupport = resolveGcSupport(env);
+        GuiSupport guiSupport = resolveGuiSupport(env);
         preparePch(env, false);
 
         List<String> command = new ArrayList<>();
         command.add(env.clangExe);
         command.add("-I" + env.sourceRoot);
         command.addAll(gcSupport.compileFlags());
+        command.addAll(guiSupport.compileFlags());
         command.addAll(pgoCompileFlags(env));
         command.addAll(frontendFlags(env));
         command.add(env.generatedCpp.toString());
@@ -73,8 +80,9 @@ public final class ApolloBuildDriver {
     private static void buildAot(BuildEnvironment env, Path linkOutput) throws Exception {
         Files.createDirectories(linkOutput.getParent() != null ? linkOutput.getParent() : env.compilerDir);
         GcSupport gcSupport = resolveGcSupport(env);
+        GuiSupport guiSupport = resolveGuiSupport(env);
 
-        BuildArtifactCacheEntry cacheEntry = tryLoadBuildArtifactCache(env, gcSupport);
+        BuildArtifactCacheEntry cacheEntry = tryLoadBuildArtifactCache(env, gcSupport, guiSupport);
         if (cacheEntry != null) {
             restoreCachedBuildArtifact(cacheEntry, linkOutput);
             return;
@@ -97,15 +105,17 @@ public final class ApolloBuildDriver {
         linkCommand.add(linkOutput.toString());
         linkCommand.addAll(standaloneLinkFlags(env));
         linkCommand.addAll(gcSupport.linkFlags());
+        linkCommand.addAll(guiSupport.linkFlags());
         linkCommand.addAll(pgoLinkFlags(env));
         linkCommand.addAll(linkFlags(env));
         runCommand(linkCommand, env.compilerDir);
 
-        writeBuildArtifactCache(env, gcSupport, linkOutput);
+        writeBuildArtifactCache(env, gcSupport, guiSupport, linkOutput);
     }
 
     private static void analyze(BuildEnvironment env, Path outputFile) throws Exception {
         GcSupport gcSupport = resolveGcSupport(env);
+        GuiSupport guiSupport = resolveGuiSupport(env);
         preparePch(env, true);
 
         Files.createDirectories(outputFile.getParent() != null ? outputFile.getParent() : env.compilerDir);
@@ -114,11 +124,13 @@ public final class ApolloBuildDriver {
         command.add(env.clangxxExe);
         command.add("-I" + env.sourceRoot);
         command.addAll(gcSupport.compileFlags());
+        command.addAll(guiSupport.compileFlags());
         command.addAll(analyzeFlags(env));
         command.add(env.generatedCpp.toString());
         command.add("-o");
         command.add(outputFile.toString());
         command.addAll(gcSupport.linkFlags());
+        command.addAll(guiSupport.linkFlags());
         command.addAll(linkFlags(env));
         runCommand(command, env.compilerDir);
     }
@@ -207,6 +219,58 @@ public final class ApolloBuildDriver {
         return new GcSupport(includePath, libPath);
     }
 
+    private static GuiSupport resolveGuiSupport(BuildEnvironment env) throws IOException {
+        String generated = Files.readString(env.generatedCpp, StandardCharsets.UTF_8);
+        if (!generated.contains("apo_gui_runtime.hpp") && !generated.contains("__apo_gui_runtime::")) {
+            return GuiSupport.disabled();
+        }
+
+        String includeDir = System.getenv("APOLLO_SDL_INCLUDE_DIR");
+        String libDir = System.getenv("APOLLO_SDL_LIB_DIR");
+        String msysRoot = System.getenv("APOLLO_MSYS64_ROOT");
+
+        if ((isBlank(includeDir) || isBlank(libDir)) && !isBlank(msysRoot)) {
+            Path msysPath = Paths.get(msysRoot);
+            List<Path> candidates = List.of(msysPath.resolve("clang64"), msysPath.resolve("mingw64"));
+            for (Path candidate : candidates) {
+                if (isBlank(includeDir)) {
+                    Path detectedInclude = locateSdlIncludeDir(candidate.resolve("include"));
+                    if (detectedInclude != null) {
+                        includeDir = detectedInclude.toString();
+                    }
+                }
+                if (isBlank(libDir) && Files.isDirectory(candidate.resolve("lib"))) {
+                    libDir = candidate.resolve("lib").toString();
+                }
+            }
+        }
+
+        if (isBlank(includeDir)) {
+            Path detectedInclude = detectSystemSdlIncludeDir();
+            if (detectedInclude != null) {
+                includeDir = detectedInclude.toString();
+            }
+        }
+        if (isBlank(libDir)) {
+            Path detectedLib = detectSystemSdlLibDir();
+            if (detectedLib != null) {
+                libDir = detectedLib.toString();
+            }
+        }
+
+        if (isBlank(includeDir) || isBlank(libDir)) {
+            throw new BuildDriverException("SDL2 and SDL2_image are required by this Apollo GUI program, but they were not found. Set APOLLO_SDL_INCLUDE_DIR and APOLLO_SDL_LIB_DIR, or run the Apollo installer for your platform.");
+        }
+
+        Path includePath = Paths.get(includeDir).toAbsolutePath().normalize();
+        Path libPath = Paths.get(libDir).toAbsolutePath().normalize();
+        if (!hasSdlHeaders(includePath) || !hasSdlLibraries(libPath)) {
+            throw new BuildDriverException("SDL2 and SDL2_image were requested by this Apollo program, but the configured SDL paths are incomplete. Include dir: " + includePath + " Lib dir: " + libPath);
+        }
+
+        return new GuiSupport(includePath, libPath, isWindowsTarget(env));
+    }
+
     private static Path detectSystemGcIncludeDir() {
         for (String candidate : List.of(
                 "/opt/homebrew/include",
@@ -236,6 +300,49 @@ public final class ApolloBuildDriver {
         return null;
     }
 
+    private static Path detectSystemSdlIncludeDir() {
+        for (String candidate : List.of(
+                "/opt/homebrew/include",
+                "/usr/local/include",
+                "/usr/include",
+                "/opt/local/include")) {
+            Path located = locateSdlIncludeDir(Paths.get(candidate));
+            if (located != null) {
+                return located;
+            }
+        }
+        return null;
+    }
+
+    private static Path detectSystemSdlLibDir() {
+        for (String candidate : List.of(
+                "/opt/homebrew/lib",
+                "/usr/local/lib",
+                "/usr/lib64",
+                "/usr/lib",
+                "/opt/local/lib")) {
+            Path path = Paths.get(candidate);
+            if (Files.isDirectory(path) && hasSdlLibraries(path)) {
+                return path;
+            }
+        }
+        return null;
+    }
+
+    private static Path locateSdlIncludeDir(Path candidateRoot) {
+        if (!Files.isDirectory(candidateRoot)) {
+            return null;
+        }
+        if (hasSdlHeaders(candidateRoot)) {
+            return candidateRoot;
+        }
+        Path sdl2 = candidateRoot.resolve("SDL2");
+        if (hasSdlHeaders(sdl2)) {
+            return sdl2;
+        }
+        return null;
+    }
+
     private static boolean hasGcHeaders(Path includePath) {
         return Files.exists(includePath.resolve("gc_cpp.h"))
                 || Files.exists(includePath.resolve("gc/gc_cpp.h"))
@@ -243,9 +350,30 @@ public final class ApolloBuildDriver {
                 || Files.exists(includePath.resolve("gc/gc.h"));
     }
 
+    private static boolean hasSdlHeaders(Path includePath) {
+        return includePath != null
+                && Files.exists(includePath.resolve("SDL.h"))
+                && Files.exists(includePath.resolve("SDL_image.h"));
+    }
+
     private static boolean hasGcLibraries(Path libPath) {
         return (Files.exists(libPath.resolve("libgc.a")) || Files.exists(libPath.resolve("libgc.dll.a")))
                 && (Files.exists(libPath.resolve("libgccpp.a")) || Files.exists(libPath.resolve("libgccpp.dll.a")));
+    }
+
+    private static boolean hasSdlLibraries(Path libPath) {
+        if (libPath == null) {
+            return false;
+        }
+        boolean hasSdl2 = Files.exists(libPath.resolve("libSDL2.a"))
+                || Files.exists(libPath.resolve("libSDL2.dll.a"))
+                || Files.exists(libPath.resolve("libSDL2.so"))
+                || Files.exists(libPath.resolve("libSDL2.dylib"));
+        boolean hasSdl2Image = Files.exists(libPath.resolve("libSDL2_image.a"))
+                || Files.exists(libPath.resolve("libSDL2_image.dll.a"))
+                || Files.exists(libPath.resolve("libSDL2_image.so"))
+                || Files.exists(libPath.resolve("libSDL2_image.dylib"));
+        return hasSdl2 && hasSdl2Image;
     }
 
     private static List<String> frontendFlags(BuildEnvironment env) {
@@ -342,12 +470,12 @@ public final class ApolloBuildDriver {
         return List.of("-static", "-static-libstdc++", "-static-libgcc");
     }
 
-    private static BuildArtifactCacheEntry tryLoadBuildArtifactCache(BuildEnvironment env, GcSupport gcSupport) throws Exception {
+    private static BuildArtifactCacheEntry tryLoadBuildArtifactCache(BuildEnvironment env, GcSupport gcSupport, GuiSupport guiSupport) throws Exception {
         if (!env.enableBuildCache) {
             return null;
         }
 
-        Path cacheArtifactPath = buildCacheArtifactPath(env, gcSupport);
+        Path cacheArtifactPath = buildCacheArtifactPath(env, gcSupport, guiSupport);
         if (!Files.exists(cacheArtifactPath)) {
             return null;
         }
@@ -355,12 +483,12 @@ public final class ApolloBuildDriver {
         return new BuildArtifactCacheEntry(cacheArtifactPath);
     }
 
-    private static void writeBuildArtifactCache(BuildEnvironment env, GcSupport gcSupport, Path linkedBinary) throws Exception {
+    private static void writeBuildArtifactCache(BuildEnvironment env, GcSupport gcSupport, GuiSupport guiSupport, Path linkedBinary) throws Exception {
         if (!env.enableBuildCache) {
             return;
         }
 
-        Path cacheArtifactPath = buildCacheArtifactPath(env, gcSupport);
+        Path cacheArtifactPath = buildCacheArtifactPath(env, gcSupport, guiSupport);
         Path parent = cacheArtifactPath.getParent();
         if (parent != null) {
             Files.createDirectories(parent);
@@ -376,16 +504,17 @@ public final class ApolloBuildDriver {
         Files.copy(cacheEntry.artifactPath, linkOutput, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private static Path buildCacheArtifactPath(BuildEnvironment env, GcSupport gcSupport) throws Exception {
+    private static Path buildCacheArtifactPath(BuildEnvironment env, GcSupport gcSupport, GuiSupport guiSupport) throws Exception {
         Path cacheRoot = env.outputDir.resolve("cache").resolve("build-aot");
-        String cacheKey = sha256(buildArtifactSignature(env, gcSupport));
+        String cacheKey = sha256(buildArtifactSignature(env, gcSupport, guiSupport));
         return cacheRoot.resolve(cacheKey + ".bin");
     }
 
-    private static String buildArtifactSignature(BuildEnvironment env, GcSupport gcSupport) throws Exception {
+    private static String buildArtifactSignature(BuildEnvironment env, GcSupport gcSupport, GuiSupport guiSupport) throws Exception {
         List<String> parts = new ArrayList<>();
         parts.add(BUILD_CACHE_VERSION);
         parts.add("generatedCpp=" + sha256(Files.readString(env.generatedCpp, StandardCharsets.UTF_8)));
+        parts.add("generatedCppLocalIncludes=" + localIncludeSignature(env.generatedCpp, env.compilerDir));
         parts.add("clang=" + env.clangExe);
         parts.add("clangxx=" + env.clangxxExe);
         parts.add("llc=" + env.llcExe);
@@ -401,12 +530,44 @@ public final class ApolloBuildDriver {
         parts.add("standaloneLinkFlags=" + String.join(" ", standaloneLinkFlags(env)));
         parts.add("gcCompileFlags=" + String.join(" ", gcSupport.compileFlags()));
         parts.add("gcLinkFlags=" + String.join(" ", gcSupport.linkFlags()));
+        parts.add("guiCompileFlags=" + String.join(" ", guiSupport.compileFlags()));
+        parts.add("guiLinkFlags=" + String.join(" ", guiSupport.linkFlags()));
         parts.add("pgoCompileFlags=" + String.join(" ", pgoCompileFlags(env)));
         parts.add("pgoLinkFlags=" + String.join(" ", pgoLinkFlags(env)));
         if (env.usePch && Files.exists(env.pchHeader)) {
             parts.add("pchHeader=" + sha256(Files.readString(env.pchHeader, StandardCharsets.UTF_8)));
         }
         return String.join("|", parts);
+    }
+
+    private static String localIncludeSignature(Path sourceFile, Path baseDir) throws Exception {
+        List<String> parts = new ArrayList<>();
+        collectLocalIncludeSignature(sourceFile.toAbsolutePath().normalize(), baseDir.toAbsolutePath().normalize(), new HashSet<>(), parts);
+        return sha256(String.join("|", parts));
+    }
+
+    private static void collectLocalIncludeSignature(Path sourceFile, Path baseDir, Set<Path> visited, List<String> parts) throws Exception {
+        if (!visited.add(sourceFile) || !Files.exists(sourceFile)) {
+            return;
+        }
+
+        Path normalizedBase = baseDir.toAbsolutePath().normalize();
+        for (String rawLine : Files.readAllLines(sourceFile, StandardCharsets.UTF_8)) {
+            String line = rawLine.trim();
+            if (!line.startsWith("#include \"") || !line.endsWith("\"")) {
+                continue;
+            }
+
+            String includePath = line.substring("#include \"".length(), line.length() - 1);
+            Path includedFile = normalizedBase.resolve(includePath).normalize();
+            if (!includedFile.startsWith(normalizedBase) || !Files.exists(includedFile)) {
+                continue;
+            }
+
+            parts.add(normalizedBase.relativize(includedFile).toString().replace('\\', '/') + "="
+                    + sha256(Files.readString(includedFile, StandardCharsets.UTF_8)));
+            collectLocalIncludeSignature(includedFile, normalizedBase, visited, parts);
+        }
     }
 
     private static String sha256(String text) throws Exception {
@@ -667,6 +828,217 @@ public final class ApolloBuildDriver {
                 return List.of();
             }
             return List.of("-L" + libDir, "-lgccpp", "-lgc");
+        }
+    }
+
+    private static final class GuiSupport {
+        private final Path includeDir;
+        private final Path libDir;
+        private final boolean windowsTarget;
+
+        private GuiSupport(Path includeDir, Path libDir, boolean windowsTarget) {
+            this.includeDir = includeDir;
+            this.libDir = libDir;
+            this.windowsTarget = windowsTarget;
+        }
+
+        private static GuiSupport disabled() {
+            return new GuiSupport(null, null, false);
+        }
+
+        private List<String> compileFlags() {
+            if (includeDir == null) {
+                return List.of();
+            }
+            return List.of("-I" + includeDir);
+        }
+
+        private List<String> linkFlags() {
+            if (libDir == null) {
+                return List.of();
+            }
+            List<String> pkgConfigFlags = resolveStaticPkgConfigLinkFlags(libDir, windowsTarget);
+            if (!pkgConfigFlags.isEmpty()) {
+                return pkgConfigFlags;
+            }
+            return List.of("-L" + libDir, "-lSDL2_image", "-lSDL2");
+        }
+    }
+
+    private static List<String> resolveStaticPkgConfigLinkFlags(Path libDir, boolean windowsTarget) {
+        Path pkgConfigDir = libDir.resolve("pkgconfig");
+        if (!Files.isDirectory(pkgConfigDir)) {
+            return List.of();
+        }
+
+        LinkedHashSet<String> flags = new LinkedHashSet<>();
+        flags.add("-L" + libDir);
+
+        Set<String> visited = new HashSet<>();
+        collectPkgConfigLinkFlags(pkgConfigDir, "SDL2_image", windowsTarget, flags, visited);
+        if (windowsTarget) {
+            collectPkgConfigLinkFlags(pkgConfigDir, "sdl2", true, flags, visited);
+        }
+
+        if (flags.size() <= 1 || !flags.contains("-lSDL2_image") || !flags.contains("-lSDL2")) {
+            return List.of();
+        }
+        return new ArrayList<>(flags);
+    }
+
+    private static void collectPkgConfigLinkFlags(Path pkgConfigDir, String packageName, boolean windowsTarget,
+            LinkedHashSet<String> flags, Set<String> visited) {
+        String normalizedName = packageName.trim();
+        if (normalizedName.isEmpty() || !visited.add(normalizedName.toLowerCase(Locale.ROOT))) {
+            return;
+        }
+
+        Path packageFile = pkgConfigDir.resolve(normalizedName + ".pc");
+        if (!Files.exists(packageFile)) {
+            return;
+        }
+
+        PkgConfigInfo info = parsePkgConfigFile(packageFile);
+        appendPkgConfigLibFlags(flags, info.libs, normalizedName, windowsTarget);
+        for (String required : info.requires) {
+            collectPkgConfigLinkFlags(pkgConfigDir, required, windowsTarget, flags, visited);
+        }
+        appendPkgConfigLibFlags(flags, info.libsPrivate, normalizedName, windowsTarget);
+        for (String required : info.requiresPrivate) {
+            collectPkgConfigLinkFlags(pkgConfigDir, required, windowsTarget, flags, visited);
+        }
+    }
+
+    private static void appendPkgConfigLibFlags(LinkedHashSet<String> flags, List<String> libFlags,
+            String packageName, boolean windowsTarget) {
+        boolean windowsSdl2 = windowsTarget && "sdl2".equalsIgnoreCase(packageName);
+        for (String flag : libFlags) {
+            if (isBlank(flag) || flag.startsWith("-L")) {
+                continue;
+            }
+            if (windowsSdl2 && ("-lmingw32".equals(flag) || "-lSDL2main".equals(flag) || "-mwindows".equals(flag))) {
+                continue;
+            }
+            flags.add(flag);
+        }
+    }
+
+    private static PkgConfigInfo parsePkgConfigFile(Path packageFile) {
+        Map<String, String> variables = new HashMap<>();
+        List<String> requires = new ArrayList<>();
+        List<String> requiresPrivate = new ArrayList<>();
+        List<String> libs = new ArrayList<>();
+        List<String> libsPrivate = new ArrayList<>();
+
+        try {
+            for (String rawLine : Files.readAllLines(packageFile, StandardCharsets.UTF_8)) {
+                String line = rawLine.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+
+                int equalsIndex = line.indexOf('=');
+                int colonIndex = line.indexOf(':');
+                if (equalsIndex >= 0 && (colonIndex < 0 || equalsIndex < colonIndex)) {
+                    String key = line.substring(0, equalsIndex).trim();
+                    String value = expandPkgConfigValue(line.substring(equalsIndex + 1).trim(), variables);
+                    variables.put(key, value);
+                    continue;
+                }
+                if (colonIndex < 0) {
+                    continue;
+                }
+
+                String key = line.substring(0, colonIndex).trim();
+                String value = expandPkgConfigValue(line.substring(colonIndex + 1).trim(), variables);
+                switch (key) {
+                    case "Requires":
+                        requires.addAll(parsePkgConfigPackageList(value));
+                        break;
+                    case "Requires.private":
+                        requiresPrivate.addAll(parsePkgConfigPackageList(value));
+                        break;
+                    case "Libs":
+                        libs.addAll(splitFlags(value));
+                        break;
+                    case "Libs.private":
+                        libsPrivate.addAll(splitFlags(value));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (IOException ex) {
+            throw new BuildDriverException("Failed to read pkg-config metadata: " + packageFile, ex);
+        }
+
+        return new PkgConfigInfo(requires, requiresPrivate, libs, libsPrivate);
+    }
+
+    private static String expandPkgConfigValue(String rawValue, Map<String, String> variables) {
+        String expanded = rawValue;
+        for (int pass = 0; pass < 8; pass++) {
+            int start = expanded.indexOf("${");
+            if (start < 0) {
+                break;
+            }
+
+            StringBuilder builder = new StringBuilder();
+            int cursor = 0;
+            while (start >= 0) {
+                int end = expanded.indexOf('}', start + 2);
+                if (end < 0) {
+                    break;
+                }
+                builder.append(expanded, cursor, start);
+                String key = expanded.substring(start + 2, end);
+                builder.append(variables.getOrDefault(key, ""));
+                cursor = end + 1;
+                start = expanded.indexOf("${", cursor);
+            }
+            builder.append(expanded.substring(cursor));
+            expanded = builder.toString();
+        }
+        return expanded;
+    }
+
+    private static List<String> parsePkgConfigPackageList(String rawValue) {
+        List<String> packages = new ArrayList<>();
+        if (isBlank(rawValue)) {
+            return packages;
+        }
+
+        String[] tokens = rawValue.replace(',', ' ').trim().split("\\s+");
+        for (int index = 0; index < tokens.length; index++) {
+            String token = tokens[index].trim();
+            if (token.isEmpty() || isPkgConfigComparator(token)) {
+                continue;
+            }
+            packages.add(token);
+            if (index + 1 < tokens.length && isPkgConfigComparator(tokens[index + 1])) {
+                index += 2;
+            }
+        }
+        return packages;
+    }
+
+    private static boolean isPkgConfigComparator(String token) {
+        return "=".equals(token) || ">".equals(token) || "<".equals(token)
+                || ">=".equals(token) || "<=".equals(token);
+    }
+
+    private static final class PkgConfigInfo {
+        private final List<String> requires;
+        private final List<String> requiresPrivate;
+        private final List<String> libs;
+        private final List<String> libsPrivate;
+
+        private PkgConfigInfo(List<String> requires, List<String> requiresPrivate,
+                List<String> libs, List<String> libsPrivate) {
+            this.requires = requires;
+            this.requiresPrivate = requiresPrivate;
+            this.libs = libs;
+            this.libsPrivate = libsPrivate;
         }
     }
 

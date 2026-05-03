@@ -14,7 +14,7 @@ grammar compilerv1;
   }
 }
 
-program      : (directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interface | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | dircpp | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
+program      : (directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interface | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | dircpp | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
 directive    : gcDirective | borrowCheckerDirective | runtimeDirective | settingDirective ;
 gcDirective  : '#[' (GC_NAME | GCMODE_NAME) '(' ID ')' ']' ;
 borrowCheckerDirective : '#[' (BORROW_CHECKER_NAME | BORROW_CHECK_NAME) '(' ID ')' ']' ;
@@ -111,6 +111,8 @@ statement    : pointer
              | typedefOpstructSession
              | typedefOpstructCreateStmt
              | typedefOpstructPhraseStmt
+             | rdwindowStmt
+             | eventHandlerStmt
              | unsafeLineStmt
              | unsafeBlock
              | bypassBlock
@@ -166,6 +168,9 @@ typedefOpstructPhraseStmt : typedefOpstructWord+ typedefOpstructCapture ';' ;
 typedefOpstructCommand : typedefOpstructWord+ typedefOpstructCapture ';' ;
 typedefOpstructCapture : '[' expression ']' ;
 typedefOpstructWord : ID | 'new' ;
+
+rdwindowStmt : 'rdwindow' ID ';' ;
+eventHandlerStmt : ID '.' 'event' '(' expression ')' block ;
 
 schedulerStartStmt : ID '.' 'new' '(' ID ')' '.' schedulerStartMode '(' ')' ';' ;
 schedulerStartMode : DETATCH | DETACH | JOIN ;
