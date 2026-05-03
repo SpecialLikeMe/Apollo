@@ -117,6 +117,15 @@ function Get-GitMetadata {
     }
 }
 
+function Get-TrackedUserChanges {
+    $statusResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no', '--', '.', ':(exclude)compiler/output')
+    if ($statusResult.ExitCode -ne 0) {
+        throw (($statusResult.Output | Out-String).Trim())
+    }
+
+    return $statusResult.Output
+}
+
 function Show-Version {
     $metadata = Get-GitMetadata
     if ($null -ne $metadata) {
@@ -178,12 +187,8 @@ function Update-Apollo {
     Connect-InstallToOfficialRepo -Branch $branch
 
     if ($hadCheckout) {
-        $dirtyResult = Invoke-Git -Arguments @('-C', $InstallDir, 'status', '--porcelain', '--untracked-files=no')
-        if ($dirtyResult.ExitCode -ne 0) {
-            throw (($dirtyResult.Output | Out-String).Trim())
-        }
-
-        if (($dirtyResult.Output | Out-String).Trim().Length -gt 0) {
+        $dirtyOutput = Get-TrackedUserChanges
+        if (($dirtyOutput | Out-String).Trim().Length -gt 0) {
             throw 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.'
         }
     }

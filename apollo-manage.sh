@@ -42,6 +42,10 @@ print_version() {
     printf 'repo %s\n' "$OFFICIAL_REPO"
 }
 
+tracked_user_changes() {
+    git -C "$INSTALL_DIR" status --porcelain --untracked-files=no -- . ':(exclude)compiler/output'
+}
+
 resolve_official_branch() {
     if command -v git >/dev/null 2>&1; then
         branch=$(git ls-remote --symref "$OFFICIAL_REPO" HEAD 2>/dev/null | awk '/^ref:/ {sub("refs/heads/", "", $2); print $2; exit}')
@@ -82,7 +86,7 @@ update_apollo() {
     branch=$(resolve_official_branch)
     attach_official_checkout "$branch"
 
-    if [ "$had_checkout" -eq 1 ] && [ -n "$(git -C "$INSTALL_DIR" status --porcelain --untracked-files=no)" ]; then
+    if [ "$had_checkout" -eq 1 ] && [ -n "$(tracked_user_changes)" ]; then
         printf 'Apollo update aborted because the worktree has tracked changes. Commit or stash them first.\n' >&2
         exit 1
     fi
