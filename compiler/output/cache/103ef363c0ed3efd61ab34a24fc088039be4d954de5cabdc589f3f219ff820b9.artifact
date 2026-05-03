@@ -89,7 +89,7 @@ inline void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_cool& value)
 }
 
 int main() {
-    const apo_cool mycool{};
+    apo_cool mycool{};
     const std::string i = std::string("") + "sys.println(\"Hello, world\");";
     __apo_executePayload(std::string("apollo\n") + (i));
     return 0;

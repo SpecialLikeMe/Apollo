@@ -1,0 +1,6 @@
+int main() {
+    file out = fopen("test.txt");
+    out.write("Hello, world");
+    out.fclose();
+    return 0;
+}

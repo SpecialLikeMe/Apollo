@@ -1457,6 +1457,17 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         return target + "." + renderFunctionCall(ctx);
     }
 
+    private String renderFileMemberAccess(String target, compilerv1Parser.FunctionCallContext ctx) {
+        String memberName = ctx.ID().getText();
+        if ("fclose".equals(memberName)) {
+            if (ctx.args() != null && !ctx.args().expression().isEmpty()) {
+                throw error(ctx, "fclose does not take arguments");
+            }
+            return target + ".close()";
+        }
+        return target + "." + renderFunctionCall(ctx);
+    }
+
     private String renderGuiRenderBinding(compilerv1Parser.MemberaccessContext ctx) {
         if (ctx == null || ctx.functionCall() == null || !"render".equals(ctx.functionCall().ID().getText())) {
             return "";
@@ -3799,12 +3810,15 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             String message = renderExpression(ctx.args().expression(0), new ApolloType("str", List.of()));
             return "__apo_isc::error(" + message + ", " + ("terminalcerr".equals(functionName) ? "true" : "false") + ")";
         }
-        if ("open".equals(functionName)) {
+        if ("open".equals(functionName) || "fopen".equals(functionName)) {
             if (ctx.args() == null || ctx.args().expression().isEmpty() || ctx.args().expression().size() > 2) {
-                throw error(ctx, "open expects a path and optional mode");
+                throw error(ctx, functionName + " expects a path and optional mode");
             }
             String path = renderExpression(ctx.args().expression(0), new ApolloType("str", List.of()));
             if (ctx.args().expression().size() == 1) {
+                if ("fopen".equals(functionName)) {
+                    return "__apo_file::open(" + path + ", \"w\")";
+                }
                 return "__apo_file::open(" + path + ")";
             }
             String mode = renderExpression(ctx.args().expression(1), new ApolloType("str", List.of()));
@@ -3832,7 +3846,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
         if ("cerr".equals(functionName) || "terminalcerr".equals(functionName)) {
             return new ApolloType("isc", List.of());
         }
-        if ("open".equals(functionName)) {
+        if ("open".equals(functionName) || "fopen".equals(functionName)) {
             return new ApolloType("file", List.of());
         }
         return callableReturnType(resolveCallableType(functionName));
@@ -3860,7 +3874,7 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             if ("read".equals(memberName)) {
                 return new ApolloType("str", List.of());
             }
-            if ("write".equals(memberName) || "close".equals(memberName)) {
+            if ("write".equals(memberName) || "close".equals(memberName) || "fclose".equals(memberName)) {
                 return new ApolloType("void", List.of());
             }
         }
@@ -4125,6 +4139,9 @@ public class CppCodeGenVisitor extends compilerv1BaseVisitor<Void> {
             }
             if (isGuiObjectType(resolvedType)) {
                 return renderGuiObjectMemberAccess(target, ctx.functionCall());
+            }
+            if (resolvedType != null && "file".equals(resolvedType.name)) {
+                return renderFileMemberAccess(target, ctx.functionCall());
             }
             return target + operator + renderFunctionCall(ctx.functionCall());
         }

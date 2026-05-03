@@ -153,6 +153,7 @@ uninstall_apollo() {
     remove_profile_snippet "$HOME/.profile"
     remove_profile_snippet "$HOME/.bashrc"
     remove_profile_snippet "$HOME/.zprofile"
+    remove_profile_snippet "$HOME/.zshrc"
 
     (
         sleep 1

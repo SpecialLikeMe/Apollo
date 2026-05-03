@@ -155,6 +155,8 @@ if "%RAW_INPUT%"=="" (
 
 if defined PRESET_RAW_OUTPUT set "RAW_OUTPUT=%PRESET_RAW_OUTPUT%"
 
+set "TEMP_AOT_OUTPUT="
+
 if "%ANALYZE_MODE%"=="1" set "APOLLO_SHOW_FILE_DETAILS=1"
 if "%BIN_MODE%"=="1" set "APOLLO_SHOW_FILE_DETAILS=1"
 
@@ -253,7 +255,7 @@ if "%BIN_MODE%"=="0" if exist "%CONFIG_EXE%" (
 
 if /I "%EXECUTION_MODE%"=="jit" goto :run_jit
 
-set "LINK_OUTPUT=output\output.exe"
+set "LINK_OUTPUT=output\run-%RANDOM%%RANDOM%%RANDOM%.exe"
 if "%BIN_MODE%"=="1" set "LINK_OUTPUT=%BIN_OUTPUT%"
 
 "%JAVA_EXE%" -cp "output\classes;%ANTLR_JAR%" ApolloBuildDriver build-aot "%INPUT_FILE%" "%LINK_OUTPUT%"

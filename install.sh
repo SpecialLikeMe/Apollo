@@ -309,6 +309,7 @@ publish_cli_shims() {
     write_path_profile_snippet "$HOME/.profile" "$USER_BIN_DIR"
     write_path_profile_snippet "$HOME/.bashrc" "$USER_BIN_DIR"
     write_path_profile_snippet "$HOME/.zprofile" "$USER_BIN_DIR"
+    write_path_profile_snippet "$HOME/.zshrc" "$USER_BIN_DIR"
 
     write_status "Installed Apollo shims to $USER_BIN_DIR"
     if [ "$system_shims_published" -eq 1 ]; then

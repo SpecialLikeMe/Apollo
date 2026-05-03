@@ -75,14 +75,14 @@ template <typename T>
 inline void __apo_gc_trace_value(__apo_gc_tracer&, const T&) {}
 using namespace std;
 
-__apo_gui_window render("render");
+__apo_gui_runtime::__apo_gui_window render("render");
 
 std::string current = "sc1.png";
 int main() {
     render.show();
     while (true) {
         render.render("crr", current, 100, 100);
-        __apo_gui_object_ref crr = render.object_ref("crr");
+        __apo_gui_runtime::__apo_gui_object_ref crr = render.object_ref("crr");
     }
     return 0;
 }

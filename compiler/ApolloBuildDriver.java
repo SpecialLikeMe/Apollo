@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -83,8 +84,7 @@ public final class ApolloBuildDriver {
         GuiSupport guiSupport = resolveGuiSupport(env);
 
         BuildArtifactCacheEntry cacheEntry = tryLoadBuildArtifactCache(env, gcSupport, guiSupport);
-        if (cacheEntry != null) {
-            restoreCachedBuildArtifact(cacheEntry, linkOutput);
+        if (cacheEntry != null && restoreCachedBuildArtifact(cacheEntry, linkOutput)) {
             return;
         }
 
@@ -496,12 +496,17 @@ public final class ApolloBuildDriver {
         Files.copy(linkedBinary, cacheArtifactPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private static void restoreCachedBuildArtifact(BuildArtifactCacheEntry cacheEntry, Path linkOutput) throws Exception {
+    private static boolean restoreCachedBuildArtifact(BuildArtifactCacheEntry cacheEntry, Path linkOutput) throws Exception {
         Path parent = linkOutput.getParent();
         if (parent != null) {
             Files.createDirectories(parent);
         }
-        Files.copy(cacheEntry.artifactPath, linkOutput, StandardCopyOption.REPLACE_EXISTING);
+        try {
+            Files.copy(cacheEntry.artifactPath, linkOutput, StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (AccessDeniedException ex) {
+            return false;
+        }
     }
 
     private static Path buildCacheArtifactPath(BuildEnvironment env, GcSupport gcSupport, GuiSupport guiSupport) throws Exception {

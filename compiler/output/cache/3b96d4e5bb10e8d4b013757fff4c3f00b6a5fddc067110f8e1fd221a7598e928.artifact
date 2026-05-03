@@ -76,12 +76,12 @@ inline void __apo_gc_trace_value(__apo_gc_tracer&, const T&) {}
 using namespace std;
 
 int main() {
-    __apo_gui_window stage("stage");
+    __apo_gui_runtime::__apo_gui_window stage("stage");
     stage.show();
     stage.render("hero", "assets/hero.png", 10, 20);
-    __apo_gui_object_ref hero = stage.object_ref("hero");
+    __apo_gui_runtime::__apo_gui_object_ref hero = stage.object_ref("hero");
     stage.render("enemy", "assets/enemy.png", 30, 20);
-    __apo_gui_object_ref enemy = stage.object_ref("enemy");
+    __apo_gui_runtime::__apo_gui_object_ref enemy = stage.object_ref("enemy");
     if (__apo_gui_runtime::key_pressed("A")) {
         stage.hide();
     }

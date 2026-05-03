@@ -344,6 +344,18 @@ $tests = @(
         )
     },
     [pscustomobject]@{
+        Name = 'fopen-alias-surface'
+        Path = 'tests\grammar\pass\fopen_alias_surface.apollo'
+        ShouldPass = $true
+        Covers = 'fopen lowers to the file runtime with write-mode defaulting and fclose lowers to close on file values'
+        OutputMustContainAll = @(
+            'struct __apo_file {',
+            'const __apo_file out = __apo_file::open("test.txt", "w");',
+            'out.write("Hello, world");',
+            'out.close();'
+        )
+    },
+    [pscustomobject]@{
         Name = 'opstruct-runtime-surface'
         Path = 'tests\grammar\pass\opstruct_runtime_surface.apollo'
         ShouldPass = $true

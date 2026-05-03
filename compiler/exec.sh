@@ -250,6 +250,7 @@ esac
 
 RAW_INPUT=${1-}
 RAW_OUTPUT=${2-}
+TEMP_AOT_OUTPUT=
 
 if [ -n "$PRESET_RAW_INPUT" ]; then
     RAW_INPUT=$PRESET_RAW_INPUT
@@ -289,7 +290,7 @@ case "$COMMAND" in
                     ;;
             esac
         else
-            LINK_OUTPUT="$SCRIPT_DIR/output/output.bin"
+            LINK_OUTPUT="$SCRIPT_DIR/output/run-$$.bin"
         fi
 
         if [ -n "$CLI_TARGET_TRIPLE" ]; then
