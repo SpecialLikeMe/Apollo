@@ -37,6 +37,7 @@ APOLLO_LLC_OPT_LEVEL=${APOLLO_LLC_OPT_LEVEL:-$APOLLO_OPT_LEVEL}
 APOLLO_USE_PCH=${APOLLO_USE_PCH:-1}
 APOLLO_PCH_HEADER=${APOLLO_PCH_HEADER:-$SCRIPT_DIR/runtime_support/apollo_pch.hpp}
 APOLLO_PCH_OUTPUT=${APOLLO_PCH_OUTPUT:-output/apollo.pch}
+CODEGEN_BOOTSTRAP_VERSION=${CODEGEN_BOOTSTRAP_VERSION:-apollo-codegen-bootstrap-v1}
 
 if [ -n "${APOLLO_JAVA_BIN:-}" ] && [ -x "$APOLLO_JAVA_BIN/java" ]; then
     JAVA_EXE="$APOLLO_JAVA_BIN/java"
@@ -123,9 +124,20 @@ prepare_codegen() {
     parser_stamp="output/classes/.apollo_parser.stamp"
     parser_classes_stamp="output/classes/.apollo_parser_classes.stamp"
     frontend_stamp="output/classes/.apollo_frontend.stamp"
+    bootstrap_version_file="output/classes/.apollo_codegen_bootstrap.version"
+
+    bootstrap_version=""
+    if [ -f "$bootstrap_version_file" ]; then
+        bootstrap_version=$(cat "$bootstrap_version_file")
+    fi
+    bootstrap_version_mismatch=0
+    if [ "$bootstrap_version" != "$CODEGEN_BOOTSTRAP_VERSION" ]; then
+        bootstrap_version_mismatch=1
+    fi
 
     parser_regenerated=0
-    if [ ! -f "$parser_source" ] \
+    if [ "$bootstrap_version_mismatch" -eq 1 ] \
+        || [ ! -f "$parser_source" ] \
         || [ ! -f "$lexer_source" ] \
         || [ ! -f "$parser_class" ] \
         || [ ! -f "$lexer_class" ] \
@@ -155,7 +167,8 @@ prepare_codegen() {
         touch_stamp "$parser_classes_stamp"
     fi
 
-    if [ ! -f "output/classes/Main.class" ] \
+    if [ "$bootstrap_version_mismatch" -eq 1 ] \
+        || [ ! -f "output/classes/Main.class" ] \
         || [ ! -f "output/classes/runtime.class" ] \
         || [ ! -f "output/classes/CppCodeGenVisitor.class" ] \
         || [ ! -f "output/classes/ApolloBuildDriver.class" ] \
@@ -171,6 +184,7 @@ prepare_codegen() {
         "$JAVAC_EXE" -d output/classes -cp ".:output/classes:$ANTLR_JAR" ApolloBuildDriver.java ApolloCodegenOptimizationPlan.java CppCodeGenVisitor.java Main.java runtime.java
         touch_stamp "$frontend_stamp"
     fi
+    printf '%s\n' "$CODEGEN_BOOTSTRAP_VERSION" > "$bootstrap_version_file"
     "$JAVA_EXE" -cp "output/classes:$ANTLR_JAR" Main "$INPUT_FILE"
 }
 

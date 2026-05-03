@@ -114,6 +114,7 @@ if not defined APOLLO_LLC_OPT_LEVEL set "APOLLO_LLC_OPT_LEVEL=%APOLLO_OPT_LEVEL%
 if not defined APOLLO_USE_PCH set "APOLLO_USE_PCH=1"
 if not defined APOLLO_PCH_HEADER set "APOLLO_PCH_HEADER=%SCRIPT_DIR%runtime_support\apollo_pch.hpp"
 if not defined APOLLO_PCH_OUTPUT set "APOLLO_PCH_OUTPUT=output\apollo.pch"
+if not defined CODEGEN_BOOTSTRAP_VERSION set "CODEGEN_BOOTSTRAP_VERSION=apollo-codegen-bootstrap-v1"
 if defined CLI_TARGET_TRIPLE set "APOLLO_TARGET_TRIPLE=%CLI_TARGET_TRIPLE%"
 if defined APOLLO_TARGET_TRIPLE set "APOLLO_TARGET_FLAGS=%APOLLO_TARGET_FLAGS% --target=%APOLLO_TARGET_TRIPLE%"
 if defined APOLLO_SYSROOT set "APOLLO_TARGET_FLAGS=%APOLLO_TARGET_FLAGS% --sysroot=%APOLLO_SYSROOT%"
@@ -343,9 +344,21 @@ set "PARSER_CLASSES_STAMP=output\classes\.apollo_parser_classes.stamp"
 set "FRONTEND_STAMP=output\classes\.apollo_frontend.stamp"
 set "PARSER_CLASS=output\classes\compilerv1Parser.class"
 set "LEXER_CLASS=output\classes\compilerv1Lexer.class"
+set "BOOTSTRAP_VERSION_FILE=output\classes\.apollo_codegen_bootstrap.version"
 set "REBUILD_PARSER="
 set "REBUILD_PARSER_CLASSES="
 set "REBUILD_FRONTEND="
+set "BOOTSTRAP_VERSION_VALUE="
+
+if not exist "%BOOTSTRAP_VERSION_FILE%" set "REBUILD_PARSER=1"
+if not exist "%BOOTSTRAP_VERSION_FILE%" set "REBUILD_FRONTEND=1"
+if exist "%BOOTSTRAP_VERSION_FILE%" (
+    set /p BOOTSTRAP_VERSION_VALUE=<"%BOOTSTRAP_VERSION_FILE%"
+    if /I not "%BOOTSTRAP_VERSION_VALUE%"=="%CODEGEN_BOOTSTRAP_VERSION%" (
+        set "REBUILD_PARSER=1"
+        set "REBUILD_FRONTEND=1"
+    )
+)
 
 if not exist "compiler-master\compilerv1Parser.java" set "REBUILD_PARSER=1"
 if not exist "compiler-master\compilerv1Lexer.java" set "REBUILD_PARSER=1"
@@ -398,6 +411,8 @@ if defined REBUILD_FRONTEND (
     )
     call :touch_stamp "%FRONTEND_STAMP%"
 )
+
+> "%BOOTSTRAP_VERSION_FILE%" echo %CODEGEN_BOOTSTRAP_VERSION%
 
 "%JAVA_EXE%" -cp "output\classes;%ANTLR_JAR%" Main "%INPUT_FILE%"
 if errorlevel 1 (
