@@ -1,0 +1,18 @@
+// Failing run: use this with `apollo -analyze tests\analyze\asan_overflow.apollo`.
+// Expected ASan color categories from one failing run:
+// - Red: the main AddressSanitizer error line
+// - Yellow: the SUMMARY line
+// - Pink-purple: stack frames and allocation/location detail lines
+
+int main() {
+    @unsafe {
+        void* heap.alc(1) int;
+        int* values = (int*)heap;
+
+        // Write one int past the allocated region.
+        values[1] = 42;
+
+        void heap;
+    }
+    return 0;
+}

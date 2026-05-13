@@ -1,0 +1,93 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeASMInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDependentOption.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakePushCheckState.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CPack.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CPackComponent.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckCCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckCXXCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckCXXSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckCXXSymbolExists.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckFunctionExists.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckLinkerFlag.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckStructHasMember.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckSymbolExists.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/MSVC-ASM.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindBacktrace.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPkgConfig.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPython/Support.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPython3.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindZLIB.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/GNUInstallDirs.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CMakeASMLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CMakeCLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CMakeCommonLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CheckCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CheckFlagCommonConfig.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CheckLinkerFlag.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Linker/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Linker/MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/GNU.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-ASM.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-GNU-ASM.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-GNU.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/SelectLibraryConfigurations.cmake
+C:/Program Files/CMake/share/cmake-4.3/Templates/CPackConfig.cmake.in
+C:/Users/devon/Apollo/compiler/native/build/CMakeFiles/4.3.2/CMakeASMCompiler.cmake
+C:/Users/devon/Apollo/compiler/native/build/CMakeFiles/4.3.2/CMakeCCompiler.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/cmake/Modules/CMakePolicy.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/cmake/Modules/GNUInstallPackageDir.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/cmake/Modules/HandleDoxygen.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/cmake/Modules/LLVMVersion.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/CMakeLists.txt
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/config-ix.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/AddLLVM.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/AddOCaml.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/CheckAtomic.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/CheckCompilerVersion.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/CheckProblematicConfigurations.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/CoverageReport.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/DetermineGCCCompatible.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/FindDIASDK.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/FindLibXml2.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/FindLibpfm.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/FindOCaml.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/Findzstd.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/GetHostTriple.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/HandleLLVMOptions.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/HandleLLVMStdlib.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/LLVM-Config.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/LLVMDistributionSupport.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/LLVMProcessSources.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/TableGen.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/cmake/modules/VersionFromVCS.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/AsmParsers.def.in
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/AsmPrinters.def.in
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/Disassemblers.def.in
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/TargetExegesis.def.in
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/TargetMCAs.def.in
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/Targets.def.in
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/Targets.h.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/abi-breaking.h.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/config.h.cmake
+C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Config/llvm-config.h.cmake

@@ -1,0 +1,13 @@
+memstruct Buffer {
+    i32 size;
+}
+
+void consume(Buffer value) {
+}
+
+int main() {
+    nconst str arena = "arena_pool";
+    Buffer value = Buffer{}.uses(arena);
+    async consume(value);
+    return 0;
+}

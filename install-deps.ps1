@@ -186,9 +186,9 @@ function Resolve-AsanRuntime {
         return $null
     }
 
-    $matches = Get-ChildItem -Path $resourceDir -Recurse -Filter 'libclang_rt.asan*.a' -ErrorAction SilentlyContinue
-    if ($matches) {
-        return $matches[0].FullName
+    $asanFiles = Get-ChildItem -Path $resourceDir -Recurse -Filter 'libclang_rt.asan*.a' -ErrorAction SilentlyContinue
+    if ($asanFiles) {
+        return $asanFiles[0].FullName
     }
 
     return $null
@@ -259,6 +259,23 @@ function Resolve-GcLibrary {
     return $null
 }
 
+function Resolve-SdlHeader {
+    param([string]$IncludeDir)
+
+    $candidates = @(
+        (Join-Path $IncludeDir 'SDL.h'),
+        (Join-Path $IncludeDir 'SDL2\SDL.h')
+    )
+
+    foreach ($candidate in $candidates) {
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
 function Write-ToolchainEnv {
     param(
         [string]$InstallDirPath,
@@ -266,7 +283,7 @@ function Write-ToolchainEnv {
         [string]$JavaBin
     )
 
-    $compilerDir = Join-Path $InstallDirPath 'compiler'
+    $compilerDir = Join-Path $InstallDirPath 'Apollo-Main\compiler'
     if (-not (Test-Path $compilerDir)) {
         throw "Apollo compiler directory not found at $compilerDir"
     }
@@ -288,6 +305,21 @@ function Write-ToolchainEnv {
     $gcppLibrary = Resolve-GcLibrary -LibDir $libDir -Names @('libgccpp.dll.a', 'libgccpp.a')
     if (-not $gcppLibrary) {
         throw 'libgccpp was not found after package installation.'
+    }
+
+    $sdlHeader = Resolve-SdlHeader -IncludeDir $includeDir
+    if (-not $sdlHeader) {
+        throw 'SDL2 headers were not found after package installation.'
+    }
+
+    $sdlLibrary = Resolve-GcLibrary -LibDir $libDir -Names @('libSDL2.dll.a', 'libSDL2.a')
+    if (-not $sdlLibrary) {
+        throw 'libSDL2 was not found after package installation.'
+    }
+
+    $sdlImageLibrary = Resolve-GcLibrary -LibDir $libDir -Names @('libSDL2_image.dll.a', 'libSDL2_image.a')
+    if (-not $sdlImageLibrary) {
+        throw 'libSDL2_image was not found after package installation.'
     }
 
     $asanRuntime = Resolve-AsanRuntime -ClangxxPath (Join-Path $mingwBin 'clang++.exe')
@@ -315,6 +347,8 @@ function Write-ToolchainEnv {
         ('set "APOLLO_LLVM_BIN={0}"' -f $mingwBin),
         ('set "APOLLO_GC_INCLUDE_DIR={0}"' -f $includeDir),
         ('set "APOLLO_GC_LIB_DIR={0}"' -f $libDir),
+        ('set "APOLLO_SDL_INCLUDE_DIR={0}"' -f $includeDir),
+        ('set "APOLLO_SDL_LIB_DIR={0}"' -f $libDir),
         ('set "APOLLO_JAVA_BIN={0}"' -f $JavaBin),
         'set "PATH=%APOLLO_MINGW_BIN%;%APOLLO_JAVA_BIN%;%PATH%"'
     )
@@ -338,6 +372,8 @@ function Set-SessionToolchainEnv {
     $env:APOLLO_LLVM_BIN = $mingwBin
     $env:APOLLO_GC_INCLUDE_DIR = $includeDir
     $env:APOLLO_GC_LIB_DIR = $libDir
+    $env:APOLLO_SDL_INCLUDE_DIR = $includeDir
+    $env:APOLLO_SDL_LIB_DIR = $libDir
     $env:APOLLO_JAVA_BIN = $JavaBin
     $env:PATH = "$mingwBin;$JavaBin;$env:PATH"
 }
@@ -345,7 +381,7 @@ function Set-SessionToolchainEnv {
 function Invoke-ApolloValidation {
     param([string]$InstallDirPath)
 
-    $validationScript = Join-Path $InstallDirPath 'compiler\run-test-suite.ps1'
+    $validationScript = Join-Path $InstallDirPath 'Apollo-Main\compiler\run-test-suite.ps1'
     if (-not (Test-Path $validationScript)) {
         throw "Apollo validation script was not found at $validationScript"
     }

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\DWARF\LowLevel\DWARFCFIProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\DWARF\LowLevel\DWARFExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\DWARF\LowLevel\DWARFUnwindTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\DWARF\LowLevel\DWARFCFIProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\DWARF\LowLevel\DWARFDataExtractorSimple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\DWARF\LowLevel\DWARFExpression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\DWARF\LowLevel\DWARFUnwindTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\DWARF\LowLevel\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{87710DDF-F811-3822-A4AB-356A2253038F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{59DF061E-57DC-33F3-94FD-B07E5CD94B4B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

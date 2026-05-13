@@ -1,8 +1,0 @@
-#[fallback(allow)]
-
-extern "cstdio";
-
-int main() {
-    puts("hello from fallback");
-    return 0;
-}

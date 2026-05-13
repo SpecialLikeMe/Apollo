@@ -1,0 +1,11 @@
+{
+  "blocked": [
+    "system",
+    "popen",
+    "WinExec",
+    "CreateProcess",
+    "ShellExecute",
+    "malloc",
+    "calloc"
+  ]
+}

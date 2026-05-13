@@ -1,0 +1,8 @@
+struct Plain {
+    i32 size;
+}
+
+int main() {
+    Plain value = Plain{}.uses("arena_pool");
+    return 0;
+}

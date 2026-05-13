@@ -1,0 +1,21 @@
+typedef opstruct cool {
+    asg("cool ${name}") -> {
+    }
+    src("please do ${DO}") -> {
+        DO
+    }
+}
+
+typedef struct rtx {
+    nconst int id;
+    nconst str a;
+}
+
+int main() {
+    rtx x = {
+        .id = 1,
+        .a = "Hello, world!"
+    };
+    sys.println(x.a);
+    return 0;
+}

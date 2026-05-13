@@ -1,5 +1,0 @@
-ASan completed without reported sanitizer findings.
-warning: suspicious allocation pattern detected in demo path
-==4242==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x000000000040 at pc 0x000000000111 bp 0x000000000222 sp 0x000000000333
-WRITE of size 4 at 0x000000000040 thread T0
-#0 0x000000000111 in main C:/Users/devon/Apollo/compiler/output.cpp:42

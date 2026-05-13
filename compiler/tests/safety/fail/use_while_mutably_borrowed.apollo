@@ -1,6 +1,0 @@
-int main() {
-    nconst i32 value = 1;
-    nconst i32& alias = &nconst value;
-    i32 copy = value;
-    return alias;
-}

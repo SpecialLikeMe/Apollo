@@ -1,0 +1,61 @@
+; ModuleID = 'autofmt_reported_sample'
+source_filename = "C:/Users/devon/Apollo/compiler/tests/grammar/pass/autofmt_reported_sample.apollo"
+
+@apollo.str.literal = private unnamed_addr constant [13 x i8] c"Hello, world\00"
+@apollo.print.fmt = private unnamed_addr constant [3 x i8] c"%s\00"
+
+define internal void @"apollo$et$hello"(ptr %indef) {
+entry:
+  %indef1 = alloca ptr, align 8
+  store ptr %indef, ptr %indef1, align 8
+  %0 = load ptr, ptr %indef1, align 8
+  %1 = call i32 (ptr, ...) @printf(ptr @apollo.print.fmt, ptr @apollo.str.literal)
+  ret void
+}
+
+define internal void @"apollo$run$please"(ptr %indef) {
+entry:
+  %indef1 = alloca ptr, align 8
+  store ptr %indef, ptr %indef1, align 8
+  %0 = load ptr, ptr %indef1, align 8
+  ret void
+}
+
+declare i32 @printf(ptr, ...)
+
+define i32 @main() {
+entry:
+  %i = alloca i32, align 4
+  store i32 0, ptr %i, align 4
+  ret i32 0
+}
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.layouts = !{!3, !4}
+!apollo.dependencies = !{!5}
+!apollo.primitive.types = !{!6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"autofmt_reported_sample"}
+!1 = !{!"autofmt", i1 true, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 true}
+!3 = !{!"et", !"full-soa", i32 0, i1 true, i1 false, i1 false, !"full-soa-eligible"}
+!4 = !{!"run", !"aos", i32 0, i1 true, i1 true, i1 false, !"inheritance"}
+!5 = !{!"iostream"}
+!6 = !{!"i32", !"i32"}
+!7 = !{!"short", !"i16"}
+!8 = !{!"bool", !"i1"}
+!9 = !{!"i8", !"i8"}
+!10 = !{!"u8", !"i8"}
+!11 = !{!"i16", !"i16"}
+!12 = !{!"u16", !"i16"}
+!13 = !{!"u32", !"i32"}
+!14 = !{!"int", !"i32"}
+!15 = !{!"i64", !"i64"}
+!16 = !{!"u64", !"i64"}
+!17 = !{!"long", !"i64"}
+!18 = !{!"float", !"float"}
+!19 = !{!"double", !"double"}
+!20 = !{!"f64", !"double"}
+!21 = !{!"void", !"void"}

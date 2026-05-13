@@ -1,0 +1,17 @@
+typedef struct rtx {
+    nconst int id;
+    nconst str a;
+}
+
+int main() {
+    rtx full = {
+        .id = 1,
+        .a = "Hello, world!"
+    };
+    rtx partial = {
+        .id = 2
+    };
+    rtx empty;
+    sys.println(full.a);
+    return partial.id;
+}

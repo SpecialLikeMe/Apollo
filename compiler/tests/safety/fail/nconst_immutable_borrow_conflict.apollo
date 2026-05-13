@@ -1,5 +1,0 @@
-int main() {
-    const i32 value = 1;
-    nconst i32& alias = &nconst value;
-    return alias;
-}

@@ -1,0 +1,9 @@
+// This should fail: by-value parameters do not live long enough for reference returns.
+
+str& bad(str value) {
+    return &value;
+}
+
+int main() {
+    return 0;
+}

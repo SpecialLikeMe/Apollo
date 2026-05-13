@@ -1,0 +1,17 @@
+// This should compile: a branchy helper can still return a stable reference origin when every path resolves to the same parameter.
+
+str& chooseFirst(nconst str& first, nconst str& second, int pick) {
+    if (pick) {
+        return first;
+    }
+    return first;
+}
+
+int main() {
+    nconst str first = "alpha";
+    nconst str second = "beta";
+    int pick = 0;
+    nconst str& alias = chooseFirst(&nconst first, &nconst second, pick);
+    sys.println(alias);
+    return 0;
+}

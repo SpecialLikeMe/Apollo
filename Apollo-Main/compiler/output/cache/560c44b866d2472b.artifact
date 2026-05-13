@@ -1,0 +1,38 @@
+; ModuleID = 'typedef_opstruct_instance_phrase'
+source_filename = "C:/Users/devon/Apollo/compiler/tests/grammar/pass/typedef_opstruct_instance_phrase.apollo"
+
+@apollo.template.str.literal = private unnamed_addr constant [29 x i8] c"sys.stdout(\22Hello, world!\22);\00"
+
+define i32 @main() {
+entry:
+  %i = alloca ptr, align 8
+  store ptr @apollo.template.str.literal, ptr %i, align 8
+  ret i32 0
+}
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.dependencies = !{!3}
+!apollo.primitive.types = !{!4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"typedef_opstruct_instance_phrase"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 true, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 true, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"iostream"}
+!4 = !{!"i32", !"i32"}
+!5 = !{!"short", !"i16"}
+!6 = !{!"bool", !"i1"}
+!7 = !{!"i8", !"i8"}
+!8 = !{!"u8", !"i8"}
+!9 = !{!"i16", !"i16"}
+!10 = !{!"u16", !"i16"}
+!11 = !{!"u32", !"i32"}
+!12 = !{!"int", !"i32"}
+!13 = !{!"i64", !"i64"}
+!14 = !{!"u64", !"i64"}
+!15 = !{!"long", !"i64"}
+!16 = !{!"float", !"float"}
+!17 = !{!"double", !"double"}
+!18 = !{!"f64", !"double"}
+!19 = !{!"void", !"void"}

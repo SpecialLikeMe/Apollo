@@ -1,6 +1,0 @@
-// Clean run: use this with `apollo -analyze tests\analyze\asan_clean.apollo` to get the green success line.
-
-int main() {
-    sys.println(123);
-    return 0;
-}

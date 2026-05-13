@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\ArchiveEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\ArchiveYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\CodeViewYAMLDebugSections.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\CodeViewYAMLSymbols.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\CodeViewYAMLTypeHashing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\CodeViewYAMLTypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\COFFEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\COFFYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\DWARFEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\DWARFYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\DXContainerEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\DXContainerYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\ELFEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\ELFYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\GOFFEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\GOFFYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\MachOEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\MachOYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\ObjectYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\MinidumpEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\MinidumpYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\OffloadEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\OffloadYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\WasmEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\WasmYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\XCOFFEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\XCOFFYAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\YAML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\yaml2obj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\ArchiveYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\COFFYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\CodeViewYAMLDebugSections.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\CodeViewYAMLSymbols.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\CodeViewYAMLTypeHashing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\CodeViewYAMLTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\DWARFEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\DWARFYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\DXContainerYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\ELFYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\GOFFYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\MachOYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\MinidumpYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\ObjectYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\OffloadYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\WasmYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\XCOFFYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\YAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ObjectYAML\yaml2obj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ObjectYAML\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{19436BC5-5970-3AE9-B69B-53DFF529524A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{15F5757A-4FDA-31A8-AA53-CB76F7A161D6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

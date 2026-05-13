@@ -1,0 +1,4 @@
+C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\Support\BLAKE3\blake3.c;C:\Users\devon\Apollo\compiler\native\build\apollo-llvm\lib\Support\BLAKE3\LLVMSupportBlake3.dir\Release\blake3.obj
+C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\Support\BLAKE3\blake3_dispatch.c;C:\Users\devon\Apollo\compiler\native\build\apollo-llvm\lib\Support\BLAKE3\LLVMSupportBlake3.dir\Release\blake3_dispatch.obj
+C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\Support\BLAKE3\blake3_portable.c;C:\Users\devon\Apollo\compiler\native\build\apollo-llvm\lib\Support\BLAKE3\LLVMSupportBlake3.dir\Release\blake3_portable.obj
+C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\Support\BLAKE3\blake3_neon.c;C:\Users\devon\Apollo\compiler\native\build\apollo-llvm\lib\Support\BLAKE3\LLVMSupportBlake3.dir\Release\blake3_neon.obj

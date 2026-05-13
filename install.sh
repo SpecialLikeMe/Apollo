@@ -18,7 +18,8 @@ resolve_script_path() {
 
 SCRIPT_PATH=$(resolve_script_path "$0")
 INSTALL_DIR=$(CDPATH= cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd -P)
-COMPILER_DIR="$INSTALL_DIR/compiler"
+PAYLOAD_DIR="$INSTALL_DIR/Apollo-Main"
+COMPILER_DIR="$PAYLOAD_DIR/compiler"
 TOOLCHAIN_ENV_SH="$COMPILER_DIR/toolchain-env.sh"
 USER_BIN_DIR=${XDG_BIN_HOME:-$HOME/.local/bin}
 SYSTEM_BIN_DIR=${APOLLO_SYSTEM_BIN_DIR:-/usr/local/bin}
@@ -204,6 +205,56 @@ resolve_gc_library() {
     return 1
 }
 
+resolve_sdl_include_dir() {
+    if [ -n "${APOLLO_SDL_INCLUDE_DIR:-}" ] && [ -d "$APOLLO_SDL_INCLUDE_DIR" ]; then
+        printf '%s\n' "$APOLLO_SDL_INCLUDE_DIR"
+        return 0
+    fi
+
+    if include_dir=$(pkg_config_first_path sdl2 --cflags-only-I); then
+        printf '%s\n' "$include_dir"
+        return 0
+    fi
+
+    first_existing_dir \
+        /opt/homebrew/include \
+        /usr/local/include \
+        /usr/include \
+        /opt/local/include
+}
+
+resolve_sdl_lib_dir() {
+    if [ -n "${APOLLO_SDL_LIB_DIR:-}" ] && [ -d "$APOLLO_SDL_LIB_DIR" ]; then
+        printf '%s\n' "$APOLLO_SDL_LIB_DIR"
+        return 0
+    fi
+
+    if lib_dir=$(pkg_config_first_path sdl2 --libs-only-L); then
+        printf '%s\n' "$lib_dir"
+        return 0
+    fi
+
+    first_existing_dir \
+        /opt/homebrew/lib \
+        /usr/local/lib \
+        /usr/lib64 \
+        /usr/lib \
+        /opt/local/lib
+}
+
+resolve_sdl_header() {
+    include_dir=$1
+    for candidate in \
+        "$include_dir/SDL.h" \
+        "$include_dir/SDL2/SDL.h"; do
+        if [ -f "$candidate" ]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+    return 1
+}
+
 dependency_snapshot() {
     java_bin=$(resolve_java_bin)
     llvm_bin=$(resolve_llvm_bin)
@@ -211,6 +262,8 @@ dependency_snapshot() {
     git_bin=$(command -v git 2>/dev/null || printf '')
     gc_include_dir=$(resolve_gc_include_dir)
     gc_lib_dir=$(resolve_gc_lib_dir)
+    sdl_include_dir=$(resolve_sdl_include_dir)
+    sdl_lib_dir=$(resolve_sdl_lib_dir)
 
     [ -n "$git_bin" ] || return 1
     [ -n "$java_bin" ] || return 1
@@ -233,17 +286,25 @@ dependency_snapshot() {
     resolve_gc_library "$gc_lib_dir" libgc.a libgc.so libgc.dylib >/dev/null || return 1
     resolve_gc_library "$gc_lib_dir" libgccpp.a libgccpp.so libgccpp.dylib >/dev/null || return 1
 
+    [ -n "$sdl_include_dir" ] || return 1
+    [ -n "$sdl_lib_dir" ] || return 1
+    resolve_sdl_header "$sdl_include_dir" >/dev/null || return 1
+    resolve_gc_library "$sdl_lib_dir" libSDL2.a libSDL2.so libSDL2.dylib >/dev/null || return 1
+    resolve_gc_library "$sdl_lib_dir" libSDL2_image.a libSDL2_image.so libSDL2_image.dylib >/dev/null || return 1
+
     printf 'GIT_BIN=%s\n' "$git_bin"
     printf 'JAVA_BIN=%s\n' "$java_bin"
     printf 'LLVM_BIN=%s\n' "$llvm_bin"
     printf 'MAKE_BIN=%s\n' "$make_bin"
     printf 'GC_INCLUDE_DIR=%s\n' "$gc_include_dir"
     printf 'GC_LIB_DIR=%s\n' "$gc_lib_dir"
+    printf 'SDL_INCLUDE_DIR=%s\n' "$sdl_include_dir"
+    printf 'SDL_LIB_DIR=%s\n' "$sdl_lib_dir"
 }
 
 verify_dependencies() {
     if ! snapshot=$(dependency_snapshot); then
-        printf 'Apollo dependency verification failed. Required components: java, javac, clang, clang++, llc, make/gmake, bundled antlr-4.13.2-complete.jar, and Boehm GC headers/libs.\n' >&2
+        printf 'Apollo dependency verification failed. Required components: java, javac, clang, clang++, llc, make/gmake, bundled antlr-4.13.2-complete.jar, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs.\n' >&2
         return 1
     fi
 
@@ -254,6 +315,8 @@ verify_dependencies() {
     write_status "Verified make at $MAKE_BIN"
     write_status "Verified Boehm GC include dir at $GC_INCLUDE_DIR"
     write_status "Verified Boehm GC lib dir at $GC_LIB_DIR"
+    write_status "Verified SDL include dir at $SDL_INCLUDE_DIR"
+    write_status "Verified SDL lib dir at $SDL_LIB_DIR"
 }
 
 write_path_profile_snippet() {
@@ -279,24 +342,24 @@ write_path_profile_snippet() {
 
 publish_cli_shims() {
     mkdir -p "$USER_BIN_DIR"
-    ln -snf "$INSTALL_DIR/apollo.sh" "$USER_BIN_DIR/apollo"
-    ln -snf "$INSTALL_DIR/apollo-config.sh" "$USER_BIN_DIR/apollo-config"
+    ln -snf "$PAYLOAD_DIR/apollo.sh" "$USER_BIN_DIR/apollo"
+    ln -snf "$PAYLOAD_DIR/apollo-config.sh" "$USER_BIN_DIR/apollo-config"
 
     system_shims_published=0
     if [ -d "$SYSTEM_BIN_DIR" ] || mkdir -p "$SYSTEM_BIN_DIR" 2>/dev/null; then
-        if ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" 2>/dev/null \
-            && ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config" 2>/dev/null; then
+        if ln -snf "$PAYLOAD_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" 2>/dev/null \
+            && ln -snf "$PAYLOAD_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config" 2>/dev/null; then
             system_shims_published=1
         elif command_exists sudo; then
-            if sudo ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" \
-                && sudo ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config"; then
+            if sudo ln -snf "$PAYLOAD_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" \
+                && sudo ln -snf "$PAYLOAD_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config"; then
                 system_shims_published=1
             fi
         fi
     elif command_exists sudo; then
         if sudo mkdir -p "$SYSTEM_BIN_DIR" \
-            && sudo ln -snf "$INSTALL_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" \
-            && sudo ln -snf "$INSTALL_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config"; then
+            && sudo ln -snf "$PAYLOAD_DIR/apollo.sh" "$SYSTEM_BIN_DIR/apollo" \
+            && sudo ln -snf "$PAYLOAD_DIR/apollo-config.sh" "$SYSTEM_BIN_DIR/apollo-config"; then
             system_shims_published=1
         fi
     fi
@@ -339,7 +402,7 @@ validate_cli_shims() {
 }
 
 mkdir -p "$COMPILER_DIR"
-chmod +x "$INSTALL_DIR/apollo.sh" "$INSTALL_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$INSTALL_DIR/apollo-manage.sh"
+chmod +x "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$PAYLOAD_DIR/apollo-manage.sh"
 publish_cli_shims
 validate_cli_shims
 
@@ -348,14 +411,22 @@ verify_dependencies
 
 JAVA_BIN=$(resolve_java_bin)
 LLVM_BIN=$(resolve_llvm_bin)
+GC_INCLUDE_DIR=$(resolve_gc_include_dir)
+GC_LIB_DIR=$(resolve_gc_lib_dir)
+SDL_INCLUDE_DIR=$(resolve_sdl_include_dir)
+SDL_LIB_DIR=$(resolve_sdl_lib_dir)
 
 mkdir -p "$COMPILER_DIR"
 cat > "$TOOLCHAIN_ENV_SH" <<EOF
 export APOLLO_JAVA_BIN="${JAVA_BIN}"
 export APOLLO_LLVM_BIN="${LLVM_BIN}"
+export APOLLO_GC_INCLUDE_DIR="${GC_INCLUDE_DIR}"
+export APOLLO_GC_LIB_DIR="${GC_LIB_DIR}"
+export APOLLO_SDL_INCLUDE_DIR="${SDL_INCLUDE_DIR}"
+export APOLLO_SDL_LIB_DIR="${SDL_LIB_DIR}"
 export APOLLO_CXX_STD="c++20"
 EOF
 
-chmod +x "$INSTALL_DIR/apollo.sh" "$INSTALL_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$TOOLCHAIN_ENV_SH"
+chmod +x "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$TOOLCHAIN_ENV_SH"
 write_status "Wrote POSIX toolchain environment to $TOOLCHAIN_ENV_SH"
 write_status "Apollo is available as 'apollo' and 'apollo-config' from $USER_BIN_DIR"

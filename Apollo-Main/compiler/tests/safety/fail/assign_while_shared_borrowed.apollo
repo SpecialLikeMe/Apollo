@@ -1,0 +1,6 @@
+int main() {
+    i32 value = 1;
+    const i32& view = &value;
+    value = 2;
+    return view;
+}

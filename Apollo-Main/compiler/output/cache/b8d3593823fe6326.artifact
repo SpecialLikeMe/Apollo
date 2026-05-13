@@ -1,0 +1,72 @@
+; ModuleID = 'reference_branch_same_origin_call'
+source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/safety/pass/reference_branch_same_origin_call.apollo"
+
+@apollo.str.literal = private unnamed_addr constant [6 x i8] c"alpha\00"
+@apollo.str.literal.1 = private unnamed_addr constant [5 x i8] c"beta\00"
+@apollo.print.fmt = private unnamed_addr constant [4 x i8] c"%s\0A\00"
+
+define ptr @chooseFirst(ptr %first, ptr %second, i32 %pick) {
+entry:
+  %pick3 = alloca i32, align 4
+  %second2 = alloca ptr, align 8
+  %first1 = alloca ptr, align 8
+  store ptr %first, ptr %first1, align 8
+  store ptr %second, ptr %second2, align 8
+  store i32 %pick, ptr %pick3, align 4
+  %0 = load i32, ptr %pick3, align 4
+  br i1 false, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load ptr, ptr %first1, align 8
+  ret ptr %1
+
+if.end:                                           ; preds = %entry
+  %2 = load ptr, ptr %first1, align 8
+  ret ptr %2
+}
+
+define i32 @main() {
+entry:
+  %alias = alloca ptr, align 8
+  %pick = alloca i32, align 4
+  %second = alloca ptr, align 8
+  %first = alloca ptr, align 8
+  store ptr @apollo.str.literal, ptr %first, align 8
+  store ptr @apollo.str.literal.1, ptr %second, align 8
+  store i32 0, ptr %pick, align 4
+  %0 = load ptr, ptr %first, align 8
+  %1 = load ptr, ptr %second, align 8
+  %2 = load i32, ptr %pick, align 4
+  %3 = call ptr @chooseFirst(ptr %0, ptr %1, i32 %2)
+  store ptr %3, ptr %alias, align 8
+  %4 = load ptr, ptr %alias, align 8
+  %5 = call i32 (ptr, ...) @printf(ptr @apollo.print.fmt, ptr %4)
+  ret i32 0
+}
+
+declare i32 @printf(ptr, ...)
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"reference_branch_same_origin_call"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"i32", !"i32"}
+!4 = !{!"short", !"i16"}
+!5 = !{!"bool", !"i1"}
+!6 = !{!"i8", !"i8"}
+!7 = !{!"u8", !"i8"}
+!8 = !{!"i16", !"i16"}
+!9 = !{!"u16", !"i16"}
+!10 = !{!"u32", !"i32"}
+!11 = !{!"int", !"i32"}
+!12 = !{!"i64", !"i64"}
+!13 = !{!"u64", !"i64"}
+!14 = !{!"long", !"i64"}
+!15 = !{!"float", !"float"}
+!16 = !{!"double", !"double"}
+!17 = !{!"f64", !"double"}
+!18 = !{!"void", !"void"}

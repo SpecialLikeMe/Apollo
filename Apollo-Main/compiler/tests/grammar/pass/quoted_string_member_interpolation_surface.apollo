@@ -1,0 +1,13 @@
+typedef struct jjl {
+    i32 id;
+    str q;
+}
+
+int main() {
+    nconst jjl rtx = {
+        .id = 32,
+        .q = "Hello, world!"
+    };
+    sys.println("${rtx.q}");
+    return 0;
+}

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\Attributes.inc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicEnums.inc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicImpl.inc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsAArch64.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsAMDGPU.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsARM.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsBPF.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsDirectX.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsHexagon.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsLoongArch.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsMips.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsNVPTX.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsPowerPC.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsR600.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsRISCV.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsS390.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsSPIRV.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsVE.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsWebAssembly.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsX86.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\IntrinsicsXCore.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\5d9ab42a708339336cb83d82ff358efe\RuntimeLibcalls.inc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\compiler\native\build\CMakeFiles\19dc185fda7e6a5882337285488e137c\intrinsics_gen.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\IR\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\devon\Apollo\compiler\native\build\apollo-llvm\include\llvm\IR\CMakeFiles\intrinsics_gen" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{DE6EE80E-9774-3B61-9C80-B16F41EE5A00}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

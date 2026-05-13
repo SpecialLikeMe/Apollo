@@ -1,8 +1,0 @@
-class Box {
-}
-
-i32 main() {
-    Box value = Box{};
-    @release value;
-    return 0;
-}

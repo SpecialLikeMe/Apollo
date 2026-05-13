@@ -1,9 +1,0 @@
-int main() {
-    nconst lto value = 7;
-    value.typeset(str).cast();
-
-    nconst lto cleared = 1;
-    cleared.typeset(i32);
-
-    return 0;
-}

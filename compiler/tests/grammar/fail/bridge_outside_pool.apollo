@@ -1,4 +1,0 @@
-int main() {
-    @bridge i32 bridged = 1;
-    return 0;
-}

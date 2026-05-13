@@ -1,0 +1,80 @@
+; ModuleID = 'inline_foreign_cpp_surface'
+source_filename = "c:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/inline_foreign_cpp_surface.apollo"
+target datalayout = "e-m:w-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-w64-windows-gnu"
+
+@_ZN28__apollo_inline_inline_2_5_012foreignValueE = dso_local global i32 7, align 4
+@apollo.print.fmt = private unnamed_addr constant [6 x i8] c"%lld\0A\00"
+@apollo.print.fmt.1 = private unnamed_addr constant [6 x i8] c"%lld\0A\00"
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @_ZN28__apollo_inline_inline_2_5_04fourEv() local_unnamed_addr #0 {
+  ret i32 4
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @four() local_unnamed_addr #0 {
+  ret i32 4
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @__apollo_inline_get_inline_2_5_0_foreignValue() local_unnamed_addr #0 {
+  ret ptr @_ZN28__apollo_inline_inline_2_5_012foreignValueE
+}
+
+define i32 @main() {
+entry:
+  %0 = call ptr @__apollo_inline_get_inline_2_5_0_foreignValue()
+  %1 = call i32 @four()
+  %2 = sext i32 %1 to i64
+  %3 = call i32 (ptr, ...) @printf(ptr @apollo.print.fmt, i64 %2)
+  %4 = load i32, ptr %0, align 4
+  %5 = sext i32 %4 to i64
+  %6 = call i32 (ptr, ...) @printf(ptr @apollo.print.fmt.1, i64 %5)
+  ret i32 0
+}
+
+declare i32 @printf(ptr, ...)
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+!llvm.dbg.cu = !{!19}
+!llvm.ident = !{!21}
+!llvm.errno.tbaa = !{!22}
+!llvm.module.flags = !{!26, !27, !28, !29, !30}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"inline_foreign_cpp_surface"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"i32", !"i32"}
+!4 = !{!"short", !"i16"}
+!5 = !{!"bool", !"i1"}
+!6 = !{!"i8", !"i8"}
+!7 = !{!"u8", !"i8"}
+!8 = !{!"i16", !"i16"}
+!9 = !{!"u16", !"i16"}
+!10 = !{!"u32", !"i32"}
+!11 = !{!"int", !"i32"}
+!12 = !{!"i64", !"i64"}
+!13 = !{!"u64", !"i64"}
+!14 = !{!"long", !"i64"}
+!15 = !{!"float", !"float"}
+!16 = !{!"double", !"double"}
+!17 = !{!"f64", !"double"}
+!18 = !{!"void", !"void"}
+!19 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus_14, file: !20, producer: "clang version 22.1.2 (https://github.com/msys2/MINGW-packages 4f19d31560faf73257116b7c95f0b322ba83d720)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!20 = !DIFile(filename: "c:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\output\\cache\\inline_foreign/600ddafe10b3c405.cpp", directory: "c:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass")
+!21 = !{!"clang version 22.1.2 (https://github.com/msys2/MINGW-packages 4f19d31560faf73257116b7c95f0b322ba83d720)"}
+!22 = !{!23, !23, i64 0}
+!23 = !{!"int", !24, i64 0}
+!24 = !{!"omnipotent char", !25, i64 0}
+!25 = !{!"Simple C++ TBAA"}
+!26 = !{i32 2, !"Debug Info Version", i32 3}
+!27 = !{i32 1, !"wchar_size", i32 2}
+!28 = !{i32 8, !"PIC Level", i32 2}
+!29 = !{i32 7, !"uwtable", i32 2}
+!30 = !{i32 1, !"MaxTLSAlign", i32 65536}

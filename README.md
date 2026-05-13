@@ -6,13 +6,13 @@ Apollo is a compiled systems language with:
 
 - C-style braces and semicolons
 - static typing
-- a direct Apollo-to-C++ lowering pipeline
+- a direct Apollo-to-LLVM IR lowering pipeline
 - ownership and borrow-analysis features
 - optional whole-program GC mode
 - native C++ interop surfaces
 - experimental DSL surfaces such as `typedef opstruct` and `schedule`
 
-This guide is language-focused. Compiler pipeline notes and backend details still live under `compiler/readme.md`. 
+This guide is language-focused. Compiler pipeline notes and backend details still live under `Apollo-Main/compiler/readme.md`. 
 
 !Note that in some versions, the other readme may be gone.
 
@@ -629,7 +629,7 @@ This is the preferred syntax when attaching codegen-facing metadata to declarati
 
 ## Current Best Practices
 
-- Follow the syntax already used in `compiler/tests/grammar/pass` when trying a new surface.
+- Follow the syntax already used in `Apollo-Main/compiler/tests/grammar/pass` when trying a new surface.
 - Use safe Apollo bindings first; reserve `@unsafe` and especially `@bypass` for edges.
 - Prefer normal declarations and containers over raw heap forms unless you need explicit runtime behavior.
 - When using advanced surfaces such as `typedef opstruct` or `schedule`, start from an existing passing fixture and adapt it.
@@ -637,4 +637,4 @@ This is the preferred syntax when attaching codegen-facing metadata to declarati
 
 ## Known Scope Of This Guide
 
-This file documents the language surface that is exercised by the repository today. Some semantics are still evolving, especially around const-default behavior and more aggressive lowering/optimization work. If a construct is critical, verify it against the grammar fixtures under `compiler/tests/grammar/pass` and the safety fixtures under `compiler/tests/safety`.
+This file documents the language surface that is exercised by the repository today. Some semantics are still evolving, especially around const-default behavior and more aggressive lowering/optimization work. If a construct is critical, verify it against the grammar fixtures under `Apollo-Main/compiler/tests/grammar/pass` and the safety fixtures under `Apollo-Main/compiler/tests/safety`.

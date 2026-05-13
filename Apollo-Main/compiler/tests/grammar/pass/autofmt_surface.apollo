@@ -1,0 +1,19 @@
+class Box {
+    public void ping() {
+        return;
+    }
+}
+
+i32 main() {
+    Box value = Box{};
+
+    @autofmtdeclare {
+        @induct value;
+        Box inner = Box{};
+        inner.ping();
+        @release value;
+    }
+
+    value.ping();
+    return 0;
+}

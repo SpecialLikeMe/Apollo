@@ -1,0 +1,617 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3A06DF54-3572-3A90-BC65-9588322AF4E0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <VcpkgEnabled>false</VcpkgEnabled>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>LLVMCore</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="do_not_import_user.props" Condition="exists('do_not_import_user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\Debug\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LLVMCore.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LLVMCore</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\Release\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LLVMCore.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LLVMCore</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\MinSizeRel\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">LLVMCore.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">LLVMCore</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\RelWithDebInfo\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">LLVMCore.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">LLVMCore</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/IR/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/IR/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/IR/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/IR/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/IR/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/IR/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/IR/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/IR/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\AbstractCallSite.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\AsmWriter.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Assumptions.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Attributes.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\AutoUpgrade.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\BasicBlock.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\BuiltinGCs.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Comdat.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ConstantFold.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ConstantFPRange.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ConstantRange.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ConstantRangeList.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Constants.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ConvergenceVerifier.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Core.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\CycleInfo.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DIBuilder.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DataLayout.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DebugInfo.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DebugInfoMetadata.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DIExpressionOptimizer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DebugProgramInstruction.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DebugLoc.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DiagnosticHandler.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DiagnosticInfo.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DiagnosticPrinter.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Dominators.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DroppedVariableStats.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\DroppedVariableStatsIR.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\EHPersonalities.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\FPEnv.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Function.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\GCStrategy.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\GVMaterializer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Globals.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Intrinsics.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\NVVMIntrinsicUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\IRBuilder.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\IRPrintingPasses.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\SSAContext.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\InlineAsm.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Instruction.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Instructions.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\IntrinsicInst.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\LLVMContext.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\LLVMContextImpl.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\LLVMRemarkStreamer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\LegacyPassManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\MDBuilder.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\MemoryModelRelaxationAnnotations.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Mangler.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Metadata.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Module.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ModuleSummaryIndex.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Operator.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\OptBisect.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PatternMatch.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Pass.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PassInstrumentation.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PassManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PassRegistry.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PassTimingInfo.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PrintPasses.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ProfDataUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\SafepointIRVerifier.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ProfileSummary.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\PseudoProbe.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ReplaceConstant.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Statepoint.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\StructuralHash.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Type.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\TypedPointerType.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\TypeFinder.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Use.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\User.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Value.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ValueSymbolTable.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\VectorTypeUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\Verifier.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\VFABIDemangler.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\RuntimeLibcalls.cpp" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\AttributeImpl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\ConstantsContext.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\LLVMContextImpl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\MetadataImpl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\IR\SymbolTableListTraitsImpl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\AbstractCallSite.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Analysis.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Argument.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\AssemblyAnnotationWriter.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Assumptions.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\AttributeMask.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Attributes.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\AutoUpgrade.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\BasicBlock.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\BuiltinGCs.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\CFG.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\CallingConv.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\CmpPredicate.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Comdat.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Constant.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ConstantFPRange.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ConstantFold.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ConstantFolder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ConstantRange.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ConstantRangeList.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Constants.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ConvergenceVerifier.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\CycleInfo.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DIBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DataLayout.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DbgVariableFragmentInfo.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DebugInfo.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DebugInfoMetadata.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DebugLoc.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DebugProgramInstruction.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DerivedTypes.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DerivedUser.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DiagnosticHandler.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DiagnosticInfo.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DiagnosticPrinter.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Dominators.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DroppedVariableStats.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\DroppedVariableStatsIR.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\EHPersonalities.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\FMF.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\FPEnv.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\FixedPointBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Function.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GCStrategy.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GEPNoWrapFlags.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GVMaterializer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GenericConvergenceVerifierImpl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GenericFloatingPointPredicateUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GetElementPtrTypeIterator.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GlobalAlias.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GlobalIFunc.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GlobalObject.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GlobalValue.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\GlobalVariable.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\IRBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\IRBuilderFolder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\IRPrintingPasses.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\InlineAsm.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\InstIterator.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\InstVisitor.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\InstrTypes.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Instruction.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Instructions.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\IntrinsicInst.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Intrinsics.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\LLVMContext.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\LLVMRemarkStreamer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\LegacyPassManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\LegacyPassManagers.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\LegacyPassNameParser.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\MDBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Mangler.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\MatrixBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\MemoryModelRelaxationAnnotations.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Metadata.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Module.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ModuleSlotTracker.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ModuleSummaryIndex.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ModuleSummaryIndexYAML.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\NVVMIntrinsicUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\NoFolder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\OperandTraits.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Operator.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\OptBisect.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PassInstrumentation.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PassManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PassManagerImpl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PassManagerInternal.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PassTimingInfo.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PatternMatch.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PredIteratorCache.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PrintPasses.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ProfDataUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ProfileSummary.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\PseudoProbe.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ReplaceConstant.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\RuntimeLibcalls.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\SSAContext.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\SafepointIRVerifier.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Statepoint.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\StructuralHash.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\SymbolTableListTraits.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\SystemLibraries.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\TrackingMDRef.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Type.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\TypeFinder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\TypedPointerType.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Use.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\UseListOrder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\User.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\VFABIDemangler.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Value.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ValueHandle.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ValueMap.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\ValueSymbolTable.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\VectorTypeUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\Verifier.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\IR\pch.h" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\ZERO_CHECK.vcxproj">
+      <Project>{0A3DE1D2-3E0B-3DAD-BCB3-2384D209F094}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\BinaryFormat\LLVMBinaryFormat.vcxproj">
+      <Project>{2A3DEDC9-4926-3B1D-82D3-48AB2EC1BD9A}</Project>
+      <Name>LLVMBinaryFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitstream\Reader\LLVMBitstreamReader.vcxproj">
+      <Project>{265AD086-4BE5-3317-AB00-1C4E2B24462C}</Project>
+      <Name>LLVMBitstreamReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.vcxproj">
+      <Project>{3BA74E13-F39B-3CF6-824B-53BCD4CA471C}</Project>
+      <Name>LLVMDemangle</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Remarks\LLVMRemarks.vcxproj">
+      <Project>{1DD19858-6146-3BBD-BFE6-D8A9C72597D6}</Project>
+      <Name>LLVMRemarks</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Support\LLVMSupport.vcxproj">
+      <Project>{12F775A1-C208-3BB5-A257-3A47E34CC156}</Project>
+      <Name>LLVMSupport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TargetParser\LLVMTargetParser.vcxproj">
+      <Project>{930AF0AB-9671-3A7E-9AE0-B9AACDBD17EB}</Project>
+      <Name>LLVMTargetParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\IR\intrinsics_gen.vcxproj">
+      <Project>{A50D2412-7647-3631-8937-CE444D73EF79}</Project>
+      <Name>intrinsics_gen</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

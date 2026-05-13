@@ -1,0 +1,12 @@
+void inspect(nconst str& value) {
+    sys.println(value);
+    return;
+}
+
+i32 main() {
+    nconst str value = "hello";
+    nconst str& alias = &nconst value;
+    inspect(alias);
+    sys.println(value);
+    return 0;
+}

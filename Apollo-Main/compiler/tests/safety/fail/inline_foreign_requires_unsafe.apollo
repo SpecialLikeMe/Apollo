@@ -1,0 +1,9 @@
+// This should fail until inline foreign blocks are wrapped in @unsafe.
+
+int main() {
+    inline::rs {
+        #[no_mangle]
+        pub extern "C" fn four() -> i32 { 4 }
+    }
+    return 0;
+}

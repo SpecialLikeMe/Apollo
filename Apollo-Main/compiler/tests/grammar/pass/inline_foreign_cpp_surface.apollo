@@ -1,0 +1,12 @@
+@unsafe {
+    inline::cpp {
+        int four() { return 4; }
+        int foreignValue = 7;
+    }
+}
+
+int main() {
+    sys.println(four());
+    sys.println(foreignValue);
+    return 0;
+}

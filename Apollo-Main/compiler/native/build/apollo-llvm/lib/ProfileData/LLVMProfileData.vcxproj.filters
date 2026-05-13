@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\DataAccessProf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\ETMTraceDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\GCOV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\IndexedMemProfData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\InstrProf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\InstrProfCorrelator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\InstrProfReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\InstrProfWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\ItaniumManglingCanonicalizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\MemProf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\MemProfCommon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\MemProfReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\MemProfRadixTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\MemProfSummary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\MemProfSummaryBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\PGOCtxProfReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\PGOCtxProfWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\ProfileSummaryBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\SampleProf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\SampleProfReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\SampleProfWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\SymbolRemappingReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\CtxInstrContextNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\DataAccessProf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\ETMTraceDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\FunctionId.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\GCOV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\HashKeyMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\IndexedMemProfData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\InstrProf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\InstrProfCorrelator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\InstrProfReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\InstrProfWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\ItaniumManglingCanonicalizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfRadixTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfSummary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfSummaryBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfYAML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\PGOCtxProfReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\PGOCtxProfWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\ProfileCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\SampleProf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\SampleProfReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\SampleProfWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\SymbolRemappingReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\InstrProfData.inc" />
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MIBEntryDef.inc" />
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\include\llvm\ProfileData\MemProfData.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\lib\ProfileData\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{19436BC5-5970-3AE9-B69B-53DFF529524A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{15F5757A-4FDA-31A8-AA53-CB76F7A161D6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

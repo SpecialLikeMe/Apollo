@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\CodeExpander.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\CombinerUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\CXXPredicates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\GlobalISelMatchTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\GlobalISelMatchTableExecutorEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\PatternParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\GlobalISel\Patterns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\AsmWriterInst.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenDAGPatterns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenHwModes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenInstAlias.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenInstruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenRegisters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenSchedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\InfoByHwMode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\InstructionEncoding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\OptEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\PredicateExpander.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\SubtargetFeatureInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\Types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\VarLenCodeEmitterGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\AsmWriterInst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenDAGPatterns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenHwModes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenInstAlias.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenRegisters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenSchedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CodeGenTarget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\InfoByHwMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\InstructionEncoding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\OptEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\PredicateExpander.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\SubtargetFeatureInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\VarLenCodeEmitterGen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\dependencies\llvm-source\llvm\utils\TableGen\Common\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{19436BC5-5970-3AE9-B69B-53DFF529524A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{15F5757A-4FDA-31A8-AA53-CB76F7A161D6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

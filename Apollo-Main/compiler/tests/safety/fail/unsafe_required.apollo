@@ -1,0 +1,6 @@
+// This should fail to compile until raw memory is wrapped in @unsafe.
+
+int main() {
+    void* heap.alc(1) int;
+    return 0;
+}

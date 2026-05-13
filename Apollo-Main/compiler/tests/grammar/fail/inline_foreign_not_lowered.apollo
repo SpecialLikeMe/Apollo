@@ -1,0 +1,10 @@
+// This should parse and pass the unsafe boundary, but strict LLVM lowering is not implemented yet.
+
+int main() {
+    @unsafe {
+        inline::cpp {
+            int four() { return 4; }
+        }
+    }
+    return 0;
+}

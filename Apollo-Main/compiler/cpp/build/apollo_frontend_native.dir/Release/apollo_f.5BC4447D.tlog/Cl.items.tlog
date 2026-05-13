@@ -1,0 +1,10 @@
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\main.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\main.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_driver.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_driver.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_codegen_optimization_plan.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_codegen_optimization_plan.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\visitor.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\visitor.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_ir_layout_plan.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_ir_layout_plan.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_runtime.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_runtime.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1BaseVisitor.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\compilerv1BaseVisitor.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1Lexer.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\compilerv1Lexer.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1Parser.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\compilerv1Parser.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1Visitor.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\compilerv1Visitor.obj

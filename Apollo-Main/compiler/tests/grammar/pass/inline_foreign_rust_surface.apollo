@@ -1,0 +1,12 @@
+@unsafe {
+    inline::rs {
+        pub fn four() -> i32 { 4 }
+        let mut foreign_value: i32 = 7;
+    }
+}
+
+int main() {
+    sys.println(four());
+    sys.println(foreign_value);
+    return 0;
+}

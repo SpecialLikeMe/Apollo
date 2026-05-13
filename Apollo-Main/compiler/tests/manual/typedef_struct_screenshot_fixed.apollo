@@ -1,0 +1,18 @@
+typedef opstruct cool {
+    asg("cool ${name}") -> {
+    }
+    src("please do ${DO}") -> {
+        DO
+    }
+}
+
+typedef struct rtx_store {
+    public int id;
+    public str a;
+} rtx;
+
+int main() {
+    rtx x = rtx{1, "Hello, world!"};
+    sys.println(x.a);
+    return 0;
+}

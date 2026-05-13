@@ -1,0 +1,12 @@
+// This should compile: a reference-returning function can feed another reference binding.
+
+str& identity(nconst str& value) {
+    return value;
+}
+
+int main() {
+    nconst str message = "ok";
+    nconst str& alias = identity(&nconst message);
+    sys.println(alias);
+    return 0;
+}

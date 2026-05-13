@@ -1,0 +1,162 @@
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Analysis/TargetLibraryInfo.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Analysis;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/CodeGen/ValueTypes.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/CodeGen;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Attributes.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/RuntimeLibcalls.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR/Intrinsics.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/IR;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenACC/ACC.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenACC;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenACC/ACC.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenACC;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenMP/OMP.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenMP;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenMP/OMP.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/Frontend/OpenMP;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/ARM/ARM.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/TargetParser;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/ARM;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/AArch64/AArch64.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/TargetParser;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/AArch64;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/RISCV/RISCV.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/TargetParser;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/RISCV;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/PowerPC/PPC.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include/llvm/TargetParser;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/ExecutionEngine/JITLink/COFFOptions.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/ExecutionEngine/JITLink;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86/X86.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/Target/X86;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/ToolDrivers/llvm-dlltool/Options.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/ToolDrivers/llvm-dlltool;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"
+--- !FileInfo:
+  filepath: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/ToolDrivers/llvm-lib/Options.td"
+  includes: "C:/Users/devon/Apollo/dependencies/llvm-source/llvm/lib/ToolDrivers/llvm-lib;C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/include;C:/Users/devon/Apollo/dependencies/llvm-source/llvm/include"

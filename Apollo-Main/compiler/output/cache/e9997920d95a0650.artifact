@@ -1,0 +1,231 @@
+#include <cassert>
+#include <cstdint>
+#include <cstdlib>
+#include <exception>
+#include <filesystem>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <new>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+
+#ifndef __APO_HASH_SUPPORT
+#define __APO_HASH_SUPPORT
+template <typename T>
+inline void __apo_hash_combine(std::size_t& seed, const T& value) {
+    seed ^= value + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
+}
+template <typename T>
+struct __apo_hash {
+    std::size_t operator()(const T& value) const { return std::hash<T>{}(value); }
+};
+template <typename T>
+struct __apo_hash<std::vector<T>> {
+    std::size_t operator()(const std::vector<T>& values) const {
+        std::size_t seed = 0;
+        for (const auto& value : values) {
+            __apo_hash_combine(seed, __apo_hash<T>{}(value));
+        }
+        return seed;
+    }
+};
+template <typename K, typename V, typename H, typename E, typename A>
+struct __apo_hash<std::unordered_map<K, V, H, E, A>> {
+    std::size_t operator()(const std::unordered_map<K, V, H, E, A>& values) const {
+        std::size_t seed = 0;
+        for (const auto& entry : values) {
+            std::size_t entrySeed = __apo_hash<K>{}(entry.first);
+            __apo_hash_combine(entrySeed, __apo_hash<V>{}(entry.second));
+            seed ^= entrySeed + 0x9e3779b97f4a7c15ULL;
+        }
+        return seed;
+    }
+};
+#endif
+
+#ifndef __APO_TEMPLATE_LITERAL_SUPPORT
+#define __APO_TEMPLATE_LITERAL_SUPPORT
+template <typename T>
+static std::string __apo_to_string(const T& value) {
+    std::ostringstream stream;
+    stream << value;
+    return stream.str();
+}
+static std::string __apo_to_string(const std::string& value) { return value; }
+static std::string __apo_to_string(const char* value) { return value != nullptr ? std::string(value) : std::string(); }
+static std::string __apo_to_string(bool value) { return value ? "true" : "false"; }
+#endif
+
+#include "runtime_support/apo_ir_runtime.hpp"
+
+struct __apo_gc_tracer {};
+template <typename T> inline void __apo_gc_trace_value(__apo_gc_tracer&, const T&) {}
+template <typename T> struct __apo_soa_adapter;
+template <typename T> struct __apo_allocator_traits { static constexpr bool is_memstruct = false; };
+
+static inline void mymacro() {
+    std::cout << ("Hello, world!") << std::endl;
+}
+
+class apo_woeiru {
+    friend void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_woeiru& value);
+    friend struct __apo_soa_adapter<apo_woeiru>;
+};
+
+inline void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_woeiru& value) {
+}
+
+template <>
+struct __apo_soa_adapter<apo_woeiru> {
+    struct storage {
+        std::size_t size = 0;
+    };
+
+    static void push(storage& storage, const apo_woeiru& value) {
+        ++storage.size;
+    }
+
+    static apo_woeiru load(const storage& storage, std::size_t index) {
+        apo_woeiru value{};
+        return value;
+    }
+
+    static void store(storage& storage, std::size_t index, const apo_woeiru& value) {
+        (void)storage;
+        (void)index;
+        (void)value;
+    }
+
+    static std::size_t size(const storage& storage) {
+        return storage.size;
+    }
+};
+
+template <typename T>
+class apo_id {
+public:
+    T alloc() {
+        const T i;
+        return i;
+    }
+
+    public:
+    void __apo_gc_trace_fields(__apo_gc_tracer& tracer) const {
+    }
+};
+
+template <typename T>
+inline void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_id<T>& value) {
+    value.__apo_gc_trace_fields(tracer);
+}
+
+int main() {
+    const apo_id<int> i{};
+    i.alloc();
+{
+        __apo_executePayload("cpp\n\r\n            int main() {\r\n                async_write(\"function\", \"native_sum\", \"i32(i32,i32)\", \"int native_sum(int a, int b) { return a + b; }\");\r\n                async_write(\"variable\", \"shared_message\", \"str\", \"hello from inline cpp\");\r\n                return 0;\r\n            }\r\n        \n");
+    }
+    const std::string nativeFn;
+    nativeFn = async_read("function", "native_sum");
+    std::cout << (nativeFn) << std::endl;
+    const std::string sharedMessage;
+    sharedMessage = async_read("variable", "shared_message");
+    std::cout << (sharedMessage) << std::endl;
+    async_write("script", "shared_runner", "python", "print(42)", "py");
+    const std::int32_t execStatus;
+    execStatus = async_exec("script", "shared_runner");
+    std::cout << (execStatus) << std::endl;
+{
+        __apo_queuePayload("java\n\r\n            public class ApoAsyncTask {\r\n                public static void main(String[] args) {\r\n                    String message = async_read(\"variable\", \"shared_message\");\r\n                    System.out.println(message);\r\n                    int execStatus = async_exec(\"script\", \"shared_runner\");\r\n                    System.out.println(execStatus);\r\n                    async_write(\"class\", \"BridgeClass\", \"java\", \"public class BridgeClass { public String name() { return \\\"bridge\\\"; } }\");\r\n                }\r\n            }\r\n        \n");
+    }
+    __apo_executeQueuedPayload(false);
+    const double pi;
+    const std::string bridgeClass;
+    bridgeClass = async_read("class", "BridgeClass");
+    std::cout << (bridgeClass) << std::endl;
+    const std::int32_t counter;
+    counter = 0;
+{
+        std::int32_t* ptr = &counter;
+    }
+    while (counter < 4) {
+        std::cout << ("hello, world ") << std::endl;
+        counter = counter + 1;
+    }
+{
+        __apo_executePayload("rs\n\r\n            fn main() {\r\n            let message = async_read(\"variable\", \"shared_message\");\r\n            println!(\"{}\", message);\r\n            let exec_status = async_exec(\"script\", \"shared_runner\");\r\n            println!(\"{}\", exec_status);\r\n            async_write(\"variable\", \"rust_message\", \"str\", \"hello from inline rust\");\r\n            }\r\n        \n");
+    }
+    const std::unordered_map<std::string, int> ulmap;
+    ulmap["hello"] = 239847;
+    std::cout << (ulmap["hello"]) << std::endl;
+    const std::unordered_map<std::unordered_map<int, std::string>, std::unordered_map<std::string, int>> tester;
+    tester[< 23, "hello" >] = < "hello", 4 >;
+    std::cout << (tester[ < 23, "hello" > ]["hello"]) << std::endl;
+    const std::string rustMessage;
+    rustMessage = async_read("variable", "rust_message");
+    std::cout << (rustMessage) << std::endl;
+    std::cout << ("qpwoeiruqpwoeiru") << std::endl;
+    mymacro();
+    const std::string io;
+    apo_mycls make = apo_mycls{};
+    make.bark();
+{
+        void* heap = malloc((1024) * sizeof(int));
+        const std::int32_t** placed = (i32**)new[heap]i32*;
+    }
+    /* unsupported statement: @autoreleasepool{constinti=4;sys.stdout(i);} */
+{
+        
+            #include <memory>
+        
+    }
+    return 0;
+}
+
+class apo_mycls {
+    friend void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_mycls& value);
+    friend struct __apo_soa_adapter<apo_mycls>;
+public:
+    static void bark() {
+        std::cout << ("static") << std::endl;
+        return;
+    }
+
+};
+
+inline void __apo_gc_trace_value(__apo_gc_tracer& tracer, const apo_mycls& value) {
+}
+
+template <>
+struct __apo_soa_adapter<apo_mycls> {
+    struct storage {
+        std::size_t size = 0;
+    };
+
+    static void push(storage& storage, const apo_mycls& value) {
+        ++storage.size;
+    }
+
+    static apo_mycls load(const storage& storage, std::size_t index) {
+        apo_mycls value{};
+        return value;
+    }
+
+    static void store(storage& storage, std::size_t index, const apo_mycls& value) {
+        (void)storage;
+        (void)index;
+        (void)value;
+    }
+
+    static std::size_t size(const storage& storage) {
+        return storage.size;
+    }
+};
+
+

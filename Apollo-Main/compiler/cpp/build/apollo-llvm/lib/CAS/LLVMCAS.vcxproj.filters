@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\ActionCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\ActionCaches.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\BuiltinCAS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\BuiltinObjectHasher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\BuiltinUnifiedCASDatabases.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\CASNodeSchema.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\DatabaseFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\InMemoryCAS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\MappedFileRegionArena.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\NamedValuesSchema.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\ObjectStore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskCAS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskCASLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskCommon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskDataAllocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskGraphDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskKeyValueDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskTrieRawHashMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\UnifiedOnDiskCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\BuiltinCAS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\DatabaseFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\OnDiskCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\ActionCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\BuiltinCASContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\BuiltinObjectHasher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\BuiltinUnifiedCASDatabases.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\CASID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\CASNodeSchema.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\CASReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\FileOffset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\MappedFileRegionArena.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\NamedValuesSchema.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\ObjectStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\OnDiskCASLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\OnDiskDataAllocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\OnDiskGraphDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\OnDiskKeyValueDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\OnDiskTrieRawHashMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\UnifiedOnDiskCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\CAS\ValidationResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\CAS\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{87710DDF-F811-3822-A4AB-356A2253038F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{59DF061E-57DC-33F3-94FD-B07E5CD94B4B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

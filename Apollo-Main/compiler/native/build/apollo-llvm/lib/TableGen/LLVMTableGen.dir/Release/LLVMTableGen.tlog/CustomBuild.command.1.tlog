@@ -1,0 +1,10 @@
+^C:\USERS\DEVON\APOLLO\DEPENDENCIES\LLVM-SOURCE\LLVM\LIB\TABLEGEN\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/compiler/native -BC:/Users/devon/Apollo/compiler/native/build --check-stamp-file C:/Users/devon/Apollo/compiler/native/build/apollo-llvm/lib/TableGen/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

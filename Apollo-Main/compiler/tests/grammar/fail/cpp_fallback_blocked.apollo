@@ -1,0 +1,8 @@
+#[fallback(allow)]
+
+extern "cstdlib";
+
+int main() {
+    system("echo blocked");
+    return 0;
+}
