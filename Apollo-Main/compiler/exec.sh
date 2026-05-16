@@ -100,6 +100,31 @@ needs_rebuild() {
     return 1
 }
 
+native_target_stale() {
+    target=$1
+
+    if [ ! -f "$target" ]; then
+        return 0
+    fi
+
+    for dependency in \
+        "$NATIVE_SOURCE_DIR/CMakeLists.txt" \
+        "$SCRIPT_DIR/compilerv1.g4"
+    do
+        if [ ! -f "$dependency" ] || [ "$dependency" -nt "$target" ]; then
+            return 0
+        fi
+    done
+
+    for dependency in $(find "$NATIVE_SOURCE_DIR/src" "$NATIVE_SOURCE_DIR/generated" -type f \( -name '*.cpp' -o -name '*.h' \) 2>/dev/null); do
+        if [ ! -f "$dependency" ] || [ "$dependency" -nt "$target" ]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 run_and_capture_exit() {
     set +e
     "$@"
@@ -215,12 +240,21 @@ ensure_native_targets() {
             case "$target_name" in
                 apollo_frontend_native)
                     APOLLO_FRONTEND_EXE=$(resolve_native_executable apollo_frontend_native) || need_native_build=1
+                    if [ "$need_native_build" -eq 0 ] && native_target_stale "$APOLLO_FRONTEND_EXE"; then
+                        need_native_build=1
+                    fi
                     ;;
                 apollo_build_driver_native)
                     APOLLO_BUILD_DRIVER_EXE=$(resolve_native_executable apollo_build_driver_native) || need_native_build=1
+                    if [ "$need_native_build" -eq 0 ] && native_target_stale "$APOLLO_BUILD_DRIVER_EXE"; then
+                        need_native_build=1
+                    fi
                     ;;
                 *)
-                    resolve_native_executable "$target_name" >/dev/null 2>&1 || need_native_build=1
+                    resolved_target=$(resolve_native_executable "$target_name") || need_native_build=1
+                    if [ "$need_native_build" -eq 0 ] && native_target_stale "$resolved_target"; then
+                        need_native_build=1
+                    fi
                     ;;
             esac
         done

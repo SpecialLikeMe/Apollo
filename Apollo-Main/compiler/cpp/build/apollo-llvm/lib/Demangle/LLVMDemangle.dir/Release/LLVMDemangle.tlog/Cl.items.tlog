@@ -1,6 +1,0 @@
-C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Demangle\Demangle.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.dir\Release\Demangle.obj
-C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Demangle\ItaniumDemangle.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.dir\Release\ItaniumDemangle.obj
-C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Demangle\MicrosoftDemangle.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.dir\Release\MicrosoftDemangle.obj
-C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Demangle\MicrosoftDemangleNodes.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.dir\Release\MicrosoftDemangleNodes.obj
-C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Demangle\RustDemangle.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.dir\Release\RustDemangle.obj
-C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Demangle\DLangDemangle.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.dir\Release\DLangDemangle.obj

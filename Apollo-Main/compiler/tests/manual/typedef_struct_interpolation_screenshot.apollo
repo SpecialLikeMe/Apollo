@@ -1,0 +1,15 @@
+extern iostream
+
+typedef struct req {
+    nconst int id;
+    nconst str a;
+}
+
+int main() {
+    req x = {
+        .id = 1,
+        .a = "Hello, world"
+    };
+    sys.println("${x.a}");
+    return 0;
+}

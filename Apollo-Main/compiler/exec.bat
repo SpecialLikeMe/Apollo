@@ -427,8 +427,16 @@ if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="1" set "NEED_NATIVE_BUILD=1"
 if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="true" set "NEED_NATIVE_BUILD=1"
 if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="yes" set "NEED_NATIVE_BUILD=1"
 if "%NEED_NATIVE_BUILD%"=="0" (
-    call :resolve_native_executable apollo_build_driver_native APOLLO_BUILD_DRIVER_EXE
-    if errorlevel 1 set "NEED_NATIVE_BUILD=1"
+    for %%T in (%*) do (
+        call :resolve_native_executable %%T RESOLVED_NATIVE_TARGET
+        if errorlevel 1 (
+            set "NEED_NATIVE_BUILD=1"
+        ) else (
+            call :native_target_stale "!RESOLVED_NATIVE_TARGET!"
+            if not errorlevel 1 set "NEED_NATIVE_BUILD=1"
+            if /I "%%T"=="apollo_build_driver_native" set "APOLLO_BUILD_DRIVER_EXE=!RESOLVED_NATIVE_TARGET!"
+        )
+    )
 )
 
 if "%NEED_NATIVE_BUILD%"=="1" (
@@ -448,6 +456,19 @@ if errorlevel 1 exit /b 1
 findstr /B /C:"CMAKE_HOME_DIRECTORY:INTERNAL=%NATIVE_SOURCE_DIR_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
 if errorlevel 1 exit /b 1
 exit /b 0
+
+:native_target_stale
+if not exist "%~1" exit /b 0
+powershell -NoProfile -Command ^
+    "$target = Get-Item -LiteralPath '%~1' -ErrorAction Stop;" ^
+    "$deps = @();" ^
+    "$deps += Get-Item -LiteralPath '%NATIVE_SOURCE_DIR%\CMakeLists.txt', '%SCRIPT_DIR%compilerv1.g4' -ErrorAction SilentlyContinue;" ^
+    "$deps += Get-ChildItem -LiteralPath '%NATIVE_SOURCE_DIR%\src', '%NATIVE_SOURCE_DIR%\generated' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -in '.cpp', '.h' };" ^
+    "$latest = $deps | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1;" ^
+    "if ($null -eq $latest) { exit 1 }" ^
+    "if ($latest.LastWriteTimeUtc -gt $target.LastWriteTimeUtc) { exit 0 }" ^
+    "exit 1"
+exit /b %errorlevel%
 
 :resolve_cmake
 if defined CMAKE_EXE if exist "%CMAKE_EXE%" exit /b 0
