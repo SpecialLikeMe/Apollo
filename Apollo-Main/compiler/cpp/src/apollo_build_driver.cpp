@@ -1,5 +1,6 @@
 #include "apollo_build_driver.h"
 
+#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include <filesystem>
@@ -983,6 +984,8 @@ std::vector<std::string> standaloneLinkFlags(const BuildEnvironment& env) {
     return windowsStaticLink
         ? std::vector<std::string>{"-static", "-static-libstdc++", "-static-libgcc"}
         : std::vector<std::string>{};
+#elif defined(__linux__)
+    return {"-no-pie", "-static-libstdc++", "-static-libgcc"};
 #else
     return {};
 #endif

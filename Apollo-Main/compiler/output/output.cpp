@@ -1,0 +1,68 @@
+; ModuleID = 'typedef_struct_interpolation_screenshot'
+source_filename = "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/tests/manual/typedef_struct_interpolation_screenshot.apollo"
+
+%apollo.aggregate.req = type { i32, ptr }
+
+@apollo.str.literal = private unnamed_addr constant [13 x i8] c"Hello, world\00"
+@apollo.interpolated.fmt = private unnamed_addr constant [3 x i8] c"%s\00"
+@apollo.print.fmt = private unnamed_addr constant [4 x i8] c"%s\0A\00"
+
+define i32 @main() {
+entry:
+  %req.object = alloca %apollo.aggregate.req, align 8
+  %x = alloca ptr, align 8
+  store %apollo.aggregate.req zeroinitializer, ptr %req.object, align 8
+  %0 = getelementptr inbounds nuw %apollo.aggregate.req, ptr %req.object, i32 0, i32 0
+  store i32 1, ptr %0, align 4
+  %1 = getelementptr inbounds nuw %apollo.aggregate.req, ptr %req.object, i32 0, i32 1
+  store ptr @apollo.str.literal, ptr %1, align 8
+  store ptr %req.object, ptr %x, align 8
+  %2 = load ptr, ptr %x, align 8
+  %3 = getelementptr inbounds nuw %apollo.aggregate.req, ptr %2, i32 0, i32 1
+  %4 = load ptr, ptr %3, align 8
+  %5 = call i32 (ptr, i64, ptr, ...) @snprintf(ptr null, i64 0, ptr @apollo.interpolated.fmt, ptr %4)
+  %6 = sext i32 %5 to i64
+  %7 = add i64 %6, 1
+  %8 = call ptr @malloc(i64 %7)
+  %9 = call i32 (ptr, i64, ptr, ...) @snprintf(ptr %8, i64 %7, ptr @apollo.interpolated.fmt, ptr %4)
+  %10 = call i32 (ptr, ...) @printf(ptr @apollo.print.fmt, ptr %8)
+  ret i32 0
+}
+
+declare i32 @snprintf(ptr, i64, ptr, ...)
+
+declare ptr @malloc(i64)
+
+declare i32 @printf(ptr, ...)
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.layouts = !{!3}
+!apollo.layout.fields = !{!4, !5}
+!apollo.dependencies = !{!6}
+!apollo.primitive.types = !{!7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21, !22}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"typedef_struct_interpolation_screenshot"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 true}
+!3 = !{!"req", !"full-soa", i32 2, i1 false, i1 false, i1 false, !"full-soa-eligible"}
+!4 = !{!"req", !"id", !"int", i1 true}
+!5 = !{!"req", !"a", !"str", i1 true}
+!6 = !{!"iostream"}
+!7 = !{!"void", !"void"}
+!8 = !{!"f64", !"double"}
+!9 = !{!"double", !"double"}
+!10 = !{!"short", !"i16"}
+!11 = !{!"u8", !"i8"}
+!12 = !{!"u64", !"i64"}
+!13 = !{!"i16", !"i16"}
+!14 = !{!"u32", !"i32"}
+!15 = !{!"u16", !"i16"}
+!16 = !{!"bool", !"i1"}
+!17 = !{!"i32", !"i32"}
+!18 = !{!"float", !"float"}
+!19 = !{!"int", !"i32"}
+!20 = !{!"i8", !"i8"}
+!21 = !{!"i64", !"i64"}
+!22 = !{!"long", !"i64"}
