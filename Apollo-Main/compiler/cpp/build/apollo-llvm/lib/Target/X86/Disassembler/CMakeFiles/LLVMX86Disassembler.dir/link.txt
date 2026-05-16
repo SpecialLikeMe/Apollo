@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../../../libLLVMX86Disassembler.a CMakeFiles/LLVMX86Disassembler.dir/X86Disassembler.cpp.o
+/usr/sbin/ranlib -D ../../../libLLVMX86Disassembler.a

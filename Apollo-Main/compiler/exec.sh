@@ -151,6 +151,57 @@ run_quiet_command() {
     return "$status"
 }
 
+normalize_posix_text_file() {
+    target_file=$1
+
+    if [ ! -f "$target_file" ]; then
+        return 0
+    fi
+
+    if ! LC_ALL=C grep -q "$(printf '\r')$" "$target_file" 2>/dev/null; then
+        return 0
+    fi
+
+    temp_file=$(mktemp "${TMPDIR:-/tmp}/apollo-crlf.XXXXXX")
+    tr -d '\r' < "$target_file" > "$temp_file"
+    cat "$temp_file" > "$target_file"
+    rm -f "$temp_file"
+}
+
+normalize_llvm_shell_scripts() {
+    llvm_tree="$RESOLVED_APOLLO_DIR/dependencies/llvm-source"
+
+    if [ ! -d "$llvm_tree" ]; then
+        return 0
+    fi
+
+    find "$llvm_tree" -type f \( -name '*.sh' -o -name 'config.guess' -o -name 'config.sub' \) 2>/dev/null | while IFS= read -r script_path; do
+        normalize_posix_text_file "$script_path"
+    done
+}
+
+configure_native_build() {
+    set -- "$CMAKE_EXE"
+
+    if [ -n "${APOLLO_NATIVE_GENERATOR:-}" ]; then
+        set -- "$@" -G "$APOLLO_NATIVE_GENERATOR"
+    fi
+
+    set -- "$@" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR"
+
+    if [ -n "${CMAKE_TOOLCHAIN_FILE:-}" ]; then
+        set -- "$@" "-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE"
+    elif [ -n "${VCPKG_ROOT:-}" ] && [ -f "$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" ]; then
+        set -- "$@" "-DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+    fi
+
+    if [ -n "${APOLLO_ANTLR4_RUNTIME_CMAKE_DIR:-}" ]; then
+        set -- "$@" "-Dantlr4-runtime_DIR=$APOLLO_ANTLR4_RUNTIME_CMAKE_DIR"
+    fi
+
+    run_quiet_command "$@"
+}
+
 resolve_cmake() {
     if [ -n "${CMAKE_EXE:-}" ] && [ -x "$CMAKE_EXE" ]; then
         return 0
@@ -205,29 +256,14 @@ resolve_native_executable() {
 
 ensure_native_targets() {
     resolve_cmake || return 1
+    normalize_llvm_shell_scripts
 
     if [ -f "$NATIVE_BUILD_DIR/CMakeCache.txt" ] && ! native_build_cache_valid; then
         rm -rf "$NATIVE_BUILD_DIR"
     fi
 
     if [ ! -f "$NATIVE_BUILD_DIR/CMakeCache.txt" ]; then
-        if [ -n "${APOLLO_NATIVE_GENERATOR:-}" ]; then
-            if [ -n "${CMAKE_TOOLCHAIN_FILE:-}" ]; then
-                run_quiet_command "$CMAKE_EXE" -G "$APOLLO_NATIVE_GENERATOR" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR" "-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE"
-            elif [ -n "${VCPKG_ROOT:-}" ] && [ -f "$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" ]; then
-                run_quiet_command "$CMAKE_EXE" -G "$APOLLO_NATIVE_GENERATOR" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR" "-DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-            else
-                run_quiet_command "$CMAKE_EXE" -G "$APOLLO_NATIVE_GENERATOR" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR"
-            fi
-        else
-            if [ -n "${CMAKE_TOOLCHAIN_FILE:-}" ]; then
-                run_quiet_command "$CMAKE_EXE" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR" "-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE"
-            elif [ -n "${VCPKG_ROOT:-}" ] && [ -f "$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" ]; then
-                run_quiet_command "$CMAKE_EXE" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR" "-DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-            else
-                run_quiet_command "$CMAKE_EXE" -S "$NATIVE_SOURCE_DIR" -B "$NATIVE_BUILD_DIR"
-            fi
-        fi
+        configure_native_build
     fi
 
     need_native_build=0

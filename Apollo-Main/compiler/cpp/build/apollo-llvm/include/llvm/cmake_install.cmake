@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm
+# Install script for directory: /mnt/c/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ApolloNativeFrontend")
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -27,44 +27,54 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "0")
+endif()
+
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Analysis/cmake_install.cmake")
+# Set path to fallback-tool for dependency-resolution.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/usr/sbin/objdump")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/CodeGen/cmake_install.cmake")
+  include("/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Analysis/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/IR/cmake_install.cmake")
+  include("/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/CodeGen/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Support/cmake_install.cmake")
+  include("/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/IR/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Frontend/cmake_install.cmake")
+  include("/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Support/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/TargetParser/cmake_install.cmake")
+  include("/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Frontend/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/TargetParser/cmake_install.cmake")
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/install_local_manifest.txt"
+  file(WRITE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

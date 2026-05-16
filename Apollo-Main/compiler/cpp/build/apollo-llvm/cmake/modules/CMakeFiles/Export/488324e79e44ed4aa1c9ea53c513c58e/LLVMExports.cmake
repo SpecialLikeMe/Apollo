@@ -62,7 +62,7 @@ add_library(LLVMDemangle STATIC IMPORTED)
 add_library(LLVMSupport STATIC IMPORTED)
 
 set_target_properties(LLVMSupport PROPERTIES
-  INTERFACE_LINK_LIBRARIES "psapi;shell32;ole32;uuid;advapi32;ws2_32;ntdll;\$<\$<NOT:\$<LINK_LANGUAGE:Swift>>:delayimp;-delayload:shell32.dll;-delayload:ole32.dll>;LLVMDemangle"
+  INTERFACE_LINK_LIBRARIES "rt;dl;m;ZLIB::ZLIB;zstd::libzstd_shared;LLVMDemangle"
 )
 
 # Create imported target LLVMSupportLSP
@@ -485,7 +485,7 @@ set_target_properties(LLVMRemarks PROPERTIES
 add_library(LLVMHTTP STATIC IMPORTED)
 
 set_target_properties(LLVMHTTP PROPERTIES
-  INTERFACE_LINK_LIBRARIES "winhttp.lib;crypt32.lib;LLVMSupport"
+  INTERFACE_LINK_LIBRARIES "LLVMSupport"
 )
 
 # Create imported target LLVMDebuginfod
@@ -604,14 +604,14 @@ set_target_properties(LLVMMCJIT PROPERTIES
 add_library(LLVMOrcJIT STATIC IMPORTED)
 
 set_target_properties(LLVMOrcJIT PROPERTIES
-  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:LLVMAnalysis>;\$<LINK_ONLY:LLVMBitReader>;\$<LINK_ONLY:LLVMBitWriter>;\$<LINK_ONLY:LLVMPasses>;LLVMBinaryFormat;LLVMCore;LLVMExecutionEngine;LLVMJITLink;LLVMObject;LLVMOrcShared;LLVMOrcTargetProcess;LLVMWindowsDriver;LLVMMC;LLVMPasses;LLVMRuntimeDyld;LLVMSupport;LLVMTarget;LLVMTargetParser;LLVMTextAPI;LLVMTransformUtils"
+  INTERFACE_LINK_LIBRARIES "rt;\$<LINK_ONLY:LLVMAnalysis>;\$<LINK_ONLY:LLVMBitReader>;\$<LINK_ONLY:LLVMBitWriter>;\$<LINK_ONLY:LLVMPasses>;LLVMBinaryFormat;LLVMCore;LLVMExecutionEngine;LLVMJITLink;LLVMObject;LLVMOrcShared;LLVMOrcTargetProcess;LLVMWindowsDriver;LLVMMC;LLVMPasses;LLVMRuntimeDyld;LLVMSupport;LLVMTarget;LLVMTargetParser;LLVMTextAPI;LLVMTransformUtils"
 )
 
 # Create imported target LLVMOrcDebugging
 add_library(LLVMOrcDebugging STATIC IMPORTED)
 
 set_target_properties(LLVMOrcDebugging PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMBinaryFormat;LLVMDebugInfoDWARF;LLVMJITLink;LLVMObject;LLVMOrcJIT;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
+  INTERFACE_LINK_LIBRARIES "rt;LLVMBinaryFormat;LLVMDebugInfoDWARF;LLVMJITLink;LLVMObject;LLVMOrcJIT;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
 )
 
 # Create imported target LLVMOrcShared
@@ -625,7 +625,7 @@ set_target_properties(LLVMOrcShared PROPERTIES
 add_library(LLVMOrcTargetProcess STATIC IMPORTED)
 
 set_target_properties(LLVMOrcTargetProcess PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMBinaryFormat;LLVMObject;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
+  INTERFACE_LINK_LIBRARIES "rt;LLVMBinaryFormat;LLVMObject;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
 )
 
 # Create imported target LLVMRuntimeDyld
@@ -702,7 +702,7 @@ set_target_properties(LLVMAsmParser PROPERTIES
 add_library(LLVMLineEditor STATIC IMPORTED)
 
 set_target_properties(LLVMLineEditor PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMSupport"
+  INTERFACE_LINK_LIBRARIES "LibEdit::LibEdit;LLVMSupport"
 )
 
 # Create imported target LLVMProfileData
@@ -793,7 +793,7 @@ set_target_properties(LLVMWindowsDriver PROPERTIES
 add_library(LLVMWindowsManifest STATIC IMPORTED)
 
 set_target_properties(LLVMWindowsManifest PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMSupport"
+  INTERFACE_LINK_LIBRARIES "LibXml2::LibXml2;LLVMSupport"
 )
 
 # Load information for each installed configuration.

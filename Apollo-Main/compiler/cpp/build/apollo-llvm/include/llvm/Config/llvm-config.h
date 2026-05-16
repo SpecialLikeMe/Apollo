@@ -19,7 +19,7 @@
 
 /* Target triple LLVM will generate code for by default */
 /* Doesn't use `cmakedefine` because it is allowed to be empty. */
-#define LLVM_DEFAULT_TARGET_TRIPLE "x86_64-pc-windows-msvc"
+#define LLVM_DEFAULT_TARGET_TRIPLE "x86_64-unknown-linux-gnu"
 
 /* Define if threads enabled */
 #define LLVM_ENABLE_THREADS 1
@@ -28,7 +28,7 @@
 #define LLVM_HAS_ATOMICS 1
 
 /* Host triple LLVM will be executed on */
-#define LLVM_HOST_TRIPLE "x86_64-pc-windows-msvc"
+#define LLVM_HOST_TRIPLE "x86_64-unknown-linux-gnu"
 
 /* LLVM architecture name for the native architecture, if available */
 #define LLVM_NATIVE_ARCH X86
@@ -55,7 +55,7 @@
 /* #undef LLVM_NATIVE_TARGETMCA */
 
 /* Define if this is Unixish platform */
-/* #undef LLVM_ON_UNIX */
+#define LLVM_ON_UNIX 1
 
 /* Define if we have the Intel JIT API runtime support library */
 #define LLVM_USE_INTEL_JITEVENTS 0
@@ -93,10 +93,10 @@
 /* #undef LLVM_ENABLE_HTTPLIB */
 
 /* Define if zlib compression is available */
-#define LLVM_ENABLE_ZLIB 0
+#define LLVM_ENABLE_ZLIB 1
 
 /* Define if zstd compression is available */
-#define LLVM_ENABLE_ZSTD 0
+#define LLVM_ENABLE_ZSTD 1
 
 /* Define if LLVM is using tflite */
 /* #undef LLVM_HAVE_TFLITE */
@@ -105,7 +105,7 @@
 /* #undef LLVM_ENABLE_PROFCHECK */
 
 /* Define to 1 if you have the <sysexits.h> header file. */
-/* #undef HAVE_SYSEXITS_H */
+#define HAVE_SYSEXITS_H 1
 
 /* Define if building libLLVM shared library */
 /* #undef LLVM_BUILD_LLVM_DYLIB */
@@ -114,10 +114,10 @@
 /* #undef LLVM_BUILD_SHARED_LIBS */
 
 /* Define if exporting LLVM public interface for shared library */
-/* #undef LLVM_ENABLE_LLVM_EXPORT_ANNOTATIONS */
+#define LLVM_ENABLE_LLVM_EXPORT_ANNOTATIONS
 
 /* Define if exporting LLVM-C public interface for shared library */
-/* #undef LLVM_ENABLE_LLVM_C_EXPORT_ANNOTATIONS */
+#define LLVM_ENABLE_LLVM_C_EXPORT_ANNOTATIONS
 
 /* Define if building LLVM with LLVM_FORCE_USE_OLD_TOOLCHAIN_LIBS */
 /* #undef LLVM_FORCE_USE_OLD_TOOLCHAIN */
@@ -133,7 +133,7 @@
 #define LLVM_ENABLE_DIA_SDK 0
 
 /* Define if plugins enabled */
-/* #undef LLVM_ENABLE_PLUGINS */
+#define LLVM_ENABLE_PLUGINS
 
 /* Define if logf128 is available */
 /* #undef LLVM_HAS_LOGF128 */

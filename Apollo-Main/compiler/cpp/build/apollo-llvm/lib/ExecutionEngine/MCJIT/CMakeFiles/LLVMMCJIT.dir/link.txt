@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../../libLLVMMCJIT.a CMakeFiles/LLVMMCJIT.dir/MCJIT.cpp.o
+/usr/sbin/ranlib -D ../../libLLVMMCJIT.a

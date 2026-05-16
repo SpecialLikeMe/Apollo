@@ -17,7 +17,7 @@ set(LLVM_VERSION_SUFFIX git)
 set(LLVM_PACKAGE_VERSION 23.0.0git)
 set(LLVM_PACKAGE_BUGREPORT https://github.com/llvm/llvm-project/issues/)
 
-set(LLVM_BUILD_TYPE )
+set(LLVM_BUILD_TYPE Release)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY )
 
@@ -148,11 +148,11 @@ set_property(GLOBAL PROPERTY LLVMBUILD_LIB_DEPS_LLVMXRay )
 set_property(GLOBAL PROPERTY LLVMBUILD_LIB_DEPS_LLVMWindowsDriver )
 set_property(GLOBAL PROPERTY LLVMBUILD_LIB_DEPS_LLVMWindowsManifest )
 
-set(LLVM_TARGET_TRIPLE "x86_64-pc-windows-msvc")
+set(LLVM_TARGET_TRIPLE "x86_64-unknown-linux-gnu")
 
 set(LLVM_TARGET_TRIPLE_ENV "")
 
-set(LLVM_HOST_TRIPLE "x86_64-pc-windows-msvc")
+set(LLVM_HOST_TRIPLE "x86_64-unknown-linux-gnu")
 
 set(LLVM_ABI_BREAKING_CHECKS WITH_ASSERTS)
 
@@ -173,7 +173,7 @@ endif()
 
 set(LLVM_ENABLE_RTTI OFF)
 
-set(LLVM_ENABLE_LIBEDIT 0)
+set(LLVM_ENABLE_LIBEDIT TRUE)
 if(LLVM_ENABLE_LIBEDIT)
   find_package(LibEdit)
 endif()
@@ -182,18 +182,18 @@ set(LLVM_ENABLE_THREADS ON)
 
 set(LLVM_ENABLE_UNWIND_TABLES ON)
 
-set(LLVM_ENABLE_ZLIB )
+set(LLVM_ENABLE_ZLIB 1)
 if(LLVM_ENABLE_ZLIB)
   set(ZLIB_ROOT )
   find_package(ZLIB)
 endif()
 
-set(LLVM_ENABLE_ZSTD FALSE)
+set(LLVM_ENABLE_ZSTD TRUE)
 if(LLVM_ENABLE_ZSTD)
   find_package(zstd)
 endif()
 
-set(LLVM_ENABLE_LIBXML2 )
+set(LLVM_ENABLE_LIBXML2 1)
 if(LLVM_ENABLE_LIBXML2)
   find_package(LibXml2)
 endif()
@@ -210,7 +210,7 @@ endif()
 
 set(LLVM_WITH_Z3 )
 
-set(LLVM_ENABLE_DIA_SDK OFF)
+set(LLVM_ENABLE_DIA_SDK 0)
 if(LLVM_ENABLE_DIA_SDK)
   find_package(DIASDK)
 endif()
@@ -219,7 +219,7 @@ set(LLVM_NATIVE_ARCH X86)
 
 set(LLVM_ENABLE_PIC ON)
 
-set(LLVM_BUILD_32_BITS )
+set(LLVM_BUILD_32_BITS OFF)
 
 set(LLVM_ENABLE_TELEMETRY ON)
 
@@ -227,11 +227,11 @@ if (NOT "" STREQUAL "")
   set(LLVM_PTHREAD_LIB "")
 endif()
 
-set(LLVM_ENABLE_PLUGINS OFF)
+set(LLVM_ENABLE_PLUGINS ON)
 set(LLVM_EXPORT_SYMBOLS_FOR_PLUGINS OFF)
-set(LLVM_PLUGIN_EXT .dll)
+set(LLVM_PLUGIN_EXT .so)
 
-set(LLVM_ON_UNIX 0)
+set(LLVM_ON_UNIX 1)
 
 set(LLVM_LIBDIR_SUFFIX )
 
@@ -257,11 +257,11 @@ set(LLVM_BINARY_DIR "${LLVM_INSTALL_PREFIX}")
 set(LLVM_CMAKE_DIR "${LLVM_INSTALL_PREFIX}/lib/cmake/llvm")
 set(LLVM_TOOLS_BINARY_DIR "${LLVM_INSTALL_PREFIX}/bin")
 set(LLVM_HAVE_OPT_VIEWER_MODULES 0)
-set(LLVM_CONFIGURATION_TYPES Debug;Release;MinSizeRel;RelWithDebInfo)
+set(LLVM_CONFIGURATION_TYPES )
 set(LLVM_ENABLE_SHARED_LIBS OFF)
 
-set(LLVM_DEFAULT_EXTERNAL_LIT "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/$(Configuration)/bin/llvm-lit.py")
-set(LLVM_LIT_ARGS "-sv --no-progress-bar")
+set(LLVM_DEFAULT_EXTERNAL_LIT "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/./bin/llvm-lit")
+set(LLVM_LIT_ARGS "-sv")
 
 if(NOT TARGET LLVMSupport)
   include("${LLVM_CMAKE_DIR}/LLVMExports.cmake")

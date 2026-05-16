@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMCodeGenTypes.a CMakeFiles/LLVMCodeGenTypes.dir/LowLevelType.cpp.o
+/usr/sbin/ranlib -D ../libLLVMCodeGenTypes.a

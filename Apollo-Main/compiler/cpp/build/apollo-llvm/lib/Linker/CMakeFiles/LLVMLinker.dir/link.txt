@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMLinker.a CMakeFiles/LLVMLinker.dir/IRMover.cpp.o CMakeFiles/LLVMLinker.dir/LinkModules.cpp.o
+/usr/sbin/ranlib -D ../libLLVMLinker.a

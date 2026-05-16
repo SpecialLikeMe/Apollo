@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../../libLLVMFrontendHLSL.a CMakeFiles/LLVMFrontendHLSL.dir/CBuffer.cpp.o CMakeFiles/LLVMFrontendHLSL.dir/HLSLBinding.cpp.o CMakeFiles/LLVMFrontendHLSL.dir/HLSLResource.cpp.o CMakeFiles/LLVMFrontendHLSL.dir/HLSLRootSignature.cpp.o CMakeFiles/LLVMFrontendHLSL.dir/RootSignatureMetadata.cpp.o CMakeFiles/LLVMFrontendHLSL.dir/RootSignatureValidations.cpp.o
+/usr/sbin/ranlib -D ../../libLLVMFrontendHLSL.a

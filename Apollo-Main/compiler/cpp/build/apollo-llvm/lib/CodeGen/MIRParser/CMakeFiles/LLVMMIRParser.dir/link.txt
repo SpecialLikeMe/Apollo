@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../../libLLVMMIRParser.a CMakeFiles/LLVMMIRParser.dir/MILexer.cpp.o CMakeFiles/LLVMMIRParser.dir/MIParser.cpp.o CMakeFiles/LLVMMIRParser.dir/MIRParser.cpp.o
+/usr/sbin/ranlib -D ../../libLLVMMIRParser.a

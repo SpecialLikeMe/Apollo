@@ -24,9 +24,9 @@
 #define LLVM_WINDOWS_PREFER_FORWARD_SLASH 0
 
 /* Define to 1 if you have the `backtrace' function. */
-/* #undef HAVE_BACKTRACE */
+#define HAVE_BACKTRACE TRUE
 
-#define BACKTRACE_HEADER <backtrace.h>
+#define BACKTRACE_HEADER <execinfo.h>
 
 /* Define to 1 if you have the <CrashReporterClient.h> header file. */
 /* #undef HAVE_CRASHREPORTERCLIENT_H */
@@ -36,7 +36,7 @@
 
 /* Define to 1 if you have the declaration of `arc4random', and to 0 if you
    don't. */
-#define HAVE_DECL_ARC4RANDOM 0
+#define HAVE_DECL_ARC4RANDOM 1
 
 /* Define to 1 if you have the declaration of `FE_ALL_EXCEPT', and to 0 if you
    don't. */
@@ -48,16 +48,16 @@
 
 /* Define to 1 if you have the declaration of `strerror_s', and to 0 if you
    don't. */
-#define HAVE_DECL_STRERROR_S 1
+#define HAVE_DECL_STRERROR_S 0
 
 /* Define if dlopen() is available on this platform. */
-/* #undef HAVE_DLOPEN */
+#define HAVE_DLOPEN 1
 
 /* Define to 1 if we can register EH frames on this platform. */
-/* #undef HAVE_REGISTER_FRAME */
+#define HAVE_REGISTER_FRAME 1
 
 /* Define to 1 if we can deregister EH frames on this platform. */
-/* #undef HAVE_DEREGISTER_FRAME */
+#define HAVE_DEREGISTER_FRAME 1
 
 /* Define if __unw_add_dynamic_fde() is available on this platform. */
 /* #undef HAVE_UNW_ADD_DYNAMIC_FDE */
@@ -72,22 +72,22 @@
 /* #undef HAVE_FFI_H */
 
 /* Define to 1 if you have the `futimens' function. */
-/* #undef HAVE_FUTIMENS */
+#define HAVE_FUTIMENS 1
 
 /* Define to 1 if you have the `futimes' function. */
-/* #undef HAVE_FUTIMES */
+#define HAVE_FUTIMES 1
 
 /* Define to 1 if you have the `getpagesize' function. */
-/* #undef HAVE_GETPAGESIZE */
+#define HAVE_GETPAGESIZE 1
 
 /* Define to 1 if you have the `getrusage' function. */
-/* #undef HAVE_GETRUSAGE */
+#define HAVE_GETRUSAGE 1
 
 /* Define to 1 if you have the `isatty' function. */
-/* #undef HAVE_ISATTY */
+#define HAVE_ISATTY 1
 
 /* Define to 1 if you have the `edit' library (-ledit). */
-/* #undef HAVE_LIBEDIT */
+#define HAVE_LIBEDIT TRUE
 
 /* Define to 1 if you have the `pfm' library (-lpfm). */
 /* #undef HAVE_LIBPFM */
@@ -99,13 +99,13 @@
 /* #undef HAVE_LIBPSAPI */
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
-/* #undef HAVE_LIBPTHREAD */
+#define HAVE_LIBPTHREAD 1
 
 /* Define to 1 if you have the `pthread_getname_np' function. */
-/* #undef HAVE_PTHREAD_GETNAME_NP */
+#define HAVE_PTHREAD_GETNAME_NP 1
 
 /* Define to 1 if you have the `pthread_setname_np' function. */
-/* #undef HAVE_PTHREAD_SETNAME_NP */
+#define HAVE_PTHREAD_SETNAME_NP 1
 
 /* Define to 1 if you have the `pthread_get_name_np' function. */
 /* #undef HAVE_PTHREAD_GET_NAME_NP */
@@ -120,10 +120,10 @@
 /* #undef HAVE_MALLCTL */
 
 /* Define to 1 if you have the `mallinfo' function. */
-/* #undef HAVE_MALLINFO */
+#define HAVE_MALLINFO 1
 
 /* Define to 1 if you have the `mallinfo2' function. */
-/* #undef HAVE_MALLINFO2 */
+#define HAVE_MALLINFO2 1
 
 /* Define to 1 if you have the <malloc/malloc.h> header file. */
 /* #undef HAVE_MALLOC_MALLOC_H */
@@ -132,49 +132,49 @@
 /* #undef HAVE_MALLOC_ZONE_STATISTICS */
 
 /* Define to 1 if you have the `posix_spawn' function. */
-/* #undef HAVE_POSIX_SPAWN */
+#define HAVE_POSIX_SPAWN 1
 
 /* Define to 1 if you have the `pread' function. */
-/* #undef HAVE_PREAD */
+#define HAVE_PREAD 1
 
 /* Define to 1 if you have the <pthread.h> header file. */
-/* #undef HAVE_PTHREAD_H */
+#define HAVE_PTHREAD_H 1
 
 /* Have pthread_mutex_lock */
-/* #undef HAVE_PTHREAD_MUTEX_LOCK */
+#define HAVE_PTHREAD_MUTEX_LOCK 1
 
 /* Have pthread_rwlock_init */
-/* #undef HAVE_PTHREAD_RWLOCK_INIT */
+#define HAVE_PTHREAD_RWLOCK_INIT 1
 
 /* Define to 1 if you have the `sbrk' function. */
-/* #undef HAVE_SBRK */
+#define HAVE_SBRK 1
 
 /* Define to 1 if you have the `setenv' function. */
-/* #undef HAVE_SETENV */
+#define HAVE_SETENV 1
 
 /* Define to 1 if you have the `sigaltstack' function. */
-/* #undef HAVE_SIGALTSTACK */
+#define HAVE_SIGALTSTACK 1
 
 /* Define to 1 if you have the `strerror_r' function. */
-/* #undef HAVE_STRERROR_R */
+#define HAVE_STRERROR_R 1
 
 /* Define to 1 if you have the `sysconf' function. */
-/* #undef HAVE_SYSCONF */
+#define HAVE_SYSCONF 1
 
 /* Define to 1 if you have the <sys/mman.h> header file. */
-/* #undef HAVE_SYS_MMAN_H */
+#define HAVE_SYS_MMAN_H 1
 
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
-/* #undef HAVE_SYS_IOCTL_H */
+#define HAVE_SYS_IOCTL_H 1
 
 /* Define to 1 if stat struct has st_mtimespec member .*/
 /* #undef HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC */
 
 /* Define to 1 if stat struct has st_mtim member. */
-/* #undef HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC */
+#define HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-/* #undef HAVE_UNISTD_H */
+#define HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the <valgrind/valgrind.h> header file. */
 /* #undef HAVE_VALGRIND_VALGRIND_H */
@@ -183,10 +183,10 @@
 /* #undef HAVE__ALLOCA */
 
 /* Define to 1 if you have the `_chsize_s' function. */
-#define HAVE__CHSIZE_S 1
+/* #undef HAVE__CHSIZE_S */
 
 /* Define to 1 if you have the `_Unwind_Backtrace' function. */
-/* #undef HAVE__UNWIND_BACKTRACE */
+#define HAVE__UNWIND_BACKTRACE 1
 
 /* Have host's __alloca */
 /* #undef HAVE___ALLOCA */
@@ -198,7 +198,7 @@
 /* #undef HAVE___ASHRDI3 */
 
 /* Have host's __chkstk */
-#define HAVE___CHKSTK 1
+/* #undef HAVE___CHKSTK */
 
 /* Have host's __chkstk_ms */
 /* #undef HAVE___CHKSTK_MS */
@@ -261,13 +261,13 @@
 #define LLVM_VERSION_PRINTER_SHOW_BUILD_CONFIG 1
 
 /* Define if libxml2 is supported on this platform. */
-/* #undef LLVM_ENABLE_LIBXML2 */
+#define LLVM_ENABLE_LIBXML2 1
 
 /* Define to the extension used for shared libraries, say, ".so". */
-#define LTDL_SHLIB_EXT ".dll"
+#define LTDL_SHLIB_EXT ".so"
 
 /* Define to the extension used for plugin libraries, say, ".so". */
-#define LLVM_PLUGIN_EXT ".dll"
+#define LLVM_PLUGIN_EXT ".so"
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "https://github.com/llvm/llvm-project/issues/"
@@ -285,10 +285,10 @@
 /* #undef PACKAGE_VENDOR */
 
 /* Define to a function implementing stricmp */
-#define stricmp _stricmp
+/* #undef stricmp */
 
 /* Define to a function implementing strdup */
-#define strdup _strdup
+/* #undef strdup */
 
 /* Whether GlobalISel rule coverage is being collected */
 #define LLVM_GISEL_COV_ENABLED 0
@@ -301,8 +301,8 @@
 
 /* #undef HAVE_PROC_PID_RUSAGE */
 
-/* #undef HAVE_BUILTIN_THREAD_POINTER */
+#define HAVE_BUILTIN_THREAD_POINTER 1
 
-/* #undef HAVE_GETAUXVAL */
+#define HAVE_GETAUXVAL 1
 
 #endif

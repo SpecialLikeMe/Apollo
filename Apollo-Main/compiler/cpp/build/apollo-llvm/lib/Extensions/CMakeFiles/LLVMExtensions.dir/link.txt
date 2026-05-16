@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMExtensions.a CMakeFiles/LLVMExtensions.dir/Extensions.cpp.o
+/usr/sbin/ranlib -D ../libLLVMExtensions.a

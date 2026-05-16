@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMLTO.a CMakeFiles/LLVMLTO.dir/LTO.cpp.o CMakeFiles/LLVMLTO.dir/LTOBackend.cpp.o CMakeFiles/LLVMLTO.dir/LTOModule.cpp.o CMakeFiles/LLVMLTO.dir/LTOCodeGenerator.cpp.o CMakeFiles/LLVMLTO.dir/UpdateCompilerUsed.cpp.o CMakeFiles/LLVMLTO.dir/ThinLTOCodeGenerator.cpp.o
+/usr/sbin/ranlib -D ../libLLVMLTO.a

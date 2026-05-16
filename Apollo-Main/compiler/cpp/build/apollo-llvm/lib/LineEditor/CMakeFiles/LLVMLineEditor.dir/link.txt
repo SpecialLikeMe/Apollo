@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMLineEditor.a CMakeFiles/LLVMLineEditor.dir/LineEditor.cpp.o
+/usr/sbin/ranlib -D ../libLLVMLineEditor.a

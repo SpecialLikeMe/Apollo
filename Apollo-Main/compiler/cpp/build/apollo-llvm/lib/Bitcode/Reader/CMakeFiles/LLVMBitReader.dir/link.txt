@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../../libLLVMBitReader.a CMakeFiles/LLVMBitReader.dir/BitcodeAnalyzer.cpp.o CMakeFiles/LLVMBitReader.dir/BitReader.cpp.o CMakeFiles/LLVMBitReader.dir/BitcodeReader.cpp.o CMakeFiles/LLVMBitReader.dir/MetadataLoader.cpp.o CMakeFiles/LLVMBitReader.dir/ValueList.cpp.o
+/usr/sbin/ranlib -D ../../libLLVMBitReader.a

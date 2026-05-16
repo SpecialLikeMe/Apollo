@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../../libLLVMAggressiveInstCombine.a CMakeFiles/LLVMAggressiveInstCombine.dir/AggressiveInstCombine.cpp.o CMakeFiles/LLVMAggressiveInstCombine.dir/TruncInstCombine.cpp.o
+/usr/sbin/ranlib -D ../../libLLVMAggressiveInstCombine.a

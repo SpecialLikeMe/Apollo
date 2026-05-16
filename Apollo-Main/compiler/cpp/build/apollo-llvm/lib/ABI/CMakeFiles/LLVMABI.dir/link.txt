@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMABI.a CMakeFiles/LLVMABI.dir/Types.cpp.o CMakeFiles/LLVMABI.dir/FunctionInfo.cpp.o CMakeFiles/LLVMABI.dir/TargetInfo.cpp.o CMakeFiles/LLVMABI.dir/Targets/BPF.cpp.o
+/usr/sbin/ranlib -D ../libLLVMABI.a

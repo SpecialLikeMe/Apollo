@@ -1,0 +1,2 @@
+/usr/sbin/ar Dqc ../libLLVMFileCheck.a CMakeFiles/LLVMFileCheck.dir/FileCheck.cpp.o
+/usr/sbin/ranlib -D ../libLLVMFileCheck.a

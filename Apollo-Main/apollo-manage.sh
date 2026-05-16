@@ -47,12 +47,28 @@ tracked_user_changes() {
         [ -z "$line" ] && continue
         path=${line#?? }
         case "$path" in
-            compiler/output/*|compiler/*.class|compiler/*.interp|compiler/*.tokens)
+            compiler/output/*|compiler/*.class|compiler/*.interp|compiler/*.tokens|compiler/toolchain-env.sh|compiler/toolchain-local-env.sh)
                 continue
                 ;;
         esac
         printf '%s\n' "$line"
     done
+}
+
+refresh_posix_installation() {
+    installer_script="$INSTALL_DIR/install-posix.sh"
+    if [ -x "$installer_script" ]; then
+        "$installer_script"
+        return 0
+    fi
+
+    parent_installer="$INSTALL_DIR/../install.sh"
+    if [ -x "$parent_installer" ]; then
+        "$parent_installer"
+        return 0
+    fi
+
+    return 0
 }
 
 resolve_official_branch() {
@@ -102,6 +118,7 @@ update_apollo() {
 
     git -C "$INSTALL_DIR" fetch --prune "$OFFICIAL_REPO" "refs/heads/$branch"
     git -C "$INSTALL_DIR" merge --ff-only FETCH_HEAD
+    refresh_posix_installation
     print_version | sed '1s/^Apollo dev /Apollo updated to /'
 }
 

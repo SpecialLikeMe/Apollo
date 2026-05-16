@@ -53,7 +53,7 @@ add_library(LLVMDemangle STATIC IMPORTED)
 add_library(LLVMSupport STATIC IMPORTED)
 
 set_target_properties(LLVMSupport PROPERTIES
-  INTERFACE_LINK_LIBRARIES "psapi;shell32;ole32;uuid;advapi32;ws2_32;ntdll;\$<\$<NOT:\$<LINK_LANGUAGE:Swift>>:delayimp;-delayload:shell32.dll;-delayload:ole32.dll>;LLVMDemangle"
+  INTERFACE_LINK_LIBRARIES "rt;dl;m;ZLIB::ZLIB;zstd::libzstd_shared;LLVMDemangle"
 )
 
 # Create imported target LLVMSupportLSP
@@ -74,7 +74,7 @@ set_target_properties(LLVMTableGen PROPERTIES
 add_library(LLVMTableGenBasic STATIC IMPORTED)
 
 set_target_properties(LLVMTableGenBasic PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/utils/TableGen/Basic/.."
+  INTERFACE_INCLUDE_DIRECTORIES "/mnt/c/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/utils/TableGen/Basic/.."
   INTERFACE_LINK_LIBRARIES "LLVMSupport;LLVMTableGen"
 )
 
@@ -82,7 +82,7 @@ set_target_properties(LLVMTableGenBasic PROPERTIES
 add_library(LLVMTableGenCommon STATIC IMPORTED)
 
 set_target_properties(LLVMTableGenCommon PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/utils/TableGen/Common/.."
+  INTERFACE_INCLUDE_DIRECTORIES "/mnt/c/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/utils/TableGen/Common/.."
   INTERFACE_LINK_LIBRARIES "LLVMTableGenBasic;LLVMSupport;LLVMTableGen;LLVMCodeGenTypes"
 )
 
@@ -478,7 +478,7 @@ set_target_properties(LLVMRemarks PROPERTIES
 add_library(LLVMHTTP STATIC IMPORTED)
 
 set_target_properties(LLVMHTTP PROPERTIES
-  INTERFACE_LINK_LIBRARIES "winhttp.lib;crypt32.lib;LLVMSupport"
+  INTERFACE_LINK_LIBRARIES "LLVMSupport"
 )
 
 # Create imported target LLVMDebuginfod
@@ -597,14 +597,14 @@ set_target_properties(LLVMMCJIT PROPERTIES
 add_library(LLVMOrcJIT STATIC IMPORTED)
 
 set_target_properties(LLVMOrcJIT PROPERTIES
-  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:LLVMAnalysis>;\$<LINK_ONLY:LLVMBitReader>;\$<LINK_ONLY:LLVMBitWriter>;\$<LINK_ONLY:LLVMPasses>;LLVMBinaryFormat;LLVMCore;LLVMExecutionEngine;LLVMJITLink;LLVMObject;LLVMOrcShared;LLVMOrcTargetProcess;LLVMWindowsDriver;LLVMMC;LLVMPasses;LLVMRuntimeDyld;LLVMSupport;LLVMTarget;LLVMTargetParser;LLVMTextAPI;LLVMTransformUtils"
+  INTERFACE_LINK_LIBRARIES "rt;\$<LINK_ONLY:LLVMAnalysis>;\$<LINK_ONLY:LLVMBitReader>;\$<LINK_ONLY:LLVMBitWriter>;\$<LINK_ONLY:LLVMPasses>;LLVMBinaryFormat;LLVMCore;LLVMExecutionEngine;LLVMJITLink;LLVMObject;LLVMOrcShared;LLVMOrcTargetProcess;LLVMWindowsDriver;LLVMMC;LLVMPasses;LLVMRuntimeDyld;LLVMSupport;LLVMTarget;LLVMTargetParser;LLVMTextAPI;LLVMTransformUtils"
 )
 
 # Create imported target LLVMOrcDebugging
 add_library(LLVMOrcDebugging STATIC IMPORTED)
 
 set_target_properties(LLVMOrcDebugging PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMBinaryFormat;LLVMDebugInfoDWARF;LLVMJITLink;LLVMObject;LLVMOrcJIT;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
+  INTERFACE_LINK_LIBRARIES "rt;LLVMBinaryFormat;LLVMDebugInfoDWARF;LLVMJITLink;LLVMObject;LLVMOrcJIT;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
 )
 
 # Create imported target LLVMOrcShared
@@ -618,7 +618,7 @@ set_target_properties(LLVMOrcShared PROPERTIES
 add_library(LLVMOrcTargetProcess STATIC IMPORTED)
 
 set_target_properties(LLVMOrcTargetProcess PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMBinaryFormat;LLVMObject;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
+  INTERFACE_LINK_LIBRARIES "rt;LLVMBinaryFormat;LLVMObject;LLVMOrcShared;LLVMSupport;LLVMTargetParser"
 )
 
 # Create imported target LLVMRuntimeDyld
@@ -695,7 +695,7 @@ set_target_properties(LLVMAsmParser PROPERTIES
 add_library(LLVMLineEditor STATIC IMPORTED)
 
 set_target_properties(LLVMLineEditor PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMSupport"
+  INTERFACE_LINK_LIBRARIES "LibEdit::LibEdit;LLVMSupport"
 )
 
 # Create imported target LLVMProfileData
@@ -786,2999 +786,755 @@ set_target_properties(LLVMWindowsDriver PROPERTIES
 add_library(LLVMWindowsManifest STATIC IMPORTED)
 
 set_target_properties(LLVMWindowsManifest PROPERTIES
-  INTERFACE_LINK_LIBRARIES "LLVMSupport"
+  INTERFACE_LINK_LIBRARIES "LibXml2::LibXml2;LLVMSupport"
 )
-
-# Import target "LLVMDemangle" for configuration "Debug"
-set_property(TARGET LLVMDemangle APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDemangle PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDemangle.lib"
-  )
-
-# Import target "LLVMSupport" for configuration "Debug"
-set_property(TARGET LLVMSupport APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMSupport PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "ASM_MASM;C;CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMSupport.lib"
-  )
-
-# Import target "LLVMSupportLSP" for configuration "Debug"
-set_property(TARGET LLVMSupportLSP APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMSupportLSP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMSupportLSP.lib"
-  )
-
-# Import target "LLVMTableGen" for configuration "Debug"
-set_property(TARGET LLVMTableGen APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTableGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTableGen.lib"
-  )
-
-# Import target "LLVMTableGenBasic" for configuration "Debug"
-set_property(TARGET LLVMTableGenBasic APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTableGenBasic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTableGenBasic.lib"
-  )
-
-# Import target "LLVMTableGenCommon" for configuration "Debug"
-set_property(TARGET LLVMTableGenCommon APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTableGenCommon PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTableGenCommon.lib"
-  )
-
-# Import target "llvm-tblgen" for configuration "Debug"
-set_property(TARGET llvm-tblgen APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(llvm-tblgen PROPERTIES
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/bin/llvm-tblgen.exe"
-  )
-
-# Import target "LLVMCore" for configuration "Debug"
-set_property(TARGET LLVMCore APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCore PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCore.lib"
-  )
-
-# Import target "LLVMABI" for configuration "Debug"
-set_property(TARGET LLVMABI APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMABI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMABI.lib"
-  )
-
-# Import target "LLVMFuzzerCLI" for configuration "Debug"
-set_property(TARGET LLVMFuzzerCLI APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFuzzerCLI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFuzzerCLI.lib"
-  )
-
-# Import target "LLVMFuzzMutate" for configuration "Debug"
-set_property(TARGET LLVMFuzzMutate APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFuzzMutate PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFuzzMutate.lib"
-  )
-
-# Import target "LLVMFileCheck" for configuration "Debug"
-set_property(TARGET LLVMFileCheck APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFileCheck PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFileCheck.lib"
-  )
-
-# Import target "LLVMInterfaceStub" for configuration "Debug"
-set_property(TARGET LLVMInterfaceStub APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMInterfaceStub PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMInterfaceStub.lib"
-  )
-
-# Import target "LLVMIRPrinter" for configuration "Debug"
-set_property(TARGET LLVMIRPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMIRPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMIRPrinter.lib"
-  )
-
-# Import target "LLVMIRReader" for configuration "Debug"
-set_property(TARGET LLVMIRReader APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMIRReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMIRReader.lib"
-  )
-
-# Import target "LLVMCAS" for configuration "Debug"
-set_property(TARGET LLVMCAS APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCAS PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCAS.lib"
-  )
-
-# Import target "LLVMCGData" for configuration "Debug"
-set_property(TARGET LLVMCGData APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCGData PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCGData.lib"
-  )
-
-# Import target "LLVMCodeGen" for configuration "Debug"
-set_property(TARGET LLVMCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCodeGen.lib"
-  )
-
-# Import target "LLVMSelectionDAG" for configuration "Debug"
-set_property(TARGET LLVMSelectionDAG APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMSelectionDAG PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMSelectionDAG.lib"
-  )
-
-# Import target "LLVMAsmPrinter" for configuration "Debug"
-set_property(TARGET LLVMAsmPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMAsmPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMAsmPrinter.lib"
-  )
-
-# Import target "LLVMMIRParser" for configuration "Debug"
-set_property(TARGET LLVMMIRParser APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMMIRParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMMIRParser.lib"
-  )
-
-# Import target "LLVMGlobalISel" for configuration "Debug"
-set_property(TARGET LLVMGlobalISel APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMGlobalISel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMGlobalISel.lib"
-  )
-
-# Import target "LLVMCodeGenTypes" for configuration "Debug"
-set_property(TARGET LLVMCodeGenTypes APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCodeGenTypes PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCodeGenTypes.lib"
-  )
-
-# Import target "LLVMBinaryFormat" for configuration "Debug"
-set_property(TARGET LLVMBinaryFormat APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMBinaryFormat PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMBinaryFormat.lib"
-  )
-
-# Import target "LLVMBitReader" for configuration "Debug"
-set_property(TARGET LLVMBitReader APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMBitReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMBitReader.lib"
-  )
-
-# Import target "LLVMBitWriter" for configuration "Debug"
-set_property(TARGET LLVMBitWriter APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMBitWriter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMBitWriter.lib"
-  )
-
-# Import target "LLVMBitstreamReader" for configuration "Debug"
-set_property(TARGET LLVMBitstreamReader APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMBitstreamReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMBitstreamReader.lib"
-  )
-
-# Import target "LLVMDWARFLinker" for configuration "Debug"
-set_property(TARGET LLVMDWARFLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDWARFLinker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDWARFLinker.lib"
-  )
-
-# Import target "LLVMDWARFLinkerClassic" for configuration "Debug"
-set_property(TARGET LLVMDWARFLinkerClassic APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDWARFLinkerClassic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDWARFLinkerClassic.lib"
-  )
-
-# Import target "LLVMDWARFLinkerParallel" for configuration "Debug"
-set_property(TARGET LLVMDWARFLinkerParallel APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDWARFLinkerParallel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDWARFLinkerParallel.lib"
-  )
-
-# Import target "LLVMExtensions" for configuration "Debug"
-set_property(TARGET LLVMExtensions APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMExtensions PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMExtensions.lib"
-  )
-
-# Import target "LLVMFrontendAtomic" for configuration "Debug"
-set_property(TARGET LLVMFrontendAtomic APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendAtomic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendAtomic.lib"
-  )
-
-# Import target "LLVMFrontendDirective" for configuration "Debug"
-set_property(TARGET LLVMFrontendDirective APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendDirective PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendDirective.lib"
-  )
-
-# Import target "LLVMFrontendDriver" for configuration "Debug"
-set_property(TARGET LLVMFrontendDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendDriver.lib"
-  )
-
-# Import target "LLVMFrontendHLSL" for configuration "Debug"
-set_property(TARGET LLVMFrontendHLSL APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendHLSL PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendHLSL.lib"
-  )
-
-# Import target "LLVMFrontendOpenACC" for configuration "Debug"
-set_property(TARGET LLVMFrontendOpenACC APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendOpenACC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendOpenACC.lib"
-  )
-
-# Import target "LLVMFrontendOpenMP" for configuration "Debug"
-set_property(TARGET LLVMFrontendOpenMP APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendOpenMP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendOpenMP.lib"
-  )
-
-# Import target "LLVMFrontendOffloading" for configuration "Debug"
-set_property(TARGET LLVMFrontendOffloading APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMFrontendOffloading PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMFrontendOffloading.lib"
-  )
-
-# Import target "LLVMTransformUtils" for configuration "Debug"
-set_property(TARGET LLVMTransformUtils APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTransformUtils PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTransformUtils.lib"
-  )
-
-# Import target "LLVMInstrumentation" for configuration "Debug"
-set_property(TARGET LLVMInstrumentation APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMInstrumentation PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMInstrumentation.lib"
-  )
-
-# Import target "LLVMAggressiveInstCombine" for configuration "Debug"
-set_property(TARGET LLVMAggressiveInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMAggressiveInstCombine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMAggressiveInstCombine.lib"
-  )
-
-# Import target "LLVMInstCombine" for configuration "Debug"
-set_property(TARGET LLVMInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMInstCombine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMInstCombine.lib"
-  )
-
-# Import target "LLVMScalarOpts" for configuration "Debug"
-set_property(TARGET LLVMScalarOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMScalarOpts PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMScalarOpts.lib"
-  )
-
-# Import target "LLVMipo" for configuration "Debug"
-set_property(TARGET LLVMipo APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMipo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMipo.lib"
-  )
-
-# Import target "LLVMVectorize" for configuration "Debug"
-set_property(TARGET LLVMVectorize APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMVectorize PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMVectorize.lib"
-  )
-
-# Import target "LLVMObjCARCOpts" for configuration "Debug"
-set_property(TARGET LLVMObjCARCOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMObjCARCOpts PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMObjCARCOpts.lib"
-  )
-
-# Import target "LLVMCoroutines" for configuration "Debug"
-set_property(TARGET LLVMCoroutines APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCoroutines PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCoroutines.lib"
-  )
-
-# Import target "LLVMCFGuard" for configuration "Debug"
-set_property(TARGET LLVMCFGuard APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCFGuard PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCFGuard.lib"
-  )
-
-# Import target "LLVMHipStdPar" for configuration "Debug"
-set_property(TARGET LLVMHipStdPar APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMHipStdPar PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMHipStdPar.lib"
-  )
-
-# Import target "LLVMLinker" for configuration "Debug"
-set_property(TARGET LLVMLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMLinker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMLinker.lib"
-  )
-
-# Import target "LLVMAnalysis" for configuration "Debug"
-set_property(TARGET LLVMAnalysis APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMAnalysis PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMAnalysis.lib"
-  )
-
-# Import target "LLVMDTLTO" for configuration "Debug"
-set_property(TARGET LLVMDTLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDTLTO PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDTLTO.lib"
-  )
-
-# Import target "LLVMLTO" for configuration "Debug"
-set_property(TARGET LLVMLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMLTO PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMLTO.lib"
-  )
-
-# Import target "LLVMMC" for configuration "Debug"
-set_property(TARGET LLVMMC APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMMC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMMC.lib"
-  )
-
-# Import target "LLVMMCParser" for configuration "Debug"
-set_property(TARGET LLVMMCParser APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMMCParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMMCParser.lib"
-  )
-
-# Import target "LLVMMCDisassembler" for configuration "Debug"
-set_property(TARGET LLVMMCDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMMCDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMMCDisassembler.lib"
-  )
-
-# Import target "LLVMMCA" for configuration "Debug"
-set_property(TARGET LLVMMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMMCA PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMMCA.lib"
-  )
-
-# Import target "LLVMObjCopy" for configuration "Debug"
-set_property(TARGET LLVMObjCopy APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMObjCopy PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMObjCopy.lib"
-  )
-
-# Import target "LLVMObject" for configuration "Debug"
-set_property(TARGET LLVMObject APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMObject PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMObject.lib"
-  )
-
-# Import target "LLVMObjectYAML" for configuration "Debug"
-set_property(TARGET LLVMObjectYAML APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMObjectYAML PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMObjectYAML.lib"
-  )
-
-# Import target "LLVMOption" for configuration "Debug"
-set_property(TARGET LLVMOption APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMOption PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMOption.lib"
-  )
-
-# Import target "LLVMRemarks" for configuration "Debug"
-set_property(TARGET LLVMRemarks APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMRemarks PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMRemarks.lib"
-  )
-
-# Import target "LLVMHTTP" for configuration "Debug"
-set_property(TARGET LLVMHTTP APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMHTTP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMHTTP.lib"
-  )
-
-# Import target "LLVMDebuginfod" for configuration "Debug"
-set_property(TARGET LLVMDebuginfod APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebuginfod PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebuginfod.lib"
-  )
-
-# Import target "LLVMDebugInfoDWARFLowLevel" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoDWARFLowLevel APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoDWARFLowLevel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoDWARFLowLevel.lib"
-  )
-
-# Import target "LLVMDebugInfoDWARF" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoDWARF APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoDWARF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoDWARF.lib"
-  )
-
-# Import target "LLVMDebugInfoGSYM" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoGSYM APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoGSYM PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoGSYM.lib"
-  )
-
-# Import target "LLVMDebugInfoLogicalView" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoLogicalView APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoLogicalView PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoLogicalView.lib"
-  )
-
-# Import target "LLVMDebugInfoMSF" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoMSF APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoMSF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoMSF.lib"
-  )
-
-# Import target "LLVMDebugInfoCodeView" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoCodeView APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoCodeView PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoCodeView.lib"
-  )
-
-# Import target "LLVMDebugInfoPDB" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoPDB APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoPDB PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoPDB.lib"
-  )
-
-# Import target "LLVMSymbolize" for configuration "Debug"
-set_property(TARGET LLVMSymbolize APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMSymbolize PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMSymbolize.lib"
-  )
-
-# Import target "LLVMDebugInfoBTF" for configuration "Debug"
-set_property(TARGET LLVMDebugInfoBTF APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDebugInfoBTF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDebugInfoBTF.lib"
-  )
-
-# Import target "LLVMDWARFCFIChecker" for configuration "Debug"
-set_property(TARGET LLVMDWARFCFIChecker APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDWARFCFIChecker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDWARFCFIChecker.lib"
-  )
-
-# Import target "LLVMDWP" for configuration "Debug"
-set_property(TARGET LLVMDWP APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDWP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDWP.lib"
-  )
-
-# Import target "LLVMExecutionEngine" for configuration "Debug"
-set_property(TARGET LLVMExecutionEngine APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMExecutionEngine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMExecutionEngine.lib"
-  )
-
-# Import target "LLVMInterpreter" for configuration "Debug"
-set_property(TARGET LLVMInterpreter APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMInterpreter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMInterpreter.lib"
-  )
-
-# Import target "LLVMJITLink" for configuration "Debug"
-set_property(TARGET LLVMJITLink APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMJITLink PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMJITLink.lib"
-  )
-
-# Import target "LLVMMCJIT" for configuration "Debug"
-set_property(TARGET LLVMMCJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMMCJIT PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMMCJIT.lib"
-  )
-
-# Import target "LLVMOrcJIT" for configuration "Debug"
-set_property(TARGET LLVMOrcJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMOrcJIT PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMOrcJIT.lib"
-  )
-
-# Import target "LLVMOrcDebugging" for configuration "Debug"
-set_property(TARGET LLVMOrcDebugging APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMOrcDebugging PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMOrcDebugging.lib"
-  )
-
-# Import target "LLVMOrcShared" for configuration "Debug"
-set_property(TARGET LLVMOrcShared APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMOrcShared PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMOrcShared.lib"
-  )
-
-# Import target "LLVMOrcTargetProcess" for configuration "Debug"
-set_property(TARGET LLVMOrcTargetProcess APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMOrcTargetProcess PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMOrcTargetProcess.lib"
-  )
-
-# Import target "LLVMRuntimeDyld" for configuration "Debug"
-set_property(TARGET LLVMRuntimeDyld APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMRuntimeDyld PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMRuntimeDyld.lib"
-  )
-
-# Import target "LLVMTarget" for configuration "Debug"
-set_property(TARGET LLVMTarget APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTarget PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTarget.lib"
-  )
-
-# Import target "LLVMX86CodeGen" for configuration "Debug"
-set_property(TARGET LLVMX86CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMX86CodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMX86CodeGen.lib"
-  )
-
-# Import target "LLVMX86AsmParser" for configuration "Debug"
-set_property(TARGET LLVMX86AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMX86AsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMX86AsmParser.lib"
-  )
-
-# Import target "LLVMX86Disassembler" for configuration "Debug"
-set_property(TARGET LLVMX86Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMX86Disassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMX86Disassembler.lib"
-  )
-
-# Import target "LLVMX86TargetMCA" for configuration "Debug"
-set_property(TARGET LLVMX86TargetMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMX86TargetMCA PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMX86TargetMCA.lib"
-  )
-
-# Import target "LLVMX86Desc" for configuration "Debug"
-set_property(TARGET LLVMX86Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMX86Desc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMX86Desc.lib"
-  )
-
-# Import target "LLVMX86Info" for configuration "Debug"
-set_property(TARGET LLVMX86Info APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMX86Info PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMX86Info.lib"
-  )
-
-# Import target "LLVMSandboxIR" for configuration "Debug"
-set_property(TARGET LLVMSandboxIR APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMSandboxIR PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMSandboxIR.lib"
-  )
-
-# Import target "LLVMAsmParser" for configuration "Debug"
-set_property(TARGET LLVMAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMAsmParser.lib"
-  )
-
-# Import target "LLVMLineEditor" for configuration "Debug"
-set_property(TARGET LLVMLineEditor APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMLineEditor PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMLineEditor.lib"
-  )
-
-# Import target "LLVMProfileData" for configuration "Debug"
-set_property(TARGET LLVMProfileData APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMProfileData PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMProfileData.lib"
-  )
-
-# Import target "LLVMCoverage" for configuration "Debug"
-set_property(TARGET LLVMCoverage APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMCoverage PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMCoverage.lib"
-  )
-
-# Import target "LLVMPasses" for configuration "Debug"
-set_property(TARGET LLVMPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMPasses PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMPasses.lib"
-  )
-
-# Import target "LLVMPlugins" for configuration "Debug"
-set_property(TARGET LLVMPlugins APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMPlugins PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMPlugins.lib"
-  )
-
-# Import target "LLVMTargetParser" for configuration "Debug"
-set_property(TARGET LLVMTargetParser APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTargetParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTargetParser.lib"
-  )
-
-# Import target "LLVMTextAPI" for configuration "Debug"
-set_property(TARGET LLVMTextAPI APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTextAPI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTextAPI.lib"
-  )
-
-# Import target "LLVMTextAPIBinaryReader" for configuration "Debug"
-set_property(TARGET LLVMTextAPIBinaryReader APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTextAPIBinaryReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTextAPIBinaryReader.lib"
-  )
-
-# Import target "LLVMTelemetry" for configuration "Debug"
-set_property(TARGET LLVMTelemetry APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMTelemetry PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMTelemetry.lib"
-  )
-
-# Import target "LLVMDlltoolDriver" for configuration "Debug"
-set_property(TARGET LLVMDlltoolDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMDlltoolDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMDlltoolDriver.lib"
-  )
-
-# Import target "LLVMLibDriver" for configuration "Debug"
-set_property(TARGET LLVMLibDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMLibDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMLibDriver.lib"
-  )
-
-# Import target "LLVMXRay" for configuration "Debug"
-set_property(TARGET LLVMXRay APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMXRay PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMXRay.lib"
-  )
-
-# Import target "LLVMWindowsDriver" for configuration "Debug"
-set_property(TARGET LLVMWindowsDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMWindowsDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMWindowsDriver.lib"
-  )
-
-# Import target "LLVMWindowsManifest" for configuration "Debug"
-set_property(TARGET LLVMWindowsManifest APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
-set_target_properties(LLVMWindowsManifest PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Debug/lib/LLVMWindowsManifest.lib"
-  )
 
 # Import target "LLVMDemangle" for configuration "Release"
 set_property(TARGET LLVMDemangle APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDemangle PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDemangle.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDemangle.a"
   )
 
 # Import target "LLVMSupport" for configuration "Release"
 set_property(TARGET LLVMSupport APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMSupport PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "ASM_MASM;C;CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMSupport.lib"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "ASM;C;CXX"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMSupport.a"
   )
 
 # Import target "LLVMSupportLSP" for configuration "Release"
 set_property(TARGET LLVMSupportLSP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMSupportLSP PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMSupportLSP.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMSupportLSP.a"
   )
 
 # Import target "LLVMTableGen" for configuration "Release"
 set_property(TARGET LLVMTableGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTableGen PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTableGen.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTableGen.a"
   )
 
 # Import target "LLVMTableGenBasic" for configuration "Release"
 set_property(TARGET LLVMTableGenBasic APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTableGenBasic PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTableGenBasic.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTableGenBasic.a"
   )
 
 # Import target "LLVMTableGenCommon" for configuration "Release"
 set_property(TARGET LLVMTableGenCommon APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTableGenCommon PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTableGenCommon.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTableGenCommon.a"
   )
 
 # Import target "llvm-tblgen" for configuration "Release"
 set_property(TARGET llvm-tblgen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(llvm-tblgen PROPERTIES
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/bin/llvm-tblgen.exe"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/bin/llvm-tblgen"
   )
 
 # Import target "LLVMCore" for configuration "Release"
 set_property(TARGET LLVMCore APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCore PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCore.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCore.a"
   )
 
 # Import target "LLVMABI" for configuration "Release"
 set_property(TARGET LLVMABI APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMABI PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMABI.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMABI.a"
   )
 
 # Import target "LLVMFuzzerCLI" for configuration "Release"
 set_property(TARGET LLVMFuzzerCLI APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFuzzerCLI PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFuzzerCLI.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFuzzerCLI.a"
   )
 
 # Import target "LLVMFuzzMutate" for configuration "Release"
 set_property(TARGET LLVMFuzzMutate APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFuzzMutate PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFuzzMutate.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFuzzMutate.a"
   )
 
 # Import target "LLVMFileCheck" for configuration "Release"
 set_property(TARGET LLVMFileCheck APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFileCheck PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFileCheck.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFileCheck.a"
   )
 
 # Import target "LLVMInterfaceStub" for configuration "Release"
 set_property(TARGET LLVMInterfaceStub APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMInterfaceStub PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMInterfaceStub.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMInterfaceStub.a"
   )
 
 # Import target "LLVMIRPrinter" for configuration "Release"
 set_property(TARGET LLVMIRPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMIRPrinter PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMIRPrinter.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMIRPrinter.a"
   )
 
 # Import target "LLVMIRReader" for configuration "Release"
 set_property(TARGET LLVMIRReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMIRReader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMIRReader.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMIRReader.a"
   )
 
 # Import target "LLVMCAS" for configuration "Release"
 set_property(TARGET LLVMCAS APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCAS PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCAS.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCAS.a"
   )
 
 # Import target "LLVMCGData" for configuration "Release"
 set_property(TARGET LLVMCGData APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCGData PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCGData.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCGData.a"
   )
 
 # Import target "LLVMCodeGen" for configuration "Release"
 set_property(TARGET LLVMCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCodeGen PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCodeGen.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCodeGen.a"
   )
 
 # Import target "LLVMSelectionDAG" for configuration "Release"
 set_property(TARGET LLVMSelectionDAG APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMSelectionDAG PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMSelectionDAG.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMSelectionDAG.a"
   )
 
 # Import target "LLVMAsmPrinter" for configuration "Release"
 set_property(TARGET LLVMAsmPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMAsmPrinter PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMAsmPrinter.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMAsmPrinter.a"
   )
 
 # Import target "LLVMMIRParser" for configuration "Release"
 set_property(TARGET LLVMMIRParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMMIRParser PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMMIRParser.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMMIRParser.a"
   )
 
 # Import target "LLVMGlobalISel" for configuration "Release"
 set_property(TARGET LLVMGlobalISel APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMGlobalISel PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMGlobalISel.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMGlobalISel.a"
   )
 
 # Import target "LLVMCodeGenTypes" for configuration "Release"
 set_property(TARGET LLVMCodeGenTypes APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCodeGenTypes PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCodeGenTypes.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCodeGenTypes.a"
   )
 
 # Import target "LLVMBinaryFormat" for configuration "Release"
 set_property(TARGET LLVMBinaryFormat APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMBinaryFormat PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMBinaryFormat.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMBinaryFormat.a"
   )
 
 # Import target "LLVMBitReader" for configuration "Release"
 set_property(TARGET LLVMBitReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMBitReader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMBitReader.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMBitReader.a"
   )
 
 # Import target "LLVMBitWriter" for configuration "Release"
 set_property(TARGET LLVMBitWriter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMBitWriter PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMBitWriter.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMBitWriter.a"
   )
 
 # Import target "LLVMBitstreamReader" for configuration "Release"
 set_property(TARGET LLVMBitstreamReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMBitstreamReader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMBitstreamReader.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMBitstreamReader.a"
   )
 
 # Import target "LLVMDWARFLinker" for configuration "Release"
 set_property(TARGET LLVMDWARFLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDWARFLinker PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDWARFLinker.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDWARFLinker.a"
   )
 
 # Import target "LLVMDWARFLinkerClassic" for configuration "Release"
 set_property(TARGET LLVMDWARFLinkerClassic APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDWARFLinkerClassic PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDWARFLinkerClassic.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDWARFLinkerClassic.a"
   )
 
 # Import target "LLVMDWARFLinkerParallel" for configuration "Release"
 set_property(TARGET LLVMDWARFLinkerParallel APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDWARFLinkerParallel PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDWARFLinkerParallel.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDWARFLinkerParallel.a"
   )
 
 # Import target "LLVMExtensions" for configuration "Release"
 set_property(TARGET LLVMExtensions APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMExtensions PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMExtensions.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMExtensions.a"
   )
 
 # Import target "LLVMFrontendAtomic" for configuration "Release"
 set_property(TARGET LLVMFrontendAtomic APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendAtomic PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendAtomic.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendAtomic.a"
   )
 
 # Import target "LLVMFrontendDirective" for configuration "Release"
 set_property(TARGET LLVMFrontendDirective APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendDirective PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendDirective.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendDirective.a"
   )
 
 # Import target "LLVMFrontendDriver" for configuration "Release"
 set_property(TARGET LLVMFrontendDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendDriver PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendDriver.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendDriver.a"
   )
 
 # Import target "LLVMFrontendHLSL" for configuration "Release"
 set_property(TARGET LLVMFrontendHLSL APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendHLSL PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendHLSL.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendHLSL.a"
   )
 
 # Import target "LLVMFrontendOpenACC" for configuration "Release"
 set_property(TARGET LLVMFrontendOpenACC APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendOpenACC PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendOpenACC.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendOpenACC.a"
   )
 
 # Import target "LLVMFrontendOpenMP" for configuration "Release"
 set_property(TARGET LLVMFrontendOpenMP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendOpenMP PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendOpenMP.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendOpenMP.a"
   )
 
 # Import target "LLVMFrontendOffloading" for configuration "Release"
 set_property(TARGET LLVMFrontendOffloading APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMFrontendOffloading PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMFrontendOffloading.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMFrontendOffloading.a"
   )
 
 # Import target "LLVMTransformUtils" for configuration "Release"
 set_property(TARGET LLVMTransformUtils APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTransformUtils PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTransformUtils.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTransformUtils.a"
   )
 
 # Import target "LLVMInstrumentation" for configuration "Release"
 set_property(TARGET LLVMInstrumentation APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMInstrumentation PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMInstrumentation.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMInstrumentation.a"
   )
 
 # Import target "LLVMAggressiveInstCombine" for configuration "Release"
 set_property(TARGET LLVMAggressiveInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMAggressiveInstCombine PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMAggressiveInstCombine.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMAggressiveInstCombine.a"
   )
 
 # Import target "LLVMInstCombine" for configuration "Release"
 set_property(TARGET LLVMInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMInstCombine PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMInstCombine.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMInstCombine.a"
   )
 
 # Import target "LLVMScalarOpts" for configuration "Release"
 set_property(TARGET LLVMScalarOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMScalarOpts PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMScalarOpts.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMScalarOpts.a"
   )
 
 # Import target "LLVMipo" for configuration "Release"
 set_property(TARGET LLVMipo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMipo PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMipo.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMipo.a"
   )
 
 # Import target "LLVMVectorize" for configuration "Release"
 set_property(TARGET LLVMVectorize APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMVectorize PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMVectorize.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMVectorize.a"
   )
 
 # Import target "LLVMObjCARCOpts" for configuration "Release"
 set_property(TARGET LLVMObjCARCOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMObjCARCOpts PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMObjCARCOpts.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMObjCARCOpts.a"
   )
 
 # Import target "LLVMCoroutines" for configuration "Release"
 set_property(TARGET LLVMCoroutines APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCoroutines PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCoroutines.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCoroutines.a"
   )
 
 # Import target "LLVMCFGuard" for configuration "Release"
 set_property(TARGET LLVMCFGuard APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCFGuard PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCFGuard.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCFGuard.a"
   )
 
 # Import target "LLVMHipStdPar" for configuration "Release"
 set_property(TARGET LLVMHipStdPar APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMHipStdPar PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMHipStdPar.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMHipStdPar.a"
   )
 
 # Import target "LLVMLinker" for configuration "Release"
 set_property(TARGET LLVMLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMLinker PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMLinker.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMLinker.a"
   )
 
 # Import target "LLVMAnalysis" for configuration "Release"
 set_property(TARGET LLVMAnalysis APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMAnalysis PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMAnalysis.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMAnalysis.a"
   )
 
 # Import target "LLVMDTLTO" for configuration "Release"
 set_property(TARGET LLVMDTLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDTLTO PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDTLTO.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDTLTO.a"
   )
 
 # Import target "LLVMLTO" for configuration "Release"
 set_property(TARGET LLVMLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMLTO PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMLTO.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMLTO.a"
   )
 
 # Import target "LLVMMC" for configuration "Release"
 set_property(TARGET LLVMMC APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMMC PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMMC.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMMC.a"
   )
 
 # Import target "LLVMMCParser" for configuration "Release"
 set_property(TARGET LLVMMCParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMMCParser PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMMCParser.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMMCParser.a"
   )
 
 # Import target "LLVMMCDisassembler" for configuration "Release"
 set_property(TARGET LLVMMCDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMMCDisassembler PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMMCDisassembler.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMMCDisassembler.a"
   )
 
 # Import target "LLVMMCA" for configuration "Release"
 set_property(TARGET LLVMMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMMCA PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMMCA.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMMCA.a"
   )
 
 # Import target "LLVMObjCopy" for configuration "Release"
 set_property(TARGET LLVMObjCopy APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMObjCopy PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMObjCopy.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMObjCopy.a"
   )
 
 # Import target "LLVMObject" for configuration "Release"
 set_property(TARGET LLVMObject APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMObject PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMObject.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMObject.a"
   )
 
 # Import target "LLVMObjectYAML" for configuration "Release"
 set_property(TARGET LLVMObjectYAML APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMObjectYAML PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMObjectYAML.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMObjectYAML.a"
   )
 
 # Import target "LLVMOption" for configuration "Release"
 set_property(TARGET LLVMOption APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMOption PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMOption.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMOption.a"
   )
 
 # Import target "LLVMRemarks" for configuration "Release"
 set_property(TARGET LLVMRemarks APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMRemarks PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMRemarks.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMRemarks.a"
   )
 
 # Import target "LLVMHTTP" for configuration "Release"
 set_property(TARGET LLVMHTTP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMHTTP PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMHTTP.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMHTTP.a"
   )
 
 # Import target "LLVMDebuginfod" for configuration "Release"
 set_property(TARGET LLVMDebuginfod APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebuginfod PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebuginfod.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebuginfod.a"
   )
 
 # Import target "LLVMDebugInfoDWARFLowLevel" for configuration "Release"
 set_property(TARGET LLVMDebugInfoDWARFLowLevel APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoDWARFLowLevel PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoDWARFLowLevel.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoDWARFLowLevel.a"
   )
 
 # Import target "LLVMDebugInfoDWARF" for configuration "Release"
 set_property(TARGET LLVMDebugInfoDWARF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoDWARF PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoDWARF.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoDWARF.a"
   )
 
 # Import target "LLVMDebugInfoGSYM" for configuration "Release"
 set_property(TARGET LLVMDebugInfoGSYM APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoGSYM PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoGSYM.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoGSYM.a"
   )
 
 # Import target "LLVMDebugInfoLogicalView" for configuration "Release"
 set_property(TARGET LLVMDebugInfoLogicalView APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoLogicalView PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoLogicalView.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoLogicalView.a"
   )
 
 # Import target "LLVMDebugInfoMSF" for configuration "Release"
 set_property(TARGET LLVMDebugInfoMSF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoMSF PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoMSF.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoMSF.a"
   )
 
 # Import target "LLVMDebugInfoCodeView" for configuration "Release"
 set_property(TARGET LLVMDebugInfoCodeView APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoCodeView PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoCodeView.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoCodeView.a"
   )
 
 # Import target "LLVMDebugInfoPDB" for configuration "Release"
 set_property(TARGET LLVMDebugInfoPDB APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoPDB PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoPDB.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoPDB.a"
   )
 
 # Import target "LLVMSymbolize" for configuration "Release"
 set_property(TARGET LLVMSymbolize APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMSymbolize PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMSymbolize.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMSymbolize.a"
   )
 
 # Import target "LLVMDebugInfoBTF" for configuration "Release"
 set_property(TARGET LLVMDebugInfoBTF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDebugInfoBTF PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDebugInfoBTF.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDebugInfoBTF.a"
   )
 
 # Import target "LLVMDWARFCFIChecker" for configuration "Release"
 set_property(TARGET LLVMDWARFCFIChecker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDWARFCFIChecker PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDWARFCFIChecker.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDWARFCFIChecker.a"
   )
 
 # Import target "LLVMDWP" for configuration "Release"
 set_property(TARGET LLVMDWP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDWP PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDWP.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDWP.a"
   )
 
 # Import target "LLVMExecutionEngine" for configuration "Release"
 set_property(TARGET LLVMExecutionEngine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMExecutionEngine PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMExecutionEngine.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMExecutionEngine.a"
   )
 
 # Import target "LLVMInterpreter" for configuration "Release"
 set_property(TARGET LLVMInterpreter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMInterpreter PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMInterpreter.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMInterpreter.a"
   )
 
 # Import target "LLVMJITLink" for configuration "Release"
 set_property(TARGET LLVMJITLink APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMJITLink PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMJITLink.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMJITLink.a"
   )
 
 # Import target "LLVMMCJIT" for configuration "Release"
 set_property(TARGET LLVMMCJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMMCJIT PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMMCJIT.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMMCJIT.a"
   )
 
 # Import target "LLVMOrcJIT" for configuration "Release"
 set_property(TARGET LLVMOrcJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMOrcJIT PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMOrcJIT.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMOrcJIT.a"
   )
 
 # Import target "LLVMOrcDebugging" for configuration "Release"
 set_property(TARGET LLVMOrcDebugging APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMOrcDebugging PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMOrcDebugging.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMOrcDebugging.a"
   )
 
 # Import target "LLVMOrcShared" for configuration "Release"
 set_property(TARGET LLVMOrcShared APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMOrcShared PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMOrcShared.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMOrcShared.a"
   )
 
 # Import target "LLVMOrcTargetProcess" for configuration "Release"
 set_property(TARGET LLVMOrcTargetProcess APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMOrcTargetProcess PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMOrcTargetProcess.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMOrcTargetProcess.a"
   )
 
 # Import target "LLVMRuntimeDyld" for configuration "Release"
 set_property(TARGET LLVMRuntimeDyld APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMRuntimeDyld PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMRuntimeDyld.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMRuntimeDyld.a"
   )
 
 # Import target "LLVMTarget" for configuration "Release"
 set_property(TARGET LLVMTarget APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTarget PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTarget.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTarget.a"
   )
 
 # Import target "LLVMX86CodeGen" for configuration "Release"
 set_property(TARGET LLVMX86CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMX86CodeGen PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMX86CodeGen.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMX86CodeGen.a"
   )
 
 # Import target "LLVMX86AsmParser" for configuration "Release"
 set_property(TARGET LLVMX86AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMX86AsmParser PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMX86AsmParser.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMX86AsmParser.a"
   )
 
 # Import target "LLVMX86Disassembler" for configuration "Release"
 set_property(TARGET LLVMX86Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMX86Disassembler PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMX86Disassembler.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMX86Disassembler.a"
   )
 
 # Import target "LLVMX86TargetMCA" for configuration "Release"
 set_property(TARGET LLVMX86TargetMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMX86TargetMCA PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMX86TargetMCA.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMX86TargetMCA.a"
   )
 
 # Import target "LLVMX86Desc" for configuration "Release"
 set_property(TARGET LLVMX86Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMX86Desc PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMX86Desc.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMX86Desc.a"
   )
 
 # Import target "LLVMX86Info" for configuration "Release"
 set_property(TARGET LLVMX86Info APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMX86Info PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMX86Info.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMX86Info.a"
   )
 
 # Import target "LLVMSandboxIR" for configuration "Release"
 set_property(TARGET LLVMSandboxIR APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMSandboxIR PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMSandboxIR.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMSandboxIR.a"
   )
 
 # Import target "LLVMAsmParser" for configuration "Release"
 set_property(TARGET LLVMAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMAsmParser PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMAsmParser.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMAsmParser.a"
   )
 
 # Import target "LLVMLineEditor" for configuration "Release"
 set_property(TARGET LLVMLineEditor APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMLineEditor PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMLineEditor.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMLineEditor.a"
   )
 
 # Import target "LLVMProfileData" for configuration "Release"
 set_property(TARGET LLVMProfileData APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMProfileData PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMProfileData.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMProfileData.a"
   )
 
 # Import target "LLVMCoverage" for configuration "Release"
 set_property(TARGET LLVMCoverage APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMCoverage PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMCoverage.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMCoverage.a"
   )
 
 # Import target "LLVMPasses" for configuration "Release"
 set_property(TARGET LLVMPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMPasses PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMPasses.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMPasses.a"
   )
 
 # Import target "LLVMPlugins" for configuration "Release"
 set_property(TARGET LLVMPlugins APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMPlugins PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMPlugins.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMPlugins.a"
   )
 
 # Import target "LLVMTargetParser" for configuration "Release"
 set_property(TARGET LLVMTargetParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTargetParser PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTargetParser.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTargetParser.a"
   )
 
 # Import target "LLVMTextAPI" for configuration "Release"
 set_property(TARGET LLVMTextAPI APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTextAPI PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTextAPI.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTextAPI.a"
   )
 
 # Import target "LLVMTextAPIBinaryReader" for configuration "Release"
 set_property(TARGET LLVMTextAPIBinaryReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTextAPIBinaryReader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTextAPIBinaryReader.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTextAPIBinaryReader.a"
   )
 
 # Import target "LLVMTelemetry" for configuration "Release"
 set_property(TARGET LLVMTelemetry APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMTelemetry PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMTelemetry.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMTelemetry.a"
   )
 
 # Import target "LLVMDlltoolDriver" for configuration "Release"
 set_property(TARGET LLVMDlltoolDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMDlltoolDriver PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMDlltoolDriver.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMDlltoolDriver.a"
   )
 
 # Import target "LLVMLibDriver" for configuration "Release"
 set_property(TARGET LLVMLibDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMLibDriver PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMLibDriver.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMLibDriver.a"
   )
 
 # Import target "LLVMXRay" for configuration "Release"
 set_property(TARGET LLVMXRay APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMXRay PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMXRay.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMXRay.a"
   )
 
 # Import target "LLVMWindowsDriver" for configuration "Release"
 set_property(TARGET LLVMWindowsDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMWindowsDriver PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMWindowsDriver.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMWindowsDriver.a"
   )
 
 # Import target "LLVMWindowsManifest" for configuration "Release"
 set_property(TARGET LLVMWindowsManifest APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMWindowsManifest PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/Release/lib/LLVMWindowsManifest.lib"
-  )
-
-# Import target "LLVMDemangle" for configuration "MinSizeRel"
-set_property(TARGET LLVMDemangle APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDemangle PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDemangle.lib"
-  )
-
-# Import target "LLVMSupport" for configuration "MinSizeRel"
-set_property(TARGET LLVMSupport APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMSupport PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "ASM_MASM;C;CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMSupport.lib"
-  )
-
-# Import target "LLVMSupportLSP" for configuration "MinSizeRel"
-set_property(TARGET LLVMSupportLSP APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMSupportLSP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMSupportLSP.lib"
-  )
-
-# Import target "LLVMTableGen" for configuration "MinSizeRel"
-set_property(TARGET LLVMTableGen APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTableGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTableGen.lib"
-  )
-
-# Import target "LLVMTableGenBasic" for configuration "MinSizeRel"
-set_property(TARGET LLVMTableGenBasic APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTableGenBasic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTableGenBasic.lib"
-  )
-
-# Import target "LLVMTableGenCommon" for configuration "MinSizeRel"
-set_property(TARGET LLVMTableGenCommon APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTableGenCommon PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTableGenCommon.lib"
-  )
-
-# Import target "llvm-tblgen" for configuration "MinSizeRel"
-set_property(TARGET llvm-tblgen APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(llvm-tblgen PROPERTIES
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/bin/llvm-tblgen.exe"
-  )
-
-# Import target "LLVMCore" for configuration "MinSizeRel"
-set_property(TARGET LLVMCore APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCore PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCore.lib"
-  )
-
-# Import target "LLVMABI" for configuration "MinSizeRel"
-set_property(TARGET LLVMABI APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMABI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMABI.lib"
-  )
-
-# Import target "LLVMFuzzerCLI" for configuration "MinSizeRel"
-set_property(TARGET LLVMFuzzerCLI APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFuzzerCLI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFuzzerCLI.lib"
-  )
-
-# Import target "LLVMFuzzMutate" for configuration "MinSizeRel"
-set_property(TARGET LLVMFuzzMutate APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFuzzMutate PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFuzzMutate.lib"
-  )
-
-# Import target "LLVMFileCheck" for configuration "MinSizeRel"
-set_property(TARGET LLVMFileCheck APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFileCheck PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFileCheck.lib"
-  )
-
-# Import target "LLVMInterfaceStub" for configuration "MinSizeRel"
-set_property(TARGET LLVMInterfaceStub APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMInterfaceStub PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMInterfaceStub.lib"
-  )
-
-# Import target "LLVMIRPrinter" for configuration "MinSizeRel"
-set_property(TARGET LLVMIRPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMIRPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMIRPrinter.lib"
-  )
-
-# Import target "LLVMIRReader" for configuration "MinSizeRel"
-set_property(TARGET LLVMIRReader APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMIRReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMIRReader.lib"
-  )
-
-# Import target "LLVMCAS" for configuration "MinSizeRel"
-set_property(TARGET LLVMCAS APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCAS PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCAS.lib"
-  )
-
-# Import target "LLVMCGData" for configuration "MinSizeRel"
-set_property(TARGET LLVMCGData APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCGData PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCGData.lib"
-  )
-
-# Import target "LLVMCodeGen" for configuration "MinSizeRel"
-set_property(TARGET LLVMCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCodeGen.lib"
-  )
-
-# Import target "LLVMSelectionDAG" for configuration "MinSizeRel"
-set_property(TARGET LLVMSelectionDAG APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMSelectionDAG PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMSelectionDAG.lib"
-  )
-
-# Import target "LLVMAsmPrinter" for configuration "MinSizeRel"
-set_property(TARGET LLVMAsmPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMAsmPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMAsmPrinter.lib"
-  )
-
-# Import target "LLVMMIRParser" for configuration "MinSizeRel"
-set_property(TARGET LLVMMIRParser APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMMIRParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMMIRParser.lib"
-  )
-
-# Import target "LLVMGlobalISel" for configuration "MinSizeRel"
-set_property(TARGET LLVMGlobalISel APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMGlobalISel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMGlobalISel.lib"
-  )
-
-# Import target "LLVMCodeGenTypes" for configuration "MinSizeRel"
-set_property(TARGET LLVMCodeGenTypes APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCodeGenTypes PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCodeGenTypes.lib"
-  )
-
-# Import target "LLVMBinaryFormat" for configuration "MinSizeRel"
-set_property(TARGET LLVMBinaryFormat APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMBinaryFormat PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMBinaryFormat.lib"
-  )
-
-# Import target "LLVMBitReader" for configuration "MinSizeRel"
-set_property(TARGET LLVMBitReader APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMBitReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMBitReader.lib"
-  )
-
-# Import target "LLVMBitWriter" for configuration "MinSizeRel"
-set_property(TARGET LLVMBitWriter APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMBitWriter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMBitWriter.lib"
-  )
-
-# Import target "LLVMBitstreamReader" for configuration "MinSizeRel"
-set_property(TARGET LLVMBitstreamReader APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMBitstreamReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMBitstreamReader.lib"
-  )
-
-# Import target "LLVMDWARFLinker" for configuration "MinSizeRel"
-set_property(TARGET LLVMDWARFLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDWARFLinker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDWARFLinker.lib"
-  )
-
-# Import target "LLVMDWARFLinkerClassic" for configuration "MinSizeRel"
-set_property(TARGET LLVMDWARFLinkerClassic APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDWARFLinkerClassic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDWARFLinkerClassic.lib"
-  )
-
-# Import target "LLVMDWARFLinkerParallel" for configuration "MinSizeRel"
-set_property(TARGET LLVMDWARFLinkerParallel APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDWARFLinkerParallel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDWARFLinkerParallel.lib"
-  )
-
-# Import target "LLVMExtensions" for configuration "MinSizeRel"
-set_property(TARGET LLVMExtensions APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMExtensions PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMExtensions.lib"
-  )
-
-# Import target "LLVMFrontendAtomic" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendAtomic APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendAtomic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendAtomic.lib"
-  )
-
-# Import target "LLVMFrontendDirective" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendDirective APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendDirective PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendDirective.lib"
-  )
-
-# Import target "LLVMFrontendDriver" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendDriver.lib"
-  )
-
-# Import target "LLVMFrontendHLSL" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendHLSL APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendHLSL PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendHLSL.lib"
-  )
-
-# Import target "LLVMFrontendOpenACC" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendOpenACC APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendOpenACC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendOpenACC.lib"
-  )
-
-# Import target "LLVMFrontendOpenMP" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendOpenMP APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendOpenMP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendOpenMP.lib"
-  )
-
-# Import target "LLVMFrontendOffloading" for configuration "MinSizeRel"
-set_property(TARGET LLVMFrontendOffloading APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMFrontendOffloading PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMFrontendOffloading.lib"
-  )
-
-# Import target "LLVMTransformUtils" for configuration "MinSizeRel"
-set_property(TARGET LLVMTransformUtils APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTransformUtils PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTransformUtils.lib"
-  )
-
-# Import target "LLVMInstrumentation" for configuration "MinSizeRel"
-set_property(TARGET LLVMInstrumentation APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMInstrumentation PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMInstrumentation.lib"
-  )
-
-# Import target "LLVMAggressiveInstCombine" for configuration "MinSizeRel"
-set_property(TARGET LLVMAggressiveInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMAggressiveInstCombine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMAggressiveInstCombine.lib"
-  )
-
-# Import target "LLVMInstCombine" for configuration "MinSizeRel"
-set_property(TARGET LLVMInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMInstCombine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMInstCombine.lib"
-  )
-
-# Import target "LLVMScalarOpts" for configuration "MinSizeRel"
-set_property(TARGET LLVMScalarOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMScalarOpts PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMScalarOpts.lib"
-  )
-
-# Import target "LLVMipo" for configuration "MinSizeRel"
-set_property(TARGET LLVMipo APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMipo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMipo.lib"
-  )
-
-# Import target "LLVMVectorize" for configuration "MinSizeRel"
-set_property(TARGET LLVMVectorize APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMVectorize PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMVectorize.lib"
-  )
-
-# Import target "LLVMObjCARCOpts" for configuration "MinSizeRel"
-set_property(TARGET LLVMObjCARCOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMObjCARCOpts PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMObjCARCOpts.lib"
-  )
-
-# Import target "LLVMCoroutines" for configuration "MinSizeRel"
-set_property(TARGET LLVMCoroutines APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCoroutines PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCoroutines.lib"
-  )
-
-# Import target "LLVMCFGuard" for configuration "MinSizeRel"
-set_property(TARGET LLVMCFGuard APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCFGuard PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCFGuard.lib"
-  )
-
-# Import target "LLVMHipStdPar" for configuration "MinSizeRel"
-set_property(TARGET LLVMHipStdPar APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMHipStdPar PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMHipStdPar.lib"
-  )
-
-# Import target "LLVMLinker" for configuration "MinSizeRel"
-set_property(TARGET LLVMLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMLinker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMLinker.lib"
-  )
-
-# Import target "LLVMAnalysis" for configuration "MinSizeRel"
-set_property(TARGET LLVMAnalysis APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMAnalysis PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMAnalysis.lib"
-  )
-
-# Import target "LLVMDTLTO" for configuration "MinSizeRel"
-set_property(TARGET LLVMDTLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDTLTO PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDTLTO.lib"
-  )
-
-# Import target "LLVMLTO" for configuration "MinSizeRel"
-set_property(TARGET LLVMLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMLTO PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMLTO.lib"
-  )
-
-# Import target "LLVMMC" for configuration "MinSizeRel"
-set_property(TARGET LLVMMC APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMMC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMMC.lib"
-  )
-
-# Import target "LLVMMCParser" for configuration "MinSizeRel"
-set_property(TARGET LLVMMCParser APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMMCParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMMCParser.lib"
-  )
-
-# Import target "LLVMMCDisassembler" for configuration "MinSizeRel"
-set_property(TARGET LLVMMCDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMMCDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMMCDisassembler.lib"
-  )
-
-# Import target "LLVMMCA" for configuration "MinSizeRel"
-set_property(TARGET LLVMMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMMCA PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMMCA.lib"
-  )
-
-# Import target "LLVMObjCopy" for configuration "MinSizeRel"
-set_property(TARGET LLVMObjCopy APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMObjCopy PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMObjCopy.lib"
-  )
-
-# Import target "LLVMObject" for configuration "MinSizeRel"
-set_property(TARGET LLVMObject APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMObject PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMObject.lib"
-  )
-
-# Import target "LLVMObjectYAML" for configuration "MinSizeRel"
-set_property(TARGET LLVMObjectYAML APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMObjectYAML PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMObjectYAML.lib"
-  )
-
-# Import target "LLVMOption" for configuration "MinSizeRel"
-set_property(TARGET LLVMOption APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMOption PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMOption.lib"
-  )
-
-# Import target "LLVMRemarks" for configuration "MinSizeRel"
-set_property(TARGET LLVMRemarks APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMRemarks PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMRemarks.lib"
-  )
-
-# Import target "LLVMHTTP" for configuration "MinSizeRel"
-set_property(TARGET LLVMHTTP APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMHTTP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMHTTP.lib"
-  )
-
-# Import target "LLVMDebuginfod" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebuginfod APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebuginfod PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebuginfod.lib"
-  )
-
-# Import target "LLVMDebugInfoDWARFLowLevel" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoDWARFLowLevel APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoDWARFLowLevel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoDWARFLowLevel.lib"
-  )
-
-# Import target "LLVMDebugInfoDWARF" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoDWARF APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoDWARF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoDWARF.lib"
-  )
-
-# Import target "LLVMDebugInfoGSYM" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoGSYM APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoGSYM PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoGSYM.lib"
-  )
-
-# Import target "LLVMDebugInfoLogicalView" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoLogicalView APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoLogicalView PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoLogicalView.lib"
-  )
-
-# Import target "LLVMDebugInfoMSF" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoMSF APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoMSF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoMSF.lib"
-  )
-
-# Import target "LLVMDebugInfoCodeView" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoCodeView APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoCodeView PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoCodeView.lib"
-  )
-
-# Import target "LLVMDebugInfoPDB" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoPDB APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoPDB PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoPDB.lib"
-  )
-
-# Import target "LLVMSymbolize" for configuration "MinSizeRel"
-set_property(TARGET LLVMSymbolize APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMSymbolize PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMSymbolize.lib"
-  )
-
-# Import target "LLVMDebugInfoBTF" for configuration "MinSizeRel"
-set_property(TARGET LLVMDebugInfoBTF APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDebugInfoBTF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDebugInfoBTF.lib"
-  )
-
-# Import target "LLVMDWARFCFIChecker" for configuration "MinSizeRel"
-set_property(TARGET LLVMDWARFCFIChecker APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDWARFCFIChecker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDWARFCFIChecker.lib"
-  )
-
-# Import target "LLVMDWP" for configuration "MinSizeRel"
-set_property(TARGET LLVMDWP APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDWP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDWP.lib"
-  )
-
-# Import target "LLVMExecutionEngine" for configuration "MinSizeRel"
-set_property(TARGET LLVMExecutionEngine APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMExecutionEngine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMExecutionEngine.lib"
-  )
-
-# Import target "LLVMInterpreter" for configuration "MinSizeRel"
-set_property(TARGET LLVMInterpreter APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMInterpreter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMInterpreter.lib"
-  )
-
-# Import target "LLVMJITLink" for configuration "MinSizeRel"
-set_property(TARGET LLVMJITLink APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMJITLink PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMJITLink.lib"
-  )
-
-# Import target "LLVMMCJIT" for configuration "MinSizeRel"
-set_property(TARGET LLVMMCJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMMCJIT PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMMCJIT.lib"
-  )
-
-# Import target "LLVMOrcJIT" for configuration "MinSizeRel"
-set_property(TARGET LLVMOrcJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMOrcJIT PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMOrcJIT.lib"
-  )
-
-# Import target "LLVMOrcDebugging" for configuration "MinSizeRel"
-set_property(TARGET LLVMOrcDebugging APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMOrcDebugging PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMOrcDebugging.lib"
-  )
-
-# Import target "LLVMOrcShared" for configuration "MinSizeRel"
-set_property(TARGET LLVMOrcShared APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMOrcShared PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMOrcShared.lib"
-  )
-
-# Import target "LLVMOrcTargetProcess" for configuration "MinSizeRel"
-set_property(TARGET LLVMOrcTargetProcess APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMOrcTargetProcess PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMOrcTargetProcess.lib"
-  )
-
-# Import target "LLVMRuntimeDyld" for configuration "MinSizeRel"
-set_property(TARGET LLVMRuntimeDyld APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMRuntimeDyld PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMRuntimeDyld.lib"
-  )
-
-# Import target "LLVMTarget" for configuration "MinSizeRel"
-set_property(TARGET LLVMTarget APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTarget PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTarget.lib"
-  )
-
-# Import target "LLVMX86CodeGen" for configuration "MinSizeRel"
-set_property(TARGET LLVMX86CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMX86CodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMX86CodeGen.lib"
-  )
-
-# Import target "LLVMX86AsmParser" for configuration "MinSizeRel"
-set_property(TARGET LLVMX86AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMX86AsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMX86AsmParser.lib"
-  )
-
-# Import target "LLVMX86Disassembler" for configuration "MinSizeRel"
-set_property(TARGET LLVMX86Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMX86Disassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMX86Disassembler.lib"
-  )
-
-# Import target "LLVMX86TargetMCA" for configuration "MinSizeRel"
-set_property(TARGET LLVMX86TargetMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMX86TargetMCA PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMX86TargetMCA.lib"
-  )
-
-# Import target "LLVMX86Desc" for configuration "MinSizeRel"
-set_property(TARGET LLVMX86Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMX86Desc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMX86Desc.lib"
-  )
-
-# Import target "LLVMX86Info" for configuration "MinSizeRel"
-set_property(TARGET LLVMX86Info APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMX86Info PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMX86Info.lib"
-  )
-
-# Import target "LLVMSandboxIR" for configuration "MinSizeRel"
-set_property(TARGET LLVMSandboxIR APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMSandboxIR PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMSandboxIR.lib"
-  )
-
-# Import target "LLVMAsmParser" for configuration "MinSizeRel"
-set_property(TARGET LLVMAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMAsmParser.lib"
-  )
-
-# Import target "LLVMLineEditor" for configuration "MinSizeRel"
-set_property(TARGET LLVMLineEditor APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMLineEditor PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMLineEditor.lib"
-  )
-
-# Import target "LLVMProfileData" for configuration "MinSizeRel"
-set_property(TARGET LLVMProfileData APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMProfileData PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMProfileData.lib"
-  )
-
-# Import target "LLVMCoverage" for configuration "MinSizeRel"
-set_property(TARGET LLVMCoverage APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMCoverage PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMCoverage.lib"
-  )
-
-# Import target "LLVMPasses" for configuration "MinSizeRel"
-set_property(TARGET LLVMPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMPasses PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMPasses.lib"
-  )
-
-# Import target "LLVMPlugins" for configuration "MinSizeRel"
-set_property(TARGET LLVMPlugins APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMPlugins PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMPlugins.lib"
-  )
-
-# Import target "LLVMTargetParser" for configuration "MinSizeRel"
-set_property(TARGET LLVMTargetParser APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTargetParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTargetParser.lib"
-  )
-
-# Import target "LLVMTextAPI" for configuration "MinSizeRel"
-set_property(TARGET LLVMTextAPI APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTextAPI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTextAPI.lib"
-  )
-
-# Import target "LLVMTextAPIBinaryReader" for configuration "MinSizeRel"
-set_property(TARGET LLVMTextAPIBinaryReader APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTextAPIBinaryReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTextAPIBinaryReader.lib"
-  )
-
-# Import target "LLVMTelemetry" for configuration "MinSizeRel"
-set_property(TARGET LLVMTelemetry APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMTelemetry PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMTelemetry.lib"
-  )
-
-# Import target "LLVMDlltoolDriver" for configuration "MinSizeRel"
-set_property(TARGET LLVMDlltoolDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMDlltoolDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMDlltoolDriver.lib"
-  )
-
-# Import target "LLVMLibDriver" for configuration "MinSizeRel"
-set_property(TARGET LLVMLibDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMLibDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMLibDriver.lib"
-  )
-
-# Import target "LLVMXRay" for configuration "MinSizeRel"
-set_property(TARGET LLVMXRay APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMXRay PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMXRay.lib"
-  )
-
-# Import target "LLVMWindowsDriver" for configuration "MinSizeRel"
-set_property(TARGET LLVMWindowsDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMWindowsDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMWindowsDriver.lib"
-  )
-
-# Import target "LLVMWindowsManifest" for configuration "MinSizeRel"
-set_property(TARGET LLVMWindowsManifest APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(LLVMWindowsManifest PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/MinSizeRel/lib/LLVMWindowsManifest.lib"
-  )
-
-# Import target "LLVMDemangle" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDemangle APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDemangle PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDemangle.lib"
-  )
-
-# Import target "LLVMSupport" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMSupport APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMSupport PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "ASM_MASM;C;CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMSupport.lib"
-  )
-
-# Import target "LLVMSupportLSP" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMSupportLSP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMSupportLSP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMSupportLSP.lib"
-  )
-
-# Import target "LLVMTableGen" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTableGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTableGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTableGen.lib"
-  )
-
-# Import target "LLVMTableGenBasic" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTableGenBasic APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTableGenBasic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTableGenBasic.lib"
-  )
-
-# Import target "LLVMTableGenCommon" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTableGenCommon APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTableGenCommon PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTableGenCommon.lib"
-  )
-
-# Import target "llvm-tblgen" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-tblgen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-tblgen PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/bin/llvm-tblgen.exe"
-  )
-
-# Import target "LLVMCore" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCore APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCore PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCore.lib"
-  )
-
-# Import target "LLVMABI" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMABI APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMABI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMABI.lib"
-  )
-
-# Import target "LLVMFuzzerCLI" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFuzzerCLI APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFuzzerCLI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFuzzerCLI.lib"
-  )
-
-# Import target "LLVMFuzzMutate" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFuzzMutate APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFuzzMutate PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFuzzMutate.lib"
-  )
-
-# Import target "LLVMFileCheck" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFileCheck APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFileCheck PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFileCheck.lib"
-  )
-
-# Import target "LLVMInterfaceStub" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMInterfaceStub APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMInterfaceStub PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMInterfaceStub.lib"
-  )
-
-# Import target "LLVMIRPrinter" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMIRPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMIRPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMIRPrinter.lib"
-  )
-
-# Import target "LLVMIRReader" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMIRReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMIRReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMIRReader.lib"
-  )
-
-# Import target "LLVMCAS" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCAS APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCAS PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCAS.lib"
-  )
-
-# Import target "LLVMCGData" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCGData APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCGData PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCGData.lib"
-  )
-
-# Import target "LLVMCodeGen" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCodeGen.lib"
-  )
-
-# Import target "LLVMSelectionDAG" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMSelectionDAG APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMSelectionDAG PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMSelectionDAG.lib"
-  )
-
-# Import target "LLVMAsmPrinter" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMAsmPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMAsmPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMAsmPrinter.lib"
-  )
-
-# Import target "LLVMMIRParser" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMMIRParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMMIRParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMMIRParser.lib"
-  )
-
-# Import target "LLVMGlobalISel" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMGlobalISel APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMGlobalISel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMGlobalISel.lib"
-  )
-
-# Import target "LLVMCodeGenTypes" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCodeGenTypes APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCodeGenTypes PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCodeGenTypes.lib"
-  )
-
-# Import target "LLVMBinaryFormat" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMBinaryFormat APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMBinaryFormat PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMBinaryFormat.lib"
-  )
-
-# Import target "LLVMBitReader" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMBitReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMBitReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMBitReader.lib"
-  )
-
-# Import target "LLVMBitWriter" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMBitWriter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMBitWriter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMBitWriter.lib"
-  )
-
-# Import target "LLVMBitstreamReader" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMBitstreamReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMBitstreamReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMBitstreamReader.lib"
-  )
-
-# Import target "LLVMDWARFLinker" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDWARFLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDWARFLinker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDWARFLinker.lib"
-  )
-
-# Import target "LLVMDWARFLinkerClassic" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDWARFLinkerClassic APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDWARFLinkerClassic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDWARFLinkerClassic.lib"
-  )
-
-# Import target "LLVMDWARFLinkerParallel" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDWARFLinkerParallel APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDWARFLinkerParallel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDWARFLinkerParallel.lib"
-  )
-
-# Import target "LLVMExtensions" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMExtensions APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMExtensions PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMExtensions.lib"
-  )
-
-# Import target "LLVMFrontendAtomic" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendAtomic APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendAtomic PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendAtomic.lib"
-  )
-
-# Import target "LLVMFrontendDirective" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendDirective APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendDirective PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendDirective.lib"
-  )
-
-# Import target "LLVMFrontendDriver" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendDriver.lib"
-  )
-
-# Import target "LLVMFrontendHLSL" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendHLSL APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendHLSL PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendHLSL.lib"
-  )
-
-# Import target "LLVMFrontendOpenACC" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendOpenACC APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendOpenACC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendOpenACC.lib"
-  )
-
-# Import target "LLVMFrontendOpenMP" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendOpenMP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendOpenMP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendOpenMP.lib"
-  )
-
-# Import target "LLVMFrontendOffloading" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMFrontendOffloading APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMFrontendOffloading PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMFrontendOffloading.lib"
-  )
-
-# Import target "LLVMTransformUtils" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTransformUtils APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTransformUtils PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTransformUtils.lib"
-  )
-
-# Import target "LLVMInstrumentation" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMInstrumentation APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMInstrumentation PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMInstrumentation.lib"
-  )
-
-# Import target "LLVMAggressiveInstCombine" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMAggressiveInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMAggressiveInstCombine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMAggressiveInstCombine.lib"
-  )
-
-# Import target "LLVMInstCombine" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMInstCombine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMInstCombine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMInstCombine.lib"
-  )
-
-# Import target "LLVMScalarOpts" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMScalarOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMScalarOpts PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMScalarOpts.lib"
-  )
-
-# Import target "LLVMipo" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMipo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMipo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMipo.lib"
-  )
-
-# Import target "LLVMVectorize" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMVectorize APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMVectorize PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMVectorize.lib"
-  )
-
-# Import target "LLVMObjCARCOpts" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMObjCARCOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMObjCARCOpts PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMObjCARCOpts.lib"
-  )
-
-# Import target "LLVMCoroutines" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCoroutines APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCoroutines PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCoroutines.lib"
-  )
-
-# Import target "LLVMCFGuard" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCFGuard APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCFGuard PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCFGuard.lib"
-  )
-
-# Import target "LLVMHipStdPar" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMHipStdPar APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMHipStdPar PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMHipStdPar.lib"
-  )
-
-# Import target "LLVMLinker" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLinker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMLinker.lib"
-  )
-
-# Import target "LLVMAnalysis" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMAnalysis APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMAnalysis PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMAnalysis.lib"
-  )
-
-# Import target "LLVMDTLTO" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDTLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDTLTO PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDTLTO.lib"
-  )
-
-# Import target "LLVMLTO" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLTO PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMLTO.lib"
-  )
-
-# Import target "LLVMMC" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMMC APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMMC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMMC.lib"
-  )
-
-# Import target "LLVMMCParser" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMMCParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMMCParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMMCParser.lib"
-  )
-
-# Import target "LLVMMCDisassembler" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMMCDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMMCDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMMCDisassembler.lib"
-  )
-
-# Import target "LLVMMCA" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMMCA PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMMCA.lib"
-  )
-
-# Import target "LLVMObjCopy" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMObjCopy APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMObjCopy PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMObjCopy.lib"
-  )
-
-# Import target "LLVMObject" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMObject APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMObject PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMObject.lib"
-  )
-
-# Import target "LLVMObjectYAML" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMObjectYAML APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMObjectYAML PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMObjectYAML.lib"
-  )
-
-# Import target "LLVMOption" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMOption APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMOption PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMOption.lib"
-  )
-
-# Import target "LLVMRemarks" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMRemarks APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMRemarks PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMRemarks.lib"
-  )
-
-# Import target "LLVMHTTP" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMHTTP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMHTTP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMHTTP.lib"
-  )
-
-# Import target "LLVMDebuginfod" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebuginfod APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebuginfod PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebuginfod.lib"
-  )
-
-# Import target "LLVMDebugInfoDWARFLowLevel" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoDWARFLowLevel APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoDWARFLowLevel PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoDWARFLowLevel.lib"
-  )
-
-# Import target "LLVMDebugInfoDWARF" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoDWARF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoDWARF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoDWARF.lib"
-  )
-
-# Import target "LLVMDebugInfoGSYM" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoGSYM APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoGSYM PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoGSYM.lib"
-  )
-
-# Import target "LLVMDebugInfoLogicalView" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoLogicalView APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoLogicalView PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoLogicalView.lib"
-  )
-
-# Import target "LLVMDebugInfoMSF" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoMSF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoMSF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoMSF.lib"
-  )
-
-# Import target "LLVMDebugInfoCodeView" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoCodeView APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoCodeView PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoCodeView.lib"
-  )
-
-# Import target "LLVMDebugInfoPDB" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoPDB APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoPDB PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoPDB.lib"
-  )
-
-# Import target "LLVMSymbolize" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMSymbolize APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMSymbolize PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMSymbolize.lib"
-  )
-
-# Import target "LLVMDebugInfoBTF" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoBTF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoBTF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDebugInfoBTF.lib"
-  )
-
-# Import target "LLVMDWARFCFIChecker" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDWARFCFIChecker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDWARFCFIChecker PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDWARFCFIChecker.lib"
-  )
-
-# Import target "LLVMDWP" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDWP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDWP PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDWP.lib"
-  )
-
-# Import target "LLVMExecutionEngine" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMExecutionEngine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMExecutionEngine PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMExecutionEngine.lib"
-  )
-
-# Import target "LLVMInterpreter" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMInterpreter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMInterpreter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMInterpreter.lib"
-  )
-
-# Import target "LLVMJITLink" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMJITLink APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMJITLink PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMJITLink.lib"
-  )
-
-# Import target "LLVMMCJIT" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMMCJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMMCJIT PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMMCJIT.lib"
-  )
-
-# Import target "LLVMOrcJIT" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMOrcJIT APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMOrcJIT PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMOrcJIT.lib"
-  )
-
-# Import target "LLVMOrcDebugging" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMOrcDebugging APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMOrcDebugging PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMOrcDebugging.lib"
-  )
-
-# Import target "LLVMOrcShared" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMOrcShared APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMOrcShared PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMOrcShared.lib"
-  )
-
-# Import target "LLVMOrcTargetProcess" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMOrcTargetProcess APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMOrcTargetProcess PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMOrcTargetProcess.lib"
-  )
-
-# Import target "LLVMRuntimeDyld" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMRuntimeDyld APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMRuntimeDyld PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMRuntimeDyld.lib"
-  )
-
-# Import target "LLVMTarget" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTarget APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTarget PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTarget.lib"
-  )
-
-# Import target "LLVMX86CodeGen" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMX86CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMX86CodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMX86CodeGen.lib"
-  )
-
-# Import target "LLVMX86AsmParser" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMX86AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMX86AsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMX86AsmParser.lib"
-  )
-
-# Import target "LLVMX86Disassembler" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMX86Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMX86Disassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMX86Disassembler.lib"
-  )
-
-# Import target "LLVMX86TargetMCA" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMX86TargetMCA APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMX86TargetMCA PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMX86TargetMCA.lib"
-  )
-
-# Import target "LLVMX86Desc" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMX86Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMX86Desc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMX86Desc.lib"
-  )
-
-# Import target "LLVMX86Info" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMX86Info APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMX86Info PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMX86Info.lib"
-  )
-
-# Import target "LLVMSandboxIR" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMSandboxIR APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMSandboxIR PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMSandboxIR.lib"
-  )
-
-# Import target "LLVMAsmParser" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMAsmParser.lib"
-  )
-
-# Import target "LLVMLineEditor" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLineEditor APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLineEditor PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMLineEditor.lib"
-  )
-
-# Import target "LLVMProfileData" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMProfileData APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMProfileData PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMProfileData.lib"
-  )
-
-# Import target "LLVMCoverage" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCoverage APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCoverage PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMCoverage.lib"
-  )
-
-# Import target "LLVMPasses" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMPasses PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMPasses.lib"
-  )
-
-# Import target "LLVMPlugins" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMPlugins APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMPlugins PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMPlugins.lib"
-  )
-
-# Import target "LLVMTargetParser" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTargetParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTargetParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTargetParser.lib"
-  )
-
-# Import target "LLVMTextAPI" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTextAPI APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTextAPI PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTextAPI.lib"
-  )
-
-# Import target "LLVMTextAPIBinaryReader" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTextAPIBinaryReader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTextAPIBinaryReader PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTextAPIBinaryReader.lib"
-  )
-
-# Import target "LLVMTelemetry" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMTelemetry APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMTelemetry PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMTelemetry.lib"
-  )
-
-# Import target "LLVMDlltoolDriver" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDlltoolDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDlltoolDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMDlltoolDriver.lib"
-  )
-
-# Import target "LLVMLibDriver" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLibDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLibDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMLibDriver.lib"
-  )
-
-# Import target "LLVMXRay" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMXRay APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMXRay PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMXRay.lib"
-  )
-
-# Import target "LLVMWindowsDriver" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMWindowsDriver APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMWindowsDriver PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMWindowsDriver.lib"
-  )
-
-# Import target "LLVMWindowsManifest" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMWindowsManifest APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMWindowsManifest PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/RelWithDebInfo/lib/LLVMWindowsManifest.lib"
+  IMPORTED_LOCATION_RELEASE "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/libLLVMWindowsManifest.a"
   )
 
 # This file does not depend on other imported targets which have
