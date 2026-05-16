@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\Architecture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\ArchitectureSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\InterfaceFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\TextStubV5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\PackedVersion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\Platform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\RecordsSlice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\RecordVisitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\Symbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\SymbolSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\Target.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\TextAPIError.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\TextStub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\TextStubCommon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\TextAPIContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\TextStubCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\Architecture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\ArchitectureSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\DylibReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\FileTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\InterfaceFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\PackedVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\Platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\Record.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\RecordVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\RecordsSlice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\Symbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\SymbolSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\Target.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\TextAPIError.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\TextAPIReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\TextAPIWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\TextAPI\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\TextAPI\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{87710DDF-F811-3822-A4AB-356A2253038F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{59DF061E-57DC-33F3-94FD-B07E5CD94B4B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

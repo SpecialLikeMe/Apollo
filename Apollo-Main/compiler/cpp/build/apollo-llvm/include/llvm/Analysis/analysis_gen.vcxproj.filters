@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\97e4cf922a8c120cf79dd96d1107995c\TargetLibraryInfo.inc.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\abcb26244652c86fffcafad0138a53b9\analysis_gen.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Analysis\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\Analysis\CMakeFiles\analysis_gen" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{42A6E586-FF67-3935-BB0E-E09A81F107CC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

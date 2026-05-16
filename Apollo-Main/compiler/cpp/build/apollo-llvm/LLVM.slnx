@@ -1,0 +1,2685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Solution>
+	<Configurations>
+		<BuildType Name="Debug"/>
+		<BuildType Name="Release"/>
+		<BuildType Name="MinSizeRel"/>
+		<BuildType Name="RelWithDebInfo"/>
+		<Platform Name="x64"/>
+	</Configurations>
+	<Folder Name="/CMakePredefinedTargets/">
+		<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d4d03d78-e951-31f1-9976-0877979e53ac" DefaultStartup="true">
+			<BuildDependency Project="lib/ABI/LLVMABI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/AsmPrinter/LLVMAsmPrinter.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CAS/LLVMCAS.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/Coverage/LLVMCoverage.vcxproj"/>
+			<BuildDependency Project="lib/DTLTO/LLVMDTLTO.vcxproj"/>
+			<BuildDependency Project="lib/DWARFCFIChecker/LLVMDWARFCFIChecker.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/LLVMDWARFLinker.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/Classic/LLVMDWARFLinkerClassic.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/Parallel/LLVMDWARFLinkerParallel.vcxproj"/>
+			<BuildDependency Project="lib/DWP/LLVMDWP.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/LogicalView/LLVMDebugInfoLogicalView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Debuginfod/LLVMDebuginfod.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/ToolDrivers/llvm-dlltool/LLVMDlltoolDriver.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj"/>
+			<BuildDependency Project="lib/Extensions/LLVMExtensions.vcxproj"/>
+			<BuildDependency Project="lib/FileCheck/LLVMFileCheck.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Driver/LLVMFrontendDriver.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenACC/LLVMFrontendOpenACC.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/FuzzMutate/LLVMFuzzMutate.vcxproj"/>
+			<BuildDependency Project="lib/FuzzMutate/LLVMFuzzerCLI.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/HTTP/LLVMHTTP.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/InterfaceStub/LLVMInterfaceStub.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Interpreter/LLVMInterpreter.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/JITLink/LLVMJITLink.vcxproj"/>
+			<BuildDependency Project="lib/LTO/LLVMLTO.vcxproj"/>
+			<BuildDependency Project="lib/ToolDrivers/llvm-lib/LLVMLibDriver.vcxproj"/>
+			<BuildDependency Project="lib/LineEditor/LLVMLineEditor.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MCA/LLVMMCA.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/MCJIT/LLVMMCJIT.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/MIRParser/LLVMMIRParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/ObjCopy/LLVMObjCopy.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Debugging/LLVMOrcDebugging.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/LLVMOrcJIT.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/Passes/LLVMPasses.vcxproj"/>
+			<BuildDependency Project="lib/Plugins/LLVMPlugins.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/Support/LSP/LLVMSupportLSP.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Basic/LLVMTableGenBasic.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Common/LLVMTableGenCommon.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Telemetry/LLVMTelemetry.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/BinaryReader/LLVMTextAPIBinaryReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/WindowsDriver/LLVMWindowsDriver.vcxproj"/>
+			<BuildDependency Project="lib/WindowsManifest/LLVMWindowsManifest.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/AsmParser/LLVMX86AsmParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/LLVMX86CodeGen.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCTargetDesc/LLVMX86Desc.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/Disassembler/LLVMX86Disassembler.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCA/LLVMX86TargetMCA.vcxproj"/>
+			<BuildDependency Project="lib/XRay/LLVMXRay.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-tblgen.vcxproj"/>
+			<BuildDependency Project="include/llvm/Support/llvm_vcsrevision_h.vcxproj"/>
+		</Project>
+		<Project Path="INSTALL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="79d3769a-8980-3bf8-841f-ed54b3ae4f25">
+			<BuildDependency Project="ALL_BUILD.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="PACKAGE.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9b5a878a-a6f6-397e-ab31-2763a0d0141d">
+			<BuildDependency Project="ALL_BUILD.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="../ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0a3de1d2-3e0b-3dad-bcb3-2384d209f094"/>
+	</Folder>
+	<Folder Name="/LLVM/"/>
+	<Folder Name="/LLVM/Bindings/"/>
+	<Folder Name="/LLVM/Bindings/OCaml/">
+		<Project Path="ocaml_all.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="c1643094-a004-31e1-88ce-dfaa67b6a22d">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="ocaml_make_directory.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d0a4b26d-e6bc-3994-8afd-31d3b20e8f85">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Component Groups/">
+		<Project Path="lib/Engine.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7408a0a8-262c-3daa-aa39-08e5ca238b89">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="lib/Native.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="30ed40c6-87c1-344b-a8cb-7a11f2391b36">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="lib/NativeCodeGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="e6813d4a-4c22-3dbe-a6bf-0eb0254983fd">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="lib/Target/X86/X86.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="c4331bdf-c0d1-365e-b4a2-ae353329d13d">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="lib/all-targets.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="98319a33-df3e-388e-b931-119b2c7a45cd">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Distribution/">
+		<Project Path="distribution.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="dc7496ac-43cf-3aee-b1b3-66490f259371">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="install-distribution.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="184beb44-5fb3-364a-8457-1679ee97a161">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="install-distribution-stripped.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="986fa213-25fb-324d-9c4f-718a39aa9372">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Executables/">
+		<Project Path="utils/TableGen/llvm-min-tblgen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="478a0f3a-4967-3470-83ae-5d6597031335">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Basic/obj.LLVMTableGenBasic.vcxproj"/>
+		</Project>
+		<Project Path="utils/TableGen/llvm-tblgen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a8abc125-ad91-3045-ba20-0d1bd21f53cc">
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Basic/obj.LLVMTableGenBasic.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Common/obj.LLVMTableGenCommon.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Libraries/">
+		<Project Path="lib/ABI/LLVMABI.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="bcdc9925-3454-3821-a62a-9d470a9b21b5">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="875a3e0c-3d63-3db9-b79c-fbcc1b263754">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Analysis/LLVMAnalysis.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5b519fa9-db1c-3397-85e6-81c530b35310">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/Analysis/analysis_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/AsmParser/LLVMAsmParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="aaeb52c8-bada-36a6-bc48-ff46854fffbd">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/CodeGen/AsmPrinter/LLVMAsmPrinter.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="851ade54-e957-3a29-b52e-f9a92d1621d8">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/BinaryFormat/LLVMBinaryFormat.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="2a3dedc9-4926-3b1d-82d3-48ab2ec1bd9a">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Bitcode/Reader/LLVMBitReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3f6a79c2-9833-355c-80c7-b02c5306e195">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Bitcode/Writer/LLVMBitWriter.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a2dc6325-af24-354a-88d7-1c9493112cf3">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="265ad086-4be5-3317-ab00-1c4e2b24462c">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/CAS/LLVMCAS.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="32b4810d-8a4a-3220-972f-e1f410477918">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="c19ac7ea-9911-3108-91a8-c40a5f21c33b">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/CGData/LLVMCGData.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="399a4122-d938-3763-9dd5-321d32f02d19">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/CodeGen/LLVMCodeGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7f0b4ed4-c99c-3d56-a991-78f5df21edff">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/CodeGen/vt_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9bc67d25-d05d-3ca4-8020-0ed278fc091e">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/CodeGen/vt_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/IR/LLVMCore.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3a06df54-3572-3a90-bc65-9588322af4e0">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d894a838-fdc8-38e5-9f79-0101c7123cdf">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ProfileData/Coverage/LLVMCoverage.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8290e0ed-1d4d-3452-ac70-866c5dd57407">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/DTLTO/LLVMDTLTO.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="bbe7aeb1-ee53-3727-804b-46fa192660ee">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Extensions/LLVMExtensions.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/LTO/LLVMLTO.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/Passes/LLVMPasses.vcxproj"/>
+			<BuildDependency Project="lib/Plugins/LLVMPlugins.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DWARFCFIChecker/LLVMDWARFCFIChecker.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="df1e158e-fe37-3cd1-b673-cbeda846b6eb">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DWARFLinker/LLVMDWARFLinker.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="58102387-238b-31c5-8a1d-3ef119a81190">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/DWARFLinker/Classic/LLVMDWARFLinkerClassic.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="c59b43f1-d1a0-34ba-91e8-a46f890cfe13">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/AsmPrinter/LLVMAsmPrinter.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/LLVMDWARFLinker.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/DWARFLinker/Parallel/LLVMDWARFLinkerParallel.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="df7f2370-45f7-3c9e-a200-8aa40984ca03">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/AsmPrinter/LLVMAsmPrinter.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/LLVMDWARFLinker.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/DWP/LLVMDWP.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="96289bef-9761-3090-8cb4-6d1a8c58dde3">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="4844bb28-ac4f-3c3a-a15e-b09ff2d0ba49">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5fb30604-68a8-3533-8f8b-5a94b2f29eed">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="401d47c3-7ab2-3351-a552-bcde02cf45ef">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="69014312-9841-3689-9e42-68c7da84a950">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b136b3e7-450f-37a3-8563-ab51e421ac82">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/LogicalView/LLVMDebugInfoLogicalView.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a8be41fa-5678-315c-8244-07a35752f14a">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="de606306-6cfd-34ff-88d5-97a00c86d86f">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="16d28f12-8efd-3221-9ff4-2863bd072385">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Debuginfod/LLVMDebuginfod.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a15c752b-988e-3aa6-a561-aa51df5576d8">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/HTTP/LLVMHTTP.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Demangle/LLVMDemangle.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3ba74e13-f39b-3cf6-824b-53bcd4ca471c">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ToolDrivers/llvm-dlltool/LLVMDlltoolDriver.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3fc0737c-2625-375f-8c3a-1880324ca720">
+			<BuildDependency Project="lib/ToolDrivers/llvm-dlltool/DllOptionsTableGen.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="fab9a165-4d3b-3049-96c2-184e6548afcd">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Extensions/LLVMExtensions.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="60d2c4b1-3d3d-3e0e-be17-9f9cafe17be7">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/FileCheck/LLVMFileCheck.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="da9b9410-cd2b-3d75-a15b-3ca817792dad">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3e6ef0f1-c728-3716-a1a4-2d44ea5e6272">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="fefe0f58-96c6-30f4-b918-608e920ffe2e">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/Driver/LLVMFrontendDriver.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8309f8f5-a56a-3437-9ba5-6872d0d9674e">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9acc4384-7408-346e-941e-133b680451be">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b7c97956-4c8c-38e6-9f17-10d218ae1c9b">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/OpenACC/LLVMFrontendOpenACC.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="f7a2120e-113f-3684-9ef6-79d72ced8419">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/Frontend/OpenACC/acc_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0c031a0a-36a1-32b6-8c32-6f07aa9b47b8">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/Frontend/OpenMP/omp_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/FuzzMutate/LLVMFuzzMutate.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="83740bc4-1290-3f11-8637-2ccb97cabffc">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/FuzzMutate/LLVMFuzzerCLI.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="cb780b06-759e-3afe-b26e-cd8cd4843042">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="25028d85-242b-3067-833a-de568f2c1e38">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/HTTP/LLVMHTTP.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="bed9eeeb-5f8b-32d4-bb9f-dad592134f82">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="fc5c368c-6362-3687-b2ea-32080910c4ce">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/IRPrinter/LLVMIRPrinter.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="769d1b4b-50e9-3c98-b278-4422a00f4ad6">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/IRReader/LLVMIRReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7fb5429e-89b6-35fc-8066-6db56b7e30d0">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="4aaff5d8-4463-39bc-ae08-b3691c1a3877">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="91631b7a-f6c6-376f-ab28-1297805d8c19">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/InterfaceStub/LLVMInterfaceStub.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8c394c15-3b15-357a-b60c-afcf74762214">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/Interpreter/LLVMInterpreter.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b073fea3-7250-329c-9db5-bd140106d4be">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/JITLink/LLVMJITLink.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="dcdb5136-6ddd-3678-80d3-372fa136b69c">
+			<BuildDependency Project="lib/ExecutionEngine/JITLink/JITLinkTableGen.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/LTO/LLVMLTO.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5deb13be-3cd7-3414-bbf9-2bd723be3c40">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Extensions/LLVMExtensions.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/Passes/LLVMPasses.vcxproj"/>
+			<BuildDependency Project="lib/Plugins/LLVMPlugins.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/Support/llvm_vcsrevision_h.vcxproj"/>
+		</Project>
+		<Project Path="lib/ToolDrivers/llvm-lib/LLVMLibDriver.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7a22929f-a3c1-3c85-a2bb-2e27612d7850">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/ToolDrivers/llvm-lib/LibOptionsTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/LineEditor/LLVMLineEditor.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b17c90ba-f9fc-38bf-a81a-d07b41875ecd">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Linker/LLVMLinker.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7ea8f6ca-4ae8-3afa-865c-9b3c2d2e777b">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/MC/LLVMMC.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="27c7aa12-0f85-3414-a166-a5fc38d4d9ec">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/MCA/LLVMMCA.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0d0483b5-5c7a-30fe-9b91-1887c3a8c8e4">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="32fc0d08-3ef3-334e-ae39-3856438b3636">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/MCJIT/LLVMMCJIT.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b90be9ea-7971-3122-aec7-2a3e9cca0bfa">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/MC/MCParser/LLVMMCParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="dd6b5283-2780-303e-86e2-0d547ca5f3b7">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/CodeGen/MIRParser/LLVMMIRParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b479ba9f-6634-3e2e-8bfa-8437ec983478">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="65f417bd-ec11-34af-a652-78828fbc4101">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ObjCopy/LLVMObjCopy.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a512d09f-53ac-390a-9dd9-882dc145059b">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Object/LLVMObject.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ebe7a514-02f2-3602-b989-3b7cf55dccf2">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/Support/llvm_vcsrevision_h.vcxproj"/>
+		</Project>
+		<Project Path="lib/ObjectYAML/LLVMObjectYAML.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d2350cb2-19a4-3dbb-b4ce-ce3344736231">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Option/LLVMOption.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7c4ecf41-d386-322d-b969-e24bb508438f">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/Orc/Debugging/LLVMOrcDebugging.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="cbeaed39-2b99-37a4-ac0f-576e68d416e4">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/JITLink/LLVMJITLink.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/LLVMOrcJIT.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/Passes/LLVMPasses.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/WindowsDriver/LLVMWindowsDriver.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/Orc/LLVMOrcJIT.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="bae45bb8-ea82-3591-8a1d-d42dcee09d9f">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/JITLink/LLVMJITLink.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/Passes/LLVMPasses.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/WindowsDriver/LLVMWindowsDriver.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="e058e713-848b-31b1-9b9e-44e18f2f37e6">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b6b29c2c-85eb-3909-b467-64234a7a98ad">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Passes/LLVMPasses.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="bd068844-401b-395e-b282-e01b508d05bd">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Plugins/LLVMPlugins.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9746dd9f-a914-359c-9f0d-b07d450210ec">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/ProfileData/LLVMProfileData.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d1b49f3b-ac72-36d2-acd2-9c77a4ea7473">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Remarks/LLVMRemarks.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="1dd19858-6146-3bbd-bfe6-d8a9c72597d6">
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="39545264-ae00-3745-94c5-fe4e80a307c6">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/SandboxIR/LLVMSandboxIR.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9ce68a52-3f7a-3f24-9d13-b18452f5d912">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ac326948-b26e-3f00-84de-c504b34eba71">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9c18bdb8-e1f2-381e-81fc-aa0ddc8d1220">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Support/LLVMSupport.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="12f775a1-c208-3bb5-a257-3a47e34cc156">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/BLAKE3/LLVMSupportBlake3.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Support/BLAKE3/LLVMSupportBlake3.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="093db006-9965-38f0-842f-5f7e8f68a409">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Support/LSP/LLVMSupportLSP.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="2e65592a-5a4e-378f-9924-a7df7565eb9b">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7abe7352-474e-39aa-82c0-be91f3feb321">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/TableGen/LLVMTableGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="139e9012-6614-387f-a76f-2c68782fa483">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="utils/TableGen/Basic/LLVMTableGenBasic.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a3d49f3f-54f3-3ab9-ab4c-0aaa8f29f4f3">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Basic/obj.LLVMTableGenBasic.vcxproj"/>
+		</Project>
+		<Project Path="utils/TableGen/Common/LLVMTableGenCommon.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="6e5ecdad-0ad7-35ba-a901-c45ed4e60720">
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Basic/LLVMTableGenBasic.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Common/obj.LLVMTableGenCommon.vcxproj"/>
+			<BuildDependency Project="include/llvm/CodeGen/vt_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/LLVMTarget.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9fec4dd9-26ae-3258-8fb4-534fedfaea24">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/TargetParser/LLVMTargetParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="930af0ab-9671-3a7e-9ae0-b9aacdbd17eb">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/TargetParser/target_parser_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Telemetry/LLVMTelemetry.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="58e6ee8a-dca8-3a5a-82c8-a7010fcd5ccf">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/TextAPI/LLVMTextAPI.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="06d4032a-df26-3c94-87fc-9c1751f7381e">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/TextAPI/BinaryReader/LLVMTextAPIBinaryReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="2bfb1418-9c19-3893-9b3d-8e8b2916da7f">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/Utils/LLVMTransformUtils.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="020079e8-99dc-37de-a8ec-ed73e95de1e4">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/Vectorize/LLVMVectorize.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3fc625fb-759d-31a2-9c3b-92059c28a771">
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/WindowsDriver/LLVMWindowsDriver.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0133b676-8aeb-3022-b4f7-133d78097b87">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/WindowsManifest/LLVMWindowsManifest.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a3d73123-6f90-3397-a91b-b3ed23fed1d4">
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/XRay/LLVMXRay.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8435e353-4612-3f7e-950b-6d5eb8b04673">
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="lib/Transforms/IPO/LLVMipo.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b2811f68-7b0b-31c6-8cf9-2b117062f8c1">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/Frontend/OpenMP/omp_gen.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Libraries/X86/">
+		<Project Path="lib/Target/X86/AsmParser/LLVMX86AsmParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d727970f-c55b-368b-bd5a-0a5cd7e50760">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCTargetDesc/LLVMX86Desc.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/X86CommonTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/X86/LLVMX86CodeGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="4fbf95a6-e97d-300e-b0ba-53fe6ee286c1">
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/AsmPrinter/LLVMAsmPrinter.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCTargetDesc/LLVMX86Desc.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/X86CommonTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/X86/MCTargetDesc/LLVMX86Desc.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a3fd9847-c590-32f7-a776-58391dfb57d0">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/X86CommonTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/X86/Disassembler/LLVMX86Disassembler.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="75bfdea7-a8ab-36c0-8997-a20ce1975883">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/X86CommonTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="20e14483-9609-350c-9ebf-5d3f6606e6de">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/X86CommonTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/X86/MCA/LLVMX86TargetMCA.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="036756c5-9a7d-3949-88e2-ff522920ee74">
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MCA/LLVMMCA.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCTargetDesc/LLVMX86Desc.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/X86CommonTableGen.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Misc/">
+		<Project Path="utils/LLVMVisualizers/LLVMVisualizers.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="cb95004e-716f-376f-927a-51bcdb645989">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Object Libraries/">
+		<Project Path="utils/TableGen/Basic/obj.LLVMTableGenBasic.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="50955c41-d6bc-3967-b3ff-3e4b29db8aa8">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="utils/TableGen/Common/obj.LLVMTableGenCommon.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="82427847-f724-38c0-9a95-9f6ea5db6280">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/CodeGen/vt_gen.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Resources/">
+		<Project Path="llvm-headers.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="44974815-ace9-376c-ac07-43097b81addd">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/Frontend/OpenMP/omp_gen.vcxproj"/>
+			<BuildDependency Project="include/llvm/TargetParser/target_parser_gen.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="llvm-libraries.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="84aaf3ba-f8f2-3697-9de7-610abfc5b1b0">
+			<BuildDependency Project="lib/ABI/LLVMABI.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/AggressiveInstCombine/LLVMAggressiveInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/AsmPrinter/LLVMAsmPrinter.vcxproj"/>
+			<BuildDependency Project="lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="lib/Bitcode/Writer/LLVMBitWriter.vcxproj"/>
+			<BuildDependency Project="lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="lib/CAS/LLVMCAS.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/CFGuard/LLVMCFGuard.vcxproj"/>
+			<BuildDependency Project="lib/CGData/LLVMCGData.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/LLVMCodeGen.vcxproj"/>
+			<BuildDependency Project="lib/CodeGenTypes/LLVMCodeGenTypes.vcxproj"/>
+			<BuildDependency Project="lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Coroutines/LLVMCoroutines.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/Coverage/LLVMCoverage.vcxproj"/>
+			<BuildDependency Project="lib/DTLTO/LLVMDTLTO.vcxproj"/>
+			<BuildDependency Project="lib/DWARFCFIChecker/LLVMDWARFCFIChecker.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/LLVMDWARFLinker.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/Classic/LLVMDWARFLinkerClassic.vcxproj"/>
+			<BuildDependency Project="lib/DWARFLinker/Parallel/LLVMDWARFLinkerParallel.vcxproj"/>
+			<BuildDependency Project="lib/DWP/LLVMDWP.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/LogicalView/LLVMDebugInfoLogicalView.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="lib/Debuginfod/LLVMDebuginfod.vcxproj"/>
+			<BuildDependency Project="lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="lib/ToolDrivers/llvm-dlltool/LLVMDlltoolDriver.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/LLVMExecutionEngine.vcxproj"/>
+			<BuildDependency Project="lib/Extensions/LLVMExtensions.vcxproj"/>
+			<BuildDependency Project="lib/FileCheck/LLVMFileCheck.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Atomic/LLVMFrontendAtomic.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Directive/LLVMFrontendDirective.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Driver/LLVMFrontendDriver.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/Offloading/LLVMFrontendOffloading.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenACC/LLVMFrontendOpenACC.vcxproj"/>
+			<BuildDependency Project="lib/Frontend/OpenMP/LLVMFrontendOpenMP.vcxproj"/>
+			<BuildDependency Project="lib/FuzzMutate/LLVMFuzzMutate.vcxproj"/>
+			<BuildDependency Project="lib/FuzzMutate/LLVMFuzzerCLI.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/GlobalISel/LLVMGlobalISel.vcxproj"/>
+			<BuildDependency Project="lib/HTTP/LLVMHTTP.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/HipStdPar/LLVMHipStdPar.vcxproj"/>
+			<BuildDependency Project="lib/IRPrinter/LLVMIRPrinter.vcxproj"/>
+			<BuildDependency Project="lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/InstCombine/LLVMInstCombine.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Instrumentation/LLVMInstrumentation.vcxproj"/>
+			<BuildDependency Project="lib/InterfaceStub/LLVMInterfaceStub.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Interpreter/LLVMInterpreter.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/JITLink/LLVMJITLink.vcxproj"/>
+			<BuildDependency Project="lib/LTO/LLVMLTO.vcxproj"/>
+			<BuildDependency Project="lib/ToolDrivers/llvm-lib/LLVMLibDriver.vcxproj"/>
+			<BuildDependency Project="lib/LineEditor/LLVMLineEditor.vcxproj"/>
+			<BuildDependency Project="lib/Linker/LLVMLinker.vcxproj"/>
+			<BuildDependency Project="lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="lib/MCA/LLVMMCA.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCDisassembler/LLVMMCDisassembler.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/MCJIT/LLVMMCJIT.vcxproj"/>
+			<BuildDependency Project="lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/MIRParser/LLVMMIRParser.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/ObjCARC/LLVMObjCARCOpts.vcxproj"/>
+			<BuildDependency Project="lib/ObjCopy/LLVMObjCopy.vcxproj"/>
+			<BuildDependency Project="lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="lib/ObjectYAML/LLVMObjectYAML.vcxproj"/>
+			<BuildDependency Project="lib/Option/LLVMOption.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Debugging/LLVMOrcDebugging.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/LLVMOrcJIT.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/Shared/LLVMOrcShared.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/Orc/TargetProcess/LLVMOrcTargetProcess.vcxproj"/>
+			<BuildDependency Project="lib/Passes/LLVMPasses.vcxproj"/>
+			<BuildDependency Project="lib/Plugins/LLVMPlugins.vcxproj"/>
+			<BuildDependency Project="lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="lib/ExecutionEngine/RuntimeDyld/LLVMRuntimeDyld.vcxproj"/>
+			<BuildDependency Project="lib/SandboxIR/LLVMSandboxIR.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Scalar/LLVMScalarOpts.vcxproj"/>
+			<BuildDependency Project="lib/CodeGen/SelectionDAG/LLVMSelectionDAG.vcxproj"/>
+			<BuildDependency Project="lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="lib/Support/LSP/LLVMSupportLSP.vcxproj"/>
+			<BuildDependency Project="lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Basic/LLVMTableGenBasic.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/Common/LLVMTableGenCommon.vcxproj"/>
+			<BuildDependency Project="lib/Target/LLVMTarget.vcxproj"/>
+			<BuildDependency Project="lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="lib/Telemetry/LLVMTelemetry.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="lib/TextAPI/BinaryReader/LLVMTextAPIBinaryReader.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/Vectorize/LLVMVectorize.vcxproj"/>
+			<BuildDependency Project="lib/WindowsDriver/LLVMWindowsDriver.vcxproj"/>
+			<BuildDependency Project="lib/WindowsManifest/LLVMWindowsManifest.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/AsmParser/LLVMX86AsmParser.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/LLVMX86CodeGen.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCTargetDesc/LLVMX86Desc.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/Disassembler/LLVMX86Disassembler.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/TargetInfo/LLVMX86Info.vcxproj"/>
+			<BuildDependency Project="lib/Target/X86/MCA/LLVMX86TargetMCA.vcxproj"/>
+			<BuildDependency Project="lib/XRay/LLVMXRay.vcxproj"/>
+			<BuildDependency Project="lib/Transforms/IPO/LLVMipo.vcxproj"/>
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="include/llvm/Support/llvm_vcsrevision_h.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8b6a7cac-16c6-3eab-9468-28ec970383df">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Tablegenning/">
+		<Project Path="lib/ToolDrivers/llvm-dlltool/DllOptionsTableGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a1a58c50-9edc-3d9c-9462-3977f972cbf4">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ExecutionEngine/JITLink/JITLinkTableGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="f0271a5c-7683-3827-b9ea-77fe982abf5f">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="lib/ToolDrivers/llvm-lib/LibOptionsTableGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="f1bb81ef-119c-3394-9192-f6b644533dbe">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="lib/Target/X86/X86CommonTableGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="89f52278-e2fa-3640-b747-6ddc1e8ed168">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="include/llvm/Frontend/OpenACC/acc_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9f98bb5c-f07f-3ae6-8f93-2300236dbcb1">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="include/llvm/Analysis/analysis_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="62aa1714-0dee-3ace-a18d-eeeb94dc97e3">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="include/llvm/IR/intrinsics_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a50d2412-7647-3631-8937-ce444d73ef79">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="include/llvm/Frontend/OpenMP/omp_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="979b25c4-00dc-31d5-a83c-356fc15efe9b">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="include/llvm/TargetParser/target_parser_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7130ce4a-3cd7-3e84-98a0-a1ecf7931f0c">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="include/llvm/CodeGen/vt_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="98bb263c-2fe6-3136-9a3d-5d45de847bfc">
+			<BuildDependency Project="../ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+	</Folder>
+</Solution>

@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Solution>
+	<Configurations>
+		<BuildType Name="Debug"/>
+		<BuildType Name="Release"/>
+		<BuildType Name="MinSizeRel"/>
+		<BuildType Name="RelWithDebInfo"/>
+		<Platform Name="x64"/>
+	</Configurations>
+	<Project Path="apollo_build_driver_native.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="2a4ce3bf-b160-3bf4-8bd2-1a1b5e258705">
+		<BuildDependency Project="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Linker/LLVMLinker.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="apollo_driver_tests.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ff57bcfa-dd36-3c02-9805-9a82ce9f952c">
+		<BuildDependency Project="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Linker/LLVMLinker.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="apollo_frontend_native.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5bc4447d-8cc9-37e5-ad9b-7a8fd5e7b02d">
+		<BuildDependency Project="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Linker/LLVMLinker.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="apollo_runtime_tests.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="df0f7e04-1e0b-30d9-bc8f-00a578b36fe4">
+		<BuildDependency Project="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Linker/LLVMLinker.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+		<BuildDependency Project="apollo-llvm/lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Folder Name="/CMakePredefinedTargets/">
+		<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d4d03d78-e951-31f1-9976-0877979e53ac" DefaultStartup="true">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo_build_driver_native.vcxproj"/>
+			<BuildDependency Project="apollo_driver_tests.vcxproj"/>
+			<BuildDependency Project="apollo_frontend_native.vcxproj"/>
+			<BuildDependency Project="apollo_runtime_tests.vcxproj"/>
+		</Project>
+		<Project Path="INSTALL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="79d3769a-8980-3bf8-841f-ed54b3ae4f25">
+			<BuildDependency Project="ALL_BUILD.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="PACKAGE.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9b5a878a-a6f6-397e-ab31-2763a0d0141d">
+			<BuildDependency Project="ALL_BUILD.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<Build Solution="Debug|*" Project="false"/>
+			<Build Solution="Release|*" Project="false"/>
+			<Build Solution="MinSizeRel|*" Project="false"/>
+			<Build Solution="RelWithDebInfo|*" Project="false"/>
+		</Project>
+		<Project Path="ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0a3de1d2-3e0b-3dad-bcb3-2384d209f094"/>
+	</Folder>
+	<Folder Name="/LLVM/"/>
+	<Folder Name="/LLVM/Executables/">
+		<Project Path="apollo-llvm/utils/TableGen/llvm-min-tblgen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="478a0f3a-4967-3470-83ae-5d6597031335">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TableGen/LLVMTableGen.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/utils/TableGen/Basic/obj.LLVMTableGenBasic.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Libraries/">
+		<Project Path="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5b519fa9-db1c-3397-85e6-81c530b35310">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/Analysis/analysis_gen.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="aaeb52c8-bada-36a6-bc48-ff46854fffbd">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="2a3dedc9-4926-3b1d-82d3-48ab2ec1bd9a">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3f6a79c2-9833-355c-80c7-b02c5306e195">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="265ad086-4be5-3317-ab00-1c4e2b24462c">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/IR/LLVMCore.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3a06df54-3572-3a90-bc65-9588322af4e0">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="4844bb28-ac4f-3c3a-a15e-b09ff2d0ba49">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5fb30604-68a8-3533-8f8b-5a94b2f29eed">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="401d47c3-7ab2-3351-a552-bcde02cf45ef">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="69014312-9841-3689-9e42-68c7da84a950">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b136b3e7-450f-37a3-8563-ab51e421ac82">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="de606306-6cfd-34ff-88d5-97a00c86d86f">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="16d28f12-8efd-3221-9ff4-2863bd072385">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3ba74e13-f39b-3cf6-824b-53bcd4ca471c">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9acc4384-7408-346e-941e-133b680451be">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7fb5429e-89b6-35fc-8066-6db56b7e30d0">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Linker/LLVMLinker.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7ea8f6ca-4ae8-3afa-865c-9b3c2d2e777b">
+			<BuildDependency Project="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Transforms/Utils/LLVMTransformUtils.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/MC/LLVMMC.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="27c7aa12-0f85-3414-a166-a5fc38d4d9ec">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="dd6b5283-2780-303e-86e2-0d547ca5f3b7">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Object/LLVMObject.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ebe7a514-02f2-3602-b989-3b7cf55dccf2">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/Support/llvm_vcsrevision_h.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d1b49f3b-ac72-36d2-acd2-9c77a4ea7473">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="1dd19858-6146-3bbd-bfe6-d8a9c72597d6">
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Support/LLVMSupport.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="12f775a1-c208-3bb5-a257-3a47e34cc156">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/BLAKE3/LLVMSupportBlake3.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Support/BLAKE3/LLVMSupportBlake3.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="093db006-9965-38f0-842f-5f7e8f68a409">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7abe7352-474e-39aa-82c0-be91f3feb321">
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/TableGen/LLVMTableGen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="139e9012-6614-387f-a76f-2c68782fa483">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="930af0ab-9671-3a7e-9ae0-b9aacdbd17eb">
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/TargetParser/target_parser_gen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="06d4032a-df26-3c94-87fc-9c1751f7381e">
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/lib/Transforms/Utils/LLVMTransformUtils.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="020079e8-99dc-37de-a8ec-ed73e95de1e4">
+			<BuildDependency Project="apollo-llvm/lib/Analysis/LLVMAnalysis.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/AsmParser/LLVMAsmParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/BinaryFormat/LLVMBinaryFormat.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitcode/Reader/LLVMBitReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Bitstream/Reader/LLVMBitstreamReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IR/LLVMCore.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/BTF/LLVMDebugInfoBTF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/CodeView/LLVMDebugInfoCodeView.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LLVMDebugInfoDWARF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/DWARF/LowLevel/LLVMDebugInfoDWARFLowLevel.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/GSYM/LLVMDebugInfoGSYM.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/MSF/LLVMDebugInfoMSF.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/PDB/LLVMDebugInfoPDB.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Demangle/LLVMDemangle.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Frontend/HLSL/LLVMFrontendHLSL.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/IRReader/LLVMIRReader.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/LLVMMC.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/MC/MCParser/LLVMMCParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Object/LLVMObject.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/ProfileData/LLVMProfileData.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Remarks/LLVMRemarks.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/Support/LLVMSupport.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/DebugInfo/Symbolize/LLVMSymbolize.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TargetParser/LLVMTargetParser.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/lib/TextAPI/LLVMTextAPI.vcxproj"/>
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Object Libraries/">
+		<Project Path="apollo-llvm/utils/TableGen/Basic/obj.LLVMTableGenBasic.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="50955c41-d6bc-3967-b3ff-3e4b29db8aa8">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Resources/">
+		<Project Path="apollo-llvm/include/llvm/Support/llvm_vcsrevision_h.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8b6a7cac-16c6-3eab-9468-28ec970383df">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		</Project>
+	</Folder>
+	<Folder Name="/LLVM/Tablegenning/">
+		<Project Path="apollo-llvm/include/llvm/Analysis/analysis_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="62aa1714-0dee-3ace-a18d-eeeb94dc97e3">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/include/llvm/IR/intrinsics_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="a50d2412-7647-3631-8937-ce444d73ef79">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+		<Project Path="apollo-llvm/include/llvm/TargetParser/target_parser_gen.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7130ce4a-3cd7-3e84-98a0-a1ecf7931f0c">
+			<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+			<BuildDependency Project="apollo-llvm/utils/TableGen/llvm-min-tblgen.vcxproj"/>
+		</Project>
+	</Folder>
+</Solution>

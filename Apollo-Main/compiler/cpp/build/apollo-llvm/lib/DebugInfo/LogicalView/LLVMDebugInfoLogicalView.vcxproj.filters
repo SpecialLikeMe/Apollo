@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVCompare.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVElement.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVLine.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVLocation.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVObject.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVOptions.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVRange.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVReader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVScope.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVSort.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVSourceLanguage.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVSupport.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVSymbol.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Core\LVType.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\LVReaderHandler.cpp">
+      <Filter>Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Readers\LVBinaryReader.cpp">
+      <Filter>Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Readers\LVCodeViewReader.cpp">
+      <Filter>Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Readers\LVCodeViewVisitor.cpp">
+      <Filter>Readers</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\Readers\LVDWARFReader.cpp">
+      <Filter>Readers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\LVReaderHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVCompare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVLocation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVRange.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVScope.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVSourceLanguage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVStringPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVSupport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Core\LVType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Readers\LVBinaryReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Readers\LVCodeViewReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Readers\LVCodeViewVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\DebugInfo\LogicalView\Readers\LVDWARFReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\DebugInfo\LogicalView\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{07E6B31A-A7DC-3C1D-85EC-91C05C6E6104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{87710DDF-F811-3822-A4AB-356A2253038F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Readers">
+      <UniqueIdentifier>{0B839CA9-FC22-3AB9-B141-4FD2E52D3275}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

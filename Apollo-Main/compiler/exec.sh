@@ -271,6 +271,8 @@ ensure_native_targets() {
 native_build_cache_valid() {
     cache_file="$NATIVE_BUILD_DIR/CMakeCache.txt"
     [ -f "$cache_file" ] || return 1
+    [ -d "$NATIVE_BUILD_DIR/CMakeFiles" ] || return 1
+    [ -f "$NATIVE_BUILD_DIR/cmake_install.cmake" ] || return 1
     grep -Fqx "ApolloNativeFrontend_SOURCE_DIR:STATIC=$NATIVE_SOURCE_DIR" "$cache_file" || return 1
     grep -Fqx "ApolloNativeFrontend_BINARY_DIR:STATIC=$NATIVE_BUILD_DIR" "$cache_file" || return 1
     grep -Fqx "CMAKE_HOME_DIRECTORY:INTERNAL=$NATIVE_SOURCE_DIR" "$cache_file" || return 1

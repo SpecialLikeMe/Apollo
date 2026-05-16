@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\Archive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerObjcopy.cpp">
+      <Filter>Source Files\DXContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerObject.cpp">
+      <Filter>Source Files\DXContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerReader.cpp">
+      <Filter>Source Files\DXContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerWriter.cpp">
+      <Filter>Source Files\DXContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\CommonConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\ObjCopy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\ConfigManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFObjcopy.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFObject.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFReader.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFWriter.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\ELF\ELFObjcopy.cpp">
+      <Filter>Source Files\ELF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\ELF\ELFObject.cpp">
+      <Filter>Source Files\ELF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOObjcopy.cpp">
+      <Filter>Source Files\MachO</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOReader.cpp">
+      <Filter>Source Files\MachO</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOWriter.cpp">
+      <Filter>Source Files\MachO</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOLayoutBuilder.cpp">
+      <Filter>Source Files\MachO</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOObject.cpp">
+      <Filter>Source Files\MachO</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmObject.cpp">
+      <Filter>Source Files\wasm</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmReader.cpp">
+      <Filter>Source Files\wasm</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmWriter.cpp">
+      <Filter>Source Files\wasm</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmObjcopy.cpp">
+      <Filter>Source Files\wasm</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\XCOFF\XCOFFObjcopy.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\XCOFF\XCOFFReader.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\XCOFF\XCOFFWriter.cpp">
+      <Filter>Source Files\COFF</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\Archive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\CommonConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\ConfigManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\MultiFormatConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\ObjCopy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\COFF\COFFConfig.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\COFF\COFFObjcopy.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\DXContainer\DXContainerConfig.h">
+      <Filter>Header Files\DXContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\DXContainer\DXContainerObjcopy.h">
+      <Filter>Header Files\DXContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\ELF\ELFConfig.h">
+      <Filter>Header Files\ELF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\ELF\ELFObjcopy.h">
+      <Filter>Header Files\ELF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\MachO\MachOConfig.h">
+      <Filter>Header Files\MachO</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\MachO\MachOObjcopy.h">
+      <Filter>Header Files\MachO</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\wasm\WasmConfig.h">
+      <Filter>Header Files\wasm</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\wasm\WasmObjcopy.h">
+      <Filter>Header Files\wasm</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\XCOFF\XCOFFConfig.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ObjCopy\XCOFF\XCOFFObjcopy.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFObject.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFReader.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\COFF\COFFWriter.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerObject.h">
+      <Filter>Header Files\DXContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerReader.h">
+      <Filter>Header Files\DXContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\DXContainer\DXContainerWriter.h">
+      <Filter>Header Files\DXContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\ELF\ELFObject.h">
+      <Filter>Header Files\ELF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOLayoutBuilder.h">
+      <Filter>Header Files\MachO</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOObject.h">
+      <Filter>Header Files\MachO</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOReader.h">
+      <Filter>Header Files\MachO</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\MachO\MachOWriter.h">
+      <Filter>Header Files\MachO</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmObject.h">
+      <Filter>Header Files\wasm</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmReader.h">
+      <Filter>Header Files\wasm</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\wasm\WasmWriter.h">
+      <Filter>Header Files\wasm</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\XCOFF\XCOFFObject.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\XCOFF\XCOFFReader.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\XCOFF\XCOFFWriter.h">
+      <Filter>Header Files\COFF</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ObjCopy\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{87710DDF-F811-3822-A4AB-356A2253038F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\COFF">
+      <UniqueIdentifier>{E8EABC32-F7A1-3DB5-8626-A2E87FD72AE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DXContainer">
+      <UniqueIdentifier>{0C1E85BB-BCEA-37E9-8248-94DDC67023DD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ELF">
+      <UniqueIdentifier>{D4C70096-A5E3-3657-877F-3C71AB721E5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MachO">
+      <UniqueIdentifier>{656AE513-56A0-339B-93AE-5586DAAE4F6C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\wasm">
+      <UniqueIdentifier>{41221006-639F-35CE-9978-6C1F6675D705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{59DF061E-57DC-33F3-94FD-B07E5CD94B4B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\COFF">
+      <UniqueIdentifier>{539BF1C6-45F3-393A-91A0-FBEB53F4621A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DXContainer">
+      <UniqueIdentifier>{A573E7F2-BD2E-3647-8D52-D20B5F13DCB6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ELF">
+      <UniqueIdentifier>{B672D5D1-F949-3A12-96C0-33460AA76FCD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MachO">
+      <UniqueIdentifier>{4056E145-BC01-349A-8AD1-1FD257DE3DA3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\wasm">
+      <UniqueIdentifier>{A10E1290-6FF5-398C-89B1-C3C76BE127DF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

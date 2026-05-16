@@ -1,0 +1,617 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ResolveNugetPackages>false</ResolveNugetPackages>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D4D03D78-E951-31F1-9976-0877979E53AC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\FindBacktrace.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeASMLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectASMLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-4.3\Templates\CPackConfig.cmake.in;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeASMCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeCCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\CMakePolicy.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\GNUInstallPackageDir.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\HandleDoxygen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\LLVMVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\config-ix.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddLLVM.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckAtomic.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckCompilerVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckProblematicConfigurations.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CoverageReport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\DetermineGCCCompatible.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindDIASDK.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibXml2.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibpfm.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\Findzstd.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\GetHostTriple.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMOptions.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMStdlib.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVM-Config.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMDistributionSupport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMProcessSources.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\TableGen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\VersionFromVCS.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmParsers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmPrinters.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Disassemblers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetExegesis.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetMCAs.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\abi-breaking.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\config.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\llvm-config.h.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\FindBacktrace.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeASMLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectASMLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-4.3\Templates\CPackConfig.cmake.in;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeASMCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeCCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\CMakePolicy.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\GNUInstallPackageDir.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\HandleDoxygen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\LLVMVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\config-ix.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddLLVM.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckAtomic.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckCompilerVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckProblematicConfigurations.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CoverageReport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\DetermineGCCCompatible.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindDIASDK.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibXml2.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibpfm.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\Findzstd.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\GetHostTriple.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMOptions.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMStdlib.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVM-Config.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMDistributionSupport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMProcessSources.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\TableGen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\VersionFromVCS.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmParsers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmPrinters.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Disassemblers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetExegesis.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetMCAs.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\abi-breaking.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\config.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\llvm-config.h.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\FindBacktrace.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeASMLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectASMLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-4.3\Templates\CPackConfig.cmake.in;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeASMCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeCCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\CMakePolicy.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\GNUInstallPackageDir.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\HandleDoxygen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\LLVMVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\config-ix.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddLLVM.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckAtomic.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckCompilerVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckProblematicConfigurations.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CoverageReport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\DetermineGCCCompatible.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindDIASDK.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibXml2.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibpfm.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\Findzstd.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\GetHostTriple.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMOptions.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMStdlib.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVM-Config.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMDistributionSupport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMProcessSources.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\TableGen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\VersionFromVCS.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmParsers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmPrinters.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Disassemblers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetExegesis.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetMCAs.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\abi-breaking.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\config.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\llvm-config.h.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeASMInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakePushCheckState.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestASMCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckCXXSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckStructHasMember.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CheckSymbolExists.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\FindBacktrace.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeASMLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectASMLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckLinkerFlag.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU-ASM.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-GNU.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-4.3\Templates\CPackConfig.cmake.in;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeASMCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles\4.3.2\CMakeCCompiler.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\CMakePolicy.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\GNUInstallPackageDir.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\HandleDoxygen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\cmake\Modules\LLVMVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\config-ix.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddLLVM.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\AddOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckAtomic.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckCompilerVersion.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CheckProblematicConfigurations.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\CoverageReport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\DetermineGCCCompatible.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindDIASDK.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibXml2.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindLibpfm.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\FindOCaml.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\Findzstd.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\GetHostTriple.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMOptions.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\HandleLLVMStdlib.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVM-Config.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMDistributionSupport.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\LLVMProcessSources.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\TableGen.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\cmake\modules\VersionFromVCS.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmParsers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\AsmPrinters.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Disassemblers.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetExegesis.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\TargetMCAs.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.def.in;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\Targets.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\abi-breaking.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\config.h.cmake;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\Config\llvm-config.h.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\ZERO_CHECK.vcxproj">
+      <Project>{0A3DE1D2-3E0B-3DAD-BCB3-2384D209F094}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ABI\LLVMABI.vcxproj">
+      <Project>{BCDC9925-3454-3821-A62A-9D470A9B21B5}</Project>
+      <Name>LLVMABI</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\AggressiveInstCombine\LLVMAggressiveInstCombine.vcxproj">
+      <Project>{875A3E0C-3D63-3DB9-B79C-FBCC1B263754}</Project>
+      <Name>LLVMAggressiveInstCombine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Analysis\LLVMAnalysis.vcxproj">
+      <Project>{5B519FA9-DB1C-3397-85E6-81C530B35310}</Project>
+      <Name>LLVMAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\AsmParser\LLVMAsmParser.vcxproj">
+      <Project>{AAEB52C8-BADA-36A6-BC48-FF46854FFFBD}</Project>
+      <Name>LLVMAsmParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\AsmPrinter\LLVMAsmPrinter.vcxproj">
+      <Project>{851ADE54-E957-3A29-B52E-F9A92D1621D8}</Project>
+      <Name>LLVMAsmPrinter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\BinaryFormat\LLVMBinaryFormat.vcxproj">
+      <Project>{2A3DEDC9-4926-3B1D-82D3-48AB2EC1BD9A}</Project>
+      <Name>LLVMBinaryFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.vcxproj">
+      <Project>{3F6A79C2-9833-355C-80C7-B02C5306E195}</Project>
+      <Name>LLVMBitReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Writer\LLVMBitWriter.vcxproj">
+      <Project>{A2DC6325-AF24-354A-88D7-1C9493112CF3}</Project>
+      <Name>LLVMBitWriter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitstream\Reader\LLVMBitstreamReader.vcxproj">
+      <Project>{265AD086-4BE5-3317-AB00-1C4E2B24462C}</Project>
+      <Name>LLVMBitstreamReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CAS\LLVMCAS.vcxproj">
+      <Project>{32B4810D-8A4A-3220-972F-E1F410477918}</Project>
+      <Name>LLVMCAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\CFGuard\LLVMCFGuard.vcxproj">
+      <Project>{C19AC7EA-9911-3108-91A8-C40A5F21C33B}</Project>
+      <Name>LLVMCFGuard</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CGData\LLVMCGData.vcxproj">
+      <Project>{399A4122-D938-3763-9DD5-321D32F02D19}</Project>
+      <Name>LLVMCGData</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\LLVMCodeGen.vcxproj">
+      <Project>{7F0B4ED4-C99C-3D56-A991-78F5DF21EDFF}</Project>
+      <Name>LLVMCodeGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGenTypes\LLVMCodeGenTypes.vcxproj">
+      <Project>{9BC67D25-D05D-3CA4-8020-0ED278FC091E}</Project>
+      <Name>LLVMCodeGenTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR\LLVMCore.vcxproj">
+      <Project>{3A06DF54-3572-3A90-BC65-9588322AF4E0}</Project>
+      <Name>LLVMCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Coroutines\LLVMCoroutines.vcxproj">
+      <Project>{D894A838-FDC8-38E5-9F79-0101C7123CDF}</Project>
+      <Name>LLVMCoroutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ProfileData\Coverage\LLVMCoverage.vcxproj">
+      <Project>{8290E0ED-1D4D-3452-AC70-866C5DD57407}</Project>
+      <Name>LLVMCoverage</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DTLTO\LLVMDTLTO.vcxproj">
+      <Project>{BBE7AEB1-EE53-3727-804B-46FA192660EE}</Project>
+      <Name>LLVMDTLTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DWARFCFIChecker\LLVMDWARFCFIChecker.vcxproj">
+      <Project>{DF1E158E-FE37-3CD1-B673-CBEDA846B6EB}</Project>
+      <Name>LLVMDWARFCFIChecker</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DWARFLinker\LLVMDWARFLinker.vcxproj">
+      <Project>{58102387-238B-31C5-8A1D-3EF119A81190}</Project>
+      <Name>LLVMDWARFLinker</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DWARFLinker\Classic\LLVMDWARFLinkerClassic.vcxproj">
+      <Project>{C59B43F1-D1A0-34BA-91E8-A46F890CFE13}</Project>
+      <Name>LLVMDWARFLinkerClassic</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DWARFLinker\Parallel\LLVMDWARFLinkerParallel.vcxproj">
+      <Project>{DF7F2370-45F7-3C9E-A200-8AA40984CA03}</Project>
+      <Name>LLVMDWARFLinkerParallel</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DWP\LLVMDWP.vcxproj">
+      <Project>{96289BEF-9761-3090-8CB4-6D1A8C58DDE3}</Project>
+      <Name>LLVMDWP</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\BTF\LLVMDebugInfoBTF.vcxproj">
+      <Project>{4844BB28-AC4F-3C3A-A15E-B09FF2D0BA49}</Project>
+      <Name>LLVMDebugInfoBTF</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\CodeView\LLVMDebugInfoCodeView.vcxproj">
+      <Project>{5FB30604-68A8-3533-8F8B-5A94B2F29EED}</Project>
+      <Name>LLVMDebugInfoCodeView</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\DWARF\LLVMDebugInfoDWARF.vcxproj">
+      <Project>{401D47C3-7AB2-3351-A552-BCDE02CF45EF}</Project>
+      <Name>LLVMDebugInfoDWARF</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\DWARF\LowLevel\LLVMDebugInfoDWARFLowLevel.vcxproj">
+      <Project>{69014312-9841-3689-9E42-68C7DA84A950}</Project>
+      <Name>LLVMDebugInfoDWARFLowLevel</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\GSYM\LLVMDebugInfoGSYM.vcxproj">
+      <Project>{B136B3E7-450F-37A3-8563-AB51E421AC82}</Project>
+      <Name>LLVMDebugInfoGSYM</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\LogicalView\LLVMDebugInfoLogicalView.vcxproj">
+      <Project>{A8BE41FA-5678-315C-8244-07A35752F14A}</Project>
+      <Name>LLVMDebugInfoLogicalView</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\MSF\LLVMDebugInfoMSF.vcxproj">
+      <Project>{DE606306-6CFD-34FF-88D5-97A00C86D86F}</Project>
+      <Name>LLVMDebugInfoMSF</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\PDB\LLVMDebugInfoPDB.vcxproj">
+      <Project>{16D28F12-8EFD-3221-9FF4-2863BD072385}</Project>
+      <Name>LLVMDebugInfoPDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Debuginfod\LLVMDebuginfod.vcxproj">
+      <Project>{A15C752B-988E-3AA6-A561-AA51DF5576D8}</Project>
+      <Name>LLVMDebuginfod</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.vcxproj">
+      <Project>{3BA74E13-F39B-3CF6-824B-53BCD4CA471C}</Project>
+      <Name>LLVMDemangle</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ToolDrivers\llvm-dlltool\LLVMDlltoolDriver.vcxproj">
+      <Project>{3FC0737C-2625-375F-8C3A-1880324CA720}</Project>
+      <Name>LLVMDlltoolDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\LLVMExecutionEngine.vcxproj">
+      <Project>{FAB9A165-4D3B-3049-96C2-184E6548AFCD}</Project>
+      <Name>LLVMExecutionEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Extensions\LLVMExtensions.vcxproj">
+      <Project>{60D2C4B1-3D3D-3E0E-BE17-9F9CAFE17BE7}</Project>
+      <Name>LLVMExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\FileCheck\LLVMFileCheck.vcxproj">
+      <Project>{DA9B9410-CD2B-3D75-A15B-3CA817792DAD}</Project>
+      <Name>LLVMFileCheck</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Atomic\LLVMFrontendAtomic.vcxproj">
+      <Project>{3E6EF0F1-C728-3716-A1A4-2D44EA5E6272}</Project>
+      <Name>LLVMFrontendAtomic</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Directive\LLVMFrontendDirective.vcxproj">
+      <Project>{FEFE0F58-96C6-30F4-B918-608E920FFE2E}</Project>
+      <Name>LLVMFrontendDirective</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Driver\LLVMFrontendDriver.vcxproj">
+      <Project>{8309F8F5-A56A-3437-9BA5-6872D0D9674E}</Project>
+      <Name>LLVMFrontendDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\HLSL\LLVMFrontendHLSL.vcxproj">
+      <Project>{9ACC4384-7408-346E-941E-133B680451BE}</Project>
+      <Name>LLVMFrontendHLSL</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Offloading\LLVMFrontendOffloading.vcxproj">
+      <Project>{B7C97956-4C8C-38E6-9F17-10D218AE1C9B}</Project>
+      <Name>LLVMFrontendOffloading</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\OpenACC\LLVMFrontendOpenACC.vcxproj">
+      <Project>{F7A2120E-113F-3684-9EF6-79D72CED8419}</Project>
+      <Name>LLVMFrontendOpenACC</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\OpenMP\LLVMFrontendOpenMP.vcxproj">
+      <Project>{0C031A0A-36A1-32B6-8C32-6F07AA9B47B8}</Project>
+      <Name>LLVMFrontendOpenMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\FuzzMutate\LLVMFuzzMutate.vcxproj">
+      <Project>{83740BC4-1290-3F11-8637-2CCB97CABFFC}</Project>
+      <Name>LLVMFuzzMutate</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\FuzzMutate\LLVMFuzzerCLI.vcxproj">
+      <Project>{CB780B06-759E-3AFE-B26E-CD8CD4843042}</Project>
+      <Name>LLVMFuzzerCLI</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\GlobalISel\LLVMGlobalISel.vcxproj">
+      <Project>{25028D85-242B-3067-833A-DE568F2C1E38}</Project>
+      <Name>LLVMGlobalISel</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\HTTP\LLVMHTTP.vcxproj">
+      <Project>{BED9EEEB-5F8B-32D4-BB9F-DAD592134F82}</Project>
+      <Name>LLVMHTTP</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\HipStdPar\LLVMHipStdPar.vcxproj">
+      <Project>{FC5C368C-6362-3687-B2EA-32080910C4CE}</Project>
+      <Name>LLVMHipStdPar</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IRPrinter\LLVMIRPrinter.vcxproj">
+      <Project>{769D1B4B-50E9-3C98-B278-4422A00F4AD6}</Project>
+      <Name>LLVMIRPrinter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IRReader\LLVMIRReader.vcxproj">
+      <Project>{7FB5429E-89B6-35FC-8066-6DB56B7E30D0}</Project>
+      <Name>LLVMIRReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\InstCombine\LLVMInstCombine.vcxproj">
+      <Project>{4AAFF5D8-4463-39BC-AE08-B3691C1A3877}</Project>
+      <Name>LLVMInstCombine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Instrumentation\LLVMInstrumentation.vcxproj">
+      <Project>{91631B7A-F6C6-376F-AB28-1297805D8C19}</Project>
+      <Name>LLVMInstrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\InterfaceStub\LLVMInterfaceStub.vcxproj">
+      <Project>{8C394C15-3B15-357A-B60C-AFCF74762214}</Project>
+      <Name>LLVMInterfaceStub</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Interpreter\LLVMInterpreter.vcxproj">
+      <Project>{B073FEA3-7250-329C-9DB5-BD140106D4BE}</Project>
+      <Name>LLVMInterpreter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\JITLink\LLVMJITLink.vcxproj">
+      <Project>{DCDB5136-6DDD-3678-80D3-372FA136B69C}</Project>
+      <Name>LLVMJITLink</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\LTO\LLVMLTO.vcxproj">
+      <Project>{5DEB13BE-3CD7-3414-BBF9-2BD723BE3C40}</Project>
+      <Name>LLVMLTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ToolDrivers\llvm-lib\LLVMLibDriver.vcxproj">
+      <Project>{7A22929F-A3C1-3C85-A2BB-2E27612D7850}</Project>
+      <Name>LLVMLibDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\LineEditor\LLVMLineEditor.vcxproj">
+      <Project>{B17C90BA-F9FC-38BF-A81A-D07B41875ECD}</Project>
+      <Name>LLVMLineEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Linker\LLVMLinker.vcxproj">
+      <Project>{7EA8F6CA-4AE8-3AFA-865C-9B3C2D2E777B}</Project>
+      <Name>LLVMLinker</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\MC\LLVMMC.vcxproj">
+      <Project>{27C7AA12-0F85-3414-A166-A5FC38D4D9EC}</Project>
+      <Name>LLVMMC</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\MCA\LLVMMCA.vcxproj">
+      <Project>{0D0483B5-5C7A-30FE-9B91-1887C3A8C8E4}</Project>
+      <Name>LLVMMCA</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\MC\MCDisassembler\LLVMMCDisassembler.vcxproj">
+      <Project>{32FC0D08-3EF3-334E-AE39-3856438B3636}</Project>
+      <Name>LLVMMCDisassembler</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\MCJIT\LLVMMCJIT.vcxproj">
+      <Project>{B90BE9EA-7971-3122-AEC7-2A3E9CCA0BFA}</Project>
+      <Name>LLVMMCJIT</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\MC\MCParser\LLVMMCParser.vcxproj">
+      <Project>{DD6B5283-2780-303E-86E2-0D547CA5F3B7}</Project>
+      <Name>LLVMMCParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\MIRParser\LLVMMIRParser.vcxproj">
+      <Project>{B479BA9F-6634-3E2E-8BFA-8437EC983478}</Project>
+      <Name>LLVMMIRParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\ObjCARC\LLVMObjCARCOpts.vcxproj">
+      <Project>{65F417BD-EC11-34AF-A652-78828FBC4101}</Project>
+      <Name>LLVMObjCARCOpts</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ObjCopy\LLVMObjCopy.vcxproj">
+      <Project>{A512D09F-53AC-390A-9DD9-882DC145059B}</Project>
+      <Name>LLVMObjCopy</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Object\LLVMObject.vcxproj">
+      <Project>{EBE7A514-02F2-3602-B989-3B7CF55DCCF2}</Project>
+      <Name>LLVMObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ObjectYAML\LLVMObjectYAML.vcxproj">
+      <Project>{D2350CB2-19A4-3DBB-B4CE-CE3344736231}</Project>
+      <Name>LLVMObjectYAML</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Option\LLVMOption.vcxproj">
+      <Project>{7C4ECF41-D386-322D-B969-E24BB508438F}</Project>
+      <Name>LLVMOption</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\Debugging\LLVMOrcDebugging.vcxproj">
+      <Project>{CBEAED39-2B99-37A4-AC0F-576E68D416E4}</Project>
+      <Name>LLVMOrcDebugging</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\LLVMOrcJIT.vcxproj">
+      <Project>{BAE45BB8-EA82-3591-8A1D-D42DCEE09D9F}</Project>
+      <Name>LLVMOrcJIT</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\Shared\LLVMOrcShared.vcxproj">
+      <Project>{E058E713-848B-31B1-9B9E-44E18F2F37E6}</Project>
+      <Name>LLVMOrcShared</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\TargetProcess\LLVMOrcTargetProcess.vcxproj">
+      <Project>{B6B29C2C-85EB-3909-B467-64234A7A98AD}</Project>
+      <Name>LLVMOrcTargetProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Passes\LLVMPasses.vcxproj">
+      <Project>{BD068844-401B-395E-B282-E01B508D05BD}</Project>
+      <Name>LLVMPasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Plugins\LLVMPlugins.vcxproj">
+      <Project>{9746DD9F-A914-359C-9F0D-B07D450210EC}</Project>
+      <Name>LLVMPlugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ProfileData\LLVMProfileData.vcxproj">
+      <Project>{D1B49F3B-AC72-36D2-ACD2-9C77A4EA7473}</Project>
+      <Name>LLVMProfileData</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Remarks\LLVMRemarks.vcxproj">
+      <Project>{1DD19858-6146-3BBD-BFE6-D8A9C72597D6}</Project>
+      <Name>LLVMRemarks</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\RuntimeDyld\LLVMRuntimeDyld.vcxproj">
+      <Project>{39545264-AE00-3745-94C5-FE4E80A307C6}</Project>
+      <Name>LLVMRuntimeDyld</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\SandboxIR\LLVMSandboxIR.vcxproj">
+      <Project>{9CE68A52-3F7A-3F24-9D13-B18452F5D912}</Project>
+      <Name>LLVMSandboxIR</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Scalar\LLVMScalarOpts.vcxproj">
+      <Project>{AC326948-B26E-3F00-84DE-C504B34EBA71}</Project>
+      <Name>LLVMScalarOpts</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\SelectionDAG\LLVMSelectionDAG.vcxproj">
+      <Project>{9C18BDB8-E1F2-381E-81FC-AA0DDC8D1220}</Project>
+      <Name>LLVMSelectionDAG</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Support\LLVMSupport.vcxproj">
+      <Project>{12F775A1-C208-3BB5-A257-3A47E34CC156}</Project>
+      <Name>LLVMSupport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Support\LSP\LLVMSupportLSP.vcxproj">
+      <Project>{2E65592A-5A4E-378F-9924-A7DF7565EB9B}</Project>
+      <Name>LLVMSupportLSP</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\Symbolize\LLVMSymbolize.vcxproj">
+      <Project>{7ABE7352-474E-39AA-82C0-BE91F3FEB321}</Project>
+      <Name>LLVMSymbolize</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TableGen\LLVMTableGen.vcxproj">
+      <Project>{139E9012-6614-387F-A76F-2C68782FA483}</Project>
+      <Name>LLVMTableGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\LLVMTableGenBasic.vcxproj">
+      <Project>{A3D49F3F-54F3-3AB9-AB4C-0AAA8F29F4F3}</Project>
+      <Name>LLVMTableGenBasic</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Common\LLVMTableGenCommon.vcxproj">
+      <Project>{6E5ECDAD-0AD7-35BA-A901-C45ED4E60720}</Project>
+      <Name>LLVMTableGenCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\LLVMTarget.vcxproj">
+      <Project>{9FEC4DD9-26AE-3258-8FB4-534FEDFAEA24}</Project>
+      <Name>LLVMTarget</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TargetParser\LLVMTargetParser.vcxproj">
+      <Project>{930AF0AB-9671-3A7E-9AE0-B9AACDBD17EB}</Project>
+      <Name>LLVMTargetParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Telemetry\LLVMTelemetry.vcxproj">
+      <Project>{58E6EE8A-DCA8-3A5A-82C8-A7010FCD5CCF}</Project>
+      <Name>LLVMTelemetry</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TextAPI\LLVMTextAPI.vcxproj">
+      <Project>{06D4032A-DF26-3C94-87FC-9C1751F7381E}</Project>
+      <Name>LLVMTextAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TextAPI\BinaryReader\LLVMTextAPIBinaryReader.vcxproj">
+      <Project>{2BFB1418-9C19-3893-9B3D-8E8B2916DA7F}</Project>
+      <Name>LLVMTextAPIBinaryReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Utils\LLVMTransformUtils.vcxproj">
+      <Project>{020079E8-99DC-37DE-A8EC-ED73E95DE1E4}</Project>
+      <Name>LLVMTransformUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Vectorize\LLVMVectorize.vcxproj">
+      <Project>{3FC625FB-759D-31A2-9C3B-92059C28A771}</Project>
+      <Name>LLVMVectorize</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\WindowsDriver\LLVMWindowsDriver.vcxproj">
+      <Project>{0133B676-8AEB-3022-B4F7-133D78097B87}</Project>
+      <Name>LLVMWindowsDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\WindowsManifest\LLVMWindowsManifest.vcxproj">
+      <Project>{A3D73123-6F90-3397-A91B-B3ED23FED1D4}</Project>
+      <Name>LLVMWindowsManifest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\X86\AsmParser\LLVMX86AsmParser.vcxproj">
+      <Project>{D727970F-C55B-368B-BD5A-0A5CD7E50760}</Project>
+      <Name>LLVMX86AsmParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\X86\LLVMX86CodeGen.vcxproj">
+      <Project>{4FBF95A6-E97D-300E-B0BA-53FE6EE286C1}</Project>
+      <Name>LLVMX86CodeGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\X86\MCTargetDesc\LLVMX86Desc.vcxproj">
+      <Project>{A3FD9847-C590-32F7-A776-58391DFB57D0}</Project>
+      <Name>LLVMX86Desc</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\X86\Disassembler\LLVMX86Disassembler.vcxproj">
+      <Project>{75BFDEA7-A8AB-36C0-8997-A20CE1975883}</Project>
+      <Name>LLVMX86Disassembler</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\X86\TargetInfo\LLVMX86Info.vcxproj">
+      <Project>{20E14483-9609-350C-9EBF-5D3F6606E6DE}</Project>
+      <Name>LLVMX86Info</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\X86\MCA\LLVMX86TargetMCA.vcxproj">
+      <Project>{036756C5-9A7D-3949-88E2-FF522920EE74}</Project>
+      <Name>LLVMX86TargetMCA</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\XRay\LLVMXRay.vcxproj">
+      <Project>{8435E353-4612-3F7E-950B-6D5EB8B04673}</Project>
+      <Name>LLVMXRay</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\IPO\LLVMipo.vcxproj">
+      <Project>{B2811F68-7B0B-31C6-8CF9-2B117062F8C1}</Project>
+      <Name>LLVMipo</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\llvm-tblgen.vcxproj">
+      <Project>{A8ABC125-AD91-3045-BA20-0D1BD21F53CC}</Project>
+      <Name>llvm-tblgen</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\Support\llvm_vcsrevision_h.vcxproj">
+      <Project>{8B6A7CAC-16C6-3EAB-9468-28EC970383DF}</Project>
+      <Name>llvm_vcsrevision_h</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

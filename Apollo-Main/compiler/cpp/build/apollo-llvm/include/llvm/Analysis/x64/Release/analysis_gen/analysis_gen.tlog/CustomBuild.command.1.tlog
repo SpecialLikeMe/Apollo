@@ -1,0 +1,28 @@
+^C:\USERS\DEVON\APOLLO\APOLLO-MAIN\COMPILER\CPP\BUILD\CMAKEFILES\97E4CF922A8C120CF79DD96D1107995C\TARGETLIBRARYINFO.INC.RULE
+setlocal
+..\..\..\Release\bin\llvm-min-tblgen.exe -gen-target-library-info -IC:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm/Analysis -IC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include -IC:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include --long-string-literals=0 C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm/Analysis/TargetLibraryInfo.td -o C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Analysis/TargetLibraryInfo.inc
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\DEVON\APOLLO\APOLLO-MAIN\COMPILER\CPP\BUILD\CMAKEFILES\ABCB26244652C86FFFCAFAD0138A53B9\ANALYSIS_GEN.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\DEVON\APOLLO\APOLLO-MAIN\DEPENDENCIES\LLVM-SOURCE\LLVM\INCLUDE\LLVM\ANALYSIS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Analysis/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

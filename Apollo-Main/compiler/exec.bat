@@ -449,6 +449,8 @@ if errorlevel 1 exit /b !errorlevel!
 exit /b 0
 
 :native_build_cache_valid
+if not exist "%NATIVE_BUILD_DIR%\CMakeFiles" exit /b 1
+if not exist "%NATIVE_BUILD_DIR%\cmake_install.cmake" exit /b 1
 findstr /B /C:"ApolloNativeFrontend_SOURCE_DIR:STATIC=%NATIVE_SOURCE_DIR_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
 if errorlevel 1 exit /b 1
 findstr /B /C:"ApolloNativeFrontend_BINARY_DIR:STATIC=%NATIVE_BUILD_DIR_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul

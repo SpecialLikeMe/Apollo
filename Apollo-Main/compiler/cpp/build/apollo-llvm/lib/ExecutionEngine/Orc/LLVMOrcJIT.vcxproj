@@ -1,0 +1,750 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BAE45BB8-EA82-3591-8A1D-D42DCEE09D9F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <VcpkgEnabled>false</VcpkgEnabled>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>LLVMOrcJIT</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="do_not_import_user.props" Condition="exists('do_not_import_user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\Debug\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LLVMOrcJIT.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LLVMOrcJIT</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\Release\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LLVMOrcJIT.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LLVMOrcJIT</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\MinSizeRel\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">LLVMOrcJIT.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">LLVMOrcJIT</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\RelWithDebInfo\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">LLVMOrcJIT.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">LLVMOrcJIT</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj -w14062 /Gw /EHs-c-</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4146;4244;4267;4456;4457;4458;4459;4624;4100;4127;4505;4702;4245;4310;4701;4703;4389;4805;4577;4319;4324;4251;4275</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatSpecificWarningsAsErrors>4238</TreatSpecificWarningsAsErrors>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <MASM>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;UNICODE;_UNICODE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;__STDC_LIMIT_MACROS;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <IncludePaths>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </MASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include;C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/ExecutionEngine/Orc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/ExecutionEngine/Orc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/ExecutionEngine/Orc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/ExecutionEngine/Orc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/ExecutionEngine/Orc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/ExecutionEngine/Orc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/lib/ExecutionEngine/Orc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/lib/ExecutionEngine/Orc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.3\Modules\CheckLinkerFlag.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\AbsoluteSymbols.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\BacktraceTools.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\COFF.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\COFFVCRuntimeSupport.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\COFFPlatform.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\CompileOnDemandLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\CompileUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\Core.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\DebugUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\EHFrameRegistrationPlugin.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\EPCDynamicLibrarySearchGenerator.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\EPCGenericDylibManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\EPCGenericJITLinkMemoryManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\EPCGenericRTDyldMemoryManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\EPCIndirectionUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ExecutionUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ExecutorResolutionGenerator.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ObjectFileInterface.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\IndirectionUtils.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\InProcessMemoryAccess.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\IRCompileLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\IRTransformLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\IRPartitionLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\JITTargetMachineBuilder.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\JITLinkReentryTrampolines.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LazyObjectLinkingLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LazyReexports.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\Layer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LinkGraphLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LinkGraphLinkingLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LoadLinkableFile.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LookupAndRecordAddrs.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\LLJIT.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\MachO.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\MachOPlatform.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\MapperJITLinkMemoryManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\MemoryMapper.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ELFNixPlatform.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\Mangling.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ObjectLinkingLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ObjectTransformLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\OrcABISupport.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\OrcV2CBindings.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\RTDyldObjectLinkingLayer.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\SectCreate.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\SelfExecutorProcessControl.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\SimpleRemoteEPC.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\SimpleRemoteMemoryMapper.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\Speculation.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\SpeculateAnalyses.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ExecutorProcessControl.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\TaskDispatch.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ThreadSafeModule.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\UnwindInfoRegistrationPlugin.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\RedirectionManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\JITLinkRedirectableSymbolManager.cpp" />
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\ExecutionEngine\Orc\ReOptimizeLayer.cpp" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\AbsoluteSymbols.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\BacktraceTools.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\COFF.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\COFFPlatform.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\COFFVCRuntimeSupport.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\CallSPSViaEPC.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\CallViaEPC.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\CallableTraitsHelper.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\CompileOnDemandLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\CompileUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\Core.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\CoreContainers.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\DebugUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\DylibManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EHFrameRegistrationPlugin.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ELFNixPlatform.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EPCDynamicLibrarySearchGenerator.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EPCGenericDylibManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EPCGenericJITLinkMemoryManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EPCGenericMemoryAccess.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EPCGenericRTDyldMemoryManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\EPCIndirectionUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ExecutionUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ExecutorProcessControl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ExecutorResolutionGenerator.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\IRCompileLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\IRPartitionLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\IRTransformLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\InProcessMemoryAccess.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\IndirectionUtils.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\JITLinkRedirectableSymbolManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\JITLinkReentryTrampolines.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\JITTargetMachineBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LLJIT.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\Layer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LazyObjectLinkingLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LazyReexports.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LinkGraphLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LinkGraphLinkingLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LoadLinkableFile.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\LookupAndRecordAddrs.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MachO.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MachOBuilder.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MachOPlatform.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\Mangling.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MapperJITLinkMemoryManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MaterializationUnit.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MemoryAccess.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\MemoryMapper.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ObjectFileInterface.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ObjectLinkingLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ObjectTransformLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\OrcABISupport.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\RTDyldObjectLinkingLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ReOptimizeLayer.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\RedirectionManager.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\SectCreate.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\SelfExecutorProcessControl.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\SimpleRemoteEPC.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\SimpleRemoteMemoryMapper.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\SpeculateAnalyses.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\Speculation.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\SymbolStringPool.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\TaskDispatch.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\ThreadSafeModule.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\UnwindInfoRegistrationPlugin.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\WaitingOnGraph.h" />
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\include\llvm\ExecutionEngine\Orc\WaitingOnGraphOpReplay.h" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\ZERO_CHECK.vcxproj">
+      <Project>{0A3DE1D2-3E0B-3DAD-BCB3-2384D209F094}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\AggressiveInstCombine\LLVMAggressiveInstCombine.vcxproj">
+      <Project>{875A3E0C-3D63-3DB9-B79C-FBCC1B263754}</Project>
+      <Name>LLVMAggressiveInstCombine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Analysis\LLVMAnalysis.vcxproj">
+      <Project>{5B519FA9-DB1C-3397-85E6-81C530B35310}</Project>
+      <Name>LLVMAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\AsmParser\LLVMAsmParser.vcxproj">
+      <Project>{AAEB52C8-BADA-36A6-BC48-FF46854FFFBD}</Project>
+      <Name>LLVMAsmParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\BinaryFormat\LLVMBinaryFormat.vcxproj">
+      <Project>{2A3DEDC9-4926-3B1D-82D3-48AB2EC1BD9A}</Project>
+      <Name>LLVMBinaryFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.vcxproj">
+      <Project>{3F6A79C2-9833-355C-80C7-B02C5306E195}</Project>
+      <Name>LLVMBitReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Writer\LLVMBitWriter.vcxproj">
+      <Project>{A2DC6325-AF24-354A-88D7-1C9493112CF3}</Project>
+      <Name>LLVMBitWriter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitstream\Reader\LLVMBitstreamReader.vcxproj">
+      <Project>{265AD086-4BE5-3317-AB00-1C4E2B24462C}</Project>
+      <Name>LLVMBitstreamReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\CFGuard\LLVMCFGuard.vcxproj">
+      <Project>{C19AC7EA-9911-3108-91A8-C40A5F21C33B}</Project>
+      <Name>LLVMCFGuard</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CGData\LLVMCGData.vcxproj">
+      <Project>{399A4122-D938-3763-9DD5-321D32F02D19}</Project>
+      <Name>LLVMCGData</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\LLVMCodeGen.vcxproj">
+      <Project>{7F0B4ED4-C99C-3D56-A991-78F5DF21EDFF}</Project>
+      <Name>LLVMCodeGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGenTypes\LLVMCodeGenTypes.vcxproj">
+      <Project>{9BC67D25-D05D-3CA4-8020-0ED278FC091E}</Project>
+      <Name>LLVMCodeGenTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IR\LLVMCore.vcxproj">
+      <Project>{3A06DF54-3572-3A90-BC65-9588322AF4E0}</Project>
+      <Name>LLVMCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Coroutines\LLVMCoroutines.vcxproj">
+      <Project>{D894A838-FDC8-38E5-9F79-0101C7123CDF}</Project>
+      <Name>LLVMCoroutines</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\BTF\LLVMDebugInfoBTF.vcxproj">
+      <Project>{4844BB28-AC4F-3C3A-A15E-B09FF2D0BA49}</Project>
+      <Name>LLVMDebugInfoBTF</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\CodeView\LLVMDebugInfoCodeView.vcxproj">
+      <Project>{5FB30604-68A8-3533-8F8B-5A94B2F29EED}</Project>
+      <Name>LLVMDebugInfoCodeView</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\DWARF\LLVMDebugInfoDWARF.vcxproj">
+      <Project>{401D47C3-7AB2-3351-A552-BCDE02CF45EF}</Project>
+      <Name>LLVMDebugInfoDWARF</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\DWARF\LowLevel\LLVMDebugInfoDWARFLowLevel.vcxproj">
+      <Project>{69014312-9841-3689-9E42-68C7DA84A950}</Project>
+      <Name>LLVMDebugInfoDWARFLowLevel</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\GSYM\LLVMDebugInfoGSYM.vcxproj">
+      <Project>{B136B3E7-450F-37A3-8563-AB51E421AC82}</Project>
+      <Name>LLVMDebugInfoGSYM</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\MSF\LLVMDebugInfoMSF.vcxproj">
+      <Project>{DE606306-6CFD-34FF-88D5-97A00C86D86F}</Project>
+      <Name>LLVMDebugInfoMSF</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\PDB\LLVMDebugInfoPDB.vcxproj">
+      <Project>{16D28F12-8EFD-3221-9FF4-2863BD072385}</Project>
+      <Name>LLVMDebugInfoPDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Demangle\LLVMDemangle.vcxproj">
+      <Project>{3BA74E13-F39B-3CF6-824B-53BCD4CA471C}</Project>
+      <Name>LLVMDemangle</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\LLVMExecutionEngine.vcxproj">
+      <Project>{FAB9A165-4D3B-3049-96C2-184E6548AFCD}</Project>
+      <Name>LLVMExecutionEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Atomic\LLVMFrontendAtomic.vcxproj">
+      <Project>{3E6EF0F1-C728-3716-A1A4-2D44EA5E6272}</Project>
+      <Name>LLVMFrontendAtomic</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Directive\LLVMFrontendDirective.vcxproj">
+      <Project>{FEFE0F58-96C6-30F4-B918-608E920FFE2E}</Project>
+      <Name>LLVMFrontendDirective</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\HLSL\LLVMFrontendHLSL.vcxproj">
+      <Project>{9ACC4384-7408-346E-941E-133B680451BE}</Project>
+      <Name>LLVMFrontendHLSL</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\Offloading\LLVMFrontendOffloading.vcxproj">
+      <Project>{B7C97956-4C8C-38E6-9F17-10D218AE1C9B}</Project>
+      <Name>LLVMFrontendOffloading</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Frontend\OpenMP\LLVMFrontendOpenMP.vcxproj">
+      <Project>{0C031A0A-36A1-32B6-8C32-6F07AA9B47B8}</Project>
+      <Name>LLVMFrontendOpenMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\GlobalISel\LLVMGlobalISel.vcxproj">
+      <Project>{25028D85-242B-3067-833A-DE568F2C1E38}</Project>
+      <Name>LLVMGlobalISel</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\HipStdPar\LLVMHipStdPar.vcxproj">
+      <Project>{FC5C368C-6362-3687-B2EA-32080910C4CE}</Project>
+      <Name>LLVMHipStdPar</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IRPrinter\LLVMIRPrinter.vcxproj">
+      <Project>{769D1B4B-50E9-3C98-B278-4422A00F4AD6}</Project>
+      <Name>LLVMIRPrinter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\IRReader\LLVMIRReader.vcxproj">
+      <Project>{7FB5429E-89B6-35FC-8066-6DB56B7E30D0}</Project>
+      <Name>LLVMIRReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\InstCombine\LLVMInstCombine.vcxproj">
+      <Project>{4AAFF5D8-4463-39BC-AE08-B3691C1A3877}</Project>
+      <Name>LLVMInstCombine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Instrumentation\LLVMInstrumentation.vcxproj">
+      <Project>{91631B7A-F6C6-376F-AB28-1297805D8C19}</Project>
+      <Name>LLVMInstrumentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\JITLink\LLVMJITLink.vcxproj">
+      <Project>{DCDB5136-6DDD-3678-80D3-372FA136B69C}</Project>
+      <Name>LLVMJITLink</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Linker\LLVMLinker.vcxproj">
+      <Project>{7EA8F6CA-4AE8-3AFA-865C-9B3C2D2E777B}</Project>
+      <Name>LLVMLinker</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\MC\LLVMMC.vcxproj">
+      <Project>{27C7AA12-0F85-3414-A166-A5FC38D4D9EC}</Project>
+      <Name>LLVMMC</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\MC\MCParser\LLVMMCParser.vcxproj">
+      <Project>{DD6B5283-2780-303E-86E2-0D547CA5F3B7}</Project>
+      <Name>LLVMMCParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\ObjCARC\LLVMObjCARCOpts.vcxproj">
+      <Project>{65F417BD-EC11-34AF-A652-78828FBC4101}</Project>
+      <Name>LLVMObjCARCOpts</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Object\LLVMObject.vcxproj">
+      <Project>{EBE7A514-02F2-3602-B989-3B7CF55DCCF2}</Project>
+      <Name>LLVMObject</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ObjectYAML\LLVMObjectYAML.vcxproj">
+      <Project>{D2350CB2-19A4-3DBB-B4CE-CE3344736231}</Project>
+      <Name>LLVMObjectYAML</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Option\LLVMOption.vcxproj">
+      <Project>{7C4ECF41-D386-322D-B969-E24BB508438F}</Project>
+      <Name>LLVMOption</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\Shared\LLVMOrcShared.vcxproj">
+      <Project>{E058E713-848B-31B1-9B9E-44E18F2F37E6}</Project>
+      <Name>LLVMOrcShared</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\Orc\TargetProcess\LLVMOrcTargetProcess.vcxproj">
+      <Project>{B6B29C2C-85EB-3909-B467-64234A7A98AD}</Project>
+      <Name>LLVMOrcTargetProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Passes\LLVMPasses.vcxproj">
+      <Project>{BD068844-401B-395E-B282-E01B508D05BD}</Project>
+      <Name>LLVMPasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ProfileData\LLVMProfileData.vcxproj">
+      <Project>{D1B49F3B-AC72-36D2-ACD2-9C77A4EA7473}</Project>
+      <Name>LLVMProfileData</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Remarks\LLVMRemarks.vcxproj">
+      <Project>{1DD19858-6146-3BBD-BFE6-D8A9C72597D6}</Project>
+      <Name>LLVMRemarks</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\ExecutionEngine\RuntimeDyld\LLVMRuntimeDyld.vcxproj">
+      <Project>{39545264-AE00-3745-94C5-FE4E80A307C6}</Project>
+      <Name>LLVMRuntimeDyld</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\SandboxIR\LLVMSandboxIR.vcxproj">
+      <Project>{9CE68A52-3F7A-3F24-9D13-B18452F5D912}</Project>
+      <Name>LLVMSandboxIR</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Scalar\LLVMScalarOpts.vcxproj">
+      <Project>{AC326948-B26E-3F00-84DE-C504B34EBA71}</Project>
+      <Name>LLVMScalarOpts</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\CodeGen\SelectionDAG\LLVMSelectionDAG.vcxproj">
+      <Project>{9C18BDB8-E1F2-381E-81FC-AA0DDC8D1220}</Project>
+      <Name>LLVMSelectionDAG</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Support\LLVMSupport.vcxproj">
+      <Project>{12F775A1-C208-3BB5-A257-3A47E34CC156}</Project>
+      <Name>LLVMSupport</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\DebugInfo\Symbolize\LLVMSymbolize.vcxproj">
+      <Project>{7ABE7352-474E-39AA-82C0-BE91F3FEB321}</Project>
+      <Name>LLVMSymbolize</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Target\LLVMTarget.vcxproj">
+      <Project>{9FEC4DD9-26AE-3258-8FB4-534FEDFAEA24}</Project>
+      <Name>LLVMTarget</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TargetParser\LLVMTargetParser.vcxproj">
+      <Project>{930AF0AB-9671-3A7E-9AE0-B9AACDBD17EB}</Project>
+      <Name>LLVMTargetParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\TextAPI\LLVMTextAPI.vcxproj">
+      <Project>{06D4032A-DF26-3C94-87FC-9C1751F7381E}</Project>
+      <Name>LLVMTextAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Utils\LLVMTransformUtils.vcxproj">
+      <Project>{020079E8-99DC-37DE-A8EC-ED73E95DE1E4}</Project>
+      <Name>LLVMTransformUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\Vectorize\LLVMVectorize.vcxproj">
+      <Project>{3FC625FB-759D-31A2-9C3B-92059C28A771}</Project>
+      <Name>LLVMVectorize</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\WindowsDriver\LLVMWindowsDriver.vcxproj">
+      <Project>{0133B676-8AEB-3022-B4F7-133D78097B87}</Project>
+      <Name>LLVMWindowsDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Transforms\IPO\LLVMipo.vcxproj">
+      <Project>{B2811F68-7B0B-31C6-8CF9-2B117062F8C1}</Project>
+      <Name>LLVMipo</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\IR\intrinsics_gen.vcxproj">
+      <Project>{A50D2412-7647-3631-8937-CE444D73EF79}</Project>
+      <Name>intrinsics_gen</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

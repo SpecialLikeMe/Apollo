@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\llvm-min-tblgen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\DAGISelMatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\DFAEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\DecoderTableEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\DecoderTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\TableGenBackends.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\WebAssemblyDisassemblerEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\X86DisassemblerShared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\X86DisassemblerTables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\X86ModRMFilters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\X86RecognizableInstr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\utils\TableGen\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\ARMTargetDefEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\Attributes.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\CodeGenIntrinsics.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\DirectiveEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\IntrinsicEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\RISCVTargetDefEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\RuntimeLibcallsEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\RuntimeLibcalls.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\SDNodeProperties.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\TableGen.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\TargetFeaturesEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\TargetLibraryInfoEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\utils\TableGen\Basic\obj.LLVMTableGenBasic.dir\$(Configuration)\VTEmitter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\resources\windows_version_resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{87710DDF-F811-3822-A4AB-356A2253038F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Libraries">
+      <UniqueIdentifier>{2EA04B68-70B5-378B-A7EC-9512B6C7936F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{AE9C488C-C8BE-32EF-8A37-19E3B6792AA9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{59DF061E-57DC-33F3-94FD-B07E5CD94B4B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

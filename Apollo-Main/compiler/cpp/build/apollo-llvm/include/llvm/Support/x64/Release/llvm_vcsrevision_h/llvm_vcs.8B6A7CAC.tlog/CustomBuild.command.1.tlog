@@ -1,0 +1,28 @@
+^C:\USERS\DEVON\APOLLO\APOLLO-MAIN\COMPILER\CPP\BUILD\CMAKEFILES\F49ADE672AC45E3E44AE58DB56BC8B21\VCSREVISION.H.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -DNAMES=LLVM -DLLVM_SOURCE_DIR=C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm -DHEADER_FILE=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Support/VCSRevision.h -DLLVM_FORCE_VC_REVISION= -DLLVM_FORCE_VC_REPOSITORY= -P C:/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/cmake/modules/GenerateVersionFromVCS.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\DEVON\APOLLO\APOLLO-MAIN\COMPILER\CPP\BUILD\CMAKEFILES\36F8FC5B3A26EF85E25680C14DCAE810\LLVM_VCSREVISION_H.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\DEVON\APOLLO\APOLLO-MAIN\DEPENDENCIES\LLVM-SOURCE\LLVM\INCLUDE\LLVM\SUPPORT\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/devon/Apollo/Apollo-Main/compiler/cpp -BC:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build --check-stamp-file C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/apollo-llvm/include/llvm/Support/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
