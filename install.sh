@@ -45,23 +45,23 @@ first_existing_dir() {
 
 install_with_brew() {
     write_status 'Installing dependencies with Homebrew'
-    brew install git openjdk llvm antlr boehm-gc make sdl2 sdl2_image
+    brew install git openjdk llvm antlr boehm-gc make cmake sdl2 sdl2_image
 }
 
 install_with_apt() {
     write_status 'Installing dependencies with apt'
     sudo apt-get update
-    sudo apt-get install -y git openjdk-21-jdk clang llvm make antlr4 libgc-dev libsdl2-dev libsdl2-image-dev
+    sudo apt-get install -y git openjdk-21-jdk clang llvm make cmake antlr4 libgc-dev libsdl2-dev libsdl2-image-dev
 }
 
 install_with_dnf() {
     write_status 'Installing dependencies with dnf'
-    sudo dnf install -y git java-21-openjdk-devel clang llvm make antlr4 gc-devel SDL2-devel SDL2_image-devel
+    sudo dnf install -y git java-21-openjdk-devel clang llvm make cmake antlr4 gc-devel SDL2-devel SDL2_image-devel
 }
 
 install_with_pacman() {
     write_status 'Installing dependencies with pacman'
-    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make antlr4 gc sdl2 sdl2_image
+    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make cmake antlr4 gc sdl2 sdl2_image
 }
 
 ensure_dependencies() {
@@ -126,6 +126,27 @@ resolve_make_bin() {
         command -v gmake
         return
     fi
+    printf '\n'
+}
+
+resolve_cmake_bin() {
+    if command_exists cmake; then
+        command -v cmake
+        return
+    fi
+    if command_exists brew; then
+        cmake_prefix=$(brew --prefix cmake 2>/dev/null || true)
+        if [ -n "$cmake_prefix" ] && [ -x "$cmake_prefix/bin/cmake" ]; then
+            printf '%s/bin/cmake\n' "$cmake_prefix"
+            return
+        fi
+    fi
+    for candidate in /usr/bin/cmake /usr/local/bin/cmake; do
+        if [ -x "$candidate" ]; then
+            printf '%s\n' "$candidate"
+            return
+        fi
+    done
     printf '\n'
 }
 
@@ -259,6 +280,7 @@ dependency_snapshot() {
     java_bin=$(resolve_java_bin)
     llvm_bin=$(resolve_llvm_bin)
     make_bin=$(resolve_make_bin)
+    cmake_bin=$(resolve_cmake_bin)
     git_bin=$(command -v git 2>/dev/null || printf '')
     gc_include_dir=$(resolve_gc_include_dir)
     gc_lib_dir=$(resolve_gc_lib_dir)
@@ -278,6 +300,9 @@ dependency_snapshot() {
     [ -n "$make_bin" ] || return 1
     [ -x "$make_bin" ] || return 1
 
+    [ -n "$cmake_bin" ] || return 1
+    [ -x "$cmake_bin" ] || return 1
+
     [ -f "$COMPILER_DIR/antlr-4.13.2-complete.jar" ] || return 1
 
     [ -n "$gc_include_dir" ] || return 1
@@ -296,6 +321,7 @@ dependency_snapshot() {
     printf 'JAVA_BIN=%s\n' "$java_bin"
     printf 'LLVM_BIN=%s\n' "$llvm_bin"
     printf 'MAKE_BIN=%s\n' "$make_bin"
+    printf 'CMAKE_BIN=%s\n' "$cmake_bin"
     printf 'GC_INCLUDE_DIR=%s\n' "$gc_include_dir"
     printf 'GC_LIB_DIR=%s\n' "$gc_lib_dir"
     printf 'SDL_INCLUDE_DIR=%s\n' "$sdl_include_dir"
@@ -304,7 +330,7 @@ dependency_snapshot() {
 
 verify_dependencies() {
     if ! snapshot=$(dependency_snapshot); then
-        printf 'Apollo dependency verification failed. Required components: java, javac, clang, clang++, llc, make/gmake, bundled antlr-4.13.2-complete.jar, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs.\n' >&2
+        printf 'Apollo dependency verification failed. Required components: java, javac, clang, clang++, llc, make/gmake, cmake, bundled antlr-4.13.2-complete.jar, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs.\n' >&2
         return 1
     fi
 
@@ -313,6 +339,7 @@ verify_dependencies() {
     write_status "Verified Java at $JAVA_BIN"
     write_status "Verified LLVM toolchain at $LLVM_BIN"
     write_status "Verified make at $MAKE_BIN"
+    write_status "Verified CMake at $CMAKE_BIN"
     write_status "Verified Boehm GC include dir at $GC_INCLUDE_DIR"
     write_status "Verified Boehm GC lib dir at $GC_LIB_DIR"
     write_status "Verified SDL include dir at $SDL_INCLUDE_DIR"
@@ -411,6 +438,8 @@ verify_dependencies
 
 JAVA_BIN=$(resolve_java_bin)
 LLVM_BIN=$(resolve_llvm_bin)
+MAKE_BIN=$(resolve_make_bin)
+CMAKE_BIN=$(resolve_cmake_bin)
 GC_INCLUDE_DIR=$(resolve_gc_include_dir)
 GC_LIB_DIR=$(resolve_gc_lib_dir)
 SDL_INCLUDE_DIR=$(resolve_sdl_include_dir)
@@ -420,6 +449,8 @@ mkdir -p "$COMPILER_DIR"
 cat > "$TOOLCHAIN_ENV_SH" <<EOF
 export APOLLO_JAVA_BIN="${JAVA_BIN}"
 export APOLLO_LLVM_BIN="${LLVM_BIN}"
+export APOLLO_MAKE_EXE="${MAKE_BIN}"
+export APOLLO_CMAKE_EXE="${CMAKE_BIN}"
 export APOLLO_GC_INCLUDE_DIR="${GC_INCLUDE_DIR}"
 export APOLLO_GC_LIB_DIR="${GC_LIB_DIR}"
 export APOLLO_SDL_INCLUDE_DIR="${SDL_INCLUDE_DIR}"
