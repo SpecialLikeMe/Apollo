@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(ApolloNativeFrontend LANGUAGES CXX)
+project(ApolloNativeFrontend LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,6 +10,9 @@ set(APOLLO_CPP_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 set(APOLLO_LLVM_API_ROOT "" CACHE PATH "Root directory of a host-compatible LLVM SDK with the C++ API")
 set(APOLLO_LLVM_MONOREPO_ROOT "${APOLLO_CPP_SOURCE_DIR}/../../dependencies/llvm-source" CACHE PATH "Root directory of the checked-in LLVM monorepo source tree")
+set(APOLLO_LLVM_CONFIG_DIR "")
+set(APOLLO_LLVM_API_LIBS "")
+set(APOLLO_LLVM_LIBRARY_DIRS "")
 
 if(NOT APOLLO_LLVM_API_ROOT AND DEFINED ENV{APOLLO_LLVM_API_ROOT})
     set(APOLLO_LLVM_API_ROOT "$ENV{APOLLO_LLVM_API_ROOT}")
@@ -26,13 +29,69 @@ foreach(apollo_llvm_candidate IN ITEMS
     endif()
 endforeach()
 
+if(NOT APOLLO_LLVM_API_ROOT)
+    find_program(APOLLO_LLVM_CONFIG_EXECUTABLE
+        NAMES llvm-config llvm-config-21 llvm-config-20 llvm-config-19 llvm-config-18 llvm-config-17 llvm-config-16)
+    if(APOLLO_LLVM_CONFIG_EXECUTABLE)
+        execute_process(
+            COMMAND "${APOLLO_LLVM_CONFIG_EXECUTABLE}" --prefix
+            OUTPUT_VARIABLE APOLLO_LLVM_CONFIG_PREFIX
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        if(APOLLO_LLVM_CONFIG_PREFIX)
+            set(APOLLO_LLVM_API_ROOT "${APOLLO_LLVM_CONFIG_PREFIX}")
+        endif()
+    endif()
+endif()
+
+foreach(apollo_llvm_cmake_dir IN ITEMS
+    "${APOLLO_LLVM_API_ROOT}/lib/cmake/llvm"
+    "${APOLLO_LLVM_API_ROOT}/lib64/cmake/llvm")
+    if(NOT APOLLO_LLVM_CONFIG_DIR AND EXISTS "${apollo_llvm_cmake_dir}/LLVMConfig.cmake")
+        set(APOLLO_LLVM_CONFIG_DIR "${apollo_llvm_cmake_dir}")
+    endif()
+endforeach()
+
 if(APOLLO_LLVM_API_ROOT
     AND EXISTS "${APOLLO_LLVM_API_ROOT}/include/llvm/IR/IRBuilder.h"
-    AND EXISTS "${APOLLO_LLVM_API_ROOT}/lib/LLVMCore.lib"
-    AND EXISTS "${APOLLO_LLVM_API_ROOT}/lib/cmake/llvm/LLVMConfig.cmake")
-    list(PREPEND CMAKE_PREFIX_PATH "${APOLLO_LLVM_API_ROOT}")
+    AND APOLLO_LLVM_CONFIG_DIR)
+    list(PREPEND CMAKE_PREFIX_PATH "${APOLLO_LLVM_API_ROOT}" "${APOLLO_LLVM_CONFIG_DIR}")
     find_package(LLVM CONFIG REQUIRED)
-    llvm_map_components_to_libnames(APOLLO_LLVM_API_LIBS Core Support Linker IRReader AsmParser BitReader)
+    if(APOLLO_LLVM_CONFIG_EXECUTABLE)
+        execute_process(
+            COMMAND "${APOLLO_LLVM_CONFIG_EXECUTABLE}" --libdir
+            OUTPUT_VARIABLE APOLLO_LLVM_CONFIG_LIBDIR
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        execute_process(
+            COMMAND "${APOLLO_LLVM_CONFIG_EXECUTABLE}" --libs core linker irreader asmparser bitreader
+            OUTPUT_VARIABLE APOLLO_LLVM_CONFIG_LIBS_RAW
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        execute_process(
+            COMMAND "${APOLLO_LLVM_CONFIG_EXECUTABLE}" --system-libs
+            OUTPUT_VARIABLE APOLLO_LLVM_CONFIG_SYSTEM_LIBS_RAW
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        if(APOLLO_LLVM_CONFIG_LIBS_RAW)
+            separate_arguments(APOLLO_LLVM_API_LIBS NATIVE_COMMAND "${APOLLO_LLVM_CONFIG_LIBS_RAW}")
+        endif()
+        if(APOLLO_LLVM_CONFIG_SYSTEM_LIBS_RAW)
+            separate_arguments(APOLLO_LLVM_SYSTEM_LIBS NATIVE_COMMAND "${APOLLO_LLVM_CONFIG_SYSTEM_LIBS_RAW}")
+            list(APPEND APOLLO_LLVM_API_LIBS ${APOLLO_LLVM_SYSTEM_LIBS})
+        endif()
+        if(APOLLO_LLVM_CONFIG_LIBDIR)
+            list(APPEND APOLLO_LLVM_LIBRARY_DIRS "${APOLLO_LLVM_CONFIG_LIBDIR}")
+        endif()
+    endif()
+    if(NOT APOLLO_LLVM_API_LIBS)
+        llvm_map_components_to_libnames(APOLLO_LLVM_API_LIBS Core Support Linker IRReader AsmParser BitReader)
+        list(APPEND APOLLO_LLVM_LIBRARY_DIRS ${LLVM_LIBRARY_DIRS})
+    endif()
 elseif(EXISTS "${APOLLO_LLVM_MONOREPO_ROOT}/llvm/CMakeLists.txt")
     set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON CACHE BOOL "" FORCE)
     set(LLVM_INCLUDE_TOOLS OFF CACHE BOOL "" FORCE)
@@ -50,6 +109,7 @@ elseif(EXISTS "${APOLLO_LLVM_MONOREPO_ROOT}/llvm/CMakeLists.txt")
     set(LLVM_INCLUDE_DIRS
         "${APOLLO_LLVM_MONOREPO_ROOT}/llvm/include"
         "${CMAKE_BINARY_DIR}/apollo-llvm/include")
+    list(APPEND APOLLO_LLVM_LIBRARY_DIRS "${CMAKE_BINARY_DIR}/apollo-llvm/lib")
 else()
     message(FATAL_ERROR "Apollo now requires the LLVM C++ API. Set APOLLO_LLVM_API_ROOT or keep dependencies/llvm-source available.")
 endif()
@@ -112,6 +172,13 @@ foreach(apollo_target IN ITEMS apollo_frontend_native apollo_build_driver_native
             "${APOLLO_NATIVE_GENERATED_DIR}"
             ${LLVM_INCLUDE_DIRS}
     )
+
+    if(APOLLO_LLVM_LIBRARY_DIRS)
+        target_link_directories(${apollo_target}
+            PRIVATE
+                ${APOLLO_LLVM_LIBRARY_DIRS}
+        )
+    endif()
 
     if(MSVC)
         target_compile_options(${apollo_target} PRIVATE /FS)

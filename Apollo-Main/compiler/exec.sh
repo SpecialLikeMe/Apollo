@@ -4,8 +4,42 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 RESOLVED_APOLLO_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 APOLLO_DIR=${APOLLO_DIR:-$RESOLVED_APOLLO_DIR}
+
+running_under_wsl() {
+    if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+        return 0
+    fi
+
+    kernel_release=$(uname -r 2>/dev/null || printf '')
+    case "$kernel_release" in
+        *[Mm]icrosoft*|*WSL*) return 0 ;;
+    esac
+
+    return 1
+}
+
+default_native_build_dir() {
+    if [ -n "${APOLLO_NATIVE_BUILD_DIR:-}" ]; then
+        printf '%s\n' "$APOLLO_NATIVE_BUILD_DIR"
+        return 0
+    fi
+
+    if running_under_wsl; then
+        cache_root=${XDG_CACHE_HOME:-$HOME/.cache}
+        build_key=apollo-native
+        if command -v cksum >/dev/null 2>&1; then
+            set -- $(printf '%s\n' "$SCRIPT_DIR" | cksum)
+            build_key=$1
+        fi
+        printf '%s/apollo/native-build/%s\n' "$cache_root" "$build_key"
+        return 0
+    fi
+
+    printf '%s/cpp/build\n' "$SCRIPT_DIR"
+}
+
 NATIVE_SOURCE_DIR="$SCRIPT_DIR/cpp"
-NATIVE_BUILD_DIR="$NATIVE_SOURCE_DIR/build"
+NATIVE_BUILD_DIR=$(default_native_build_dir)
 NATIVE_BUILD_CONFIG=${APOLLO_NATIVE_BUILD_CONFIG:-Release}
 APOLLO_FRONTEND_EXE=
 APOLLO_BUILD_DRIVER_EXE=
@@ -232,10 +266,10 @@ resolve_cmake() {
 resolve_native_executable() {
     name=$1
     for candidate in \
-        "$NATIVE_BUILD_DIR/$NATIVE_BUILD_CONFIG/$name" \
-        "$NATIVE_BUILD_DIR/$NATIVE_BUILD_CONFIG/$name.exe" \
         "$NATIVE_BUILD_DIR/$name" \
         "$NATIVE_BUILD_DIR/$name.exe" \
+        "$NATIVE_BUILD_DIR/$NATIVE_BUILD_CONFIG/$name" \
+        "$NATIVE_BUILD_DIR/$NATIVE_BUILD_CONFIG/$name.exe" \
         "$NATIVE_BUILD_DIR/Debug/$name" \
         "$NATIVE_BUILD_DIR/Debug/$name.exe" \
         "$NATIVE_BUILD_DIR/Release/$name" \
@@ -245,7 +279,7 @@ resolve_native_executable() {
         "$NATIVE_BUILD_DIR/MinSizeRel/$name" \
         "$NATIVE_BUILD_DIR/MinSizeRel/$name.exe"
     do
-        if [ -x "$candidate" ]; then
+        if [ -x "$candidate" ] && [ -s "$candidate" ]; then
             printf '%s\n' "$candidate"
             return 0
         fi
@@ -254,9 +288,39 @@ resolve_native_executable() {
     return 1
 }
 
+reuse_native_targets() {
+    APOLLO_FRONTEND_EXE=
+    APOLLO_BUILD_DRIVER_EXE=
+
+    for target_name in "$@"; do
+        resolved_target=$(resolve_native_executable "$target_name") || return 1
+        if native_target_stale "$resolved_target"; then
+            return 1
+        fi
+
+        case "$target_name" in
+            apollo_frontend_native) APOLLO_FRONTEND_EXE=$resolved_target ;;
+            apollo_build_driver_native) APOLLO_BUILD_DRIVER_EXE=$resolved_target ;;
+        esac
+    done
+
+    if [ -n "$APOLLO_FRONTEND_EXE" ] && [ -n "$APOLLO_BUILD_DRIVER_EXE" ]; then
+        return 0
+    fi
+
+    APOLLO_FRONTEND_EXE=$(resolve_native_executable apollo_frontend_native) || return 1
+    APOLLO_BUILD_DRIVER_EXE=$(resolve_native_executable apollo_build_driver_native) || return 1
+    return 0
+}
+
 ensure_native_targets() {
     resolve_cmake || return 1
     normalize_llvm_shell_scripts
+    mkdir -p "$NATIVE_BUILD_DIR"
+
+    if reuse_native_targets "$@"; then
+        return 0
+    fi
 
     if [ -f "$NATIVE_BUILD_DIR/CMakeCache.txt" ] && ! native_build_cache_valid; then
         rm -rf "$NATIVE_BUILD_DIR"
@@ -309,6 +373,7 @@ native_build_cache_valid() {
     [ -f "$cache_file" ] || return 1
     [ -d "$NATIVE_BUILD_DIR/CMakeFiles" ] || return 1
     [ -f "$NATIVE_BUILD_DIR/cmake_install.cmake" ] || return 1
+    [ "$NATIVE_SOURCE_DIR/CMakeLists.txt" -nt "$cache_file" ] && return 1
     grep -Fqx "ApolloNativeFrontend_SOURCE_DIR:STATIC=$NATIVE_SOURCE_DIR" "$cache_file" || return 1
     grep -Fqx "ApolloNativeFrontend_BINARY_DIR:STATIC=$NATIVE_BUILD_DIR" "$cache_file" || return 1
     grep -Fqx "CMAKE_HOME_DIRECTORY:INTERNAL=$NATIVE_SOURCE_DIR" "$cache_file" || return 1

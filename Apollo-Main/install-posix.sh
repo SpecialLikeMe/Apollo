@@ -557,7 +557,7 @@ validate_toolchain_env() {
 }
 
 mkdir -p "$COMPILER_DIR"
-chmod +x "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$PAYLOAD_DIR/apollo-manage.sh"
+chmod +x "$SCRIPT_PATH" "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$PAYLOAD_DIR/apollo-manage.sh"
 publish_cli_shims
 validate_cli_shims
 
@@ -587,7 +587,7 @@ export APOLLO_SDL_LIB_DIR="${SDL_LIB_DIR}"
 export APOLLO_CXX_STD="c++20"
 EOF
 
-chmod +x "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$TOOLCHAIN_ENV_SH" "$TOOLCHAIN_LOCAL_ENV_SH"
+chmod +x "$SCRIPT_PATH" "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh" "$COMPILER_DIR/exec.sh" "$TOOLCHAIN_ENV_SH" "$TOOLCHAIN_LOCAL_ENV_SH"
 validate_toolchain_env
 write_status "Wrote POSIX toolchain environment to $TOOLCHAIN_LOCAL_ENV_SH"
 write_status "Apollo is available as 'apollo' and 'apollo-config' from $USER_BIN_DIR"

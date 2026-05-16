@@ -18,4 +18,6 @@ resolve_script_path() {
 
 SCRIPT_PATH=$(resolve_script_path "$0")
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd -P)
-exec "$SCRIPT_DIR/Apollo-Main/install-posix.sh" "$@"
+INSTALL_POSIX_SH="$SCRIPT_DIR/Apollo-Main/install-posix.sh"
+chmod +x "$INSTALL_POSIX_SH" 2>/dev/null || true
+exec sh "$INSTALL_POSIX_SH" "$@"

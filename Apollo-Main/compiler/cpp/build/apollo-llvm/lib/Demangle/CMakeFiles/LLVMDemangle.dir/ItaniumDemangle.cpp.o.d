@@ -30,10 +30,15 @@ apollo-llvm/lib/Demangle/CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o: \
  /usr/include/c++/15.2.1/bits/functional_hash.h \
  /usr/include/c++/15.2.1/bits/stl_construct.h \
  /usr/include/c++/15.2.1/bits/stl_iterator_base_types.h \
+ /usr/include/c++/15.2.1/bits/iterator_concepts.h \
+ /usr/include/c++/15.2.1/concepts \
+ /usr/include/c++/15.2.1/bits/ptr_traits.h \
+ /usr/include/c++/15.2.1/bits/ranges_cmp.h \
  /usr/include/c++/15.2.1/bits/stl_iterator_base_funcs.h \
  /usr/include/c++/15.2.1/bits/concept_check.h \
  /usr/include/c++/15.2.1/debug/assertions.h \
- /usr/include/c++/15.2.1/bits/utility.h /usr/include/c++/15.2.1/string \
+ /usr/include/c++/15.2.1/bits/utility.h /usr/include/c++/15.2.1/compare \
+ /usr/include/c++/15.2.1/bits/invoke.h /usr/include/c++/15.2.1/string \
  /usr/include/c++/15.2.1/bits/requires_hosted.h \
  /usr/include/c++/15.2.1/bits/stringfwd.h \
  /usr/include/c++/15.2.1/bits/memoryfwd.h \
@@ -64,7 +69,6 @@ apollo-llvm/lib/Demangle/CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o: \
  /usr/include/c++/15.2.1/bits/cxxabi_forced.h \
  /usr/include/c++/15.2.1/bits/stl_iterator.h \
  /usr/include/c++/15.2.1/ext/type_traits.h \
- /usr/include/c++/15.2.1/bits/ptr_traits.h \
  /usr/include/c++/15.2.1/bits/stl_function.h \
  /usr/include/c++/15.2.1/backward/binders.h \
  /usr/include/c++/15.2.1/ext/numeric_traits.h \
@@ -72,14 +76,15 @@ apollo-llvm/lib/Demangle/CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o: \
  /usr/include/c++/15.2.1/bits/stl_pair.h \
  /usr/include/c++/15.2.1/debug/debug.h \
  /usr/include/c++/15.2.1/bits/predefined_ops.h \
- /usr/include/c++/15.2.1/bit /usr/include/c++/15.2.1/concepts \
- /usr/include/c++/15.2.1/bits/refwrap.h \
- /usr/include/c++/15.2.1/bits/invoke.h \
+ /usr/include/c++/15.2.1/bit /usr/include/c++/15.2.1/bits/refwrap.h \
  /usr/include/c++/15.2.1/bits/range_access.h \
  /usr/include/c++/15.2.1/bits/basic_string.h \
  /usr/include/c++/15.2.1/ext/alloc_traits.h \
  /usr/include/c++/15.2.1/bits/alloc_traits.h \
  /usr/include/c++/15.2.1/string_view \
+ /usr/include/c++/15.2.1/bits/ranges_base.h \
+ /usr/include/c++/15.2.1/bits/max_size_type.h \
+ /usr/include/c++/15.2.1/numbers \
  /usr/include/c++/15.2.1/bits/string_view.tcc \
  /usr/include/c++/15.2.1/ext/string_conversions.h \
  /usr/include/c++/15.2.1/cstdlib /usr/include/stdlib.h \
@@ -113,12 +118,11 @@ apollo-llvm/lib/Demangle/CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o: \
  /usr/include/c++/15.2.1/bits/memory_resource.h \
  /usr/include/c++/15.2.1/bits/uses_allocator.h \
  /usr/include/c++/15.2.1/bits/uses_allocator_args.h \
- /usr/include/c++/15.2.1/tuple \
+ /usr/include/c++/15.2.1/tuple /usr/include/c++/15.2.1/bits/ranges_util.h \
  /mnt/c/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm/Demangle/ItaniumDemangle.h \
  /mnt/c/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm/Demangle/StringViewExtras.h \
  /mnt/c/Users/devon/Apollo/Apollo-Main/dependencies/llvm-source/llvm/include/llvm/Demangle/Utility.h \
- /usr/include/c++/15.2.1/array /usr/include/c++/15.2.1/compare \
- /usr/include/c++/15.2.1/cstdint \
+ /usr/include/c++/15.2.1/array /usr/include/c++/15.2.1/cstdint \
  /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
  /usr/include/bits/stdint-least.h /usr/include/c++/15.2.1/cstring \
@@ -129,6 +133,8 @@ apollo-llvm/lib/Demangle/CMakeFiles/LLVMDemangle.dir/ItaniumDemangle.cpp.o: \
  /usr/include/c++/15.2.1/bits/stl_heap.h \
  /usr/include/c++/15.2.1/bits/uniform_int_dist.h \
  /usr/include/c++/15.2.1/bits/stl_tempbuf.h \
+ /usr/include/c++/15.2.1/bits/ranges_algo.h \
+ /usr/include/c++/15.2.1/bits/ranges_algobase.h \
  /usr/include/c++/15.2.1/pstl/glue_algorithm_defs.h \
  /usr/include/c++/15.2.1/pstl/execution_defs.h \
  /usr/include/c++/15.2.1/utility \
