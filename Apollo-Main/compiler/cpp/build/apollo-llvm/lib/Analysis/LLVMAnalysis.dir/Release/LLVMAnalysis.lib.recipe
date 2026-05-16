@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\x64\Release\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\Release\bin\llvm-min-tblgen.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\TargetParser\x64\Release\target_parser_gen</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\IR\x64\Release\intrinsics_gen</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\Support\x64\Release\llvm_vcsrevision_h</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\Analysis\x64\Release\analysis_gen</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

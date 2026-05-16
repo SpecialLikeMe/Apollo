@@ -6,7 +6,7 @@ RESOLVED_APOLLO_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 APOLLO_DIR=${APOLLO_DIR:-$RESOLVED_APOLLO_DIR}
 NATIVE_SOURCE_DIR="$SCRIPT_DIR/cpp"
 NATIVE_BUILD_DIR="$NATIVE_SOURCE_DIR/build"
-NATIVE_BUILD_CONFIG=${APOLLO_NATIVE_BUILD_CONFIG:-Debug}
+NATIVE_BUILD_CONFIG=${APOLLO_NATIVE_BUILD_CONFIG:-Release}
 APOLLO_FRONTEND_EXE=
 APOLLO_BUILD_DRIVER_EXE=
 export APOLLO_COMPILER_DIR="$SCRIPT_DIR"
@@ -205,7 +205,31 @@ ensure_native_targets() {
         fi
     fi
 
-    run_quiet_command "$CMAKE_EXE" --build "$NATIVE_BUILD_DIR" --config "$NATIVE_BUILD_CONFIG" --target "$@"
+    need_native_build=0
+    case "${APOLLO_FORCE_NATIVE_REBUILD:-}" in
+        1|true|TRUE|yes|YES|on|ON) need_native_build=1 ;;
+    esac
+
+    if [ "$need_native_build" -eq 0 ]; then
+        for target_name in "$@"; do
+            case "$target_name" in
+                apollo_frontend_native)
+                    APOLLO_FRONTEND_EXE=$(resolve_native_executable apollo_frontend_native) || need_native_build=1
+                    ;;
+                apollo_build_driver_native)
+                    APOLLO_BUILD_DRIVER_EXE=$(resolve_native_executable apollo_build_driver_native) || need_native_build=1
+                    ;;
+                *)
+                    resolve_native_executable "$target_name" >/dev/null 2>&1 || need_native_build=1
+                    ;;
+            esac
+        done
+    fi
+
+    if [ "$need_native_build" -eq 1 ]; then
+        run_quiet_command "$CMAKE_EXE" --build "$NATIVE_BUILD_DIR" --config "$NATIVE_BUILD_CONFIG" --target "$@"
+    fi
+
     APOLLO_FRONTEND_EXE=$(resolve_native_executable apollo_frontend_native) || return 1
     APOLLO_BUILD_DRIVER_EXE=$(resolve_native_executable apollo_build_driver_native) || return 1
 }

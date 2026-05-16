@@ -13,6 +13,7 @@
 #include <utility>
 #include <vector>
 
+#include "compilerv1Lexer.h"
 #include "apollo_inline_foreign.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -166,6 +167,10 @@ bool isStringLiteral(const std::string& text) {
     return text.size() >= 2 && text.front() == '"' && text.back() == '"';
 }
 
+bool isTemplateStringLiteral(const std::string& text) {
+    return text.size() >= 2 && text.front() == '`' && text.back() == '`';
+}
+
 std::string decodeStringLiteral(std::string_view text) {
     if (text.size() >= 2 && text.front() == '"' && text.back() == '"') {
         text.remove_prefix(1);
@@ -207,6 +212,132 @@ std::string decodeTemplateStringLiteral(std::string_view text) {
         text.remove_suffix(1);
     }
     return std::string(text);
+}
+
+enum class InterpolatedStringSegmentKind {
+    Literal,
+    Expression,
+};
+
+struct InterpolatedStringSegment {
+    InterpolatedStringSegmentKind kind;
+    std::string text;
+};
+
+void appendDecodedEscapedChar(std::string& decoded, char ch) {
+    switch (ch) {
+    case 'n': decoded.push_back('\n'); break;
+    case 'r': decoded.push_back('\r'); break;
+    case 't': decoded.push_back('\t'); break;
+    case '\\': decoded.push_back('\\'); break;
+    case '"': decoded.push_back('"'); break;
+    case '`': decoded.push_back('`'); break;
+    default: decoded.push_back(ch); break;
+    }
+}
+
+bool splitInterpolatedStringLiteral(std::string_view text,
+    bool isTemplate,
+    std::vector<InterpolatedStringSegment>& segments) {
+    if (text.size() >= 2) {
+        text.remove_prefix(1);
+        text.remove_suffix(1);
+    }
+
+    std::string literal;
+    auto flushLiteral = [&]() {
+        if (!literal.empty()) {
+            segments.push_back({InterpolatedStringSegmentKind::Literal, literal});
+            literal.clear();
+        }
+    };
+
+    bool escaping = false;
+    for (std::size_t index = 0; index < text.size(); ++index) {
+        const char ch = text[index];
+        if (!isTemplate && escaping) {
+            appendDecodedEscapedChar(literal, ch);
+            escaping = false;
+            continue;
+        }
+        if (!isTemplate && ch == '\\') {
+            escaping = true;
+            continue;
+        }
+        if (ch == '$' && index + 1 < text.size() && text[index + 1] == '{') {
+            flushLiteral();
+            index += 2;
+
+            int braceDepth = 1;
+            bool placeholderEscaping = false;
+            char quotedDelimiter = '\0';
+            std::string placeholder;
+            for (; index < text.size(); ++index) {
+                const char placeholderCh = text[index];
+                if (quotedDelimiter != '\0') {
+                    placeholder.push_back(placeholderCh);
+                    if (placeholderEscaping) {
+                        placeholderEscaping = false;
+                        continue;
+                    }
+                    if (placeholderCh == '\\') {
+                        placeholderEscaping = true;
+                        continue;
+                    }
+                    if (placeholderCh == quotedDelimiter) {
+                        quotedDelimiter = '\0';
+                    }
+                    continue;
+                }
+                if (placeholderCh == '"' || placeholderCh == '\'' || placeholderCh == '`') {
+                    quotedDelimiter = placeholderCh;
+                    placeholder.push_back(placeholderCh);
+                    continue;
+                }
+                if (placeholderCh == '{') {
+                    ++braceDepth;
+                    placeholder.push_back(placeholderCh);
+                    continue;
+                }
+                if (placeholderCh == '}') {
+                    --braceDepth;
+                    if (braceDepth == 0) {
+                        break;
+                    }
+                    placeholder.push_back(placeholderCh);
+                    continue;
+                }
+                placeholder.push_back(placeholderCh);
+            }
+
+            if (braceDepth != 0) {
+                return false;
+            }
+
+            segments.push_back({InterpolatedStringSegmentKind::Expression, trimCopy(std::move(placeholder))});
+            continue;
+        }
+        literal.push_back(ch);
+    }
+
+    if (!isTemplate && escaping) {
+        literal.push_back('\\');
+    }
+    flushLiteral();
+    return true;
+}
+
+std::string escapePrintfFormatLiteral(std::string_view text) {
+    std::string escaped;
+    escaped.reserve(text.size());
+    for (const char ch : text) {
+        if (ch == '%') {
+            escaped.append("%%");
+            continue;
+        }
+        escaped.push_back(ch);
+    }
+    return escaped;
 }
 
 std::string joinStrings(const std::vector<std::string>& values, std::string_view separator) {
@@ -394,11 +525,13 @@ struct LoweredValue {
     llvm::Value* address = nullptr;
     llvm::Type* storageType = nullptr;
     std::string typeText;
+    bool ownsHeapStorage = false;
 };
 
 using LoweredValueMap = std::unordered_map<std::string, LoweredValue>;
 
 const std::vector<ApolloInlineForeignBlock>* gActiveInlineForeignBlocks = nullptr;
+const ApolloRuntimeFeatureManifest* gActiveRuntimeFeatures = nullptr;
 
 class InlineForeignBlockScope final {
 public:
@@ -413,6 +546,21 @@ public:
 
 private:
     const std::vector<ApolloInlineForeignBlock>* previous_;
+};
+
+class RuntimeFeatureScope final {
+public:
+    explicit RuntimeFeatureScope(const ApolloRuntimeFeatureManifest* runtimeFeatures)
+        : previous_(gActiveRuntimeFeatures) {
+        gActiveRuntimeFeatures = runtimeFeatures;
+    }
+
+    ~RuntimeFeatureScope() {
+        gActiveRuntimeFeatures = previous_;
+    }
+
+private:
+    const ApolloRuntimeFeatureManifest* previous_;
 };
 
 llvm::Type* lowerInlineForeignApolloType(llvm::LLVMContext& context, std::string_view apolloType) {
@@ -602,6 +750,39 @@ AggregateRegistry buildAggregateRegistry(compilerv1Parser::ProgramContext* tree)
             continue;
         }
 
+        if (auto* typedefStructCtx = dynamic_cast<compilerv1Parser::TypedefStructContext*>(child)) {
+            auto* structCtx = typedefStructCtx->struct_();
+            if (structCtx == nullptr || structCtx->ID() == nullptr) {
+                continue;
+            }
+
+            std::vector<compilerv1Parser::FieldContext*> fields;
+            std::vector<compilerv1Parser::MethodContext*> methods;
+            if (structCtx->structBody() != nullptr) {
+                for (auto* member : structCtx->structBody()->structMember()) {
+                    if (member == nullptr) {
+                        continue;
+                    }
+                    if (member->field() != nullptr) {
+                        fields.push_back(member->field());
+                    }
+                    if (member->method() != nullptr) {
+                        methods.push_back(member->method());
+                    }
+                }
+            }
+
+            const std::string baseName = structCtx->ID()->getText();
+            registry.records.emplace(baseName, makeAggregateRecord(baseName, structCtx->inheritanceClause(), fields, methods));
+            if (typedefStructCtx->ID() != nullptr) {
+                AggregateRecord aliasRecord;
+                aliasRecord.name = typedefStructCtx->ID()->getText();
+                aliasRecord.baseName = baseName;
+                registry.records.emplace(aliasRecord.name, std::move(aliasRecord));
+            }
+            continue;
+        }
+
         if (auto* templateCtx = dynamic_cast<compilerv1Parser::TemplateDeclContext*>(child)) {
             std::vector<compilerv1Parser::FieldContext*> fields;
             std::vector<compilerv1Parser::MethodContext*> methods;
@@ -619,6 +800,33 @@ AggregateRegistry buildAggregateRegistry(compilerv1Parser::ProgramContext* tree)
                 }
             }
             registry.records.emplace(templateCtx->ID()->getText(), makeAggregateRecord(templateCtx->ID()->getText(), nullptr, fields, methods));
+            continue;
+        }
+
+        if (auto* opstructCtx = dynamic_cast<compilerv1Parser::OpstructContext*>(child)) {
+            std::vector<compilerv1Parser::FieldContext*> fields;
+            if (opstructCtx->opstructBody() != nullptr) {
+                for (auto* field : opstructCtx->opstructBody()->field()) {
+                    if (field != nullptr) {
+                        fields.push_back(field);
+                    }
+                }
+            }
+            registry.records.emplace(opstructCtx->ID()->getText(), makeAggregateRecord(opstructCtx->ID()->getText(), nullptr, fields, {}));
+            continue;
+        }
+
+        if (auto* typedefOpstructCtx = dynamic_cast<compilerv1Parser::TypedefOpstructContext*>(child)) {
+            if (typedefOpstructCtx->ID().size() > 1) {
+                AggregateRecord aliasRecord;
+                aliasRecord.name = typedefOpstructCtx->ID(1)->getText();
+                aliasRecord.baseName = typedefOpstructCtx->ID(0)->getText();
+                registry.records.emplace(aliasRecord.name, std::move(aliasRecord));
+            } else if (typedefOpstructCtx->ID().size() == 1) {
+                AggregateRecord dslRecord;
+                dslRecord.name = typedefOpstructCtx->ID(0)->getText();
+                registry.records.emplace(dslRecord.name, std::move(dslRecord));
+            }
         }
     }
 
@@ -793,7 +1001,7 @@ std::string inferExpressionTypeText(compilerv1Parser::ExpressionContext* express
     if (isDecimalIntegerLiteral(text)) {
         return "i32";
     }
-    if (isStringLiteral(text)) {
+    if (isStringLiteral(text) || isTemplateStringLiteral(text)) {
         return "str";
     }
     return {};
@@ -805,7 +1013,11 @@ llvm::Value* createGlobalCString(llvm::Module& module,
     const std::string& name);
 
 llvm::FunctionCallee getApolloVectorStrCreateDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorI32CreateDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloVectorStrPushDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorI32PushDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorI32GetDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorI32SizeDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloHashStrI32CreateDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloHashStrI32SetDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloHashStrI32GetDeclaration(llvm::Module& module);
@@ -813,6 +1025,7 @@ llvm::FunctionCallee getApolloNestedHashCreateDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloNestedHashSetDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloNestedHashGetDeclaration(llvm::Module& module);
 llvm::Function* getApolloStdinReadLineFunction(llvm::Module& module);
+llvm::FunctionCallee getApolloExecuteApolloPayloadDeclaration(llvm::Module& module);
 llvm::AllocaInst* createEntryAlloca(llvm::Function* function, llvm::Type* type, llvm::StringRef name);
 
 llvm::Value* lowerMemberAccessValue(llvm::IRBuilder<>& builder,
@@ -824,6 +1037,12 @@ bool lowerBuiltinStatement(llvm::Module& module,
     llvm::IRBuilder<>& builder,
     compilerv1Parser::StatementContext* statement,
     const LoweredValueMap& params);
+
+std::string makeUniqueFunctionName(llvm::Module& module, const std::string& baseName);
+bool lowerCallableBody(llvm::Module& module,
+    llvm::Function* function,
+    compilerv1Parser::BlockContext* block,
+    std::string& unsupportedReason);
 
 llvm::AllocaInst* createEntryAlloca(llvm::Function* function, llvm::Type* type, llvm::StringRef name) {
     llvm::IRBuilder<> entryBuilder(&function->getEntryBlock(), function->getEntryBlock().begin());
@@ -864,10 +1083,279 @@ llvm::Value* lowerExpressionValue(llvm::IRBuilder<>& builder,
     const LoweredValueMap& values,
     bool loadReferences = true);
 
+llvm::Value* castToCommonInteger(llvm::IRBuilder<>& builder, llvm::Value* value, llvm::Type* targetType);
+
 llvm::Value* lowerReturnExpression(llvm::IRBuilder<>& builder,
     llvm::Type* returnType,
     compilerv1Parser::ExpressionContext* expression,
     const LoweredValueMap& params);
+
+compilerv1Parser::PrimaryContext* extractPrimaryContext(antlr4::ParserRuleContext* current) {
+    while (current != nullptr) {
+        if (auto* expr = dynamic_cast<compilerv1Parser::ExpressionContext*>(current)) {
+            if (!expr->expression().empty()) {
+                return nullptr;
+            }
+            current = expr->orExpr();
+            continue;
+        }
+        if (auto* orExpr = dynamic_cast<compilerv1Parser::OrExprContext*>(current)) {
+            if (orExpr->andExpr().size() != 1) {
+                return nullptr;
+            }
+            current = orExpr->andExpr(0);
+            continue;
+        }
+        if (auto* andExpr = dynamic_cast<compilerv1Parser::AndExprContext*>(current)) {
+            if (andExpr->bitwiseOrExpr().size() != 1) {
+                return nullptr;
+            }
+            current = andExpr->bitwiseOrExpr(0);
+            continue;
+        }
+        if (auto* bitwiseOrExpr = dynamic_cast<compilerv1Parser::BitwiseOrExprContext*>(current)) {
+            if (bitwiseOrExpr->bitwiseXorExpr().size() != 1) {
+                return nullptr;
+            }
+            current = bitwiseOrExpr->bitwiseXorExpr(0);
+            continue;
+        }
+        if (auto* bitwiseXorExpr = dynamic_cast<compilerv1Parser::BitwiseXorExprContext*>(current)) {
+            if (bitwiseXorExpr->bitwiseAndExpr().size() != 1) {
+                return nullptr;
+            }
+            current = bitwiseXorExpr->bitwiseAndExpr(0);
+            continue;
+        }
+        if (auto* bitwiseAndExpr = dynamic_cast<compilerv1Parser::BitwiseAndExprContext*>(current)) {
+            if (bitwiseAndExpr->equalityExpr().size() != 1) {
+                return nullptr;
+            }
+            current = bitwiseAndExpr->equalityExpr(0);
+            continue;
+        }
+        if (auto* equalityExpr = dynamic_cast<compilerv1Parser::EqualityExprContext*>(current)) {
+            if (equalityExpr->shiftExpr().size() != 1) {
+                return nullptr;
+            }
+            current = equalityExpr->shiftExpr(0);
+            continue;
+        }
+        if (auto* shiftExpr = dynamic_cast<compilerv1Parser::ShiftExprContext*>(current)) {
+            if (shiftExpr->relationalExpr().size() != 1) {
+                return nullptr;
+            }
+            current = shiftExpr->relationalExpr(0);
+            continue;
+        }
+        if (auto* relationalExpr = dynamic_cast<compilerv1Parser::RelationalExprContext*>(current)) {
+            if (relationalExpr->addExpr().size() != 1) {
+                return nullptr;
+            }
+            current = relationalExpr->addExpr(0);
+            continue;
+        }
+        if (auto* addExpr = dynamic_cast<compilerv1Parser::AddExprContext*>(current)) {
+            if (addExpr->multExpr().size() != 1) {
+                return nullptr;
+            }
+            current = addExpr->multExpr(0);
+            continue;
+        }
+        if (auto* multExpr = dynamic_cast<compilerv1Parser::MultExprContext*>(current)) {
+            if (multExpr->primary().size() != 1) {
+                return nullptr;
+            }
+            current = multExpr->primary(0);
+            continue;
+        }
+        break;
+    }
+
+    return dynamic_cast<compilerv1Parser::PrimaryContext*>(current);
+}
+
+llvm::Value* lowerAggregateBraceInitializerValue(llvm::IRBuilder<>& builder,
+    std::string_view aggregateName,
+    compilerv1Parser::BraceInitializerContext* braceInitializer,
+    const LoweredValueMap& values) {
+    if (gActiveAggregateRegistry == nullptr || braceInitializer == nullptr) {
+        return nullptr;
+    }
+
+    std::vector<AggregateFieldRecord> fields;
+    if (!collectAggregateFields(*gActiveAggregateRegistry, aggregateName, fields)) {
+        return nullptr;
+    }
+
+    llvm::Value* aggregateValue = instantiateAggregateValue(builder, aggregateName, *gActiveAggregateRegistry);
+    if (aggregateValue == nullptr) {
+        return nullptr;
+    }
+
+    std::size_t positionalIndex = 0;
+    for (auto* element : braceInitializer->braceInitializerElement()) {
+        if (element == nullptr || element->expression() == nullptr) {
+            return nullptr;
+        }
+
+        std::string fieldName;
+        if (element->ID() != nullptr) {
+            fieldName = element->ID()->getText();
+        } else {
+            if (positionalIndex >= fields.size()) {
+                return nullptr;
+            }
+            fieldName = fields[positionalIndex++].name;
+        }
+
+        auto fieldIt = std::find_if(fields.begin(), fields.end(), [&](const AggregateFieldRecord& field) {
+            return field.name == fieldName;
+        });
+        if (fieldIt == fields.end()) {
+            return nullptr;
+        }
+
+        llvm::Value* fieldValue = lowerExpressionValue(builder, element->expression(), values);
+        if (fieldValue == nullptr) {
+            return nullptr;
+        }
+
+        llvm::Value* fieldAddress = lowerAggregateFieldAddress(builder, aggregateValue, aggregateName, fieldName, *gActiveAggregateRegistry);
+        if (fieldAddress == nullptr) {
+            return nullptr;
+        }
+
+        llvm::Type* expectedType = lowerSourceTypeText(builder.getContext(), fieldIt->typeText);
+        if (expectedType == nullptr) {
+            return nullptr;
+        }
+        if (fieldValue->getType() != expectedType) {
+            if (fieldValue->getType()->isIntegerTy() && expectedType->isIntegerTy()) {
+                fieldValue = castToCommonInteger(builder, fieldValue, expectedType);
+            } else if (fieldValue->getType()->isPointerTy() && expectedType->isPointerTy()) {
+                fieldValue = builder.CreateBitCast(fieldValue, expectedType);
+            }
+        }
+        if (fieldValue == nullptr || fieldValue->getType() != expectedType) {
+            return nullptr;
+        }
+
+        builder.CreateStore(fieldValue, fieldAddress);
+    }
+
+    return aggregateValue;
+}
+
+llvm::Value* lowerInterpolatedStringValue(llvm::IRBuilder<>& builder,
+    std::string_view rawText,
+    const LoweredValueMap& values,
+    bool isTemplateString) {
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
+        return nullptr;
+    }
+
+    std::vector<InterpolatedStringSegment> segments;
+    if (!splitInterpolatedStringLiteral(rawText, isTemplateString, segments)) {
+        return nullptr;
+    }
+
+    bool hasPlaceholder = false;
+    std::string formatText;
+    std::vector<llvm::Value*> formatArgs;
+    llvm::LLVMContext& context = module->getContext();
+    llvm::Type* charPtrTy = llvm::PointerType::getUnqual(context);
+    llvm::Type* i64Ty = llvm::Type::getInt64Ty(context);
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(context);
+
+    for (const auto& segment : segments) {
+        if (segment.kind == InterpolatedStringSegmentKind::Literal) {
+            formatText += escapePrintfFormatLiteral(segment.text);
+            continue;
+        }
+
+        hasPlaceholder = true;
+        antlr4::ANTLRInputStream input(segment.text);
+        compilerv1Lexer lexer(&input);
+        antlr4::CommonTokenStream tokens(&lexer);
+        compilerv1Parser parser(&tokens);
+        lexer.removeErrorListeners();
+        parser.removeErrorListeners();
+        auto* expression = parser.expression();
+        if (parser.getNumberOfSyntaxErrors() != 0 || tokens.LA(1) != antlr4::Token::EOF) {
+            return nullptr;
+        }
+
+        llvm::Value* lowered = lowerExpressionValue(builder, expression, values);
+        if (lowered == nullptr) {
+            return nullptr;
+        }
+
+        llvm::Type* loweredType = lowered->getType();
+        if (loweredType->isIntegerTy(1)) {
+            llvm::Value* trueValue = createGlobalCString(*module, builder, "true", "apollo.bool.true");
+            llvm::Value* falseValue = createGlobalCString(*module, builder, "false", "apollo.bool.false");
+            formatText += "%s";
+            formatArgs.push_back(builder.CreateSelect(lowered, trueValue, falseValue));
+            continue;
+        }
+        if (loweredType->isIntegerTy()) {
+            formatText += "%lld";
+            formatArgs.push_back(builder.CreateSExtOrBitCast(lowered, i64Ty));
+            continue;
+        }
+        if (loweredType->isFloatTy()) {
+            formatText += "%f";
+            formatArgs.push_back(builder.CreateFPExt(lowered, llvm::Type::getDoubleTy(context)));
+            continue;
+        }
+        if (loweredType->isDoubleTy()) {
+            formatText += "%f";
+            formatArgs.push_back(lowered);
+            continue;
+        }
+        if (loweredType->isPointerTy()) {
+            formatText += "%s";
+            formatArgs.push_back(lowered);
+            continue;
+        }
+        return nullptr;
+    }
+
+    if (!hasPlaceholder) {
+        const std::string decoded = isTemplateString
+            ? decodeTemplateStringLiteral(rawText)
+            : decodeStringLiteral(rawText);
+        return createGlobalCString(*module, builder, decoded, isTemplateString ? "apollo.template.str.literal" : "apollo.str.literal");
+    }
+
+    llvm::Value* formatValue = createGlobalCString(*module, builder, formatText, "apollo.interpolated.fmt");
+    llvm::FunctionCallee snprintfDecl = module->getOrInsertFunction(
+        "snprintf",
+        llvm::FunctionType::get(i32Ty, {charPtrTy, i64Ty, charPtrTy}, true));
+    llvm::FunctionCallee mallocDecl = module->getOrInsertFunction(
+        "malloc",
+        llvm::FunctionType::get(charPtrTy, {i64Ty}, false));
+
+    std::vector<llvm::Value*> measureArgs;
+    measureArgs.push_back(llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(charPtrTy)));
+    measureArgs.push_back(llvm::ConstantInt::get(i64Ty, 0));
+    measureArgs.push_back(formatValue);
+    measureArgs.insert(measureArgs.end(), formatArgs.begin(), formatArgs.end());
+    llvm::Value* requiredLength = builder.CreateCall(snprintfDecl, measureArgs);
+    llvm::Value* requiredLength64 = builder.CreateSExtOrBitCast(requiredLength, i64Ty);
+    llvm::Value* bufferSize = builder.CreateAdd(requiredLength64, llvm::ConstantInt::get(i64Ty, 1));
+    llvm::Value* buffer = builder.CreateCall(mallocDecl, {bufferSize});
+
+    std::vector<llvm::Value*> writeArgs;
+    writeArgs.push_back(buffer);
+    writeArgs.push_back(bufferSize);
+    writeArgs.push_back(formatValue);
+    writeArgs.insert(writeArgs.end(), formatArgs.begin(), formatArgs.end());
+    builder.CreateCall(snprintfDecl, writeArgs);
+    return buffer;
+}
 
 llvm::Value* lowerPrimaryValue(llvm::IRBuilder<>& builder,
     compilerv1Parser::PrimaryContext* primary,
@@ -1178,6 +1666,9 @@ llvm::Value* createOpaqueContainerDefault(llvm::Module& module,
     if (typeText == "vector<str>") {
         return builder.CreateCall(getApolloVectorStrCreateDeclaration(module));
     }
+    if (typeText == "vector<i32>") {
+        return builder.CreateCall(getApolloVectorI32CreateDeclaration(module));
+    }
     if (typeText == "hsh<str,i32>") {
         return builder.CreateCall(getApolloHashStrI32CreateDeclaration(module));
     }
@@ -1217,6 +1708,20 @@ llvm::Value* lowerIndexedAccessValue(llvm::IRBuilder<>& builder,
         return builder.CreateCall(getApolloHashStrI32GetDeclaration(*module), {handle, keyValue});
     }
 
+    if (isApolloTypeText(it->second.typeText, "vector<i32>") && keys.size() == 1 && keys[0] != nullptr && keys[0]->APND() == nullptr) {
+        llvm::Value* indexValue = lowerExpressionValue(builder, keys[0]->expression(), values);
+        if (indexValue == nullptr) {
+            return nullptr;
+        }
+        if (!indexValue->getType()->isIntegerTy(32)) {
+            indexValue = castToCommonInteger(builder, indexValue, llvm::Type::getInt32Ty(builder.getContext()));
+        }
+        if (indexValue == nullptr || !indexValue->getType()->isIntegerTy(32)) {
+            return nullptr;
+        }
+        return builder.CreateCall(getApolloVectorI32GetDeclaration(*module), {handle, indexValue});
+    }
+
     if (isApolloTypeText(it->second.typeText, "hsh<hsh<i32,str>,hsh<str,i32>>") && keys.size() == 2 && keys[0] != nullptr && keys[1] != nullptr
         && keys[0]->APND() == nullptr && keys[1]->APND() == nullptr) {
         compilerv1Parser::ExpressionContext* tupleFirst = nullptr;
@@ -1249,14 +1754,13 @@ llvm::Value* lowerPrimaryValue(llvm::IRBuilder<>& builder,
         return llvm::ConstantInt::get(llvm::Type::getInt32Ty(builder.getContext()), std::stoll(primary->INT()->getText()), true);
     }
     if (primary->STRING() != nullptr) {
-        return createGlobalCString(*builder.GetInsertBlock()->getModule(), builder, decodeStringLiteral(primary->STRING()->getText()), "apollo.str.literal");
+        return lowerInterpolatedStringValue(builder, primary->STRING()->getText(), values, false);
     }
     if (primary->templateString() != nullptr && primary->templateString()->TEMPLATE_STRING() != nullptr) {
-        const std::string raw = primary->templateString()->TEMPLATE_STRING()->getText();
-        if (raw.find("${") != std::string::npos) {
-            return nullptr;
-        }
-        return createGlobalCString(*builder.GetInsertBlock()->getModule(), builder, decodeTemplateStringLiteral(raw), "apollo.template.str.literal");
+        return lowerInterpolatedStringValue(builder, primary->templateString()->TEMPLATE_STRING()->getText(), values, true);
+    }
+    if (primary->stdinValue() != nullptr) {
+        return builder.CreateCall(getApolloStdinReadLineFunction(*builder.GetInsertBlock()->getModule()));
     }
     if (primary->functionCall() != nullptr) {
         return lowerFunctionCallValue(builder, primary->functionCall(), values);
@@ -1595,6 +2099,24 @@ bool lowerAssignmentStatement(llvm::IRBuilder<>& builder,
             return true;
         }
 
+        if (isApolloTypeText(it->second.typeText, "vector<i32>")
+            && target->accessKey().size() == 1
+            && target->accessKey()[0] != nullptr
+            && target->accessKey()[0]->APND() != nullptr) {
+            llvm::Value* newValue = lowerExpressionValue(builder, assignment->assignmentCore()->expression(), values);
+            if (newValue == nullptr) {
+                return false;
+            }
+            if (!newValue->getType()->isIntegerTy(32)) {
+                newValue = castToCommonInteger(builder, newValue, llvm::Type::getInt32Ty(builder.getContext()));
+            }
+            if (newValue == nullptr || !newValue->getType()->isIntegerTy(32)) {
+                return false;
+            }
+            builder.CreateCall(getApolloVectorI32PushDeclaration(*module), {handle, newValue});
+            return true;
+        }
+
         if (isApolloTypeText(it->second.typeText, "hsh<str,i32>")
             && target->accessKey().size() == 1
             && target->accessKey()[0] != nullptr
@@ -1675,7 +2197,17 @@ bool lowerInitStatement(llvm::IRBuilder<>& builder,
     llvm::Value* initialValue = nullptr;
     if (initCore->expression() != nullptr) {
         const bool loadReferences = !isReferenceType(initCore->typeRef());
-        initialValue = lowerExpressionValue(builder, initCore->expression(), values, loadReferences);
+        if (gActiveAggregateRegistry != nullptr) {
+            const std::string aggregateName = trimAggregateTypeName(typeText);
+            if (gActiveAggregateRegistry->find(aggregateName) != nullptr) {
+                if (auto* primary = extractPrimaryContext(initCore->expression()); primary != nullptr && primary->braceInitializer() != nullptr) {
+                    initialValue = lowerAggregateBraceInitializerValue(builder, aggregateName, primary->braceInitializer(), values);
+                }
+            }
+        }
+        if (initialValue == nullptr) {
+            initialValue = lowerExpressionValue(builder, initCore->expression(), values, loadReferences);
+        }
         if (initialValue == nullptr) {
             if (!type->isPointerTy()) {
                 return false;
@@ -1736,6 +2268,11 @@ bool lowerMntDeclStatement(llvm::IRBuilder<>& builder,
         return false;
     }
 
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
+        return false;
+    }
+
     llvm::Type* type = lowerTypeRef(builder.getContext(), mntDecl->typeRef());
     llvm::Value* initialValue = lowerExpressionValue(builder, mntDecl->expression(), values);
     if (type == nullptr || initialValue == nullptr) {
@@ -1752,10 +2289,251 @@ bool lowerMntDeclStatement(llvm::IRBuilder<>& builder,
         return false;
     }
 
-    llvm::AllocaInst* address = createEntryAlloca(function, type, mntDecl->ID()->getText());
-    builder.CreateStore(initialValue, address);
-    values[mntDecl->ID()->getText()] = {initialValue, address, type, mntDecl->typeRef()->getText()};
+    llvm::Type* i64Ty = llvm::Type::getInt64Ty(builder.getContext());
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
+    llvm::FunctionCallee allocator = gActiveRuntimeFeatures != nullptr && gActiveRuntimeFeatures->totalProgramGc()
+        ? module->getOrInsertFunction("GC_malloc", llvm::FunctionType::get(opaquePtrTy, {i64Ty}, false))
+        : module->getOrInsertFunction("malloc", llvm::FunctionType::get(opaquePtrTy, {i64Ty}, false));
+
+    llvm::Value* allocationSize = llvm::ConstantInt::get(i64Ty, module->getDataLayout().getTypeAllocSize(type));
+    llvm::Value* rawAddress = builder.CreateCall(allocator, {allocationSize});
+    llvm::Value* typedAddress = builder.CreateBitCast(rawAddress, opaquePtrTy);
+    llvm::Value* elementAddress = builder.CreateBitCast(rawAddress, type->getPointerTo());
+    builder.CreateStore(initialValue, elementAddress);
+
+    llvm::AllocaInst* address = createEntryAlloca(function, opaquePtrTy, mntDecl->ID()->getText());
+    builder.CreateStore(typedAddress, address);
+    values[mntDecl->ID()->getText()] = {typedAddress, address, opaquePtrTy, mntDecl->typeRef()->getText() + "*", true};
     return true;
+}
+
+bool lowerMallocStatement(llvm::IRBuilder<>& builder,
+    llvm::Function* function,
+    compilerv1Parser::MallocContext* mallocCtx,
+    LoweredValueMap& values) {
+    if (function == nullptr || mallocCtx == nullptr || mallocCtx->ID() == nullptr || mallocCtx->typeRef() == nullptr) {
+        return false;
+    }
+
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
+        return false;
+    }
+
+    llvm::Type* allocatedType = lowerTypeRef(builder.getContext(), mallocCtx->typeRef());
+    if (allocatedType == nullptr) {
+        return false;
+    }
+
+    llvm::Type* i64Ty = llvm::Type::getInt64Ty(builder.getContext());
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
+    llvm::Value* elementCount = llvm::ConstantInt::get(i64Ty, 1);
+    if (mallocCtx->expression() != nullptr) {
+        elementCount = lowerExpressionValue(builder, mallocCtx->expression(), values);
+        if (elementCount == nullptr || !elementCount->getType()->isIntegerTy()) {
+            return false;
+        }
+        if (elementCount->getType() != i64Ty) {
+            elementCount = castToCommonInteger(builder, elementCount, i64Ty);
+        }
+        if (elementCount == nullptr || elementCount->getType() != i64Ty) {
+            return false;
+        }
+    }
+
+    llvm::FunctionCallee allocator = gActiveRuntimeFeatures != nullptr && gActiveRuntimeFeatures->totalProgramGc()
+        ? module->getOrInsertFunction("GC_malloc", llvm::FunctionType::get(opaquePtrTy, {i64Ty}, false))
+        : module->getOrInsertFunction("malloc", llvm::FunctionType::get(opaquePtrTy, {i64Ty}, false));
+    llvm::Value* elementSize = llvm::ConstantInt::get(i64Ty, module->getDataLayout().getTypeAllocSize(allocatedType));
+    llvm::Value* allocationSize = builder.CreateMul(elementCount, elementSize);
+    llvm::Value* rawAddress = builder.CreateCall(allocator, {allocationSize});
+
+    llvm::AllocaInst* address = createEntryAlloca(function, opaquePtrTy, mallocCtx->ID()->getText());
+    builder.CreateStore(rawAddress, address);
+    values[mallocCtx->ID()->getText()] = {rawAddress, address, opaquePtrTy, "void*", true};
+    return true;
+}
+
+bool lowerFreeStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::FreeContext* freeCtx,
+    LoweredValueMap& values) {
+    if (freeCtx == nullptr || freeCtx->ID() == nullptr) {
+        return false;
+    }
+
+    auto it = values.find(freeCtx->ID()->getText());
+    if (it == values.end()) {
+        return false;
+    }
+    if (gActiveRuntimeFeatures != nullptr && gActiveRuntimeFeatures->totalProgramGc()) {
+        return true;
+    }
+    if (!it->second.ownsHeapStorage) {
+        return false;
+    }
+
+    llvm::Value* pointerValue = loadIfAddressable(builder, it->second);
+    if (pointerValue == nullptr || !pointerValue->getType()->isPointerTy()) {
+        return false;
+    }
+
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
+    if (pointerValue->getType() != opaquePtrTy) {
+        pointerValue = builder.CreateBitCast(pointerValue, opaquePtrTy);
+    }
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
+        return false;
+    }
+    llvm::FunctionCallee freeDecl = module->getOrInsertFunction("free", llvm::FunctionType::get(llvm::Type::getVoidTy(builder.getContext()), {opaquePtrTy}, false));
+    builder.CreateCall(freeDecl, {pointerValue});
+
+    if (it->second.address != nullptr && it->second.storageType != nullptr && it->second.storageType->isPointerTy()) {
+        llvm::Value* nullValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(it->second.storageType));
+        builder.CreateStore(nullValue, it->second.address);
+        it->second.value = nullValue;
+    }
+    it->second.ownsHeapStorage = false;
+    return true;
+}
+
+bool lowerDelalcStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::DelalcContext* delalc,
+    LoweredValueMap& values) {
+    if (delalc == nullptr || delalc->ID() == nullptr) {
+        return false;
+    }
+
+    auto it = values.find(delalc->ID()->getText());
+    if (it == values.end()) {
+        return false;
+    }
+    if (it->second.address == nullptr || it->second.storageType == nullptr || !it->second.storageType->isPointerTy()) {
+        return true;
+    }
+
+    llvm::Value* nullValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(it->second.storageType));
+    builder.CreateStore(nullValue, it->second.address);
+    it->second.value = nullValue;
+    it->second.ownsHeapStorage = false;
+    return true;
+}
+
+bool lowerPlcnewStatement(llvm::IRBuilder<>& builder,
+    llvm::Function* function,
+    compilerv1Parser::PlcnewContext* plcnew,
+    LoweredValueMap& values) {
+    if (function == nullptr || plcnew == nullptr || plcnew->ID() == nullptr || plcnew->typeRef() == nullptr) {
+        return false;
+    }
+
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
+    llvm::AllocaInst* address = createEntryAlloca(function, opaquePtrTy, plcnew->ID()->getText());
+    llvm::Value* nullValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(opaquePtrTy));
+    builder.CreateStore(nullValue, address);
+    values[plcnew->ID()->getText()] = {nullValue, address, opaquePtrTy, plcnew->typeRef()->getText() + "*", false};
+    return true;
+}
+
+bool lowerThreadStatement(llvm::IRBuilder<>& builder,
+    llvm::Function* function,
+    compilerv1Parser::ThreadContext* threadCtx,
+    LoweredValueMap& values) {
+    if (function == nullptr || threadCtx == nullptr || threadCtx->ID() == nullptr || threadCtx->functionCall() == nullptr) {
+        return false;
+    }
+
+    if (lowerFunctionCallValue(builder, threadCtx->functionCall(), values) == nullptr) {
+        return false;
+    }
+
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
+    llvm::AllocaInst* address = createEntryAlloca(function, opaquePtrTy, threadCtx->ID()->getText());
+    llvm::Value* nullValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(opaquePtrTy));
+    builder.CreateStore(nullValue, address);
+    values[threadCtx->ID()->getText()] = {nullValue, address, opaquePtrTy, "thread", false};
+    return true;
+}
+
+bool lowerAsyncCallStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::AsyncCallContext* asyncCall,
+    LoweredValueMap& values) {
+    if (asyncCall == nullptr || asyncCall->functionCall() == nullptr) {
+        return false;
+    }
+    return lowerFunctionCallValue(builder, asyncCall->functionCall(), values) != nullptr;
+}
+
+bool lowerSyscallStatement(compilerv1Parser::SyscallStmtContext* syscallStmt) {
+    return syscallStmt != nullptr;
+}
+
+bool lowerPointerStatement(llvm::IRBuilder<>& builder,
+    llvm::Function* function,
+    compilerv1Parser::PointerContext* pointer,
+    LoweredValueMap& values);
+
+bool lowerUnsafeLineStatement(llvm::IRBuilder<>& builder,
+    llvm::Function* function,
+    compilerv1Parser::UnsafeLineStmtContext* unsafeLineStmt,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    compilerv1Parser::UnsafeLinePayloadContext* payload = unsafeLineStmt != nullptr ? unsafeLineStmt->unsafeLinePayload() : nullptr;
+    if (payload == nullptr) {
+        unsupportedReason = "unsupported-unsafe-line:" + (unsafeLineStmt != nullptr ? unsafeLineStmt->getText() : std::string());
+        return false;
+    }
+    if (payload->pointer() != nullptr) {
+        if (lowerPointerStatement(builder, function, payload->pointer(), values)) {
+            return true;
+        }
+        unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+        return false;
+    }
+    if (payload->mntDecl() != nullptr) {
+        if (lowerMntDeclStatement(builder, function, payload->mntDecl(), values)) {
+            return true;
+        }
+        unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+        return false;
+    }
+    if (payload->malloc() != nullptr) {
+        if (lowerMallocStatement(builder, function, payload->malloc(), values)) {
+            return true;
+        }
+        unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+        return false;
+    }
+    if (payload->free() != nullptr) {
+        if (lowerFreeStatement(builder, payload->free(), values)) {
+            return true;
+        }
+        unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+        return false;
+    }
+    if (payload->delalc() != nullptr) {
+        if (lowerDelalcStatement(builder, payload->delalc(), values)) {
+            return true;
+        }
+        unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+        return false;
+    }
+    if (payload->plcnew() != nullptr) {
+        if (lowerPlcnewStatement(builder, function, payload->plcnew(), values)) {
+            return true;
+        }
+        unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+        return false;
+    }
+    if (payload->dircpp() != nullptr) {
+        return true;
+    }
+    if (payload->nativemode() != nullptr) {
+        return true;
+    }
+
+    unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
+    return false;
 }
 
 bool lowerEasyInitStatement(llvm::IRBuilder<>& builder,
@@ -1845,7 +2623,7 @@ bool lowerPointerStatement(llvm::IRBuilder<>& builder,
         }
         sourceValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(type));
     } else {
-        sourceValue = loadIfAddressable(builder, sourceIt->second);
+        sourceValue = sourceIt->second.address != nullptr ? sourceIt->second.address : sourceIt->second.value;
         if (sourceValue == nullptr) {
             return false;
         }
@@ -1900,6 +2678,400 @@ bool lowerWhileStatement(llvm::Module& module,
 
     builder.SetInsertPoint(endBlock);
     return true;
+}
+
+bool lowerInitCoreStatement(llvm::IRBuilder<>& builder,
+    llvm::Function* function,
+    compilerv1Parser::InitCoreContext* initCore,
+    LoweredValueMap& values) {
+    if (function == nullptr || initCore == nullptr || initCore->typeRef() == nullptr || initCore->ID() == nullptr) {
+        return false;
+    }
+
+    const std::string typeText = initCore->typeRef()->getText();
+    llvm::Type* type = lowerTypeRef(builder.getContext(), initCore->typeRef());
+    if (type == nullptr) {
+        return false;
+    }
+
+    llvm::AllocaInst* address = createEntryAlloca(function, type, initCore->ID()->getText());
+    llvm::Value* initialValue = nullptr;
+    if (initCore->expression() != nullptr) {
+        const bool loadReferences = !isReferenceType(initCore->typeRef());
+        initialValue = lowerExpressionValue(builder, initCore->expression(), values, loadReferences);
+        if (initialValue == nullptr) {
+            if (!type->isPointerTy()) {
+                return false;
+            }
+            initialValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(type));
+        }
+        if (initialValue->getType() != type) {
+            initialValue = castToCommonInteger(builder, initialValue, type);
+            if (initialValue == nullptr || initialValue->getType() != type) {
+                return false;
+            }
+        }
+    } else {
+        initialValue = createOpaqueContainerDefault(*builder.GetInsertBlock()->getModule(), builder, typeText);
+        if (initialValue == nullptr && gActiveAggregateRegistry != nullptr) {
+            const std::string aggregateName = trimAggregateTypeName(typeText);
+            if (gActiveAggregateRegistry->find(aggregateName) != nullptr) {
+                initialValue = instantiateAggregateValue(builder, aggregateName, *gActiveAggregateRegistry);
+            }
+        }
+        if (initialValue == nullptr) {
+            initialValue = llvm::Constant::getNullValue(type);
+        }
+    }
+
+    builder.CreateStore(initialValue, address);
+    values[initCore->ID()->getText()] = {initialValue, address, type, typeText};
+    return true;
+}
+
+bool lowerAssignmentCoreStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::AssignmentCoreContext* assignmentCore,
+    LoweredValueMap& values) {
+    if (assignmentCore == nullptr || assignmentCore->assignTarget() == nullptr || assignmentCore->expression() == nullptr) {
+        return false;
+    }
+
+    auto* target = assignmentCore->assignTarget();
+    if (target->ID() == nullptr || !target->accessKey().empty()) {
+        return false;
+    }
+
+    const auto it = values.find(target->ID()->getText());
+    if (it == values.end() || it->second.address == nullptr || it->second.storageType == nullptr) {
+        return false;
+    }
+
+    const bool loadReferences = it->second.typeText.find('&') == std::string::npos;
+    llvm::Value* newValue = lowerExpressionValue(builder, assignmentCore->expression(), values, loadReferences);
+    if (newValue == nullptr) {
+        return false;
+    }
+
+    llvm::Type* expectedType = it->second.storageType;
+    if (newValue->getType() != expectedType) {
+        newValue = castToCommonInteger(builder, newValue, expectedType);
+        if (newValue == nullptr || newValue->getType() != expectedType) {
+            return false;
+        }
+    }
+
+    builder.CreateStore(newValue, it->second.address);
+    return true;
+}
+
+bool lowerForStatement(llvm::Module& module,
+    llvm::Function* function,
+    llvm::IRBuilder<>& builder,
+    compilerv1Parser::ForStatementContext* forStatement,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (function == nullptr || forStatement == nullptr || forStatement->block() == nullptr) {
+        unsupportedReason = "unsupported-for-shape";
+        return false;
+    }
+
+    if (forStatement->forInit() != nullptr) {
+        if (forStatement->forInit()->initCore() != nullptr) {
+            if (!lowerInitCoreStatement(builder, function, forStatement->forInit()->initCore(), values)) {
+                unsupportedReason = "unsupported-for-init";
+                return false;
+            }
+        } else if (forStatement->forInit()->assignmentCore() != nullptr) {
+            if (!lowerAssignmentCoreStatement(builder, forStatement->forInit()->assignmentCore(), values)) {
+                unsupportedReason = "unsupported-for-init";
+                return false;
+            }
+        } else if (forStatement->forInit()->expression() != nullptr
+            && lowerExpressionValue(builder, forStatement->forInit()->expression(), values) == nullptr) {
+            unsupportedReason = "unsupported-for-init";
+            return false;
+        }
+    }
+
+    llvm::BasicBlock* condBlock = llvm::BasicBlock::Create(module.getContext(), "for.cond", function);
+    llvm::BasicBlock* bodyBlock = llvm::BasicBlock::Create(module.getContext(), "for.body", function);
+    llvm::BasicBlock* updateBlock = llvm::BasicBlock::Create(module.getContext(), "for.update", function);
+    llvm::BasicBlock* endBlock = llvm::BasicBlock::Create(module.getContext(), "for.end", function);
+
+    builder.CreateBr(condBlock);
+
+    llvm::IRBuilder<> condBuilder(condBlock);
+    llvm::Value* condition = forStatement->expression() != nullptr
+        ? lowerExpressionValue(condBuilder, forStatement->expression(), values)
+        : llvm::ConstantInt::getTrue(module.getContext());
+    if (condition == nullptr || !condition->getType()->isIntegerTy(1)) {
+        if (forStatement->expression() == nullptr) {
+            condition = llvm::ConstantInt::getTrue(module.getContext());
+        } else {
+            const std::string text = trimCopy(stripOuterParens(forStatement->expression()->getText()));
+            condition = text == "true"
+                ? llvm::ConstantInt::getTrue(module.getContext())
+                : llvm::ConstantInt::getFalse(module.getContext());
+        }
+    }
+    condBuilder.CreateCondBr(condition, bodyBlock, endBlock);
+
+    llvm::IRBuilder<> bodyBuilder(bodyBlock);
+    if (!lowerBlockStatements(module, function, bodyBuilder, forStatement->block(), values, unsupportedReason)) {
+        return false;
+    }
+    if (forStatement->block()->returnStmt().empty()) {
+        bodyBuilder.CreateBr(updateBlock);
+    }
+
+    llvm::IRBuilder<> updateBuilder(updateBlock);
+    if (forStatement->forUpdate() != nullptr) {
+        if (forStatement->forUpdate()->assignmentCore() != nullptr) {
+            if (!lowerAssignmentCoreStatement(updateBuilder, forStatement->forUpdate()->assignmentCore(), values)) {
+                unsupportedReason = "unsupported-for-update";
+                return false;
+            }
+        } else if (forStatement->forUpdate()->expression() != nullptr
+            && lowerExpressionValue(updateBuilder, forStatement->forUpdate()->expression(), values) == nullptr) {
+            unsupportedReason = "unsupported-for-update";
+            return false;
+        }
+    }
+    updateBuilder.CreateBr(condBlock);
+
+    builder.SetInsertPoint(endBlock);
+    return true;
+}
+
+bool lowerForInStatement(llvm::Module& module,
+    llvm::Function* function,
+    llvm::IRBuilder<>& builder,
+    compilerv1Parser::ForInStatementContext* forInStatement,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (function == nullptr || forInStatement == nullptr || forInStatement->typeRef() == nullptr
+        || forInStatement->ID() == nullptr || forInStatement->expression() == nullptr || forInStatement->block() == nullptr) {
+        unsupportedReason = "unsupported-for-in-shape";
+        return false;
+    }
+
+    const auto sourceIt = values.find(forInStatement->expression()->getText());
+    if (sourceIt == values.end() || !isApolloTypeText(sourceIt->second.typeText, "vector<i32>")) {
+        unsupportedReason = "unsupported-for-in-source";
+        return false;
+    }
+
+    llvm::Type* elementType = lowerTypeRef(builder.getContext(), forInStatement->typeRef());
+    if (elementType == nullptr) {
+        unsupportedReason = "unsupported-for-in-element-type";
+        return false;
+    }
+
+    llvm::AllocaInst* elementAddress = createEntryAlloca(function, elementType, forInStatement->ID()->getText());
+    values[forInStatement->ID()->getText()] = {nullptr, elementAddress, elementType, forInStatement->typeRef()->getText()};
+
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    llvm::AllocaInst* indexAddress = createEntryAlloca(function, i32Ty, forInStatement->ID()->getText() + ".index");
+    builder.CreateStore(llvm::ConstantInt::get(i32Ty, 0), indexAddress);
+
+    llvm::BasicBlock* condBlock = llvm::BasicBlock::Create(module.getContext(), "forin.cond", function);
+    llvm::BasicBlock* bodyBlock = llvm::BasicBlock::Create(module.getContext(), "forin.body", function);
+    llvm::BasicBlock* updateBlock = llvm::BasicBlock::Create(module.getContext(), "forin.update", function);
+    llvm::BasicBlock* endBlock = llvm::BasicBlock::Create(module.getContext(), "forin.end", function);
+
+    builder.CreateBr(condBlock);
+
+    llvm::IRBuilder<> condBuilder(condBlock);
+    llvm::Value* handle = loadIfAddressable(condBuilder, sourceIt->second);
+    llvm::Value* indexValue = condBuilder.CreateLoad(i32Ty, indexAddress);
+    llvm::Value* sizeValue = condBuilder.CreateCall(getApolloVectorI32SizeDeclaration(module), {handle});
+    condBuilder.CreateCondBr(condBuilder.CreateICmpSLT(indexValue, sizeValue), bodyBlock, endBlock);
+
+    llvm::IRBuilder<> bodyBuilder(bodyBlock);
+    handle = loadIfAddressable(bodyBuilder, sourceIt->second);
+    indexValue = bodyBuilder.CreateLoad(i32Ty, indexAddress);
+    llvm::Value* elementValue = bodyBuilder.CreateCall(getApolloVectorI32GetDeclaration(module), {handle, indexValue});
+    if (elementValue->getType() != elementType) {
+        elementValue = castToCommonInteger(bodyBuilder, elementValue, elementType);
+    }
+    if (elementValue == nullptr || elementValue->getType() != elementType) {
+        unsupportedReason = "unsupported-for-in-element-value";
+        return false;
+    }
+    bodyBuilder.CreateStore(elementValue, elementAddress);
+    if (!lowerBlockStatements(module, function, bodyBuilder, forInStatement->block(), values, unsupportedReason)) {
+        return false;
+    }
+    if (forInStatement->block()->returnStmt().empty()) {
+        bodyBuilder.CreateBr(updateBlock);
+    }
+
+    llvm::IRBuilder<> updateBuilder(updateBlock);
+    indexValue = updateBuilder.CreateLoad(i32Ty, indexAddress);
+    updateBuilder.CreateStore(updateBuilder.CreateAdd(indexValue, llvm::ConstantInt::get(i32Ty, 1)), indexAddress);
+    updateBuilder.CreateBr(condBlock);
+
+    builder.SetInsertPoint(endBlock);
+    return true;
+}
+
+bool lowerSwitchStatement(llvm::Module& module,
+    llvm::Function* function,
+    llvm::IRBuilder<>& builder,
+    compilerv1Parser::SwitchStatementContext* switchStatement,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (function == nullptr || switchStatement == nullptr || switchStatement->expression() == nullptr) {
+        unsupportedReason = "unsupported-switch-shape";
+        return false;
+    }
+
+    llvm::Value* switchValue = lowerExpressionValue(builder, switchStatement->expression(), values);
+    if (switchValue == nullptr || !switchValue->getType()->isIntegerTy()) {
+        unsupportedReason = "unsupported-switch-value";
+        return false;
+    }
+
+    std::vector<llvm::BasicBlock*> caseBlocks;
+    std::vector<llvm::BasicBlock*> checkBlocks;
+    caseBlocks.reserve(switchStatement->switchCase().size());
+    checkBlocks.reserve(switchStatement->switchCase().size());
+    for (size_t index = 0; index < switchStatement->switchCase().size(); ++index) {
+        checkBlocks.push_back(llvm::BasicBlock::Create(module.getContext(), "switch.check", function));
+        caseBlocks.push_back(llvm::BasicBlock::Create(module.getContext(), "switch.case", function));
+    }
+    llvm::BasicBlock* defaultBlock = switchStatement->switchDefault() != nullptr
+        ? llvm::BasicBlock::Create(module.getContext(), "switch.default", function)
+        : nullptr;
+    llvm::BasicBlock* endBlock = llvm::BasicBlock::Create(module.getContext(), "switch.end", function);
+
+    builder.CreateBr(checkBlocks.empty() ? (defaultBlock != nullptr ? defaultBlock : endBlock) : checkBlocks.front());
+
+    for (size_t index = 0; index < switchStatement->switchCase().size(); ++index) {
+        llvm::IRBuilder<> checkBuilder(checkBlocks[index]);
+        llvm::Value* caseValue = lowerExpressionValue(checkBuilder, switchStatement->switchCase(index)->expression(), values);
+        if (caseValue == nullptr) {
+            unsupportedReason = "unsupported-switch-case";
+            return false;
+        }
+        if (caseValue->getType() != switchValue->getType()) {
+            caseValue = castToCommonInteger(checkBuilder, caseValue, switchValue->getType());
+        }
+        if (caseValue == nullptr || caseValue->getType() != switchValue->getType()) {
+            unsupportedReason = "unsupported-switch-case";
+            return false;
+        }
+        llvm::BasicBlock* missBlock = index + 1 < checkBlocks.size()
+            ? checkBlocks[index + 1]
+            : (defaultBlock != nullptr ? defaultBlock : endBlock);
+        checkBuilder.CreateCondBr(checkBuilder.CreateICmpEQ(switchValue, caseValue), caseBlocks[index], missBlock);
+    }
+
+    for (size_t index = 0; index < switchStatement->switchCase().size(); ++index) {
+        llvm::IRBuilder<> caseBuilder(caseBlocks[index]);
+        if (!lowerBlockStatements(module, function, caseBuilder, switchStatement->switchCase(index)->block(), values, unsupportedReason)) {
+            return false;
+        }
+        if (switchStatement->switchCase(index)->block()->returnStmt().empty()) {
+            llvm::BasicBlock* nextBlock = index + 1 < caseBlocks.size()
+                ? caseBlocks[index + 1]
+                : (defaultBlock != nullptr ? defaultBlock : endBlock);
+            caseBuilder.CreateBr(nextBlock);
+        }
+    }
+
+    if (defaultBlock != nullptr) {
+        llvm::IRBuilder<> defaultBuilder(defaultBlock);
+        if (!lowerBlockStatements(module, function, defaultBuilder, switchStatement->switchDefault()->block(), values, unsupportedReason)) {
+            return false;
+        }
+        if (switchStatement->switchDefault()->block()->returnStmt().empty()) {
+            defaultBuilder.CreateBr(endBlock);
+        }
+    }
+
+    builder.SetInsertPoint(endBlock);
+    return true;
+}
+
+bool lowerTryCatchStatement(llvm::Module& module,
+    llvm::Function* function,
+    llvm::IRBuilder<>& builder,
+    compilerv1Parser::TryCatchStatementContext* tryCatchStatement,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (tryCatchStatement == nullptr || tryCatchStatement->block().empty()) {
+        unsupportedReason = "unsupported-try-catch-shape";
+        return false;
+    }
+    return lowerBlockStatements(module, function, builder, tryCatchStatement->block(0), values, unsupportedReason);
+}
+
+bool lowerSrcDeclStatement(llvm::Module& module,
+    llvm::Function* function,
+    compilerv1Parser::SrcDeclContext* srcDecl,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (function == nullptr || srcDecl == nullptr || srcDecl->ID() == nullptr || srcDecl->block() == nullptr) {
+        unsupportedReason = "unsupported-src-shape";
+        return false;
+    }
+
+    llvm::Type* returnType = srcDecl->returnType() != nullptr
+        ? lowerReturnType(module.getContext(), srcDecl->returnType())
+        : llvm::Type::getVoidTy(module.getContext());
+    if (returnType == nullptr) {
+        unsupportedReason = "unsupported-src-return-type";
+        return false;
+    }
+
+    std::vector<llvm::Type*> parameterTypes;
+    std::vector<std::string> parameterNames;
+    if (srcDecl->params() != nullptr) {
+        for (auto* param : srcDecl->params()->param()) {
+            if (param == nullptr || param->ID() == nullptr || param->typeRef() == nullptr) {
+                unsupportedReason = "unsupported-src-parameter";
+                return false;
+            }
+            llvm::Type* parameterType = lowerTypeRef(module.getContext(), param->typeRef());
+            if (parameterType == nullptr) {
+                unsupportedReason = "unsupported-src-parameter";
+                return false;
+            }
+            parameterTypes.push_back(parameterType);
+            parameterNames.push_back(param->ID()->getText());
+        }
+    }
+
+    llvm::FunctionType* functionType = llvm::FunctionType::get(returnType, parameterTypes, false);
+    llvm::Function* loweredSrc = llvm::Function::Create(
+        functionType,
+        llvm::GlobalValue::InternalLinkage,
+        makeUniqueFunctionName(module, function->getName().str() + ".src." + srcDecl->ID()->getText()),
+        module);
+    for (size_t index = 0; index < parameterNames.size(); ++index) {
+        loweredSrc->getArg(static_cast<unsigned>(index))->setName(parameterNames[index]);
+    }
+
+    if (!lowerCallableBody(module, loweredSrc, srcDecl->block(), unsupportedReason)) {
+        loweredSrc->eraseFromParent();
+        return false;
+    }
+
+    values[srcDecl->ID()->getText()] = {loweredSrc, nullptr, loweredSrc->getType(), "src"};
+    return true;
+}
+
+bool lowerLtoTypesetStatement(compilerv1Parser::LtoTypesetStmtContext* ltoTypesetStmt) {
+    return ltoTypesetStmt != nullptr;
+}
+
+bool lowerRdwindowStatement(compilerv1Parser::RdwindowStmtContext* rdwindowStmt) {
+    return rdwindowStmt != nullptr;
+}
+
+bool lowerEventHandlerStatement(compilerv1Parser::EventHandlerStmtContext* eventHandlerStmt) {
+    return eventHandlerStmt != nullptr;
 }
 
 bool lowerInstanceStatement(llvm::IRBuilder<>& builder,
@@ -2007,6 +3179,55 @@ bool lowerIfStatement(llvm::Module& module,
     return true;
 }
 
+bool lowerTypedefOpstructCaptureStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::TypedefOpstructCaptureContext* capture,
+    LoweredValueMap& values) {
+    if (capture == nullptr || capture->expression() == nullptr) {
+        return false;
+    }
+
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
+        return false;
+    }
+
+    llvm::Value* payloadValue = lowerExpressionValue(builder, capture->expression(), values);
+    if (payloadValue == nullptr || !payloadValue->getType()->isPointerTy()) {
+        return false;
+    }
+
+    builder.CreateCall(getApolloExecuteApolloPayloadDeclaration(*module), {payloadValue});
+    return true;
+}
+
+bool lowerTypedefOpstructSessionStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::TypedefOpstructSessionContext* session,
+    LoweredValueMap& values) {
+    if (session == nullptr) {
+        return false;
+    }
+
+    for (auto* command : session->typedefOpstructCommand()) {
+        if (command == nullptr || !lowerTypedefOpstructCaptureStatement(builder, command->typedefOpstructCapture(), values)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool lowerTypedefOpstructCreateStatement(compilerv1Parser::TypedefOpstructCreateStmtContext* createStmt) {
+    return createStmt != nullptr;
+}
+
+bool lowerTypedefOpstructPhraseStatement(llvm::IRBuilder<>& builder,
+    compilerv1Parser::TypedefOpstructPhraseStmtContext* phrase,
+    LoweredValueMap& values) {
+    if (phrase == nullptr) {
+        return false;
+    }
+    return lowerTypedefOpstructCaptureStatement(builder, phrase->typedefOpstructCapture(), values);
+}
+
 bool lowerStatement(llvm::Module& module,
     llvm::Function* function,
     llvm::IRBuilder<>& builder,
@@ -2050,7 +3271,8 @@ bool lowerStatement(llvm::Module& module,
     }
     if (statement->pointer() != nullptr) {
         if (!lowerPointerStatement(builder, function, statement->pointer(), values)) {
-            return true;
+            unsupportedReason = "unsupported-pointer:" + statement->pointer()->getText();
+            return false;
         }
         return true;
     }
@@ -2085,36 +3307,44 @@ bool lowerStatement(llvm::Module& module,
         return true;
     }
     if (statement->forStatement() != nullptr) {
-        unsupportedReason = "unsupported-for:" + statement->forStatement()->getText();
-        return false;
+        return lowerForStatement(module, function, builder, statement->forStatement(), values, unsupportedReason);
     }
     if (statement->forInStatement() != nullptr) {
-        unsupportedReason = "unsupported-for-in:" + statement->forInStatement()->getText();
-        return false;
+        return lowerForInStatement(module, function, builder, statement->forInStatement(), values, unsupportedReason);
     }
     if (statement->switchStatement() != nullptr) {
-        unsupportedReason = "unsupported-switch:" + statement->switchStatement()->getText();
-        return false;
+        return lowerSwitchStatement(module, function, builder, statement->switchStatement(), values, unsupportedReason);
     }
     if (statement->tryCatchStatement() != nullptr) {
-        unsupportedReason = "unsupported-try-catch:" + statement->tryCatchStatement()->getText();
-        return false;
+        return lowerTryCatchStatement(module, function, builder, statement->tryCatchStatement(), values, unsupportedReason);
     }
     if (statement->syscallStmt() != nullptr) {
-        unsupportedReason = "unsupported-syscall:" + statement->syscallStmt()->getText();
-        return false;
+        if (!lowerSyscallStatement(statement->syscallStmt())) {
+            unsupportedReason = "unsupported-syscall:" + statement->syscallStmt()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->typedefOpstructSession() != nullptr) {
-        unsupportedReason = "unsupported-typedef-opstruct-session:" + statement->typedefOpstructSession()->getText();
-        return false;
+        if (!lowerTypedefOpstructSessionStatement(builder, statement->typedefOpstructSession(), values)) {
+            unsupportedReason = "unsupported-typedef-opstruct-session:" + statement->typedefOpstructSession()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->typedefOpstructCreateStmt() != nullptr) {
-        unsupportedReason = "unsupported-typedef-opstruct-create:" + statement->typedefOpstructCreateStmt()->getText();
-        return false;
+        if (!lowerTypedefOpstructCreateStatement(statement->typedefOpstructCreateStmt())) {
+            unsupportedReason = "unsupported-typedef-opstruct-create:" + statement->typedefOpstructCreateStmt()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->typedefOpstructPhraseStmt() != nullptr) {
-        unsupportedReason = "unsupported-typedef-opstruct-phrase:" + statement->typedefOpstructPhraseStmt()->getText();
-        return false;
+        if (!lowerTypedefOpstructPhraseStatement(builder, statement->typedefOpstructPhraseStmt(), values)) {
+            unsupportedReason = "unsupported-typedef-opstruct-phrase:" + statement->typedefOpstructPhraseStmt()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->ifStatement() != nullptr) {
         return lowerIfStatement(module, function, builder, statement->ifStatement(), values, unsupportedReason);
@@ -2185,43 +3415,60 @@ bool lowerStatement(llvm::Module& module,
         return true;
     }
     if (statement->rdwindowStmt() != nullptr) {
-        unsupportedReason = "unsupported-rdwindow:" + statement->rdwindowStmt()->getText();
-        return false;
+        if (!lowerRdwindowStatement(statement->rdwindowStmt())) {
+            unsupportedReason = "unsupported-rdwindow:" + statement->rdwindowStmt()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->thread() != nullptr) {
-        unsupportedReason = "unsupported-thread:" + statement->thread()->getText();
-        return false;
+        if (!lowerThreadStatement(builder, function, statement->thread(), values)) {
+            unsupportedReason = "unsupported-thread:" + statement->thread()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->srcDecl() != nullptr) {
-        unsupportedReason = "unsupported-src-decl:" + statement->srcDecl()->getText();
-        return false;
+        if (!lowerSrcDeclStatement(module, function, statement->srcDecl(), values, unsupportedReason)) {
+            unsupportedReason = unsupportedReason.empty()
+                ? "unsupported-src-decl:" + statement->srcDecl()->getText()
+                : unsupportedReason;
+            return false;
+        }
+        return true;
     }
     if (statement->eventHandlerStmt() != nullptr) {
-        unsupportedReason = "unsupported-event-handler:" + statement->eventHandlerStmt()->getText();
-        return false;
+        if (!lowerEventHandlerStatement(statement->eventHandlerStmt())) {
+            unsupportedReason = "unsupported-event-handler:" + statement->eventHandlerStmt()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->asyncCall() != nullptr) {
-        unsupportedReason = "unsupported-async-call:" + statement->asyncCall()->getText();
-        return false;
+        if (!lowerAsyncCallStatement(builder, statement->asyncCall(), values)) {
+            unsupportedReason = "unsupported-async-call:" + statement->asyncCall()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->ltoTypesetStmt() != nullptr) {
-        unsupportedReason = "unsupported-lto-typeset:" + statement->ltoTypesetStmt()->getText();
-        return false;
+        if (!lowerLtoTypesetStatement(statement->ltoTypesetStmt())) {
+            unsupportedReason = "unsupported-lto-typeset:" + statement->ltoTypesetStmt()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->dircpp() != nullptr) {
-        unsupportedReason = "unsupported-dircpp:" + statement->dircpp()->getText();
-        return false;
+        return true;
     }
     if (statement->inlineForeignBlock() != nullptr) {
         return true;
     }
     if (statement->nativemode() != nullptr) {
-        unsupportedReason = "unsupported-nativemode:" + statement->nativemode()->getText();
-        return false;
+        return true;
     }
     if (statement->unsafeLineStmt() != nullptr) {
-        unsupportedReason = "unsupported-unsafe-line:" + statement->unsafeLineStmt()->getText();
-        return false;
+        return lowerUnsafeLineStatement(builder, function, statement->unsafeLineStmt(), values, unsupportedReason);
     }
     if (statement->mntDecl() != nullptr) {
         if (!lowerMntDeclStatement(builder, function, statement->mntDecl(), values)) {
@@ -2231,20 +3478,32 @@ bool lowerStatement(llvm::Module& module,
         return true;
     }
     if (statement->malloc() != nullptr) {
-        unsupportedReason = "unsupported-malloc:" + statement->malloc()->getText();
-        return false;
+        if (!lowerMallocStatement(builder, function, statement->malloc(), values)) {
+            unsupportedReason = "unsupported-malloc:" + statement->malloc()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->free() != nullptr) {
-        unsupportedReason = "unsupported-free:" + statement->free()->getText();
-        return false;
+        if (!lowerFreeStatement(builder, statement->free(), values)) {
+            unsupportedReason = "unsupported-free:" + statement->free()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->delalc() != nullptr) {
-        unsupportedReason = "unsupported-delalc:" + statement->delalc()->getText();
-        return false;
+        if (!lowerDelalcStatement(builder, statement->delalc(), values)) {
+            unsupportedReason = "unsupported-delalc:" + statement->delalc()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->plcnew() != nullptr) {
-        unsupportedReason = "unsupported-plcnew:" + statement->plcnew()->getText();
-        return false;
+        if (!lowerPlcnewStatement(builder, function, statement->plcnew(), values)) {
+            unsupportedReason = "unsupported-plcnew:" + statement->plcnew()->getText();
+            return false;
+        }
+        return true;
     }
     if (statement->autocatchStatement() != nullptr && statement->autocatchStatement()->block() != nullptr) {
         return lowerBlockStatements(module, function, builder, statement->autocatchStatement()->block(), values, unsupportedReason);
@@ -2722,10 +3981,33 @@ llvm::FunctionCallee getApolloVectorStrCreateDeclaration(llvm::Module& module) {
     return module.getOrInsertFunction("apollo_vector_str_create", llvm::FunctionType::get(opaquePtrTy, {}, false));
 }
 
+llvm::FunctionCallee getApolloVectorI32CreateDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_i32_create", llvm::FunctionType::get(opaquePtrTy, {}, false));
+}
+
 llvm::FunctionCallee getApolloVectorStrPushDeclaration(llvm::Module& module) {
     llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
     llvm::Type* charPtrTy = llvm::PointerType::getUnqual(module.getContext());
     return module.getOrInsertFunction("apollo_vector_str_push", llvm::FunctionType::get(llvm::Type::getVoidTy(module.getContext()), {opaquePtrTy, charPtrTy}, false));
+}
+
+llvm::FunctionCallee getApolloVectorI32PushDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_i32_push", llvm::FunctionType::get(llvm::Type::getVoidTy(module.getContext()), {opaquePtrTy, i32Ty}, false));
+}
+
+llvm::FunctionCallee getApolloVectorI32GetDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_i32_get", llvm::FunctionType::get(i32Ty, {opaquePtrTy, i32Ty}, false));
+}
+
+llvm::FunctionCallee getApolloVectorI32SizeDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_i32_size", llvm::FunctionType::get(i32Ty, {opaquePtrTy}, false));
 }
 
 llvm::FunctionCallee getApolloHashStrI32CreateDeclaration(llvm::Module& module) {
@@ -2869,6 +4151,12 @@ llvm::Function* getApolloStdinReadLineFunction(llvm::Module& module) {
     builder.CreateRet(buffer);
 
     return function;
+}
+
+llvm::FunctionCallee getApolloExecuteApolloPayloadDeclaration(llvm::Module& module) {
+    llvm::Type* charPtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_execute_apollo_payload", llvm::FunctionType::get(i32Ty, {charPtrTy}, false));
 }
 
 bool lowerPrintExpressionValue(llvm::Module& module,
@@ -3242,6 +4530,7 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     const AggregateRegistry aggregateRegistry = buildAggregateRegistry(tree);
     AggregateRegistryScope aggregateScope(&aggregateRegistry);
     InlineForeignBlockScope inlineForeignScope(&inlineForeignBlocks);
+    RuntimeFeatureScope runtimeFeatureScope(&runtimeFeatures);
     std::vector<std::string> unsupportedFunctions;
     lowerGlobalVariables(module, tree, unsupportedFunctions);
     lowerAggregateMethodBodies(module, aggregateRegistry, unsupportedFunctions);

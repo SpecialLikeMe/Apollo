@@ -430,6 +430,7 @@ std::filesystem::path ApolloDriver::cacheArtifactPath(const std::filesystem::pat
 
 std::string ApolloDriver::currentCompilerSignature() {
     const auto cppRoot = std::filesystem::path(__FILE__).lexically_normal().parent_path().parent_path();
+    const auto compilerRoot = cppRoot.parent_path();
     const std::vector<std::filesystem::path> inputs = {
         cppRoot / "src" / "apollo_driver.cpp",
         cppRoot / "src" / "apollo_driver.h",
@@ -443,7 +444,7 @@ std::string ApolloDriver::currentCompilerSignature() {
         cppRoot / "src" / "apollo_runtime.h",
         cppRoot / "src" / "apollo_codegen_optimization_plan.cpp",
         cppRoot / "src" / "apollo_codegen_optimization_plan.h",
-        cppRoot / "compilerv1.g4"
+        compilerRoot / "compilerv1.g4"
     };
 
     std::string combined(kCompilerCacheVersion);

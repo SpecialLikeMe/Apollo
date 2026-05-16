@@ -1,0 +1,144 @@
+; ModuleID = 'control_flow_surface'
+source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/control_flow_surface.apollo"
+
+define void @record(i32 %value) {
+entry:
+  %mirror = alloca i32, align 4
+  %value1 = alloca i32, align 4
+  store i32 %value, ptr %value1, align 4
+  %0 = load i32, ptr %value1, align 4
+  store i32 %0, ptr %mirror, align 4
+  ret void
+}
+
+define i32 @main() {
+entry:
+  %counter = alloca ptr, align 8
+  %entry.index = alloca i32, align 4
+  %entry1 = alloca i32, align 4
+  %index = alloca i32, align 4
+  %total = alloca i32, align 4
+  %values = alloca ptr, align 8
+  %0 = call ptr @apollo_vector_i32_create()
+  store ptr %0, ptr %values, align 8
+  %1 = load ptr, ptr %values, align 8
+  call void @apollo_vector_i32_push(ptr %1, i32 1)
+  %2 = load ptr, ptr %values, align 8
+  call void @apollo_vector_i32_push(ptr %2, i32 2)
+  store i32 0, ptr %total, align 4
+  store i32 0, ptr %index, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.update, %entry
+  %3 = load i32, ptr %index, align 4
+  %4 = icmp slt i32 %3, 2
+  br i1 %4, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, ptr %total, align 4
+  %6 = load ptr, ptr %values, align 8
+  %7 = load i32, ptr %index, align 4
+  %8 = call i32 @apollo_vector_i32_get(ptr %6, i32 %7)
+  %9 = add i32 %5, %8
+  store i32 %9, ptr %total, align 4
+  br label %for.update
+
+for.update:                                       ; preds = %for.body
+  %10 = load i32, ptr %index, align 4
+  %11 = add i32 %10, 1
+  store i32 %11, ptr %index, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  store i32 0, ptr %entry.index, align 4
+  br label %forin.cond
+
+forin.cond:                                       ; preds = %forin.update, %for.end
+  %12 = load ptr, ptr %values, align 8
+  %13 = load i32, ptr %entry.index, align 4
+  %14 = call i32 @apollo_vector_i32_size(ptr %12)
+  %15 = icmp slt i32 %13, %14
+  br i1 %15, label %forin.body, label %forin.end
+
+forin.body:                                       ; preds = %forin.cond
+  %16 = load ptr, ptr %values, align 8
+  %17 = load i32, ptr %entry.index, align 4
+  %18 = call i32 @apollo_vector_i32_get(ptr %16, i32 %17)
+  store i32 %18, ptr %entry1, align 4
+  %19 = load i32, ptr %total, align 4
+  %20 = load i32, ptr %entry1, align 4
+  %21 = add i32 %19, %20
+  store i32 %21, ptr %total, align 4
+  br label %forin.update
+
+forin.update:                                     ; preds = %forin.body
+  %22 = load i32, ptr %entry.index, align 4
+  %23 = add i32 %22, 1
+  store i32 %23, ptr %entry.index, align 4
+  br label %forin.cond
+
+forin.end:                                        ; preds = %forin.cond
+  %24 = load i32, ptr %total, align 4
+  br label %switch.check
+
+switch.check:                                     ; preds = %forin.end
+  %25 = icmp eq i32 %24, 6
+  br i1 %25, label %switch.case, label %switch.default
+
+switch.case:                                      ; preds = %switch.check
+  %26 = load i32, ptr %total, align 4
+  %27 = add i32 %26, 1
+  store i32 %27, ptr %total, align 4
+  br label %switch.default
+
+switch.default:                                   ; preds = %switch.case, %switch.check
+  %28 = load i32, ptr %total, align 4
+  %29 = add i32 %28, 2
+  store i32 %29, ptr %total, align 4
+  br label %switch.end
+
+switch.end:                                       ; preds = %switch.default
+  %30 = load i32, ptr %total, align 4
+  call void @record(i32 %30)
+  store ptr null, ptr %counter, align 8
+  %31 = load ptr, ptr %counter, align 8
+  %32 = load i32, ptr %total, align 4
+  ret i32 %32
+}
+
+declare ptr @apollo_vector_i32_create()
+
+declare void @apollo_vector_i32_push(ptr, i32)
+
+declare i32 @apollo_vector_i32_get(ptr, i32)
+
+declare i32 @apollo_vector_i32_size(ptr)
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.layouts = !{!3}
+!apollo.layout.fields = !{!4}
+!apollo.primitive.types = !{!5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"control_flow_surface"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 true}
+!3 = !{!"CounterStore", !"full-soa", i32 1, i1 false, i1 false, i1 false, !"full-soa-eligible"}
+!4 = !{!"CounterStore", !"value", !"i32", i1 true}
+!5 = !{!"i32", !"i32"}
+!6 = !{!"short", !"i16"}
+!7 = !{!"bool", !"i1"}
+!8 = !{!"i8", !"i8"}
+!9 = !{!"u8", !"i8"}
+!10 = !{!"i16", !"i16"}
+!11 = !{!"u16", !"i16"}
+!12 = !{!"u32", !"i32"}
+!13 = !{!"int", !"i32"}
+!14 = !{!"i64", !"i64"}
+!15 = !{!"u64", !"i64"}
+!16 = !{!"long", !"i64"}
+!17 = !{!"float", !"float"}
+!18 = !{!"double", !"double"}
+!19 = !{!"f64", !"double"}
+!20 = !{!"void", !"void"}

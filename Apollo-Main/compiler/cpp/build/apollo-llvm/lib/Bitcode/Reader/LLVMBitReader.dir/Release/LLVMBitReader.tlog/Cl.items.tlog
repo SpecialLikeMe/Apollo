@@ -1,0 +1,5 @@
+C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Bitcode\Reader\BitcodeAnalyzer.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.dir\Release\BitcodeAnalyzer.obj
+C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Bitcode\Reader\BitReader.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.dir\Release\BitReader.obj
+C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Bitcode\Reader\BitcodeReader.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.dir\Release\BitcodeReader.obj
+C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Bitcode\Reader\MetadataLoader.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.dir\Release\MetadataLoader.obj
+C:\Users\devon\Apollo\Apollo-Main\dependencies\llvm-source\llvm\lib\Bitcode\Reader\ValueList.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\lib\Bitcode\Reader\LLVMBitReader.dir\Release\ValueList.obj

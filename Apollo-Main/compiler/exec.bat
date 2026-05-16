@@ -75,7 +75,7 @@ set "NATIVE_SOURCE_DIR=%SCRIPT_DIR%cpp"
 set "NATIVE_BUILD_DIR=%NATIVE_SOURCE_DIR%\build"
 set "NATIVE_SOURCE_DIR_SLASH=%NATIVE_SOURCE_DIR:\=/%"
 set "NATIVE_BUILD_DIR_SLASH=%NATIVE_BUILD_DIR:\=/%"
-set "NATIVE_BUILD_CONFIG=Debug"
+set "NATIVE_BUILD_CONFIG=Release"
 if defined APOLLO_NATIVE_BUILD_CONFIG set "NATIVE_BUILD_CONFIG=%APOLLO_NATIVE_BUILD_CONFIG%"
 set "APOLLO_BUILD_DRIVER_EXE="
 set "CMAKE_EXE="
@@ -268,7 +268,40 @@ if /I "%EXECUTION_MODE%"=="jit" goto :run_jit
 set "LINK_OUTPUT=output\run-%RANDOM%%RANDOM%%RANDOM%.exe"
 if "%BIN_MODE%"=="1" set "LINK_OUTPUT=%BIN_OUTPUT%"
 
-"%APOLLO_BUILD_DRIVER_EXE%" build-aot "%INPUT_FILE%" "%LINK_OUTPUT%"
+set "NATIVE_DRIVER_CMD=%APOLLO_BUILD_DRIVER_EXE%"
+if exist "%NATIVE_BUILD_DIR%\Release\apollo_build_driver_native.exe" set "NATIVE_DRIVER_CMD=%NATIVE_BUILD_DIR%\Release\apollo_build_driver_native.exe"
+if /I "%APOLLO_SHOW_FILE_DETAILS%"=="1" echo Using native build driver: %NATIVE_DRIVER_CMD%
+set "NATIVE_DRIVER_SCRIPT=%TEMP%\apollo-build-driver-%RANDOM%%RANDOM%%RANDOM%.cmd"
+(
+    echo @echo off
+    echo set "CLANG_EXE="
+    echo set "CLANGXX_EXE="
+    echo set "LLC_EXE="
+    echo set "APOLLO_CXX_STD="
+    echo set "APOLLO_OPT_LEVEL="
+    echo set "APOLLO_LLC_OPT_LEVEL="
+    echo set "APOLLO_USE_PCH="
+    echo set "APOLLO_PCH_HEADER="
+    echo set "APOLLO_PCH_OUTPUT="
+    echo set "APOLLO_PCH_EXTRA_FLAGS="
+    echo set "APOLLO_FRONTEND_EXTRA_FLAGS="
+    echo set "APOLLO_LLC_EXTRA_FLAGS="
+    echo set "APOLLO_LINK_EXTRA_FLAGS="
+    echo set "APOLLO_ANALYZE_EXTRA_FLAGS="
+    echo set "APOLLO_TARGET_FLAGS="
+    echo set "APOLLO_FRONTEND_FLAGS="
+    echo set "APOLLO_LLC_FLAGS="
+    echo set "APOLLO_ANALYZE_FLAGS="
+    echo set "APOLLO_PCH_GENERATE_FLAGS="
+    echo set "APOLLO_PCH_USE_FLAGS="
+    echo set "APOLLO_LINK_FLAGS="
+    if exist "%TOOLCHAIN_ENV%" echo call "%TOOLCHAIN_ENV%" ^>nul
+    echo "%NATIVE_DRIVER_CMD%" build-aot "%INPUT_FILE%" "%LINK_OUTPUT%"
+) > "%NATIVE_DRIVER_SCRIPT%"
+call "%NATIVE_DRIVER_SCRIPT%"
+set "NATIVE_DRIVER_STATUS=%errorlevel%"
+del /f /q "%NATIVE_DRIVER_SCRIPT%" >nul 2>nul
+if not "%NATIVE_DRIVER_STATUS%"=="0" exit /b %NATIVE_DRIVER_STATUS%
 if errorlevel 1 (
     popd
     exit /b %errorlevel%
@@ -354,6 +387,7 @@ if errorlevel 1 (
     popd
     exit /b !errorlevel!
 )
+if exist "%NATIVE_BUILD_DIR%\Release\apollo_build_driver_native.exe" set "APOLLO_BUILD_DRIVER_EXE=%NATIVE_BUILD_DIR%\Release\apollo_build_driver_native.exe"
 exit /b 0
 
 :ensure_native_targets
@@ -388,8 +422,19 @@ if not exist "%NATIVE_BUILD_DIR%\CMakeCache.txt" (
     if errorlevel 1 exit /b !errorlevel!
 )
 
-call :run_quiet_command "%CMAKE_EXE%" --build "%NATIVE_BUILD_DIR%" --config "%NATIVE_BUILD_CONFIG%" --target %*
-if errorlevel 1 exit /b !errorlevel!
+set "NEED_NATIVE_BUILD=0"
+if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="1" set "NEED_NATIVE_BUILD=1"
+if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="true" set "NEED_NATIVE_BUILD=1"
+if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="yes" set "NEED_NATIVE_BUILD=1"
+if "%NEED_NATIVE_BUILD%"=="0" (
+    call :resolve_native_executable apollo_build_driver_native APOLLO_BUILD_DRIVER_EXE
+    if errorlevel 1 set "NEED_NATIVE_BUILD=1"
+)
+
+if "%NEED_NATIVE_BUILD%"=="1" (
+    call :run_quiet_command "%CMAKE_EXE%" --build "%NATIVE_BUILD_DIR%" --config "%NATIVE_BUILD_CONFIG%" --target %*
+    if errorlevel 1 exit /b !errorlevel!
+)
 
 call :resolve_native_executable apollo_build_driver_native APOLLO_BUILD_DRIVER_EXE
 if errorlevel 1 exit /b !errorlevel!

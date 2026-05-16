@@ -1,0 +1,14 @@
+typedef struct jjl {
+    i32 id;
+    str q;
+}
+
+int main() {
+    nconst jjl rtx = {
+        .id = 32,
+        .q = "Hello, World!"
+    };
+    str templ = `value: ${rtx.q}`;
+    sys.println(templ);
+    return 0;
+}

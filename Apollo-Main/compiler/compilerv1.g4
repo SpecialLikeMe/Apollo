@@ -1,20 +1,32 @@
 grammar compilerv1;
 
 @lexer::members {
-  private boolean expectInclusive = false;
+  private:
+    bool expectInclusive = false;
+    bool pendingInlineSeparator = false;
+    bool awaitingInlinePayloadLanguage = false;
 
-  private boolean shouldExpectInclusiveAfterInlinePayload() {
-    int lookahead = 1;
-    int ch = _input.LA(lookahead);
-    while (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
-      lookahead++;
-      ch = _input.LA(lookahead);
+    bool shouldExpectInclusiveAfterInlinePayload() {
+      int lookahead = 1;
+      int ch = _input->LA(lookahead);
+      while (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+        lookahead++;
+        ch = _input->LA(lookahead);
+      }
+      return ch == '{' || ch == '-';
     }
-    return ch == '{' || ch == '-';
-  }
+
+    void maybeArmInclusiveAfterInlineLanguage() {
+      if (!awaitingInlinePayloadLanguage) {
+        pendingInlineSeparator = false;
+        return;
+      }
+      expectInclusive = shouldExpectInclusiveAfterInlinePayload();
+      awaitingInlinePayloadLanguage = false;
+    }
 }
 
-program      : (directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interface | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | dircpp | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
+program      : (directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | dircpp | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
 directive    : gcDirective | borrowCheckerDirective | runtimeDirective | settingDirective ;
 gcDirective  : '#[' (GC_NAME | GCMODE_NAME) '(' ID ')' ']' ;
 borrowCheckerDirective : '#[' (BORROW_CHECKER_NAME | BORROW_CHECK_NAME) '(' ID ')' ']' ;
@@ -45,6 +57,7 @@ classBody    : LBRACE classMember* RBRACE ;
 templateDecl : 'template' ID '(' templateParams ')' classBody ;
 templateParams : ID (',' ID)* ;
 dircpp       : DIRCPP_HDR INCLUSIVE ;
+inlineForeignBlock : INLINE INLINE_SEP (NATIVE | ID) INCLUSIVE ';'? ;
 structBody   : LBRACE structMember* RBRACE ;
 scheduleDecl : SCHEDULE ID LBRACE scheduleMember* RBRACE ;
 scheduleMember : mandatoryScheduleMember ;
@@ -79,8 +92,8 @@ functionType : 'fn' '<' returnType '(' functionTypeArgs? ')' '>' ;
 functionTypeArgs : typeRef (',' typeRef)* ;
 macro        : macroQualifier ID '(' params? ')' block ;
 macroQualifier : 'extern [&macro]' | '__preprocess [&macro]' | 'extern [&dynamic_macro]' | '__preprocess [&dynamic_macro]' ;
-stdin        : 'sys' '.' 'stdin(' ID ')' ';' ;
-stdinExpr    : 'sys' '.' 'stdin(' ')' ;
+stdinStmt    : 'sys' '.' 'stdin(' ID ')' ';' ;
+stdinValue   : 'sys' '.' 'stdin(' ')' ;
 lambda       : typeRef ID '=' 'lmd->' lambdaDefinition ;
 lambdaDefinition : function | lambdaLiteral ;
 lambdaLiteral : returnType? '(' params? ')' block ;
@@ -151,14 +164,15 @@ statement    : pointer
              | schedulerInsertStmt
              | schedulerVoidStmt
              | nativemode
+             | inlineForeignBlock
              | asyncCall
              | syscallStmt
              | templateDecl
              | class
              | struct
-             | interface
+             | interfaceDecl
              | print
-             | stdin
+             | stdinStmt
              | assertStmt
              | block ;
 
@@ -177,11 +191,11 @@ schedulerStartMode : DETATCH | DETACH | JOIN ;
 schedulerInsertStmt : ID '.' INS '(' ID ',' expression ')' block ;
 schedulerVoidStmt : ID '.' (SCHVOID | 'void') '(' ')' ';' ;
 
-ifStatement    : IF '(' expression ')' block (ELSE block)? ;
-whileStatement : WHILE '(' expression ')' block ;
-forStatement   : FOR '(' forInit? ';' expression? ';' forUpdate? ')' block ;
-forInStatement : FOR '(' (CONST | NCONST)? typeRef ID IN expression ')' block ;
-switchStatement : SWITCH '(' expression ')' LBRACE switchCase* switchDefault? RBRACE ;
+ifStatement    : IF '('? expression ')'? block (ELSE block)? ;
+whileStatement : WHILE '('? expression ')'? block ;
+forStatement   : FOR '('? forInit? ';' expression? ';' forUpdate? ')'? block ;
+forInStatement : FOR '('? (CONST | NCONST)? typeRef ID IN expression ')'? block ;
+switchStatement : SWITCH '('? expression ')'? LBRACE switchCase* switchDefault? RBRACE ;
 switchCase     : CASE expression ':' block ;
 switchDefault  : DEFAULT ':' block ;
 tryCatchStatement : TRY block CATCH '(' TERMINALEXCEPTION '(' ID ')' ')' block ;
@@ -233,7 +247,7 @@ primary        : INT
                | SUCCESS
                | STRING
                | templateString
-               | stdinExpr
+               | stdinValue
                | castExpr
                | placementNewExpr
                | functionCall
@@ -274,7 +288,7 @@ typedefOpstructAsgEntry : ASG '(' STRING ')' '->' block ;
 typedefOpstructSrcEntry : SRC '(' STRING ')' '->' typedefOpstructTemplateBody ;
 typedefOpstructTemplateBody : LBRACE typedefOpstructTemplateBodyItem* RBRACE ;
 typedefOpstructTemplateBodyItem : statement | returnStmt | ID ;
-interface      : 'itr' ID inheritanceClause? attributeBlock? '{' virtualMethod* '}' ;
+interfaceDecl  : 'itr' ID inheritanceClause? attributeBlock? '{' virtualMethod* '}' ;
 inheritanceClause : '*' inheritedType (';' inheritedType)* ;
 inheritedType  : CLSTYPE? typeRef ;
 virtualMethod  : VIRTUAL returnType ID '(' params? ')' ';' ;
@@ -307,8 +321,15 @@ LTO      : 'lto' ;
 MNT      : 'mnt' ;
 INDEF    : 'indef' ;
 ANNOT_OVERRIDE : '@Override' ;
+INLINE   : 'inline' { pendingInlineSeparator = true; } ;
 ASYNC    : 'async' { expectInclusive = shouldExpectInclusiveAfterInlinePayload(); } ;
 LANG     : 'lang' { expectInclusive = shouldExpectInclusiveAfterInlinePayload(); } ;
+INLINE_SEP : '::' {
+    if (pendingInlineSeparator) {
+      awaitingInlinePayloadLanguage = true;
+      pendingInlineSeparator = false;
+    }
+} ;
 DIRCPP_HDR : ('std -hres' | 'cxx::std') { expectInclusive = true; } ;
 OVERRIDE : 'override' ;
 SYSCALL  : 'syscall' ;
@@ -339,13 +360,16 @@ GC_NAME  : 'gc' ;
 GCMODE_NAME : 'gcmode' ;
 BORROW_CHECKER_NAME : 'borrow_checker' ;
 BORROW_CHECK_NAME : 'borrow_check' ;
-ID       : [a-zA-Z_][a-zA-Z0-9_]* ;
-NATIVE   : 'cpp' | 'c' | 'rs' | 'rust' | 'java' | 'cs' | 'csharp' | 'py' | 'python' | 'js' | 'javascript' | 'ts' | 'typescript' | 'go' | 'golang' | 'php' | 'rb' | 'ruby' | 'kt' | 'kotlin' ;
+ID       : [a-zA-Z_][a-zA-Z0-9_]* { maybeArmInclusiveAfterInlineLanguage(); } ;
+NATIVE   : 'cpp' | 'c' | 'rs' | 'rust' | 'java' | 'cs' | 'csharp' | 'py' | 'python' | 'js' | 'javascript' | 'ts' | 'typescript' | 'go' | 'golang' | 'php' | 'rb' | 'ruby' | 'kt' | 'kotlin' { maybeArmInclusiveAfterInlineLanguage(); } ;
 INCLUSIVE
     : {expectInclusive}? '{' INCLUSIVE_CONTENT* '}'
       {
-          setText(getText().substring(1, getText().length() - 1));
-          expectInclusive = false;
+          {
+              std::string text = getText();
+              setText(text.substr(1, text.size() - 2));
+              expectInclusive = false;
+          }
       }
     ;
 

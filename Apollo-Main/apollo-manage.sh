@@ -47,7 +47,7 @@ tracked_user_changes() {
         [ -z "$line" ] && continue
         path=${line#?? }
         case "$path" in
-            compiler/output/*|compiler/compiler-master/*|compiler/*.class|compiler/*.interp|compiler/*.tokens)
+            compiler/output/*|compiler/*.class|compiler/*.interp|compiler/*.tokens)
                 continue
                 ;;
         esac

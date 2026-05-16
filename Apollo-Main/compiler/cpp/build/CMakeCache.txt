@@ -375,7 +375,7 @@ GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
 GLIBCXX_USE_CXX11_ABI:BOOL=OFF
 
 //The gold linker
-GOLD_EXECUTABLE:FILEPATH=C:/msys64/clang64/bin/ld.exe
+GOLD_EXECUTABLE:FILEPATH=C:/msys64/mingw64/bin/ld.exe
 
 //Enable the 'libc' project targeting the GPU
 LIBC_GPU_BUILD:BOOL=OFF

@@ -131,7 +131,7 @@ function Get-TrackedUserChanges {
             }
 
             $path = $line.Substring(3)
-            if ($path -like 'compiler/output/*' -or $path -like 'compiler/compiler-master/*') {
+            if ($path -like 'compiler/output/*') {
                 return $false
             }
             if ($path -like 'compiler/*.class' -or $path -like 'compiler/*.interp' -or $path -like 'compiler/*.tokens') {

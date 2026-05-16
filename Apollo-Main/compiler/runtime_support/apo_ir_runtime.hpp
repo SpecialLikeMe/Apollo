@@ -557,6 +557,10 @@ static bool __apo_eval_apollo_expr(const std::string& rawExpr,
     while (__apo_has_wrapping_parens(expr)) {
         expr = __apo_trim_copy(expr.substr(1, expr.size() - 2));
     }
+    while (!expr.empty() && expr.back() == ';') {
+        expr.pop_back();
+        expr = __apo_trim_copy(expr);
+    }
     std::vector<std::string> additiveParts = __apo_split_top_level(expr, '+');
     if (additiveParts.size() > 1) {
         std::vector<__apo_apollo_payload_value> values;
@@ -591,6 +595,46 @@ static bool __apo_eval_apollo_expr(const std::string& rawExpr,
         outValue = __apo_apollo_payload_value::string(input);
         return true;
     }
+    auto tryRenderExpr = [&](const std::string& prefix, bool appendNewline) -> bool {
+        size_t prefixStart = expr.find(prefix);
+        if (prefixStart == std::string::npos) {
+            return false;
+        }
+        size_t close = expr.find_last_of(')');
+        if (close == std::string::npos || close <= prefixStart + prefix.size() - 1) {
+            return false;
+        }
+        std::string inner = expr.substr(prefixStart + prefix.size(), close - (prefixStart + prefix.size()));
+        __apo_apollo_payload_value value;
+        if (!__apo_eval_apollo_expr(inner, bindings, value)) {
+            return false;
+        }
+        std::cout << value.render();
+        if (appendNewline) {
+            std::cout << std::endl;
+        }
+        outValue = value;
+        return true;
+    };
+    if (tryRenderExpr("sys.println(", true) || tryRenderExpr("sys.print(", false) || tryRenderExpr("sys.stdout(", false)) {
+        return true;
+    }
+    if (expr.find("sys.") != std::string::npos
+            && (expr.find("stdout") != std::string::npos || expr.find("print") != std::string::npos)) {
+        size_t open = expr.find('(');
+        size_t close = expr.find_last_of(')');
+        if (open != std::string::npos && close != std::string::npos && close > open + 1) {
+            __apo_apollo_payload_value value;
+            if (__apo_eval_apollo_expr(expr.substr(open + 1, close - open - 1), bindings, value)) {
+                std::cout << value.render();
+                if (expr.find("println") != std::string::npos) {
+                    std::cout << std::endl;
+                }
+                outValue = value;
+                return true;
+            }
+        }
+    }
     if (expr.size() >= 2 && expr.front() == '"' && expr.back() == '"') {
         outValue = __apo_apollo_payload_value::string(__apo_decode_string_literal(expr));
         return true;
@@ -610,14 +654,23 @@ static bool __apo_eval_apollo_expr(const std::string& rawExpr,
 static int __apo_execute_apollo_statement(const std::string& rawStatement,
                                           std::unordered_map<std::string, __apo_apollo_payload_value>& bindings) {
     std::string statement = __apo_trim_copy(rawStatement);
+    while (!statement.empty() && statement.back() == ';') {
+        statement.pop_back();
+        statement = __apo_trim_copy(statement);
+    }
     if (statement.empty()) {
         return 0;
     }
     auto renderCall = [&](const std::string& prefix, bool appendNewline) -> int {
-        if (statement.rfind(prefix, 0) != 0 || statement.back() != ')') {
+        size_t prefixStart = statement.find(prefix);
+        if (prefixStart == std::string::npos) {
             return 1;
         }
-        std::string inner = statement.substr(prefix.size(), statement.size() - prefix.size() - 1);
+        size_t close = statement.find_last_of(')');
+        if (close == std::string::npos || close <= prefixStart + prefix.size() - 1) {
+            return 1;
+        }
+        std::string inner = statement.substr(prefixStart + prefix.size(), close - (prefixStart + prefix.size()));
         __apo_apollo_payload_value value;
         if (!__apo_eval_apollo_expr(inner, bindings, value)) {
             std::cerr << "unsupported Apollo payload expression: " << inner << std::endl;
@@ -630,11 +683,32 @@ static int __apo_execute_apollo_statement(const std::string& rawStatement,
         return 0;
     };
 
-    if (statement.rfind("sys.println(", 0) == 0) {
-        return renderCall("sys.println(", true);
+    if (int renderStatus = renderCall("sys.println(", true); renderStatus != 1) {
+        return renderStatus;
     }
-    if (statement.rfind("sys.print(", 0) == 0) {
-        return renderCall("sys.print(", false);
+    if (int renderStatus = renderCall("sys.print(", false); renderStatus != 1) {
+        return renderStatus;
+    }
+    if (int renderStatus = renderCall("sys.stdout(", false); renderStatus != 1) {
+        return renderStatus;
+    }
+    if (statement.find("sys.") != std::string::npos
+            && (statement.find("stdout") != std::string::npos || statement.find("print") != std::string::npos)) {
+        size_t open = statement.find('(');
+        size_t close = statement.find_last_of(')');
+        if (open != std::string::npos && close != std::string::npos && close > open + 1) {
+            __apo_apollo_payload_value value;
+            std::string inner = statement.substr(open + 1, close - open - 1);
+            if (!__apo_eval_apollo_expr(inner, bindings, value)) {
+                std::cerr << "unsupported Apollo payload expression: " << inner << std::endl;
+                return -1;
+            }
+            std::cout << value.render();
+            if (statement.find("println") != std::string::npos) {
+                std::cout << std::endl;
+            }
+            return 0;
+        }
     }
     if (statement == "return" || statement.rfind("return ", 0) == 0) {
         return 0;

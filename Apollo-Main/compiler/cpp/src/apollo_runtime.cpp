@@ -1737,7 +1737,7 @@ private:
                 binding->ownerScopeId = -1;
                 binding->inducted = false;
                 binding->allocatorBindingName.clear();
-                binding->moved = true;
+                binding->moved = false;
             }
             return;
         }

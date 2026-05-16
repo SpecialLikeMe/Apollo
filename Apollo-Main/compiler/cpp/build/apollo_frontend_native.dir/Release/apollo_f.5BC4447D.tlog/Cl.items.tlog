@@ -1,6 +1,7 @@
 C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\main.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\main.obj
 C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_driver.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_driver.obj
 C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_codegen_optimization_plan.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_codegen_optimization_plan.obj
+C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_inline_foreign.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_inline_foreign.obj
 C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\visitor.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\visitor.obj
 C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_ir_layout_plan.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_ir_layout_plan.obj
 C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_runtime.cpp;C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo_frontend_native.dir\Release\apollo_runtime.obj

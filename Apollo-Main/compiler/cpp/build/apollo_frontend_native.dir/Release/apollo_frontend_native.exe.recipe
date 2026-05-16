@@ -14,6 +14,12 @@
       <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\IR\x64\Release\intrinsics_gen</FullPath>
     </ProjectOutput>
     <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\Support\x64\Release\llvm_vcsrevision_h</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\apollo-llvm\include\llvm\Analysis\x64\Release\analysis_gen</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
       <FullPath>C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\Release\apollo_frontend_native.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
