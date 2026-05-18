@@ -169,12 +169,13 @@ run_quiet_command() {
     fi
 
     log_file=$(mktemp "${TMPDIR:-/tmp}/apollo-native.XXXXXX.log")
-    if run_and_capture_exit "$@" >"$log_file" 2>&1; then
+    run_and_capture_exit "$@" >"$log_file" 2>&1
+    status=$?
+    if [ "$status" -eq 0 ]; then
         rm -f "$log_file"
         return 0
     fi
 
-    status=$?
     cat "$log_file" >&2
     rm -f "$log_file"
     return "$status"
