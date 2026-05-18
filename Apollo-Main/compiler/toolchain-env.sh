@@ -176,6 +176,8 @@ resolve_antlr4_runtime_cmake_dir() {
     fi
     for candidate in \
         /usr/lib/cmake/antlr4-runtime \
+        /usr/lib/x86_64-linux-gnu/cmake/antlr4-runtime \
+        /usr/lib64/cmake/antlr4-runtime \
         /usr/local/lib/cmake/antlr4-runtime \
         /opt/homebrew/lib/cmake/antlr4-runtime \
         /opt/local/lib/cmake/antlr4-runtime; do

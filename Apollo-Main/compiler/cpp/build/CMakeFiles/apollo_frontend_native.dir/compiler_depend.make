@@ -2110,6 +2110,7 @@ CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj: C:/User
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Listener.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.h \
   C:/msys64/clang64/include/_mingw.h \
   C:/msys64/clang64/include/_mingw_mac.h \
   C:/msys64/clang64/include/_mingw_off_t.h \

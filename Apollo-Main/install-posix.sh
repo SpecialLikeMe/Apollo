@@ -43,47 +43,167 @@ first_existing_dir() {
     return 1
 }
 
+is_truthy() {
+    case "$1" in
+        1|true|TRUE|yes|YES|y|Y|on|ON) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+is_falsy() {
+    case "$1" in
+        0|false|FALSE|no|NO|n|N|off|OFF) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+should_install_dependency_group() {
+    env_name=$1
+    prompt=$2
+    interactive_default=$3
+    noninteractive_default=$4
+
+    eval "raw_value=\${$env_name:-}"
+    if [ -n "$raw_value" ]; then
+        if is_truthy "$raw_value"; then
+            return 0
+        fi
+        if is_falsy "$raw_value"; then
+            return 1
+        fi
+    fi
+
+    if [ ! -t 0 ]; then
+        [ "$noninteractive_default" = "1" ]
+        return
+    fi
+
+    while :; do
+        if [ "$interactive_default" = "1" ]; then
+            suffix='[Y/n]'
+        else
+            suffix='[y/N]'
+        fi
+        printf '%s %s ' "$prompt" "$suffix"
+        IFS= read -r response || response=''
+        if [ -z "$response" ]; then
+            [ "$interactive_default" = "1" ]
+            return
+        fi
+        if is_truthy "$response"; then
+            return 0
+        fi
+        if is_falsy "$response"; then
+            return 1
+        fi
+        write_status 'Please answer yes or no.'
+    done
+}
+
 install_with_brew() {
+    install_core=$1
+    install_features=$2
+    packages=''
+    if [ "$install_core" = "1" ]; then
+        packages="$packages git openjdk llvm antlr antlr4-cpp-runtime boehm-gc make cmake sdl2 sdl2_image python"
+    fi
+    if [ "$install_features" = "1" ]; then
+        packages="$packages rust zig go node"
+    fi
+    [ -n "$packages" ] || return 0
+
     write_status 'Installing dependencies with Homebrew'
-    brew install git openjdk llvm antlr boehm-gc make cmake sdl2 sdl2_image rust zig go node python
+    # shellcheck disable=SC2086
+    brew install $packages
 }
 
 install_with_apt() {
+    install_core=$1
+    install_features=$2
+    packages=''
+    if [ "$install_core" = "1" ]; then
+        packages="$packages git openjdk-21-jdk clang llvm make cmake antlr4 libantlr4-runtime-dev libgc-dev libsdl2-dev libsdl2-image-dev python3 python3-pip"
+    fi
+    if [ "$install_features" = "1" ]; then
+        packages="$packages rustc cargo zig golang-go nodejs npm"
+    fi
+    [ -n "$packages" ] || return 0
+
     write_status 'Installing dependencies with apt'
     sudo apt-get update
-    sudo apt-get install -y git openjdk-21-jdk clang llvm make cmake antlr4 libgc-dev libsdl2-dev libsdl2-image-dev rustc cargo zig golang-go nodejs npm python3 python3-pip
+    # shellcheck disable=SC2086
+    sudo apt-get install -y $packages
 }
 
 install_with_dnf() {
+    install_core=$1
+    install_features=$2
+    packages=''
+    if [ "$install_core" = "1" ]; then
+        packages="$packages git java-21-openjdk-devel clang llvm make cmake antlr4 antlr4-runtime-devel gc-devel SDL2-devel SDL2_image-devel python3 python3-pip"
+    fi
+    if [ "$install_features" = "1" ]; then
+        packages="$packages rust cargo zig golang nodejs npm"
+    fi
+    [ -n "$packages" ] || return 0
+
     write_status 'Installing dependencies with dnf'
-    sudo dnf install -y git java-21-openjdk-devel clang llvm make cmake antlr4 gc-devel SDL2-devel SDL2_image-devel rust cargo zig golang nodejs npm python3 python3-pip
+    # shellcheck disable=SC2086
+    sudo dnf install -y $packages
 }
 
 install_with_pacman() {
+    install_core=$1
+    install_features=$2
+    packages=''
+    if [ "$install_core" = "1" ]; then
+        packages="$packages git jdk21-openjdk clang llvm make cmake antlr4 antlr4-runtime gc sdl2 sdl2_image python python-pip"
+    fi
+    if [ "$install_features" = "1" ]; then
+        packages="$packages rust zig go nodejs npm"
+    fi
+    [ -n "$packages" ] || return 0
+
     write_status 'Installing dependencies with pacman'
-    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make cmake antlr4 antlr4-runtime gc sdl2 sdl2_image rust zig go nodejs npm python python-pip
+    # shellcheck disable=SC2086
+    sudo pacman -Sy --needed --noconfirm $packages
 }
 
 ensure_dependencies() {
-    if dependency_snapshot >/dev/null 2>&1; then
-        write_status 'All Apollo dependencies are already present'
+    install_core=$1
+    install_features=$2
+
+    if [ "$install_core" != "1" ] && [ "$install_features" != "1" ]; then
+        write_status 'Skipping package-managed dependency installation'
+        return
+    fi
+
+    need_install=0
+    if [ "$install_core" = "1" ] && ! dependency_snapshot >/dev/null 2>&1; then
+        need_install=1
+    fi
+    if [ "$install_features" = "1" ] && ! feature_dependency_snapshot >/dev/null 2>&1; then
+        need_install=1
+    fi
+    if [ "$need_install" -eq 0 ]; then
+        write_status 'Selected Apollo dependencies are already present'
         return
     fi
 
     if command_exists brew; then
-        install_with_brew
+        install_with_brew "$install_core" "$install_features"
         return
     fi
     if command_exists apt-get; then
-        install_with_apt
+        install_with_apt "$install_core" "$install_features"
         return
     fi
     if command_exists dnf; then
-        install_with_dnf
+        install_with_dnf "$install_core" "$install_features"
         return
     fi
     if command_exists pacman; then
-        install_with_pacman
+        install_with_pacman "$install_core" "$install_features"
         return
     fi
     printf 'Unsupported platform package manager. Install Java, Clang/LLVM, ANTLR4, make, cmake, and Boehm GC manually.\n' >&2
@@ -311,6 +431,8 @@ resolve_antlr4_runtime_cmake_dir() {
 
     for candidate in \
         /usr/lib/cmake/antlr4-runtime \
+        /usr/lib/x86_64-linux-gnu/cmake/antlr4-runtime \
+        /usr/lib64/cmake/antlr4-runtime \
         /usr/local/lib/cmake/antlr4-runtime \
         /opt/homebrew/lib/cmake/antlr4-runtime \
         /opt/local/lib/cmake/antlr4-runtime; do
@@ -600,6 +722,28 @@ ensure_llts() {
     fi
 }
 
+feature_dependency_snapshot() {
+    rustc_exe=$(resolve_rustc_exe)
+    cargo_exe=$(resolve_cargo_exe)
+    zig_exe=$(resolve_zig_exe)
+    go_bin=$(resolve_go_bin)
+    node_bin=$(resolve_node_bin)
+    npm_bin=$(resolve_npm_bin)
+
+    [ -n "$rustc_exe" ] || return 1
+    [ -x "$rustc_exe" ] || return 1
+    [ -n "$cargo_exe" ] || return 1
+    [ -x "$cargo_exe" ] || return 1
+    [ -n "$zig_exe" ] || return 1
+    [ -x "$zig_exe" ] || return 1
+    [ -n "$go_bin" ] || return 1
+    [ -x "$go_bin" ] || return 1
+    [ -n "$node_bin" ] || return 1
+    [ -x "$node_bin" ] || return 1
+    [ -n "$npm_bin" ] || return 1
+    [ -x "$npm_bin" ] || return 1
+}
+
 dependency_snapshot() {
     java_bin=$(resolve_java_bin)
     llvm_bin=$(resolve_llvm_bin)
@@ -642,16 +786,6 @@ dependency_snapshot() {
     [ -x "$python_bin" ] || return 1
     [ -n "$pip_bin" ] || return 1
     [ -x "$pip_bin" ] || return 1
-    [ -n "$rustc_exe" ] || return 1
-    [ -x "$rustc_exe" ] || return 1
-    [ -n "$zig_exe" ] || return 1
-    [ -x "$zig_exe" ] || return 1
-    [ -n "$go_bin" ] || return 1
-    [ -x "$go_bin" ] || return 1
-    [ -n "$node_bin" ] || return 1
-    [ -x "$node_bin" ] || return 1
-    [ -n "$npm_bin" ] || return 1
-    [ -x "$npm_bin" ] || return 1
 
     [ -f "$COMPILER_DIR/antlr-4.13.2-complete.jar" ] || return 1
 
@@ -703,16 +837,36 @@ verify_dependencies() {
     write_status "Verified CMake at $CMAKE_BIN"
     write_status "Verified Python at $PYTHON_BIN"
     write_status "Verified pip at $PIP_BIN"
-    write_status "Verified Rust compiler at $RUSTC_EXE"
-    write_status "Verified Zig compiler at $ZIG_EXE"
+    if [ -n "$RUSTC_EXE" ]; then
+        write_status "Verified Rust compiler at $RUSTC_EXE"
+    else
+        write_status 'Rust compiler was not auto-discovered; inline foreign Rust will remain disabled until rustc is installed'
+    fi
+    if [ -n "$ZIG_EXE" ]; then
+        write_status "Verified Zig compiler at $ZIG_EXE"
+    else
+        write_status 'Zig compiler was not auto-discovered; inline foreign Zig will remain disabled until zig is installed'
+    fi
     if [ -n "$LPYTHON_EXE" ]; then
         write_status "Verified LPython at $LPYTHON_EXE"
     else
         write_status 'LPython compiler was not auto-discovered; the available PyPI package may only provide support modules on this machine. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
     fi
-    write_status "Verified Go at $GO_BIN"
-    write_status "Verified Node.js at $NODE_BIN"
-    write_status "Verified npm at $NPM_BIN"
+    if [ -n "$GO_BIN" ]; then
+        write_status "Verified Go at $GO_BIN"
+    else
+        write_status 'Go compiler was not auto-discovered; inline foreign Go will use Apollo fallback support where available'
+    fi
+    if [ -n "$NODE_BIN" ]; then
+        write_status "Verified Node.js at $NODE_BIN"
+    else
+        write_status 'Node.js was not auto-discovered; optional JavaScript/TypeScript tooling remains disabled until node is installed'
+    fi
+    if [ -n "$NPM_BIN" ]; then
+        write_status "Verified npm at $NPM_BIN"
+    else
+        write_status 'npm was not auto-discovered; optional JavaScript/TypeScript tooling remains disabled until npm is installed'
+    fi
     if [ -n "$SWIFTC_EXE" ]; then
         write_status "Verified Swift compiler at $SWIFTC_EXE"
     else
@@ -835,9 +989,23 @@ chmod +x "$SCRIPT_PATH" "$PAYLOAD_DIR/apollo.sh" "$PAYLOAD_DIR/apollo-config.sh"
 publish_cli_shims
 validate_cli_shims
 
-ensure_dependencies
-ensure_lpython
-ensure_llts
+INSTALL_CORE_DEPS=0
+if should_install_dependency_group APOLLO_INSTALL_CORE_DEPS 'Install Apollo core build dependencies (LLVM/Clang, Java, ANTLR, CMake, GC, SDL2, Python)?' 1 1; then
+    INSTALL_CORE_DEPS=1
+fi
+
+INSTALL_FEATURE_DEPS=0
+if should_install_dependency_group APOLLO_INSTALL_FEATURE_DEPS 'Install optional inline-foreign toolchains (Rust, Zig, Go, Node, LLTS, LPython helpers)?' 0 1; then
+    INSTALL_FEATURE_DEPS=1
+fi
+
+ensure_dependencies "$INSTALL_CORE_DEPS" "$INSTALL_FEATURE_DEPS"
+if [ "$INSTALL_FEATURE_DEPS" = "1" ]; then
+    ensure_lpython
+    ensure_llts
+else
+    write_status 'Skipping optional inline-foreign toolchain installation'
+fi
 verify_dependencies
 
 JAVA_BIN=$(resolve_java_bin)

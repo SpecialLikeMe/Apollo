@@ -114,7 +114,45 @@ else()
     message(FATAL_ERROR "Apollo now requires the LLVM C++ API. Set APOLLO_LLVM_API_ROOT or keep dependencies/llvm-source available.")
 endif()
 
-find_package(antlr4-runtime CONFIG REQUIRED)
+set(APOLLO_ANTLR4_RUNTIME_TARGET "")
+find_package(antlr4-runtime CONFIG QUIET)
+
+foreach(apollo_antlr_target IN ITEMS antlr4_shared antlr4_static antlr4-runtime antlr4_runtime)
+    if(NOT APOLLO_ANTLR4_RUNTIME_TARGET AND TARGET ${apollo_antlr_target})
+        set(APOLLO_ANTLR4_RUNTIME_TARGET ${apollo_antlr_target})
+    endif()
+endforeach()
+
+if(NOT APOLLO_ANTLR4_RUNTIME_TARGET)
+    find_path(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR
+        NAMES antlr4-runtime.h
+        HINTS
+            "$ENV{APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}"
+            "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/include"
+            "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/include/antlr4-runtime"
+        PATH_SUFFIXES
+            antlr4-runtime
+            include
+            include/antlr4-runtime)
+    find_library(APOLLO_ANTLR4_RUNTIME_LIBRARY
+        NAMES antlr4-runtime antlr4_runtime antlr4_shared
+        HINTS
+            "$ENV{APOLLO_ANTLR4_RUNTIME_LIB_DIR}"
+            "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/lib"
+            "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/lib64")
+
+    if(NOT APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR OR NOT APOLLO_ANTLR4_RUNTIME_LIBRARY)
+        message(FATAL_ERROR
+            "Could not locate the ANTLR4 C++ runtime. Install the runtime development package "
+            "or set antlr4-runtime_DIR/APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR/APOLLO_ANTLR4_RUNTIME_LIB_DIR.")
+    endif()
+
+    add_library(apollo_antlr4_runtime UNKNOWN IMPORTED)
+    set_target_properties(apollo_antlr4_runtime PROPERTIES
+        IMPORTED_LOCATION "${APOLLO_ANTLR4_RUNTIME_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}")
+    set(APOLLO_ANTLR4_RUNTIME_TARGET apollo_antlr4_runtime)
+endif()
 
 set(APOLLO_NATIVE_GENERATED_DIR "${APOLLO_CPP_SOURCE_DIR}/generated")
 
@@ -186,7 +224,7 @@ foreach(apollo_target IN ITEMS apollo_frontend_native apollo_build_driver_native
 
     target_link_libraries(${apollo_target}
         PRIVATE
-            antlr4_shared
+            ${APOLLO_ANTLR4_RUNTIME_TARGET}
             ${APOLLO_LLVM_API_LIBS}
     )
 endforeach()

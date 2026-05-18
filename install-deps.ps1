@@ -12,6 +12,62 @@ function Write-Status {
     Write-Host "[apollo-install] $Message"
 }
 
+function Convert-ToInstallerSelection {
+    param([AllowNull()][string]$Value)
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return $null
+    }
+
+    switch -Regex ($Value.Trim()) {
+        '^(1|true|yes|y|on)$' { return $true }
+        '^(0|false|no|n|off)$' { return $false }
+        default { return $null }
+    }
+}
+
+function Test-InstallerInteractive {
+    try {
+        return [Environment]::UserInteractive -and -not [Console]::IsInputRedirected -and -not [Console]::IsOutputRedirected
+    } catch {
+        return $false
+    }
+}
+
+function Resolve-InstallerSelection {
+    param(
+        [string]$EnvName,
+        [string]$Prompt,
+        [bool]$InteractiveDefault,
+        [bool]$NonInteractiveDefault
+    )
+
+    $envValue = [Environment]::GetEnvironmentVariable($EnvName)
+    $parsed = Convert-ToInstallerSelection -Value $envValue
+    if ($null -ne $parsed) {
+        return $parsed
+    }
+
+    if (-not (Test-InstallerInteractive)) {
+        return $NonInteractiveDefault
+    }
+
+    while ($true) {
+        $suffix = if ($InteractiveDefault) { '[Y/n]' } else { '[y/N]' }
+        $response = Read-Host "$Prompt $suffix"
+        if ([string]::IsNullOrWhiteSpace($response)) {
+            return $InteractiveDefault
+        }
+
+        $parsed = Convert-ToInstallerSelection -Value $response
+        if ($null -ne $parsed) {
+            return $parsed
+        }
+
+        Write-Status 'Please answer yes or no.'
+    }
+}
+
 function Get-WingetCommand {
     $winget = Get-Command winget -ErrorAction SilentlyContinue
     if (-not $winget) {
@@ -817,12 +873,7 @@ function Write-ToolchainEnv {
             (Join-Path $mingwBin 'llc.exe'),
             $makeProgram,
             (Join-Path $JavaBin 'java.exe'),
-            (Join-Path $JavaBin 'javac.exe'),
-            $rustc,
-            $zig,
-            $go,
-            $node,
-            $npm)) {
+            (Join-Path $JavaBin 'javac.exe'))) {
         if (-not (Test-Path $requiredPath)) {
             throw "Required tool was not found at $requiredPath"
         }
@@ -945,18 +996,36 @@ function Invoke-ApolloValidation {
 $InstallDir = [System.IO.Path]::GetFullPath($InstallDir)
 Write-Status "Bootstrapping dependencies for Apollo at $InstallDir"
 
-Ensure-Git
-Ensure-Java
-Ensure-Python
-Ensure-Node
-Ensure-Go
-Ensure-Rust
-Ensure-LLTS
-Ensure-Zig
-Ensure-Swift
-Ensure-LPython
-$msysRoot = Ensure-Msys2
-Ensure-MingwPackages -MsysRoot $msysRoot
+$installCoreDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_CORE_DEPS' -Prompt 'Install Apollo core dependencies (Git, Java, Python, MSYS2 clang/LLVM, ANTLR runtime, GC, SDL2)?' -InteractiveDefault $true -NonInteractiveDefault $true
+$installFeatureDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_FEATURE_DEPS' -Prompt 'Install optional inline-foreign toolchains (Rust, Go, Node, Zig, Swift, LLTS, LPython)?' -InteractiveDefault $false -NonInteractiveDefault $true
+
+if ($installCoreDependencies) {
+    Ensure-Git
+    Ensure-Java
+    Ensure-Python
+    $msysRoot = Ensure-Msys2
+    Ensure-MingwPackages -MsysRoot $msysRoot
+} else {
+    Write-Status 'Skipping core dependency installation; using any existing Windows toolchain that is already installed.'
+    $msysRoot = Resolve-MsysRoot
+}
+
+if ($installFeatureDependencies) {
+    Ensure-Node
+    Ensure-Go
+    Ensure-Rust
+    Ensure-LLTS
+    Ensure-Zig
+    Ensure-Swift
+    Ensure-LPython
+} else {
+    Write-Status 'Skipping optional inline-foreign toolchain installation'
+}
+
+if (-not $msysRoot) {
+    throw 'MSYS2 could not be resolved. Re-run the installer and choose core dependency installation, or install MSYS2 manually.'
+}
+
 $javaBin = Resolve-JavaBin
 Write-ToolchainEnv -InstallDirPath $InstallDir -MsysRoot $msysRoot -JavaBin $javaBin
 Set-SessionToolchainEnv -MsysRoot $msysRoot -JavaBin $javaBin
