@@ -257,7 +257,7 @@ resolve_cmake() {
     return 1
 }
 
-resolve_native_executable() {
+find_native_executable() {
     name=$1
     for candidate in \
         "$NATIVE_BUILD_DIR/$name" \
@@ -278,6 +278,15 @@ resolve_native_executable() {
             return 0
         fi
     done
+    return 1
+}
+
+resolve_native_executable() {
+    name=$1
+    if resolved_target=$(find_native_executable "$name"); then
+        printf '%s\n' "$resolved_target"
+        return 0
+    fi
     printf 'Native Apollo executable not found: %s\n' "$name" >&2
     return 1
 }
@@ -287,7 +296,7 @@ reuse_native_targets() {
     APOLLO_BUILD_DRIVER_EXE=
 
     for target_name in "$@"; do
-        resolved_target=$(resolve_native_executable "$target_name") || return 1
+        resolved_target=$(find_native_executable "$target_name") || return 1
         if native_target_stale "$resolved_target"; then
             return 1
         fi
@@ -302,8 +311,8 @@ reuse_native_targets() {
         return 0
     fi
 
-    APOLLO_FRONTEND_EXE=$(resolve_native_executable apollo_frontend_native) || return 1
-    APOLLO_BUILD_DRIVER_EXE=$(resolve_native_executable apollo_build_driver_native) || return 1
+    APOLLO_FRONTEND_EXE=$(find_native_executable apollo_frontend_native) || return 1
+    APOLLO_BUILD_DRIVER_EXE=$(find_native_executable apollo_build_driver_native) || return 1
     return 0
 }
 
@@ -333,20 +342,29 @@ ensure_native_targets() {
         for target_name in "$@"; do
             case "$target_name" in
                 apollo_frontend_native)
-                    APOLLO_FRONTEND_EXE=$(resolve_native_executable apollo_frontend_native) || need_native_build=1
-                    if [ "$need_native_build" -eq 0 ] && native_target_stale "$APOLLO_FRONTEND_EXE"; then
+                    if APOLLO_FRONTEND_EXE=$(find_native_executable apollo_frontend_native); then
+                        if native_target_stale "$APOLLO_FRONTEND_EXE"; then
+                            need_native_build=1
+                        fi
+                    else
                         need_native_build=1
                     fi
                     ;;
                 apollo_build_driver_native)
-                    APOLLO_BUILD_DRIVER_EXE=$(resolve_native_executable apollo_build_driver_native) || need_native_build=1
-                    if [ "$need_native_build" -eq 0 ] && native_target_stale "$APOLLO_BUILD_DRIVER_EXE"; then
+                    if APOLLO_BUILD_DRIVER_EXE=$(find_native_executable apollo_build_driver_native); then
+                        if native_target_stale "$APOLLO_BUILD_DRIVER_EXE"; then
+                            need_native_build=1
+                        fi
+                    else
                         need_native_build=1
                     fi
                     ;;
                 *)
-                    resolved_target=$(resolve_native_executable "$target_name") || need_native_build=1
-                    if [ "$need_native_build" -eq 0 ] && native_target_stale "$resolved_target"; then
+                    if resolved_target=$(find_native_executable "$target_name"); then
+                        if native_target_stale "$resolved_target"; then
+                            need_native_build=1
+                        fi
+                    else
                         need_native_build=1
                     fi
                     ;;

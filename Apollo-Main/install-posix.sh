@@ -105,10 +105,10 @@ install_with_brew() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git openjdk llvm antlr antlr4-cpp-runtime boehm-gc make cmake sdl2 sdl2_image python"
+        packages="$packages git llvm antlr4-cpp-runtime boehm-gc make cmake sdl2 sdl2_image python"
     fi
     if [ "$install_features" = "1" ]; then
-        packages="$packages rust zig go node"
+        packages="$packages openjdk rust zig go node"
     fi
     [ -n "$packages" ] || return 0
 
@@ -122,10 +122,10 @@ install_with_apt() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git openjdk-21-jdk clang llvm make cmake antlr4 libantlr4-runtime-dev libgc-dev libsdl2-dev libsdl2-image-dev python3 python3-pip"
+        packages="$packages git clang llvm make cmake libantlr4-runtime-dev libgc-dev libsdl2-dev libsdl2-image-dev python3 python3-pip"
     fi
     if [ "$install_features" = "1" ]; then
-        packages="$packages rustc cargo zig golang-go nodejs npm"
+        packages="$packages openjdk-21-jdk rustc cargo zig golang-go nodejs npm"
     fi
     [ -n "$packages" ] || return 0
 
@@ -140,10 +140,10 @@ install_with_dnf() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git java-21-openjdk-devel clang llvm make cmake antlr4 antlr4-runtime-devel gc-devel SDL2-devel SDL2_image-devel python3 python3-pip"
+        packages="$packages git clang llvm make cmake antlr4-runtime-devel gc-devel SDL2-devel SDL2_image-devel python3 python3-pip"
     fi
     if [ "$install_features" = "1" ]; then
-        packages="$packages rust cargo zig golang nodejs npm"
+        packages="$packages java-21-openjdk-devel rust cargo zig golang nodejs npm"
     fi
     [ -n "$packages" ] || return 0
 
@@ -157,10 +157,10 @@ install_with_pacman() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git jdk21-openjdk clang llvm make cmake antlr4 antlr4-runtime gc sdl2 sdl2_image python python-pip"
+        packages="$packages git clang llvm make cmake antlr4-runtime gc sdl2 sdl2_image python python-pip"
     fi
     if [ "$install_features" = "1" ]; then
-        packages="$packages rust zig go nodejs npm"
+        packages="$packages jdk21-openjdk rust zig go nodejs npm"
     fi
     [ -n "$packages" ] || return 0
 
@@ -206,7 +206,7 @@ ensure_dependencies() {
         install_with_pacman "$install_core" "$install_features"
         return
     fi
-    printf 'Unsupported platform package manager. Install Java, Clang/LLVM, ANTLR4, make, cmake, and Boehm GC manually.\n' >&2
+    printf 'Unsupported platform package manager. Install Clang/LLVM, the ANTLR4 C++ runtime, make, cmake, and Boehm GC manually.\n' >&2
     exit 1
 }
 
@@ -723,6 +723,7 @@ ensure_llts() {
 }
 
 feature_dependency_snapshot() {
+    java_bin=$(resolve_java_bin)
     rustc_exe=$(resolve_rustc_exe)
     cargo_exe=$(resolve_cargo_exe)
     zig_exe=$(resolve_zig_exe)
@@ -730,6 +731,9 @@ feature_dependency_snapshot() {
     node_bin=$(resolve_node_bin)
     npm_bin=$(resolve_npm_bin)
 
+    [ -n "$java_bin" ] || return 1
+    [ -x "$java_bin/java" ] || return 1
+    [ -x "$java_bin/javac" ] || return 1
     [ -n "$rustc_exe" ] || return 1
     [ -x "$rustc_exe" ] || return 1
     [ -n "$cargo_exe" ] || return 1
@@ -767,9 +771,6 @@ dependency_snapshot() {
     sdl_lib_dir=$(resolve_sdl_lib_dir)
 
     [ -n "$git_bin" ] || return 1
-    [ -n "$java_bin" ] || return 1
-    [ -x "$java_bin/java" ] || return 1
-    [ -x "$java_bin/javac" ] || return 1
 
     [ -n "$llvm_bin" ] || return 1
     [ -x "$llvm_bin/clang" ] || return 1
@@ -786,8 +787,6 @@ dependency_snapshot() {
     [ -x "$python_bin" ] || return 1
     [ -n "$pip_bin" ] || return 1
     [ -x "$pip_bin" ] || return 1
-
-    [ -f "$COMPILER_DIR/antlr-4.13.2-complete.jar" ] || return 1
 
     [ -n "$gc_include_dir" ] || return 1
     [ -n "$gc_lib_dir" ] || return 1
@@ -825,13 +824,17 @@ dependency_snapshot() {
 
 verify_dependencies() {
     if ! snapshot=$(dependency_snapshot); then
-        printf 'Apollo dependency verification failed. Required components: git, java, javac, clang, clang++, llc, make/gmake, cmake, python, pip, rustc, zig, go, node, npm, bundled antlr-4.13.2-complete.jar, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs. LPython is optional and only enabled when a real compiler command is available.\n' >&2
+        printf 'Apollo dependency verification failed. Required components: git, clang, clang++, llc, make/gmake, cmake, the ANTLR4 C++ runtime development files, python, pip, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs. Java and other language toolchains are optional and only needed for their corresponding inline-foreign surfaces.\n' >&2
         return 1
     fi
 
     eval "$snapshot"
     write_status "Verified git at $GIT_BIN"
-    write_status "Verified Java at $JAVA_BIN"
+    if [ -n "$JAVA_BIN" ] && [ -x "$JAVA_BIN/java" ] && [ -x "$JAVA_BIN/javac" ]; then
+        write_status "Verified Java at $JAVA_BIN"
+    else
+        write_status 'Java runtime/compiler was not auto-discovered; inline foreign Java and Kotlin launch remain disabled until Java is installed'
+    fi
     write_status "Verified LLVM toolchain at $LLVM_BIN"
     write_status "Verified make at $MAKE_BIN"
     write_status "Verified CMake at $CMAKE_BIN"
@@ -990,12 +993,12 @@ publish_cli_shims
 validate_cli_shims
 
 INSTALL_CORE_DEPS=0
-if should_install_dependency_group APOLLO_INSTALL_CORE_DEPS 'Install Apollo core build dependencies (LLVM/Clang, Java, ANTLR, CMake, GC, SDL2, Python)?' 1 1; then
+if should_install_dependency_group APOLLO_INSTALL_CORE_DEPS 'Install Apollo core build dependencies (LLVM/Clang, ANTLR4 C++ runtime, CMake, GC, SDL2, Python)?' 1 1; then
     INSTALL_CORE_DEPS=1
 fi
 
 INSTALL_FEATURE_DEPS=0
-if should_install_dependency_group APOLLO_INSTALL_FEATURE_DEPS 'Install optional inline-foreign toolchains (Rust, Zig, Go, Node, LLTS, LPython helpers)?' 0 1; then
+if should_install_dependency_group APOLLO_INSTALL_FEATURE_DEPS 'Install optional inline-foreign toolchains (Java/Kotlin runtime support, Rust, Zig, Go, Node, LLTS, LPython helpers)?' 0 1; then
     INSTALL_FEATURE_DEPS=1
 fi
 

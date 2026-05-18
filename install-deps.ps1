@@ -748,7 +748,7 @@ function Resolve-JavaBin {
         }
     }
 
-    throw 'javac.exe could not be located after installing Java.'
+    return $null
 }
 
 function Resolve-GcHeader {
@@ -871,16 +871,17 @@ function Write-ToolchainEnv {
             (Join-Path $mingwBin 'clang.exe'),
             (Join-Path $mingwBin 'clang++.exe'),
             (Join-Path $mingwBin 'llc.exe'),
-            $makeProgram,
-            (Join-Path $JavaBin 'java.exe'),
-            (Join-Path $JavaBin 'javac.exe'))) {
+            $makeProgram)) {
         if (-not (Test-Path $requiredPath)) {
             throw "Required tool was not found at $requiredPath"
         }
     }
 
     $envFile = Join-Path $compilerDir 'toolchain-env.bat'
-    $pathEntries = @($mingwBin, $JavaBin)
+    $pathEntries = @($mingwBin)
+    if (-not [string]::IsNullOrWhiteSpace($JavaBin)) {
+        $pathEntries += $JavaBin
+    }
     $pathEntries += Split-Path $makeProgram -Parent
     foreach ($tool in @($rustc, $swiftc, $zig, $lpython, $go, $node, $npm, $gollvm, $llts)) {
         if (-not [string]::IsNullOrWhiteSpace($tool)) {
@@ -966,7 +967,10 @@ function Set-SessionToolchainEnv {
     $env:APOLLO_NODE_EXE = $node
     $env:APOLLO_NPM_EXE = $npm
 
-    $pathEntries = @($mingwBin, $JavaBin)
+    $pathEntries = @($mingwBin)
+    if (-not [string]::IsNullOrWhiteSpace($JavaBin)) {
+        $pathEntries += $JavaBin
+    }
     if ($makeProgram) {
         $pathEntries += Split-Path $makeProgram -Parent
     }
@@ -996,12 +1000,11 @@ function Invoke-ApolloValidation {
 $InstallDir = [System.IO.Path]::GetFullPath($InstallDir)
 Write-Status "Bootstrapping dependencies for Apollo at $InstallDir"
 
-$installCoreDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_CORE_DEPS' -Prompt 'Install Apollo core dependencies (Git, Java, Python, MSYS2 clang/LLVM, ANTLR runtime, GC, SDL2)?' -InteractiveDefault $true -NonInteractiveDefault $true
-$installFeatureDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_FEATURE_DEPS' -Prompt 'Install optional inline-foreign toolchains (Rust, Go, Node, Zig, Swift, LLTS, LPython)?' -InteractiveDefault $false -NonInteractiveDefault $true
+$installCoreDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_CORE_DEPS' -Prompt 'Install Apollo core dependencies (Git, Python, MSYS2 clang/LLVM, ANTLR runtime, GC, SDL2)?' -InteractiveDefault $true -NonInteractiveDefault $true
+$installFeatureDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_FEATURE_DEPS' -Prompt 'Install optional inline-foreign toolchains (Java/Kotlin runtime support, Rust, Go, Node, Zig, Swift, LLTS, LPython)?' -InteractiveDefault $false -NonInteractiveDefault $true
 
 if ($installCoreDependencies) {
     Ensure-Git
-    Ensure-Java
     Ensure-Python
     $msysRoot = Ensure-Msys2
     Ensure-MingwPackages -MsysRoot $msysRoot
@@ -1011,6 +1014,7 @@ if ($installCoreDependencies) {
 }
 
 if ($installFeatureDependencies) {
+    Ensure-Java
     Ensure-Node
     Ensure-Go
     Ensure-Rust
@@ -1032,6 +1036,9 @@ Set-SessionToolchainEnv -MsysRoot $msysRoot -JavaBin $javaBin
 
 if (-not (Resolve-GoLLVMCommand)) {
     Write-Status 'GoLLVM was not found in PATH; Apollo will use its built-in Go inline foreign fallback for the currently supported surface. Set APOLLO_GOLLVM_EXE after installing llvm-goc if you want to prefer an external compiler.'
+}
+if (-not (Resolve-JavaBin)) {
+    Write-Status 'Java runtime/compiler was not found; inline foreign Java and Kotlin launch will remain disabled until Java is installed.'
 }
 if (-not (Resolve-LLTSCommand)) {
     Write-Status 'LLTS was not found in PATH after the cargo bootstrap attempt; Apollo will use its built-in TypeScript inline foreign fallback for the currently supported surface. Set APOLLO_LLTS_EXE after installing lltsc if you want to prefer an external compiler.'
