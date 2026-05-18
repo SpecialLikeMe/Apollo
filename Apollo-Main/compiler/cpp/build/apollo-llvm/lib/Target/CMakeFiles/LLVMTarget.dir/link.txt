@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMTarget.a CMakeFiles/LLVMTarget.dir/RegisterTargetPassConfigCallback.cpp.o CMakeFiles/LLVMTarget.dir/Target.cpp.o CMakeFiles/LLVMTarget.dir/TargetLoweringObjectFile.cpp.o CMakeFiles/LLVMTarget.dir/TargetMachine.cpp.o CMakeFiles/LLVMTarget.dir/TargetMachineC.cpp.o
-/usr/sbin/ranlib -D ../libLLVMTarget.a

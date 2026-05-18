@@ -4,7 +4,11 @@ GRAMMAR := compilerv1.g4
 CPP_OUT := cpp/generated
 LEGACY_CPP_OUT := generated
 LEGACY_JAVA_OUT := compiler-master
+ifeq ($(OS),Windows_NT)
 CMAKE_BUILD_DIR := cpp/build
+else
+CMAKE_BUILD_DIR := cpp/build-posix
+endif
 CMAKE_CONFIG ?= Release
 NATIVE_TARGETS := apollo_frontend_native apollo_build_driver_native apollo_runtime_tests apollo_driver_tests
 CORE_TARGETS := apollo_frontend_native apollo_build_driver_native
@@ -67,7 +71,7 @@ clean-generated:
 	@$(POWERSHELL) "Remove-Item '$(CPP_OUT)/compilerv1*.cpp', '$(CPP_OUT)/compilerv1*.h', '$(CPP_OUT)/compilerv1*.tokens', '$(CPP_OUT)/compilerv1*.interp' -Force -ErrorAction SilentlyContinue; Remove-Item '$(LEGACY_CPP_OUT)', '$(LEGACY_JAVA_OUT)', 'output/classes' -Recurse -Force -ErrorAction SilentlyContinue"
 
 clean-build:
-	@$(POWERSHELL) "Remove-Item '$(CMAKE_BUILD_DIR)' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'native/build' -Recurse -Force -ErrorAction SilentlyContinue"
+	@$(POWERSHELL) "Remove-Item '$(CMAKE_BUILD_DIR)' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'cpp/build', 'cpp/build-posix', 'native/build' -Recurse -Force -ErrorAction SilentlyContinue"
 
 clean: clean-generated clean-build
 	@$(POWERSHELL) "Remove-Item '-p' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'async' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'output' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'apo_async.cpp', 'apo_async.c', 'apo_async.rs', 'apo_async.exe', 'output.exe', 'output_test.o' -Force -ErrorAction SilentlyContinue"

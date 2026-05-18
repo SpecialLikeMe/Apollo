@@ -1,0 +1,37 @@
+; ModuleID = 'unsafe_required'
+source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/safety/fail/unsafe_required.apollo"
+
+define i32 @main() {
+entry:
+  %heap = alloca ptr, align 8
+  %0 = call ptr @malloc(i64 4)
+  store ptr %0, ptr %heap, align 8
+  ret i32 0
+}
+
+declare ptr @malloc(i64)
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"unsafe_required"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"double", !"double"}
+!4 = !{!"float", !"float"}
+!5 = !{!"long", !"i64"}
+!6 = !{!"short", !"i16"}
+!7 = !{!"u32", !"i32"}
+!8 = !{!"f64", !"double"}
+!9 = !{!"i32", !"i32"}
+!10 = !{!"u8", !"i8"}
+!11 = !{!"u64", !"i64"}
+!12 = !{!"bool", !"i1"}
+!13 = !{!"int", !"i32"}
+!14 = !{!"void", !"void"}
+!15 = !{!"u16", !"i16"}
+!16 = !{!"i16", !"i16"}
+!17 = !{!"i8", !"i8"}
+!18 = !{!"i64", !"i64"}

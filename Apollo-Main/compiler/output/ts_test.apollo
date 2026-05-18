@@ -1,0 +1,1 @@
+@unsafe { inline::typescript { let ts_value: i32 = 13; function ts_read(): i32 { return ts_value; } } } int main() { sys.println(ts_read()); return 0; }

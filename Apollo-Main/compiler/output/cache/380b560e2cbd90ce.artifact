@@ -1,0 +1,144 @@
+; ModuleID = 'all_languages'
+source_filename = "all_languages.apollo"
+target datalayout = "e-m:w-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-w64-windows-gnu"
+
+@c_value = dso_local global i32 1, align 4
+@_ZN28__apollo_inline_inline_7_5_19cpp_valueE = dso_local global i32 2, align 4
+@objc_value = dso_local global i32 3, align 4
+@_ZN29__apollo_inline_inline_17_5_312objcpp_valueE = dso_local global i32 4, align 4
+@__apollo_inline_get_inline_22_5_4_rust_value_storage = internal global i32 1, align 4
+@__apollo_inline_get_inline_27_5_5_swift_value_storage = internal global i32 1, align 4
+@__apollo_inline_get_inline_32_5_6_zig_value_storage = internal global i32 1, align 4
+@__apollo_inline_get_inline_37_5_7_py_value_storage = internal global i32 1, align 4
+@__apollo_inline_get_inline_42_5_8_go_value_storage = internal global i32 1, align 4
+@__apollo_inline_get_inline_47_5_9_ts_value_storage = internal global i32 1, align 4
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @__apollo_inline_get_inline_2_5_0_c_value() local_unnamed_addr #0 {
+  ret ptr @c_value
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @__apollo_inline_get_inline_7_5_1_cpp_value() local_unnamed_addr #0 {
+  ret ptr @_ZN28__apollo_inline_inline_7_5_19cpp_valueE
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @__apollo_inline_get_inline_12_5_2_objc_value() local_unnamed_addr #0 {
+  ret ptr @objc_value
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @__apollo_inline_get_inline_17_5_3_objcpp_value() local_unnamed_addr #0 {
+  ret ptr @_ZN29__apollo_inline_inline_17_5_312objcpp_valueE
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local ptr @__apollo_inline_get_inline_22_5_4_rust_value() #1 {
+  ret ptr @__apollo_inline_get_inline_22_5_4_rust_value_storage
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local ptr @__apollo_inline_get_inline_27_5_5_swift_value() #1 {
+  ret ptr @__apollo_inline_get_inline_27_5_5_swift_value_storage
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local ptr @__apollo_inline_get_inline_32_5_6_zig_value() #1 {
+  ret ptr @__apollo_inline_get_inline_32_5_6_zig_value_storage
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local ptr @__apollo_inline_get_inline_37_5_7_py_value() #1 {
+  ret ptr @__apollo_inline_get_inline_37_5_7_py_value_storage
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local ptr @__apollo_inline_get_inline_42_5_8_go_value() #1 {
+  ret ptr @__apollo_inline_get_inline_42_5_8_go_value_storage
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local ptr @__apollo_inline_get_inline_47_5_9_ts_value() #1 {
+  ret ptr @__apollo_inline_get_inline_47_5_9_ts_value_storage
+}
+
+define i32 @main() {
+entry:
+  %0 = call ptr @__apollo_inline_get_inline_7_5_1_cpp_value()
+  %1 = call ptr @__apollo_inline_get_inline_17_5_3_objcpp_value()
+  %2 = call ptr @__apollo_inline_get_inline_22_5_4_rust_value()
+  %3 = call ptr @__apollo_inline_get_inline_27_5_5_swift_value()
+  %4 = call ptr @__apollo_inline_get_inline_32_5_6_zig_value()
+  %5 = call ptr @__apollo_inline_get_inline_37_5_7_py_value()
+  %6 = call ptr @__apollo_inline_get_inline_42_5_8_go_value()
+  %7 = call ptr @__apollo_inline_get_inline_47_5_9_ts_value()
+  ret i32 0
+}
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noinline nounwind optnone uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+!llvm.dbg.cu = !{!19, !21, !23, !25, !27, !29, !31, !33, !35, !37}
+!llvm.ident = !{!39}
+!llvm.errno.tbaa = !{!40, !44}
+!llvm.module.flags = !{!48, !49, !50, !51, !52}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"all_languages"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"double", !"double"}
+!4 = !{!"float", !"float"}
+!5 = !{!"long", !"i64"}
+!6 = !{!"short", !"i16"}
+!7 = !{!"u32", !"i32"}
+!8 = !{!"f64", !"double"}
+!9 = !{!"i32", !"i32"}
+!10 = !{!"u8", !"i8"}
+!11 = !{!"u64", !"i64"}
+!12 = !{!"bool", !"i1"}
+!13 = !{!"int", !"i32"}
+!14 = !{!"void", !"void"}
+!15 = !{!"u16", !"i16"}
+!16 = !{!"i16", !"i16"}
+!17 = !{!"i8", !"i8"}
+!18 = !{!"i64", !"i64"}
+!19 = distinct !DICompileUnit(language: DW_LANG_C11, file: !20, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!20 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/96dcb3fe88e795d4.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!21 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus_14, file: !22, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!22 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/8fa086f45b8594a2.cpp", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!23 = distinct !DICompileUnit(language: DW_LANG_ObjC, file: !24, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 1, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!24 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/274a39d791c6ca9d.m", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!25 = distinct !DICompileUnit(language: DW_LANG_ObjC_plus_plus, file: !26, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 1, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!26 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/320a1ee12c1a2082.mm", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!27 = distinct !DICompileUnit(language: DW_LANG_C11, file: !28, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!28 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/d2cc8c7dd27f4945.fake.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!29 = distinct !DICompileUnit(language: DW_LANG_C11, file: !30, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!30 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/39e05aac07244894.fake.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!31 = distinct !DICompileUnit(language: DW_LANG_C11, file: !32, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!32 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/5e80d88354b31f09.fake.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!33 = distinct !DICompileUnit(language: DW_LANG_C11, file: !34, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!34 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/ff294e7356cf131a.fake.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!35 = distinct !DICompileUnit(language: DW_LANG_C11, file: !36, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!36 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/52e46f1b3566ee81.fake.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!37 = distinct !DICompileUnit(language: DW_LANG_C11, file: !38, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!38 = !DIFile(filename: "C:\\Users\\devon\\AppData\\Local\\Temp\\apollo-inline-foreign-all-languages-native\\cache\\inline_foreign/031d67b2f72a7330.fake.c", directory: "C:/Users/devon/AppData/Local/Temp/apollo-inline-foreign-all-languages-native")
+!39 = !{!"clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)"}
+!40 = !{!41, !41, i64 0}
+!41 = !{!"int", !42, i64 0}
+!42 = !{!"omnipotent char", !43, i64 0}
+!43 = !{!"Simple C/C++ TBAA"}
+!44 = !{!45, !45, i64 0}
+!45 = !{!"int", !46, i64 0}
+!46 = !{!"omnipotent char", !47, i64 0}
+!47 = !{!"Simple C++ TBAA"}
+!48 = !{i32 2, !"Debug Info Version", i32 3}
+!49 = !{i32 1, !"wchar_size", i32 2}
+!50 = !{i32 8, !"PIC Level", i32 2}
+!51 = !{i32 7, !"uwtable", i32 2}
+!52 = !{i32 1, !"MaxTLSAlign", i32 65536}

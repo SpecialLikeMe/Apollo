@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMWindowsDriver.a CMakeFiles/LLVMWindowsDriver.dir/MSVCPaths.cpp.o
-/usr/sbin/ranlib -D ../libLLVMWindowsDriver.a

@@ -94,7 +94,22 @@ function Ensure-NativeBuild {
             $configureArgs += @('-G', $env:APOLLO_NATIVE_GENERATOR)
         }
         $configureArgs += @('-S', $nativeSourceDir, '-B', $nativeBuildDir)
-        if ($env:CMAKE_TOOLCHAIN_FILE) {
+        $usingMingwGenerator = $env:APOLLO_NATIVE_GENERATOR -eq 'MinGW Makefiles'
+        if ($usingMingwGenerator) {
+            if ($env:APOLLO_NATIVE_C_COMPILER) {
+                $configureArgs += "-DCMAKE_C_COMPILER=$($env:APOLLO_NATIVE_C_COMPILER)"
+            }
+            if ($env:APOLLO_NATIVE_CXX_COMPILER) {
+                $configureArgs += "-DCMAKE_CXX_COMPILER=$($env:APOLLO_NATIVE_CXX_COMPILER)"
+            }
+            if ($env:APOLLO_NATIVE_MAKE_PROGRAM) {
+                $configureArgs += "-DCMAKE_MAKE_PROGRAM=$($env:APOLLO_NATIVE_MAKE_PROGRAM)"
+            }
+            if ($env:APOLLO_NATIVE_CMAKE_PREFIX) {
+                $configureArgs += "-DCMAKE_PREFIX_PATH=$($env:APOLLO_NATIVE_CMAKE_PREFIX)"
+            }
+        }
+        elseif ($env:CMAKE_TOOLCHAIN_FILE) {
             $configureArgs += "-DCMAKE_TOOLCHAIN_FILE=$($env:CMAKE_TOOLCHAIN_FILE)"
         }
         elseif ($env:VCPKG_ROOT) {

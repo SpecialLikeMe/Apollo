@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMHTTP.a CMakeFiles/LLVMHTTP.dir/HTTPClient.cpp.o CMakeFiles/LLVMHTTP.dir/HTTPServer.cpp.o CMakeFiles/LLVMHTTP.dir/StreamedHTTPResponseHandler.cpp.o
-/usr/sbin/ranlib -D ../libLLVMHTTP.a

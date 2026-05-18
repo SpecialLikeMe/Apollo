@@ -24,18 +24,13 @@ default_native_build_dir() {
         return 0
     fi
 
-    if running_under_wsl; then
-        cache_root=${XDG_CACHE_HOME:-$HOME/.cache}
-        build_key=apollo-native
-        if command -v cksum >/dev/null 2>&1; then
-            set -- $(printf '%s\n' "$SCRIPT_DIR" | cksum)
-            build_key=$1
-        fi
-        printf '%s/apollo/native-build/%s\n' "$cache_root" "$build_key"
-        return 0
+    cache_root=${XDG_CACHE_HOME:-$HOME/.cache}
+    build_key=apollo-native
+    if command -v cksum >/dev/null 2>&1; then
+        set -- $(printf '%s\n' "$SCRIPT_DIR" | cksum)
+        build_key=$1
     fi
-
-    printf '%s/cpp/build\n' "$SCRIPT_DIR"
+    printf '%s/apollo/native-build/%s\n' "$cache_root" "$build_key"
 }
 
 NATIVE_SOURCE_DIR="$SCRIPT_DIR/cpp"
@@ -250,9 +245,7 @@ resolve_cmake() {
     fi
     for candidate in \
         /usr/bin/cmake \
-        /usr/local/bin/cmake \
-        "/c/Program Files/CMake/bin/cmake.exe" \
-        "/mnt/c/Program Files/CMake/bin/cmake.exe"
+        /usr/local/bin/cmake
     do
         if [ -x "$candidate" ]; then
             CMAKE_EXE="$candidate"

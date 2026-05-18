@@ -4,12 +4,12 @@ int main() {
     i32 base = 7;
     % void* heap.alc(2) int;
     % i32* alias _&base;
-    % lang {
+    % async {
         int main() {
             return 0;
         }
     }cpp;
-    % lang -override {
+    % async -override {
         int main() {
             return 0;
         }

@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$InstallDir
+    [string]$InstallDir,
+
+    [switch]$RunValidation
 )
 
 $ErrorActionPreference = 'Stop'
@@ -58,6 +60,193 @@ function Resolve-GitCommand {
     return $null
 }
 
+function Resolve-WingetPackageExecutable {
+    param(
+        [string]$PackagePrefix,
+        [string]$ExecutableName
+    )
+
+    if ([string]::IsNullOrWhiteSpace($PackagePrefix) -or [string]::IsNullOrWhiteSpace($ExecutableName)) {
+        return $null
+    }
+
+    $packagesRoot = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages'
+    if (-not (Test-Path $packagesRoot)) {
+        return $null
+    }
+
+    $packageDir = Get-ChildItem -Path $packagesRoot -Directory -Filter ($PackagePrefix + '*') -ErrorAction SilentlyContinue |
+        Sort-Object FullName -Descending |
+        Select-Object -First 1
+    if (-not $packageDir) {
+        return $null
+    }
+
+    $match = Get-ChildItem -Path $packageDir.FullName -Filter $ExecutableName -File -Recurse -ErrorAction SilentlyContinue |
+        Sort-Object FullName -Descending |
+        Select-Object -First 1
+    if ($match) {
+        return $match.FullName
+    }
+
+    return $null
+}
+
+function Resolve-CommandPath {
+    param(
+        [string[]]$Names,
+        [string[]]$CandidateFiles = @()
+    )
+
+    foreach ($name in ($Names | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })) {
+        $command = Get-Command $name -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($command -and -not [string]::IsNullOrWhiteSpace($command.Source)) {
+            return $command.Source
+        }
+    }
+
+    foreach ($candidate in ($CandidateFiles | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })) {
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
+function Resolve-PythonCommand {
+    return Resolve-CommandPath -Names @('python', 'python3', 'py') -CandidateFiles @(
+        (Resolve-WingetPackageExecutable -PackagePrefix 'Python.Python.3' -ExecutableName 'python.exe')
+    )
+}
+
+function Resolve-PipCommand {
+    return Resolve-CommandPath -Names @('pip', 'pip3') -CandidateFiles @(
+        (Resolve-WingetPackageExecutable -PackagePrefix 'Python.Python.3' -ExecutableName 'pip.exe')
+    )
+}
+
+function Test-PythonPipModule {
+    param([string]$PythonCommand)
+
+    if ([string]::IsNullOrWhiteSpace($PythonCommand)) {
+        return $false
+    }
+
+    if ((Split-Path $PythonCommand -Leaf) -ieq 'py.exe') {
+        & $PythonCommand -3 -m pip --version 1>$null 2>$null
+    } else {
+        & $PythonCommand -m pip --version 1>$null 2>$null
+    }
+
+    return $LASTEXITCODE -eq 0
+}
+
+function Resolve-PythonUserScriptsDir {
+    $python = Resolve-PythonCommand
+    if (-not $python) {
+        return $null
+    }
+
+    $userBase = $null
+    if ((Split-Path $python -Leaf) -ieq 'py.exe') {
+        $userBase = & $python -3 -c "import site; print(site.USER_BASE)" 2>$null | Select-Object -First 1
+    } else {
+        $userBase = & $python -c "import site; print(site.USER_BASE)" 2>$null | Select-Object -First 1
+    }
+    if ([string]::IsNullOrWhiteSpace($userBase)) {
+        return $null
+    }
+
+    $scriptsDir = Join-Path $userBase 'Scripts'
+    if (Test-Path $scriptsDir) {
+        return $scriptsDir
+    }
+    return $null
+}
+
+function Resolve-RustcCommand {
+    return Resolve-CommandPath -Names @('rustc') -CandidateFiles @(
+        (Join-Path $env:USERPROFILE '.cargo\bin\rustc.exe')
+    )
+}
+
+function Resolve-RustupCommand {
+    return Resolve-CommandPath -Names @('rustup') -CandidateFiles @(
+        (Join-Path $env:USERPROFILE '.cargo\bin\rustup.exe')
+    )
+}
+
+function Resolve-CargoCommand {
+    return Resolve-CommandPath -Names @('cargo') -CandidateFiles @(
+        (Join-Path $env:USERPROFILE '.cargo\bin\cargo.exe')
+    )
+}
+
+function Resolve-ZigCommand {
+    return Resolve-CommandPath -Names @('zig') -CandidateFiles @(
+        (Resolve-WingetPackageExecutable -PackagePrefix 'zig.zig' -ExecutableName 'zig.exe')
+    )
+}
+
+function Resolve-GoCommand {
+    return Resolve-CommandPath -Names @('go') -CandidateFiles @(
+        (Join-Path $env:ProgramFiles 'Go\bin\go.exe')
+    )
+}
+
+function Resolve-NodeCommand {
+    return Resolve-CommandPath -Names @('node') -CandidateFiles @(
+        (Join-Path $env:ProgramFiles 'nodejs\node.exe')
+    )
+}
+
+function Resolve-NpmCommand {
+    return Resolve-CommandPath -Names @('npm') -CandidateFiles @(
+        (Join-Path $env:ProgramFiles 'nodejs\npm.cmd')
+    )
+}
+
+function Resolve-SwiftcCommand {
+    return Resolve-CommandPath -Names @('swiftc') -CandidateFiles @(
+        (Resolve-WingetPackageExecutable -PackagePrefix 'Swift.Toolchain' -ExecutableName 'swiftc.exe')
+    )
+}
+
+function Resolve-LPythonCommand {
+    return Resolve-CommandPath -Names @('lpython') -CandidateFiles @(
+        $(if ($scriptsDir = Resolve-PythonUserScriptsDir) { Join-Path $scriptsDir 'lpython.exe' }),
+        $(if ($scriptsDir = Resolve-PythonUserScriptsDir) { Join-Path $scriptsDir 'lpython.cmd' }),
+        $(if ($scriptsDir = Resolve-PythonUserScriptsDir) { Join-Path $scriptsDir 'lpython.bat' })
+    )
+}
+
+function Test-LPythonModuleInstalled {
+    param([string]$PythonCommand)
+
+    if ([string]::IsNullOrWhiteSpace($PythonCommand)) {
+        return $false
+    }
+
+    if ((Split-Path $PythonCommand -Leaf) -ieq 'py.exe') {
+        & $PythonCommand -3 -c "import importlib.util, sys; sys.exit(0 if importlib.util.find_spec('lpython') else 1)" 1>$null 2>$null
+    } else {
+        & $PythonCommand -c "import importlib.util, sys; sys.exit(0 if importlib.util.find_spec('lpython') else 1)" 1>$null 2>$null
+    }
+
+    return $LASTEXITCODE -eq 0
+}
+
+function Resolve-GoLLVMCommand {
+    return Resolve-CommandPath -Names @('llvm-goc', 'gollvm')
+}
+
+function Resolve-LLTSCommand {
+    return Resolve-CommandPath -Names @('lltsc') -CandidateFiles @(
+        (Join-Path $env:USERPROFILE '.cargo\bin\lltsc.exe')
+    )
+}
+
 function Install-WingetPackage {
     param(
         [string]$Id,
@@ -91,6 +280,25 @@ function Resolve-MsysRoot {
     return $null
 }
 
+function Resolve-MingwMakeProgram {
+    param([string]$MsysRoot)
+
+    if ([string]::IsNullOrWhiteSpace($MsysRoot)) {
+        return $null
+    }
+
+    foreach ($candidate in @(
+            (Join-Path $MsysRoot 'clang64\bin\mingw32-make.exe'),
+            (Join-Path $MsysRoot 'clang64\bin\make.exe'),
+            (Join-Path $MsysRoot 'usr\bin\make.exe'))) {
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
 function Invoke-MsysBash {
     param(
         [string]$Root,
@@ -117,6 +325,268 @@ function Ensure-Java {
     }
 
     Install-WingetPackage -Id 'Microsoft.OpenJDK.21' -Name 'Microsoft OpenJDK 21'
+}
+
+function Ensure-Python {
+    $python = Resolve-PythonCommand
+    $pip = Resolve-PipCommand
+    $hasPipModule = Test-PythonPipModule -PythonCommand $python
+    if ($python -and ($pip -or $hasPipModule)) {
+        Add-ToProcessPath -Entry (Split-Path $python -Parent)
+        if ($pip) {
+            Add-ToProcessPath -Entry (Split-Path $pip -Parent)
+        }
+        if ($scriptsDir = Resolve-PythonUserScriptsDir) {
+            Add-ToProcessPath -Entry $scriptsDir
+        }
+        Write-Status 'Python and pip already present'
+        return
+    }
+
+    Install-WingetPackage -Id 'Python.Python.3.13' -Name 'Python 3.13'
+
+    $python = Resolve-PythonCommand
+    $pip = Resolve-PipCommand
+    if (-not $python) {
+        throw 'Python could not be located after installing Python 3.13.'
+    }
+
+    if (-not $pip -and -not (Test-PythonPipModule -PythonCommand $python)) {
+        Write-Status 'Bootstrapping pip with ensurepip'
+        if ((Split-Path $python -Leaf) -ieq 'py.exe') {
+            & $python -3 -m ensurepip --upgrade
+        } else {
+            & $python -m ensurepip --upgrade
+        }
+        if ($LASTEXITCODE -ne 0) {
+            throw 'pip could not be located or bootstrapped after installing Python 3.13.'
+        }
+        $pip = Resolve-PipCommand
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $python -Parent)
+    if ($pip) {
+        Add-ToProcessPath -Entry (Split-Path $pip -Parent)
+    }
+    if ($scriptsDir = Resolve-PythonUserScriptsDir) {
+        Add-ToProcessPath -Entry $scriptsDir
+    }
+}
+
+function Ensure-Rust {
+    $rustc = Resolve-RustcCommand
+    if ($rustc) {
+        Add-ToProcessPath -Entry (Split-Path $rustc -Parent)
+        Write-Status 'Rust already present'
+        Ensure-RustTarget -TargetTriple 'x86_64-pc-windows-gnu'
+        return
+    }
+
+    Install-WingetPackage -Id 'Rustlang.Rustup' -Name 'Rustup'
+
+    $rustc = Resolve-RustcCommand
+    if (-not $rustc) {
+        throw 'rustc.exe could not be located after installing Rustup.'
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $rustc -Parent)
+    Ensure-RustTarget -TargetTriple 'x86_64-pc-windows-gnu'
+}
+
+function Ensure-RustTarget {
+    param([string]$TargetTriple)
+
+    if ([string]::IsNullOrWhiteSpace($TargetTriple)) {
+        return
+    }
+
+    $rustup = Resolve-RustupCommand
+    if (-not $rustup) {
+        throw 'rustup.exe could not be located after installing Rust.'
+    }
+
+    $installedTargets = & $rustup target list --installed 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to query installed Rust targets with $rustup."
+    }
+
+    if ($installedTargets -contains $TargetTriple) {
+        Write-Status "Rust target $TargetTriple already present"
+        return
+    }
+
+    Write-Status "Installing Rust target $TargetTriple"
+    & $rustup target add $TargetTriple
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to install Rust target $TargetTriple."
+    }
+}
+
+function Ensure-LLTS {
+    $llts = Resolve-LLTSCommand
+    if ($llts) {
+        Add-ToProcessPath -Entry (Split-Path $llts -Parent)
+        Write-Status 'LLTS already present'
+        return
+    }
+
+    $cargo = Resolve-CargoCommand
+    if (-not $cargo) {
+        Write-Status 'Cargo was not found after installing Rust; Apollo will use its built-in TypeScript inline foreign fallback until LLTS is installed.'
+        return
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $cargo -Parent)
+    Write-Status 'Installing LLTS via cargo'
+    & $cargo install lltsc
+    if ($LASTEXITCODE -ne 0) {
+        Write-Status 'cargo install lltsc failed; Apollo will use its built-in TypeScript inline foreign fallback until LLTS is installed.'
+        return
+    }
+
+    $llts = Resolve-LLTSCommand
+    if (-not $llts) {
+        Write-Status 'LLTS was not resolved after cargo install; Apollo will use its built-in TypeScript inline foreign fallback until LLTS is installed.'
+        return
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $llts -Parent)
+}
+
+function Ensure-Zig {
+    $zig = Resolve-ZigCommand
+    if ($zig) {
+        Add-ToProcessPath -Entry (Split-Path $zig -Parent)
+        Write-Status 'Zig already present'
+        return
+    }
+
+    Install-WingetPackage -Id 'zig.zig' -Name 'Zig'
+
+    $zig = Resolve-ZigCommand
+    if (-not $zig) {
+        throw 'zig.exe could not be located after installing Zig.'
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $zig -Parent)
+}
+
+function Ensure-Go {
+    $go = Resolve-GoCommand
+    if ($go) {
+        Add-ToProcessPath -Entry (Split-Path $go -Parent)
+        Write-Status 'Go already present'
+        return
+    }
+
+    Install-WingetPackage -Id 'GoLang.Go' -Name 'Go'
+
+    $go = Resolve-GoCommand
+    if (-not $go) {
+        throw 'go.exe could not be located after installing Go.'
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $go -Parent)
+}
+
+function Ensure-Node {
+    $node = Resolve-NodeCommand
+    $npm = Resolve-NpmCommand
+    if ($node -and $npm) {
+        Add-ToProcessPath -Entry (Split-Path $node -Parent)
+        Add-ToProcessPath -Entry (Split-Path $npm -Parent)
+        Write-Status 'Node.js and npm already present'
+        return
+    }
+
+    Install-WingetPackage -Id 'OpenJS.NodeJS.LTS' -Name 'Node.js LTS'
+
+    $node = Resolve-NodeCommand
+    $npm = Resolve-NpmCommand
+    if (-not $node -or -not $npm) {
+        throw 'node.exe or npm could not be located after installing Node.js LTS.'
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $node -Parent)
+    Add-ToProcessPath -Entry (Split-Path $npm -Parent)
+}
+
+function Ensure-Swift {
+    $swiftc = Resolve-SwiftcCommand
+    if ($swiftc) {
+        Add-ToProcessPath -Entry (Split-Path $swiftc -Parent)
+        Write-Status 'Swift already present'
+        return
+    }
+
+    try {
+        Install-WingetPackage -Id 'Swift.Toolchain' -Name 'Swift Toolchain'
+    } catch {
+        $swiftc = Resolve-SwiftcCommand
+        if ($swiftc) {
+            Add-ToProcessPath -Entry (Split-Path $swiftc -Parent)
+            Write-Status 'Swift Toolchain is already installed; continuing without a winget upgrade'
+            return
+        }
+        Write-Status 'Swift Toolchain could not be auto-installed or resolved; Apollo inline foreign Swift will remain disabled until APOLLO_SWIFTC_EXE points to a real Swift compiler.'
+        return
+    }
+
+    $swiftc = Resolve-SwiftcCommand
+    if (-not $swiftc) {
+        Write-Status 'swiftc.exe could not be located after installing the Swift Toolchain; Apollo inline foreign Swift will remain disabled until APOLLO_SWIFTC_EXE points to a real Swift compiler.'
+        return
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $swiftc -Parent)
+}
+
+function Ensure-LPython {
+    $lpython = Resolve-LPythonCommand
+    if ($lpython) {
+        Add-ToProcessPath -Entry (Split-Path $lpython -Parent)
+        Write-Status 'LPython already present'
+        return
+    }
+
+    Ensure-Python
+    $python = Resolve-PythonCommand
+    if (-not $python) {
+        Write-Status 'Python could not be resolved before installing LPython; Apollo inline foreign Python will remain disabled.'
+        return
+    }
+
+    if (Test-LPythonModuleInstalled -PythonCommand $python) {
+        Write-Status 'LPython Python package is already installed, but no lpython compiler command was found. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler.'
+        return
+    }
+
+    Write-Status 'Installing LPython via pip'
+    if ((Split-Path $python -Leaf) -ieq 'py.exe') {
+        & $python -3 -m pip install --upgrade lpython
+    } else {
+        & $python -m pip install --upgrade lpython
+    }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Status 'pip could not install LPython; Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler.'
+        return
+    }
+
+    if ($scriptsDir = Resolve-PythonUserScriptsDir) {
+        Add-ToProcessPath -Entry $scriptsDir
+    }
+
+    $lpython = Resolve-LPythonCommand
+    if (-not $lpython) {
+        if (Test-LPythonModuleInstalled -PythonCommand $python) {
+            Write-Status 'The installed lpython package did not provide a compiler command on this platform. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler.'
+            return
+        }
+        Write-Status 'LPython was not located after installation; Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler.'
+        return
+    }
+
+    Add-ToProcessPath -Entry (Split-Path $lpython -Parent)
 }
 
 function Ensure-Git {
@@ -159,6 +629,7 @@ function Ensure-MingwPackages {
 
     $packages = @(
         'mingw-w64-clang-x86_64-clang',
+        'mingw-w64-clang-x86_64-antlr4-runtime-cpp',
         'mingw-w64-clang-x86_64-compiler-rt',
         'mingw-w64-clang-x86_64-llvm',
         'mingw-w64-clang-x86_64-gc',
@@ -170,7 +641,7 @@ function Ensure-MingwPackages {
     Write-Status 'Refreshing MSYS2 package metadata'
     Invoke-MsysBash -Root $MsysRoot -Command 'pacman -Sy --noconfirm'
 
-    Write-Status 'Ensuring clang64 clang, compiler-rt, llvm, make, Boehm GC, SDL2, and SDL2_image packages are installed'
+    Write-Status 'Ensuring clang64 clang, ANTLR4 runtime, compiler-rt, llvm, make, Boehm GC, SDL2, and SDL2_image packages are installed'
     Invoke-MsysBash -Root $MsysRoot -Command ("pacman -S --needed --noconfirm " + ($packages -join ' '))
 }
 
@@ -289,8 +760,18 @@ function Write-ToolchainEnv {
     }
 
     $mingwBin = Join-Path $MsysRoot 'clang64\bin'
+    $makeProgram = Resolve-MingwMakeProgram -MsysRoot $MsysRoot
     $includeDir = Join-Path $MsysRoot 'clang64\include'
     $libDir = Join-Path $MsysRoot 'clang64\lib'
+    $rustc = Resolve-RustcCommand
+    $swiftc = Resolve-SwiftcCommand
+    $zig = Resolve-ZigCommand
+    $lpython = Resolve-LPythonCommand
+    $gollvm = Resolve-GoLLVMCommand
+    $llts = Resolve-LLTSCommand
+    $go = Resolve-GoCommand
+    $node = Resolve-NodeCommand
+    $npm = Resolve-NpmCommand
 
     $gcHeader = Resolve-GcHeader -IncludeDir $includeDir
     if (-not $gcHeader) {
@@ -326,33 +807,66 @@ function Write-ToolchainEnv {
     if (-not $asanRuntime) {
         throw 'Clang compiler-rt AddressSanitizer runtimes were not found after package installation.'
     }
+    if (-not $makeProgram) {
+        throw 'MSYS2 make executable was not found after package installation.'
+    }
 
     foreach ($requiredPath in @(
             (Join-Path $mingwBin 'clang.exe'),
             (Join-Path $mingwBin 'clang++.exe'),
             (Join-Path $mingwBin 'llc.exe'),
-            (Join-Path $mingwBin 'make.exe'),
+            $makeProgram,
             (Join-Path $JavaBin 'java.exe'),
-            (Join-Path $JavaBin 'javac.exe'))) {
+            (Join-Path $JavaBin 'javac.exe'),
+            $rustc,
+            $zig,
+            $go,
+            $node,
+            $npm)) {
         if (-not (Test-Path $requiredPath)) {
             throw "Required tool was not found at $requiredPath"
         }
     }
 
     $envFile = Join-Path $compilerDir 'toolchain-env.bat'
+    $pathEntries = @($mingwBin, $JavaBin)
+    $pathEntries += Split-Path $makeProgram -Parent
+    foreach ($tool in @($rustc, $swiftc, $zig, $lpython, $go, $node, $npm, $gollvm, $llts)) {
+        if (-not [string]::IsNullOrWhiteSpace($tool)) {
+            $pathEntries += Split-Path $tool -Parent
+        }
+    }
+    $pathEntries = $pathEntries | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
     $lines = @(
         '@echo off',
+        'set "APOLLO_GOLLVM_REPO=https://go.googlesource.com/gollvm/"',
+        'set "APOLLO_LLTS_REPO=cargo:lltsc"',
         ('set "APOLLO_MSYS64_ROOT={0}"' -f $MsysRoot),
         ('set "APOLLO_MINGW_BIN={0}"' -f $mingwBin),
         ('set "APOLLO_LLVM_BIN={0}"' -f $mingwBin),
+        'set "APOLLO_NATIVE_GENERATOR=MinGW Makefiles"',
+        ('set "APOLLO_NATIVE_C_COMPILER={0}"' -f (Join-Path $mingwBin 'clang.exe')),
+        ('set "APOLLO_NATIVE_CXX_COMPILER={0}"' -f (Join-Path $mingwBin 'clang++.exe')),
+        ('set "APOLLO_NATIVE_MAKE_PROGRAM={0}"' -f $makeProgram),
+        ('set "APOLLO_NATIVE_CMAKE_PREFIX={0}"' -f (Join-Path $MsysRoot 'clang64')),
         ('set "APOLLO_GC_INCLUDE_DIR={0}"' -f $includeDir),
         ('set "APOLLO_GC_LIB_DIR={0}"' -f $libDir),
         ('set "APOLLO_SDL_INCLUDE_DIR={0}"' -f $includeDir),
         ('set "APOLLO_SDL_LIB_DIR={0}"' -f $libDir),
         ('set "APOLLO_JAVA_BIN={0}"' -f $JavaBin),
-        'set "PATH=%APOLLO_MINGW_BIN%;%APOLLO_JAVA_BIN%;%PATH%"'
+        ('set "APOLLO_RUSTC_EXE={0}"' -f $rustc),
+        ('set "APOLLO_SWIFTC_EXE={0}"' -f $swiftc),
+        ('set "APOLLO_ZIG_EXE={0}"' -f $zig),
+        ('set "APOLLO_LPYTHON_EXE={0}"' -f $lpython),
+        ('set "APOLLO_GOLLVM_EXE={0}"' -f $gollvm),
+        ('set "APOLLO_TANGOLLVM_EXE={0}"' -f $gollvm),
+        ('set "APOLLO_LLTS_EXE={0}"' -f $llts),
+        ('set "APOLLO_GO_EXE={0}"' -f $go),
+        ('set "APOLLO_NODE_EXE={0}"' -f $node),
+        ('set "APOLLO_NPM_EXE={0}"' -f $npm),
+        ('set "PATH={0};%PATH%"' -f ($pathEntries -join ';'))
     )
-
+    $pathEntries += Split-Path $makeProgram -Parent
     Set-Content -Path $envFile -Value $lines -Encoding ASCII
     Write-Status "Wrote Apollo toolchain environment file to $envFile"
 }
@@ -364,18 +878,53 @@ function Set-SessionToolchainEnv {
     )
 
     $mingwBin = Join-Path $MsysRoot 'clang64\bin'
+    $makeProgram = Resolve-MingwMakeProgram -MsysRoot $MsysRoot
     $includeDir = Join-Path $MsysRoot 'clang64\include'
     $libDir = Join-Path $MsysRoot 'clang64\lib'
+    $rustc = Resolve-RustcCommand
+    $swiftc = Resolve-SwiftcCommand
+    $zig = Resolve-ZigCommand
+    $lpython = Resolve-LPythonCommand
+    $gollvm = Resolve-GoLLVMCommand
+    $llts = Resolve-LLTSCommand
+    $go = Resolve-GoCommand
+    $node = Resolve-NodeCommand
+    $npm = Resolve-NpmCommand
 
     $env:APOLLO_MSYS64_ROOT = $MsysRoot
     $env:APOLLO_MINGW_BIN = $mingwBin
     $env:APOLLO_LLVM_BIN = $mingwBin
+    $env:APOLLO_NATIVE_GENERATOR = 'MinGW Makefiles'
+    $env:APOLLO_NATIVE_C_COMPILER = Join-Path $mingwBin 'clang.exe'
+    $env:APOLLO_NATIVE_CXX_COMPILER = Join-Path $mingwBin 'clang++.exe'
+    $env:APOLLO_NATIVE_MAKE_PROGRAM = $makeProgram
+    $env:APOLLO_NATIVE_CMAKE_PREFIX = Join-Path $MsysRoot 'clang64'
     $env:APOLLO_GC_INCLUDE_DIR = $includeDir
     $env:APOLLO_GC_LIB_DIR = $libDir
     $env:APOLLO_SDL_INCLUDE_DIR = $includeDir
     $env:APOLLO_SDL_LIB_DIR = $libDir
     $env:APOLLO_JAVA_BIN = $JavaBin
-    $env:PATH = "$mingwBin;$JavaBin;$env:PATH"
+    $env:APOLLO_RUSTC_EXE = $rustc
+    $env:APOLLO_SWIFTC_EXE = $swiftc
+    $env:APOLLO_ZIG_EXE = $zig
+    $env:APOLLO_LPYTHON_EXE = $lpython
+    $env:APOLLO_GOLLVM_EXE = $gollvm
+    $env:APOLLO_TANGOLLVM_EXE = $gollvm
+    $env:APOLLO_LLTS_EXE = $llts
+    $env:APOLLO_GO_EXE = $go
+    $env:APOLLO_NODE_EXE = $node
+    $env:APOLLO_NPM_EXE = $npm
+
+    $pathEntries = @($mingwBin, $JavaBin)
+    if ($makeProgram) {
+        $pathEntries += Split-Path $makeProgram -Parent
+    }
+    foreach ($tool in @($rustc, $swiftc, $zig, $lpython, $go, $node, $npm, $gollvm, $llts)) {
+        if (-not [string]::IsNullOrWhiteSpace($tool)) {
+            $pathEntries += Split-Path $tool -Parent
+        }
+    }
+    $env:PATH = (($pathEntries | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique) -join ';') + ';' + $env:PATH
 }
 
 function Invoke-ApolloValidation {
@@ -398,11 +947,37 @@ Write-Status "Bootstrapping dependencies for Apollo at $InstallDir"
 
 Ensure-Git
 Ensure-Java
+Ensure-Python
+Ensure-Node
+Ensure-Go
+Ensure-Rust
+Ensure-LLTS
+Ensure-Zig
+Ensure-Swift
+Ensure-LPython
 $msysRoot = Ensure-Msys2
 Ensure-MingwPackages -MsysRoot $msysRoot
 $javaBin = Resolve-JavaBin
 Write-ToolchainEnv -InstallDirPath $InstallDir -MsysRoot $msysRoot -JavaBin $javaBin
 Set-SessionToolchainEnv -MsysRoot $msysRoot -JavaBin $javaBin
-Invoke-ApolloValidation -InstallDirPath $InstallDir
+
+if (-not (Resolve-GoLLVMCommand)) {
+    Write-Status 'GoLLVM was not found in PATH; Apollo will use its built-in Go inline foreign fallback for the currently supported surface. Set APOLLO_GOLLVM_EXE after installing llvm-goc if you want to prefer an external compiler.'
+}
+if (-not (Resolve-LLTSCommand)) {
+    Write-Status 'LLTS was not found in PATH after the cargo bootstrap attempt; Apollo will use its built-in TypeScript inline foreign fallback for the currently supported surface. Set APOLLO_LLTS_EXE after installing lltsc if you want to prefer an external compiler.'
+}
+if (-not (Resolve-SwiftcCommand)) {
+    Write-Status 'Swift compiler was not found; Apollo inline foreign Swift will remain disabled until APOLLO_SWIFTC_EXE points to a real Swift compiler.'
+}
+if (-not (Resolve-LPythonCommand)) {
+    Write-Status 'LPython compiler was not found; the available PyPI package only provides support modules on this machine. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler.'
+}
+
+if ($RunValidation) {
+    Invoke-ApolloValidation -InstallDirPath $InstallDir
+} else {
+    Write-Status 'Skipping Apollo validation suite during dependency bootstrap. Run `powershell -NoProfile -ExecutionPolicy Bypass -File .\Apollo-Main\compiler\run-test-suite.ps1` when you want to validate the toolchain.'
+}
 
 Write-Status 'Dependency bootstrap complete'

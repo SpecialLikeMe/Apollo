@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMDWP.a CMakeFiles/LLVMDWP.dir/DWP.cpp.o CMakeFiles/LLVMDWP.dir/DWPError.cpp.o CMakeFiles/LLVMDWP.dir/ELFWriter.cpp.o
-/usr/sbin/ranlib -D ../libLLVMDWP.a

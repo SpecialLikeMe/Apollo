@@ -1,0 +1,16 @@
+@unsafe {
+    inl::cpp {
+        int foreign_value = 4;
+        int read_value() { return foreign_value; }
+    }
+}
+
+int main() {
+    @unsafe {
+        inl::cpp {
+            foreign_value = read_value() + 3;
+        }
+    }
+    sys.println(foreign_value);
+    return 0;
+}

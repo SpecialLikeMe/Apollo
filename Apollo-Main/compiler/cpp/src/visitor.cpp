@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <sstream>
 #include <optional>
+#include <regex>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -532,6 +533,8 @@ using LoweredValueMap = std::unordered_map<std::string, LoweredValue>;
 
 const std::vector<ApolloInlineForeignBlock>* gActiveInlineForeignBlocks = nullptr;
 const ApolloRuntimeFeatureManifest* gActiveRuntimeFeatures = nullptr;
+const std::filesystem::path* gActiveInlineForeignSourcePath = nullptr;
+const std::filesystem::path* gActiveInlineForeignOutputPath = nullptr;
 
 class InlineForeignBlockScope final {
 public:
@@ -548,6 +551,21 @@ private:
     const std::vector<ApolloInlineForeignBlock>* previous_;
 };
 
+const ApolloInlineForeignBlock* findInlineForeignBlockAt(compilerv1Parser::InlineForeignBlockContext* ctx) {
+    if (gActiveInlineForeignBlocks == nullptr || ctx == nullptr || ctx->getStart() == nullptr) {
+        return nullptr;
+    }
+
+    const int line = static_cast<int>(ctx->getStart()->getLine());
+    const int column = static_cast<int>(ctx->getStart()->getCharPositionInLine()) + 1;
+    for (const auto& block : *gActiveInlineForeignBlocks) {
+        if (block.line == line && block.column == column) {
+            return &block;
+        }
+    }
+    return nullptr;
+}
+
 class RuntimeFeatureScope final {
 public:
     explicit RuntimeFeatureScope(const ApolloRuntimeFeatureManifest* runtimeFeatures)
@@ -561,6 +579,24 @@ public:
 
 private:
     const ApolloRuntimeFeatureManifest* previous_;
+};
+
+class InlineForeignPathScope final {
+public:
+    InlineForeignPathScope(const std::filesystem::path* sourcePath, const std::filesystem::path* outputPath)
+        : previousSource_(gActiveInlineForeignSourcePath), previousOutput_(gActiveInlineForeignOutputPath) {
+        gActiveInlineForeignSourcePath = sourcePath;
+        gActiveInlineForeignOutputPath = outputPath;
+    }
+
+    ~InlineForeignPathScope() {
+        gActiveInlineForeignSourcePath = previousSource_;
+        gActiveInlineForeignOutputPath = previousOutput_;
+    }
+
+private:
+    const std::filesystem::path* previousSource_;
+    const std::filesystem::path* previousOutput_;
 };
 
 llvm::Type* lowerInlineForeignApolloType(llvm::LLVMContext& context, std::string_view apolloType) {
@@ -593,8 +629,12 @@ void addInlineForeignGlobalBindings(llvm::Module& module,
                 continue;
             }
 
-            llvm::Value* address = builder.CreateCall(getter);
-            values.emplace(global.name, LoweredValue{address, address, storageType, global.apolloType});
+            llvm::Value* getterResult = builder.CreateCall(getter);
+            if (global.apolloType == "str") {
+                values.emplace(global.name, LoweredValue{getterResult, nullptr, storageType, global.apolloType});
+            } else {
+                values.emplace(global.name, LoweredValue{getterResult, getterResult, storageType, global.apolloType});
+            }
         }
     }
 }
@@ -1537,6 +1577,152 @@ llvm::Value* lowerMemberAccessValue(llvm::IRBuilder<>& builder,
         }
     }
     return nullptr;
+}
+
+struct RuntimeInlineForeignCaptureValue {
+    ApolloInlineForeignCapture capture;
+    llvm::Value* argument = nullptr;
+};
+
+bool isRuntimeInlineForeignCaptureTypeSupported(std::string_view typeText) {
+    return typeText == "str" || kPrimitiveIrTypes.contains(std::string(typeText));
+}
+
+bool collectRuntimeInlineForeignCaptureValues(llvm::IRBuilder<>& builder,
+    const ApolloInlineForeignBlock& block,
+    const LoweredValueMap& values,
+    std::vector<RuntimeInlineForeignCaptureValue>& captures,
+    std::string& unsupportedReason) {
+    captures.clear();
+    if (!block.executesAtRuntime || block.language != ApolloInlineForeignLanguage::Rust || gActiveAggregateRegistry == nullptr) {
+        return true;
+    }
+
+    static const std::regex kMemberPattern(R"(\b([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)\b)", std::regex::optimize);
+    std::unordered_set<std::string> seen;
+    for (std::sregex_iterator it(block.payload.begin(), block.payload.end(), kMemberPattern), end; it != end; ++it) {
+        const std::string captureText = (*it)[0].str();
+        if (!seen.insert(captureText).second) {
+            continue;
+        }
+
+        const std::string baseName = (*it)[1].str();
+        const std::string fieldName = (*it)[2].str();
+        const auto valueIt = values.find(baseName);
+        if (valueIt == values.end()) {
+            continue;
+        }
+
+        const std::string aggregateName = resolveAggregateTypeName(values, baseName);
+        if (aggregateName.empty()) {
+            continue;
+        }
+
+        std::vector<AggregateFieldRecord> fields;
+        if (!collectAggregateFields(*gActiveAggregateRegistry, aggregateName, fields)) {
+            continue;
+        }
+
+        const auto fieldIt = std::find_if(fields.begin(), fields.end(), [&](const AggregateFieldRecord& field) {
+            return field.name == fieldName;
+        });
+        if (fieldIt == fields.end()) {
+            continue;
+        }
+        if (!isRuntimeInlineForeignCaptureTypeSupported(fieldIt->typeText)) {
+            unsupportedReason = "unsupported-inline-foreign-capture-type:" + captureText + ":" + fieldIt->typeText;
+            return false;
+        }
+
+        llvm::Value* baseValue = loadIfAddressable(builder, valueIt->second);
+        if (baseValue == nullptr) {
+            unsupportedReason = "unsupported-inline-foreign-capture-base:" + captureText;
+            return false;
+        }
+
+        llvm::Value* fieldAddress = lowerAggregateFieldAddress(builder, baseValue, aggregateName, fieldName, *gActiveAggregateRegistry);
+        if (fieldAddress == nullptr) {
+            unsupportedReason = "unsupported-inline-foreign-capture-field:" + captureText;
+            return false;
+        }
+
+        llvm::Type* fieldType = lowerSourceTypeText(builder.getContext(), fieldIt->typeText);
+        if (fieldType == nullptr) {
+            unsupportedReason = "unsupported-inline-foreign-capture-type:" + captureText + ":" + fieldIt->typeText;
+            return false;
+        }
+
+        captures.push_back({
+            ApolloInlineForeignCapture{captureText, "__apollo_capture_" + std::to_string(captures.size()), fieldIt->typeText},
+            builder.CreateLoad(fieldType, fieldAddress)
+        });
+    }
+
+    return true;
+}
+
+bool lowerRuntimeInlineForeignStatement(llvm::Module& module,
+    llvm::IRBuilder<>& builder,
+    const ApolloInlineForeignBlock& inlineForeign,
+    const LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (gActiveInlineForeignBlocks == nullptr || gActiveInlineForeignSourcePath == nullptr || gActiveInlineForeignOutputPath == nullptr) {
+        unsupportedReason = "missing-inline-foreign-context";
+        return false;
+    }
+
+    std::vector<RuntimeInlineForeignCaptureValue> captures;
+    if (!collectRuntimeInlineForeignCaptureValues(builder, inlineForeign, values, captures, unsupportedReason)) {
+        return false;
+    }
+
+    std::vector<ApolloInlineForeignCapture> captureSpecs;
+    std::vector<llvm::Value*> captureArgs;
+    captureSpecs.reserve(captures.size());
+    captureArgs.reserve(captures.size());
+    for (const auto& capture : captures) {
+        captureSpecs.push_back(capture.capture);
+        captureArgs.push_back(capture.argument);
+    }
+
+    ensureRuntimeInlineForeignModule(module,
+        *gActiveInlineForeignSourcePath,
+        *gActiveInlineForeignOutputPath,
+        inlineForeign,
+        *gActiveInlineForeignBlocks,
+        captureSpecs);
+
+    llvm::Function* runner = module.getFunction(inlineForeign.runnerName);
+    if (runner == nullptr) {
+        unsupportedReason = "missing-inline-foreign-runner:" + inlineForeign.runnerName;
+        return false;
+    }
+    if (runner->arg_size() != captureArgs.size()) {
+        unsupportedReason = "inline-foreign-runner-arity-mismatch:" + inlineForeign.runnerName;
+        return false;
+    }
+
+    for (std::size_t index = 0; index < captureArgs.size(); ++index) {
+        llvm::Type* expectedType = runner->getArg(static_cast<unsigned>(index))->getType();
+        if (captureArgs[index] == nullptr) {
+            unsupportedReason = "unsupported-inline-foreign-capture-arg:" + std::to_string(index);
+            return false;
+        }
+        if (captureArgs[index]->getType() != expectedType) {
+            if (captureArgs[index]->getType()->isIntegerTy() && expectedType->isIntegerTy()) {
+                captureArgs[index] = castToCommonInteger(builder, captureArgs[index], expectedType);
+            } else if (captureArgs[index]->getType()->isPointerTy() && expectedType->isPointerTy()) {
+                captureArgs[index] = builder.CreateBitCast(captureArgs[index], expectedType);
+            }
+        }
+        if (captureArgs[index] == nullptr || captureArgs[index]->getType() != expectedType) {
+            unsupportedReason = "unsupported-inline-foreign-capture-cast:" + std::to_string(index);
+            return false;
+        }
+    }
+
+    builder.CreateCall(runner, captureArgs);
+    return true;
 }
 
 llvm::Value* lowerCastValue(llvm::IRBuilder<>& builder,
@@ -2525,9 +2711,6 @@ bool lowerUnsafeLineStatement(llvm::IRBuilder<>& builder,
         unsupportedReason = "unsupported-unsafe-line:" + unsafeLineStmt->getText();
         return false;
     }
-    if (payload->dircpp() != nullptr) {
-        return true;
-    }
     if (payload->nativemode() != nullptr) {
         return true;
     }
@@ -3458,10 +3641,13 @@ bool lowerStatement(llvm::Module& module,
         }
         return true;
     }
-    if (statement->dircpp() != nullptr) {
-        return true;
-    }
     if (statement->inlineForeignBlock() != nullptr) {
+        const ApolloInlineForeignBlock* inlineForeign = findInlineForeignBlockAt(statement->inlineForeignBlock());
+        if (inlineForeign != nullptr && inlineForeign->executesAtRuntime) {
+            if (!lowerRuntimeInlineForeignStatement(module, builder, *inlineForeign, values, unsupportedReason)) {
+                return false;
+            }
+        }
         return true;
     }
     if (statement->nativemode() != nullptr) {
@@ -4500,6 +4686,7 @@ void appendPrimitiveTypeMetadata(llvm::Module& module) {
 
 void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     const std::string& moduleKey,
+    const std::string& displaySourcePath,
     const std::filesystem::path& sourcePath,
     compilerv1Parser::ProgramContext* tree,
     const ApolloRuntimeFeatureManifest& runtimeFeatures,
@@ -4507,7 +4694,7 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     bool allowPartialLowering) {
     llvm::LLVMContext context;
     llvm::Module module(moduleKey, context);
-    module.setSourceFileName(sourcePath.generic_string());
+    module.setSourceFileName(displaySourcePath);
 
     const std::string targetTriple = targetTripleFromEnvironment();
     if (!targetTriple.empty()) {
@@ -4531,6 +4718,7 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     AggregateRegistryScope aggregateScope(&aggregateRegistry);
     InlineForeignBlockScope inlineForeignScope(&inlineForeignBlocks);
     RuntimeFeatureScope runtimeFeatureScope(&runtimeFeatures);
+    InlineForeignPathScope inlineForeignPathScope(&sourcePath, &outputPath);
     std::vector<std::string> unsupportedFunctions;
     lowerGlobalVariables(module, tree, unsupportedFunctions);
     lowerAggregateMethodBodies(module, aggregateRegistry, unsupportedFunctions);
@@ -4566,11 +4754,12 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
 
 void ApolloIrCodegen::emitPrototypeModule(const std::filesystem::path& outputPath,
     const std::string& moduleKey,
+    const std::string& displaySourcePath,
     const std::filesystem::path& sourcePath,
     compilerv1Parser::ProgramContext* tree,
     const ApolloRuntimeFeatureManifest& runtimeFeatures,
     const ApolloIrLayoutPlan& layoutPlan) {
-    emitModule(outputPath, moduleKey, sourcePath, tree, runtimeFeatures, layoutPlan, true);
+    emitModule(outputPath, moduleKey, displaySourcePath, sourcePath, tree, runtimeFeatures, layoutPlan, true);
 }
 
 std::optional<std::string> ApolloIrCodegen::lowerPrimitiveType(std::string_view apolloType) {

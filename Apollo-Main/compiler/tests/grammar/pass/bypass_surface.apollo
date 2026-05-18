@@ -5,7 +5,7 @@ int main() {
         i32* alias _&base;
         * slot = i32[] *;
         crt null slot;
-        std -hres {
+        inl::cxx {
             #include <memory>
         }
         void heap;

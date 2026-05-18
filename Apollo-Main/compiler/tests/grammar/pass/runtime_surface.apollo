@@ -30,7 +30,7 @@ int main() {
             }
         }cpp;
         syscall -recursive;
-        std -hres {
+        inl::cxx {
             #include <memory>
         }
         void heap;

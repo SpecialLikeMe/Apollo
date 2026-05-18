@@ -10,7 +10,7 @@ struct Counter {
 
 int main() {
     @unsafe {
-        cxx::std {
+        inl::cxx {
         int __apo_alias_probe() {
             return 7;
         }

@@ -762,12 +762,14 @@ RuntimeRequirements directRuntimeRequirements(const BuildEnvironment& env, const
 
     const bool usesGuiRuntime = llvmRuntimeFeatureEnabled(llvmIr, "gui");
     const bool usesIrRuntime = llvmRuntimeFeatureEnabled(llvmIr, "ir_runtime");
+    const bool usesApolloPayloadRuntime = llvmIr.find("apollo_execute_apollo_payload") != std::string::npos;
     const bool totalProgramGc = llvmRuntimeFeatureEnabled(llvmIr, "total_program_gc");
 
     std::ostringstream fingerprint;
     fingerprint << "direct-llvm-ir\n"
                 << "gui=" << (usesGuiRuntime ? "1" : "0") << '\n'
                 << "ir_runtime=" << (usesIrRuntime ? "1" : "0") << '\n'
+                << "apollo_payload_runtime=" << (usesApolloPayloadRuntime ? "1" : "0") << '\n'
                 << "total_program_gc=" << (totalProgramGc ? "1" : "0");
 
     if (totalProgramGc) {
@@ -790,7 +792,7 @@ RuntimeRequirements directRuntimeRequirements(const BuildEnvironment& env, const
         appendUnique(requirements.linkFlags, "-lSDL2_image");
     }
 
-    if (usesIrRuntime) {
+    if (usesIrRuntime || usesApolloPayloadRuntime) {
         appendUnique(requirements.linkFlags, buildDirectIrRuntimeSupportObject(env).string());
     }
 

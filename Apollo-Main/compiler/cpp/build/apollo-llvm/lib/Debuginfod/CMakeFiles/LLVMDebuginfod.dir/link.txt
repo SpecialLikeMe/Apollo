@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMDebuginfod.a CMakeFiles/LLVMDebuginfod.dir/BuildIDFetcher.cpp.o CMakeFiles/LLVMDebuginfod.dir/Debuginfod.cpp.o
-/usr/sbin/ranlib -D ../libLLVMDebuginfod.a

@@ -155,6 +155,11 @@ public:
         throw ApolloCompilationFailure(builder.str());
     }
 
+    std::any visitStdimport(compilerv1Parser::StdimportContext* ctx) {
+        //TODO: add helper to import from include folder
+        return visitChildren(ctx);
+    }
+
     std::any visitAutofmtdeclareScope(compilerv1Parser::AutofmtdeclareScopeContext* ctx) override {
         ++autofmtDepth_;
         try {
@@ -552,13 +557,6 @@ public:
         requireUnsafe(ctx,
             "inline foreign code is only allowed inside `@unsafe {}` blocks",
             "wrap this inline foreign block in `@unsafe { ... }`");
-        return visitChildren(ctx);
-    }
-
-    std::any visitDircpp(compilerv1Parser::DircppContext* ctx) override {
-        requireUnsafe(ctx,
-            "raw native code injection is only allowed inside `@unsafe {}` blocks",
-            "wrap this native code block in `@unsafe { ... }`");
         return visitChildren(ctx);
     }
 

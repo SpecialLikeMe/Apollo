@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMTelemetry.a CMakeFiles/LLVMTelemetry.dir/Telemetry.cpp.o
-/usr/sbin/ranlib -D ../libLLVMTelemetry.a

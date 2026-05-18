@@ -21,6 +21,8 @@ public:
    */
     virtual std::any visitProgram(compilerv1Parser::ProgramContext *context) = 0;
 
+    virtual std::any visitStdimport(compilerv1Parser::StdimportContext *context) = 0;
+
     virtual std::any visitDirective(compilerv1Parser::DirectiveContext *context) = 0;
 
     virtual std::any visitGcDirective(compilerv1Parser::GcDirectiveContext *context) = 0;
@@ -74,8 +76,6 @@ public:
     virtual std::any visitTemplateDecl(compilerv1Parser::TemplateDeclContext *context) = 0;
 
     virtual std::any visitTemplateParams(compilerv1Parser::TemplateParamsContext *context) = 0;
-
-    virtual std::any visitDircpp(compilerv1Parser::DircppContext *context) = 0;
 
     virtual std::any visitInlineForeignBlock(compilerv1Parser::InlineForeignBlockContext *context) = 0;
 

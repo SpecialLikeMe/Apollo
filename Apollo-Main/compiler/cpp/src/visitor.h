@@ -13,6 +13,7 @@ class ApolloIrCodegen {
 public:
     static void emitModule(const std::filesystem::path& outputPath,
         const std::string& moduleKey,
+        const std::string& displaySourcePath,
         const std::filesystem::path& sourcePath,
         compilerv1Parser::ProgramContext* tree,
         const ApolloRuntimeFeatureManifest& runtimeFeatures,
@@ -21,6 +22,7 @@ public:
 
     static void emitPrototypeModule(const std::filesystem::path& outputPath,
         const std::string& moduleKey,
+        const std::string& displaySourcePath,
         const std::filesystem::path& sourcePath,
         compilerv1Parser::ProgramContext* tree,
         const ApolloRuntimeFeatureManifest& runtimeFeatures,

@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../../../libLLVMX86TargetMCA.a CMakeFiles/LLVMX86TargetMCA.dir/X86CustomBehaviour.cpp.o
-/usr/sbin/ranlib -D ../../../libLLVMX86TargetMCA.a

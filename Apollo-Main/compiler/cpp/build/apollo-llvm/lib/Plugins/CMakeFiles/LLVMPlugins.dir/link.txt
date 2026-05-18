@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMPlugins.a CMakeFiles/LLVMPlugins.dir/PassPlugin.cpp.o
-/usr/sbin/ranlib -D ../libLLVMPlugins.a

@@ -9,7 +9,7 @@ class et {
 
 int main() {
     @unsafe {
-        std -hres {
+        inl::cxx {
             et* ptr = new et();
             ptr->hello();
         }

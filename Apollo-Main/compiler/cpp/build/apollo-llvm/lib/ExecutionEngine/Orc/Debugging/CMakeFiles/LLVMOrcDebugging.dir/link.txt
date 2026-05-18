@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../../../libLLVMOrcDebugging.a CMakeFiles/LLVMOrcDebugging.dir/DebugInfoSupport.cpp.o CMakeFiles/LLVMOrcDebugging.dir/DebuggerSupport.cpp.o CMakeFiles/LLVMOrcDebugging.dir/DebuggerSupportPlugin.cpp.o CMakeFiles/LLVMOrcDebugging.dir/ELFDebugObjectPlugin.cpp.o CMakeFiles/LLVMOrcDebugging.dir/LLJITUtilsCBindings.cpp.o CMakeFiles/LLVMOrcDebugging.dir/PerfSupportPlugin.cpp.o CMakeFiles/LLVMOrcDebugging.dir/VTuneSupportPlugin.cpp.o
-/usr/sbin/ranlib -D ../../../libLLVMOrcDebugging.a

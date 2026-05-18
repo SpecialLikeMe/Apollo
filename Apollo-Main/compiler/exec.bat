@@ -58,13 +58,18 @@ shift
 set "COMMAND=analyze"
 
 :parse_done
-set "SCRIPT_DIR=%~dp0"
-if defined APOLLO_COMPILER_DIR set "SCRIPT_DIR=%APOLLO_COMPILER_DIR%"
+for %%I in ("%~f0") do set "SCRIPT_DIR=%%~dpI"
 if not "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR%\"
+if not exist "%SCRIPT_DIR%cleanup-output.ps1" if exist "%SCRIPT_DIR%compiler\cleanup-output.ps1" set "SCRIPT_DIR=%SCRIPT_DIR%compiler\"
+if not exist "%SCRIPT_DIR%cleanup-output.ps1" if exist "%CD%\compiler\cleanup-output.ps1" set "SCRIPT_DIR=%CD%\compiler\"
+if not exist "%SCRIPT_DIR%cleanup-output.ps1" (
+    echo Apollo compiler directory could not be resolved.
+    exit /b 1
+)
 set "SCRIPT_DIR_NO_SLASH=%SCRIPT_DIR%"
 if "%SCRIPT_DIR_NO_SLASH:~-1%"=="\" set "SCRIPT_DIR_NO_SLASH=%SCRIPT_DIR_NO_SLASH:~0,-1%"
 set "APOLLO_COMPILER_DIR=%SCRIPT_DIR_NO_SLASH%"
-if not defined APOLLO_DIR for %%I in ("%SCRIPT_DIR%..") do set "APOLLO_DIR=%%~fI"
+for %%I in ("%SCRIPT_DIR%..") do set "APOLLO_DIR=%%~fI"
 set "CONFIG_EXE=%APOLLO_DIR%\apollo-config.exe"
 if not exist "%CONFIG_EXE%" set "CONFIG_EXE=%APOLLO_DIR%\config.exe"
 set "APOLLO_JIT_EXE=%APOLLO_DIR%\apollo_jit.exe"
@@ -118,6 +123,13 @@ if /I "%COMMAND%"=="-m" (
 if exist "%TOOLCHAIN_ENV%" call "%TOOLCHAIN_ENV%"
 
 if not defined VCPKG_ROOT if defined USERPROFILE if exist "%USERPROFILE%\vcpkg\scripts\buildsystems\vcpkg.cmake" set "VCPKG_ROOT=%USERPROFILE%\vcpkg"
+if not defined APOLLO_NATIVE_GENERATOR if defined APOLLO_MINGW_BIN if exist "%APOLLO_MINGW_BIN%\mingw32-make.exe" set "APOLLO_NATIVE_GENERATOR=MinGW Makefiles"
+if not defined APOLLO_NATIVE_C_COMPILER if defined APOLLO_MINGW_BIN if exist "%APOLLO_MINGW_BIN%\clang.exe" set "APOLLO_NATIVE_C_COMPILER=%APOLLO_MINGW_BIN%\clang.exe"
+if not defined APOLLO_NATIVE_CXX_COMPILER if defined APOLLO_MINGW_BIN if exist "%APOLLO_MINGW_BIN%\clang++.exe" set "APOLLO_NATIVE_CXX_COMPILER=%APOLLO_MINGW_BIN%\clang++.exe"
+if not defined APOLLO_NATIVE_MAKE_PROGRAM if defined APOLLO_MINGW_BIN if exist "%APOLLO_MINGW_BIN%\mingw32-make.exe" set "APOLLO_NATIVE_MAKE_PROGRAM=%APOLLO_MINGW_BIN%\mingw32-make.exe"
+if not defined APOLLO_NATIVE_CMAKE_PREFIX if defined APOLLO_MSYS64_ROOT if exist "%APOLLO_MSYS64_ROOT%\clang64\lib\cmake\antlr4-runtime" set "APOLLO_NATIVE_CMAKE_PREFIX=%APOLLO_MSYS64_ROOT%\clang64"
+if defined APOLLO_NATIVE_C_COMPILER set "APOLLO_NATIVE_C_COMPILER_SLASH=%APOLLO_NATIVE_C_COMPILER:\=/%"
+if defined APOLLO_NATIVE_CXX_COMPILER set "APOLLO_NATIVE_CXX_COMPILER_SLASH=%APOLLO_NATIVE_CXX_COMPILER:\=/%"
 
 if not defined APOLLO_CXX_STD set "APOLLO_CXX_STD=c++20"
 if not defined APOLLO_OPT_LEVEL set "APOLLO_OPT_LEVEL=3"
@@ -402,24 +414,8 @@ if exist "%NATIVE_BUILD_DIR%\CMakeCache.txt" (
 )
 
 if not exist "%NATIVE_BUILD_DIR%\CMakeCache.txt" (
-    if defined APOLLO_NATIVE_GENERATOR (
-        if defined CMAKE_TOOLCHAIN_FILE (
-            call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%CMAKE_TOOLCHAIN_FILE%"
-        ) else if defined VCPKG_ROOT if exist "%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" (
-            call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
-        ) else (
-            call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%"
-        )
-    ) else (
-        if defined CMAKE_TOOLCHAIN_FILE (
-            call :run_quiet_command "%CMAKE_EXE%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%CMAKE_TOOLCHAIN_FILE%"
-        ) else if defined VCPKG_ROOT if exist "%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" (
-            call :run_quiet_command "%CMAKE_EXE%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
-        ) else (
-            call :run_quiet_command "%CMAKE_EXE%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%"
-        )
-    )
-    if errorlevel 1 exit /b !errorlevel!
+    call :configure_native_build
+    if errorlevel 1 if not exist "%NATIVE_BUILD_DIR%\CMakeCache.txt" exit /b !errorlevel!
 )
 
 set "NEED_NATIVE_BUILD=0"
@@ -457,7 +453,66 @@ findstr /B /C:"ApolloNativeFrontend_BINARY_DIR:STATIC=%NATIVE_BUILD_DIR_SLASH%" 
 if errorlevel 1 exit /b 1
 findstr /B /C:"CMAKE_HOME_DIRECTORY:INTERNAL=%NATIVE_SOURCE_DIR_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
 if errorlevel 1 exit /b 1
+if defined APOLLO_NATIVE_GENERATOR (
+findstr /B /C:"CMAKE_GENERATOR:INTERNAL=%APOLLO_NATIVE_GENERATOR%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
+if errorlevel 1 exit /b 1
+)
+if defined APOLLO_NATIVE_C_COMPILER_SLASH (
+findstr /B /C:"CMAKE_C_COMPILER:FILEPATH=%APOLLO_NATIVE_C_COMPILER_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
+if errorlevel 1 (
+findstr /B /C:"CMAKE_C_COMPILER:STRING=%APOLLO_NATIVE_C_COMPILER_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
+if errorlevel 1 exit /b 1
+)
+)
+if defined APOLLO_NATIVE_CXX_COMPILER_SLASH (
+findstr /B /C:"CMAKE_CXX_COMPILER:FILEPATH=%APOLLO_NATIVE_CXX_COMPILER_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
+if errorlevel 1 (
+findstr /B /C:"CMAKE_CXX_COMPILER:STRING=%APOLLO_NATIVE_CXX_COMPILER_SLASH%" "%NATIVE_BUILD_DIR%\CMakeCache.txt" >nul
+if errorlevel 1 exit /b 1
+)
+)
 exit /b 0
+
+:configure_native_build
+if defined APOLLO_NATIVE_GENERATOR if /I "%APOLLO_NATIVE_GENERATOR%"=="MinGW Makefiles" (
+    if not defined APOLLO_NATIVE_C_COMPILER (
+        echo Native Apollo C compiler was not found for the configured MinGW toolchain.
+        exit /b 1
+    )
+    if not defined APOLLO_NATIVE_CXX_COMPILER (
+        echo Native Apollo C++ compiler was not found for the configured MinGW toolchain.
+        exit /b 1
+    )
+    if not defined APOLLO_NATIVE_MAKE_PROGRAM (
+        echo Native Apollo make program was not found for the configured MinGW toolchain.
+        exit /b 1
+    )
+    if defined APOLLO_NATIVE_CMAKE_PREFIX (
+        call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_C_COMPILER="%APOLLO_NATIVE_C_COMPILER%" -DCMAKE_CXX_COMPILER="%APOLLO_NATIVE_CXX_COMPILER%" -DCMAKE_MAKE_PROGRAM="%APOLLO_NATIVE_MAKE_PROGRAM%" -DCMAKE_PREFIX_PATH="%APOLLO_NATIVE_CMAKE_PREFIX%"
+    ) else (
+        call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_C_COMPILER="%APOLLO_NATIVE_C_COMPILER%" -DCMAKE_CXX_COMPILER="%APOLLO_NATIVE_CXX_COMPILER%" -DCMAKE_MAKE_PROGRAM="%APOLLO_NATIVE_MAKE_PROGRAM%"
+    )
+    exit /b !errorlevel!
+)
+
+if defined APOLLO_NATIVE_GENERATOR (
+    if defined CMAKE_TOOLCHAIN_FILE (
+        call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%CMAKE_TOOLCHAIN_FILE%"
+    ) else if defined VCPKG_ROOT if exist "%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" (
+        call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
+    ) else (
+        call :run_quiet_command "%CMAKE_EXE%" -G "%APOLLO_NATIVE_GENERATOR%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%"
+    )
+) else (
+    if defined CMAKE_TOOLCHAIN_FILE (
+        call :run_quiet_command "%CMAKE_EXE%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%CMAKE_TOOLCHAIN_FILE%"
+    ) else if defined VCPKG_ROOT if exist "%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" (
+        call :run_quiet_command "%CMAKE_EXE%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%" -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
+    ) else (
+        call :run_quiet_command "%CMAKE_EXE%" -S "%NATIVE_SOURCE_DIR%" -B "%NATIVE_BUILD_DIR%"
+    )
+)
+exit /b !errorlevel!
 
 :native_target_stale
 if not exist "%~1" exit /b 0
@@ -491,7 +546,8 @@ exit /b 1
 :run_quiet_command
 if /I "%APOLLO_SHOW_FILE_DETAILS%"=="1" (
     %*
-    exit /b %errorlevel%
+    set "STATUS=!errorlevel!"
+    exit /b !STATUS!
 )
 
 setlocal DisableDelayedExpansion

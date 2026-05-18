@@ -45,23 +45,23 @@ first_existing_dir() {
 
 install_with_brew() {
     write_status 'Installing dependencies with Homebrew'
-    brew install git openjdk llvm antlr boehm-gc make cmake sdl2 sdl2_image
+    brew install git openjdk llvm antlr boehm-gc make cmake sdl2 sdl2_image rust zig go node python
 }
 
 install_with_apt() {
     write_status 'Installing dependencies with apt'
     sudo apt-get update
-    sudo apt-get install -y git openjdk-21-jdk clang llvm make cmake antlr4 libgc-dev libsdl2-dev libsdl2-image-dev
+    sudo apt-get install -y git openjdk-21-jdk clang llvm make cmake antlr4 libgc-dev libsdl2-dev libsdl2-image-dev rustc cargo zig golang-go nodejs npm python3 python3-pip
 }
 
 install_with_dnf() {
     write_status 'Installing dependencies with dnf'
-    sudo dnf install -y git java-21-openjdk-devel clang llvm make cmake antlr4 gc-devel SDL2-devel SDL2_image-devel
+    sudo dnf install -y git java-21-openjdk-devel clang llvm make cmake antlr4 gc-devel SDL2-devel SDL2_image-devel rust cargo zig golang nodejs npm python3 python3-pip
 }
 
 install_with_pacman() {
     write_status 'Installing dependencies with pacman'
-    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make cmake antlr4 antlr4-runtime gc sdl2 sdl2_image
+    sudo pacman -Sy --needed --noconfirm git jdk21-openjdk clang llvm make cmake antlr4 antlr4-runtime gc sdl2 sdl2_image rust zig go nodejs npm python python-pip
 }
 
 ensure_dependencies() {
@@ -124,6 +124,159 @@ resolve_make_bin() {
     fi
     if command_exists gmake; then
         command -v gmake
+        return
+    fi
+    printf '\n'
+}
+
+resolve_python_bin() {
+    if command_exists python3; then
+        command -v python3
+        return
+    fi
+    if command_exists python; then
+        command -v python
+        return
+    fi
+    printf '\n'
+}
+
+resolve_pip_bin() {
+    if command_exists pip3; then
+        command -v pip3
+        return
+    fi
+    if command_exists pip; then
+        command -v pip
+        return
+    fi
+    printf '\n'
+}
+
+resolve_rustc_exe() {
+    if [ -n "${APOLLO_RUSTC_EXE:-}" ] && [ -x "$APOLLO_RUSTC_EXE" ]; then
+        printf '%s\n' "$APOLLO_RUSTC_EXE"
+        return
+    fi
+    if command_exists rustc; then
+        command -v rustc
+        return
+    fi
+    printf '\n'
+}
+
+resolve_cargo_exe() {
+    if command_exists cargo; then
+        command -v cargo
+        return
+    fi
+    if [ -x "$HOME/.cargo/bin/cargo" ]; then
+        printf '%s\n' "$HOME/.cargo/bin/cargo"
+        return
+    fi
+    printf '\n'
+}
+
+resolve_swiftc_exe() {
+    if [ -n "${APOLLO_SWIFTC_EXE:-}" ] && [ -x "$APOLLO_SWIFTC_EXE" ]; then
+        printf '%s\n' "$APOLLO_SWIFTC_EXE"
+        return
+    fi
+    if command_exists swiftc; then
+        command -v swiftc
+        return
+    fi
+    printf '\n'
+}
+
+resolve_zig_exe() {
+    if [ -n "${APOLLO_ZIG_EXE:-}" ] && [ -x "$APOLLO_ZIG_EXE" ]; then
+        printf '%s\n' "$APOLLO_ZIG_EXE"
+        return
+    fi
+    if command_exists zig; then
+        command -v zig
+        return
+    fi
+    printf '\n'
+}
+
+resolve_lpython_exe() {
+    if [ -n "${APOLLO_LPYTHON_EXE:-}" ] && [ -x "$APOLLO_LPYTHON_EXE" ]; then
+        printf '%s\n' "$APOLLO_LPYTHON_EXE"
+        return
+    fi
+    if command_exists lpython; then
+        command -v lpython
+        return
+    fi
+    printf '\n'
+}
+
+test_lpython_module_installed() {
+    python_bin=$1
+    if [ -z "$python_bin" ] || [ ! -x "$python_bin" ]; then
+        return 1
+    fi
+
+    "$python_bin" -c "import importlib.util, sys; sys.exit(0 if importlib.util.find_spec('lpython') else 1)" >/dev/null 2>&1
+}
+
+resolve_gollvm_exe() {
+    if [ -n "${APOLLO_GOLLVM_EXE:-}" ] && [ -x "$APOLLO_GOLLVM_EXE" ]; then
+        printf '%s\n' "$APOLLO_GOLLVM_EXE"
+        return
+    fi
+    if [ -n "${APOLLO_TANGOLLVM_EXE:-}" ] && [ -x "$APOLLO_TANGOLLVM_EXE" ]; then
+        printf '%s\n' "$APOLLO_TANGOLLVM_EXE"
+        return
+    fi
+    if command_exists llvm-goc; then
+        command -v llvm-goc
+        return
+    fi
+    if command_exists gollvm; then
+        command -v gollvm
+        return
+    fi
+    printf '\n'
+}
+
+resolve_llts_exe() {
+    if [ -n "${APOLLO_LLTS_EXE:-}" ] && [ -x "$APOLLO_LLTS_EXE" ]; then
+        printf '%s\n' "$APOLLO_LLTS_EXE"
+        return
+    fi
+    if [ -x "$HOME/.cargo/bin/lltsc" ]; then
+        printf '%s\n' "$HOME/.cargo/bin/lltsc"
+        return
+    fi
+    if command_exists lltsc; then
+        command -v lltsc
+        return
+    fi
+    printf '\n'
+}
+
+resolve_go_bin() {
+    if command_exists go; then
+        command -v go
+        return
+    fi
+    printf '\n'
+}
+
+resolve_node_bin() {
+    if command_exists node; then
+        command -v node
+        return
+    fi
+    printf '\n'
+}
+
+resolve_npm_bin() {
+    if command_exists npm; then
+        command -v npm
         return
     fi
     printf '\n'
@@ -390,11 +543,79 @@ resolve_sdl_header() {
     return 1
 }
 
+ensure_lpython() {
+    if resolve_lpython_exe >/dev/null 2>&1; then
+        write_status 'LPython already present'
+        return
+    fi
+
+    python_bin=$(resolve_python_bin)
+    pip_bin=$(resolve_pip_bin)
+    if [ -z "$python_bin" ] || [ -z "$pip_bin" ]; then
+        write_status 'Python or pip could not be resolved; Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
+        return
+    fi
+
+    if test_lpython_module_installed "$python_bin"; then
+        write_status 'LPython Python package is already installed, but no lpython compiler command was found. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
+        return
+    fi
+
+    write_status 'Installing LPython via pip'
+    if "$python_bin" -m pip install --user --upgrade lpython; then
+        :
+    elif "$python_bin" -m pip install --user --break-system-packages --upgrade lpython; then
+        :
+    else
+        write_status 'Failed to install LPython via pip; Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
+        return
+    fi
+
+    if ! resolve_lpython_exe >/dev/null 2>&1; then
+        if test_lpython_module_installed "$python_bin"; then
+            write_status 'The installed lpython package did not provide a compiler command on this platform. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
+        else
+            write_status 'LPython was not located after installation; Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
+        fi
+    fi
+}
+
+ensure_llts() {
+    if command_exists lltsc || [ -x "$HOME/.cargo/bin/lltsc" ]; then
+        write_status 'LLTS already present'
+        return
+    fi
+
+    cargo_bin=$(resolve_cargo_exe)
+    if [ -z "$cargo_bin" ]; then
+        write_status 'Cargo was not resolved; Apollo will use its built-in TypeScript inline foreign fallback until LLTS is installed'
+        return
+    fi
+
+    write_status 'Installing LLTS via cargo'
+    if "$cargo_bin" install lltsc; then
+        :
+    else
+        write_status 'cargo install lltsc failed; Apollo will use its built-in TypeScript inline foreign fallback until LLTS is installed'
+    fi
+}
+
 dependency_snapshot() {
     java_bin=$(resolve_java_bin)
     llvm_bin=$(resolve_llvm_bin)
     make_bin=$(resolve_make_bin)
     cmake_bin=$(resolve_cmake_bin)
+    python_bin=$(resolve_python_bin)
+    pip_bin=$(resolve_pip_bin)
+    rustc_exe=$(resolve_rustc_exe)
+    swiftc_exe=$(resolve_swiftc_exe)
+    zig_exe=$(resolve_zig_exe)
+    lpython_exe=$(resolve_lpython_exe)
+    gollvm_exe=$(resolve_gollvm_exe)
+    llts_exe=$(resolve_llts_exe)
+    go_bin=$(resolve_go_bin)
+    node_bin=$(resolve_node_bin)
+    npm_bin=$(resolve_npm_bin)
     git_bin=$(command -v git 2>/dev/null || printf '')
     gc_include_dir=$(resolve_gc_include_dir)
     gc_lib_dir=$(resolve_gc_lib_dir)
@@ -417,6 +638,21 @@ dependency_snapshot() {
     [ -n "$cmake_bin" ] || return 1
     [ -x "$cmake_bin" ] || return 1
 
+    [ -n "$python_bin" ] || return 1
+    [ -x "$python_bin" ] || return 1
+    [ -n "$pip_bin" ] || return 1
+    [ -x "$pip_bin" ] || return 1
+    [ -n "$rustc_exe" ] || return 1
+    [ -x "$rustc_exe" ] || return 1
+    [ -n "$zig_exe" ] || return 1
+    [ -x "$zig_exe" ] || return 1
+    [ -n "$go_bin" ] || return 1
+    [ -x "$go_bin" ] || return 1
+    [ -n "$node_bin" ] || return 1
+    [ -x "$node_bin" ] || return 1
+    [ -n "$npm_bin" ] || return 1
+    [ -x "$npm_bin" ] || return 1
+
     [ -f "$COMPILER_DIR/antlr-4.13.2-complete.jar" ] || return 1
 
     [ -n "$gc_include_dir" ] || return 1
@@ -436,6 +672,17 @@ dependency_snapshot() {
     printf 'LLVM_BIN=%s\n' "$llvm_bin"
     printf 'MAKE_BIN=%s\n' "$make_bin"
     printf 'CMAKE_BIN=%s\n' "$cmake_bin"
+    printf 'PYTHON_BIN=%s\n' "$python_bin"
+    printf 'PIP_BIN=%s\n' "$pip_bin"
+    printf 'RUSTC_EXE=%s\n' "$rustc_exe"
+    printf 'SWIFTC_EXE=%s\n' "$swiftc_exe"
+    printf 'ZIG_EXE=%s\n' "$zig_exe"
+    printf 'LPYTHON_EXE=%s\n' "$lpython_exe"
+    printf 'GOLLVM_EXE=%s\n' "$gollvm_exe"
+    printf 'LLTS_EXE=%s\n' "$llts_exe"
+    printf 'GO_BIN=%s\n' "$go_bin"
+    printf 'NODE_BIN=%s\n' "$node_bin"
+    printf 'NPM_BIN=%s\n' "$npm_bin"
     printf 'GC_INCLUDE_DIR=%s\n' "$gc_include_dir"
     printf 'GC_LIB_DIR=%s\n' "$gc_lib_dir"
     printf 'SDL_INCLUDE_DIR=%s\n' "$sdl_include_dir"
@@ -444,7 +691,7 @@ dependency_snapshot() {
 
 verify_dependencies() {
     if ! snapshot=$(dependency_snapshot); then
-        printf 'Apollo dependency verification failed. Required components: java, javac, clang, clang++, llc, make/gmake, cmake, bundled antlr-4.13.2-complete.jar, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs.\n' >&2
+        printf 'Apollo dependency verification failed. Required components: git, java, javac, clang, clang++, llc, make/gmake, cmake, python, pip, rustc, zig, go, node, npm, bundled antlr-4.13.2-complete.jar, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs. LPython is optional and only enabled when a real compiler command is available.\n' >&2
         return 1
     fi
 
@@ -454,6 +701,33 @@ verify_dependencies() {
     write_status "Verified LLVM toolchain at $LLVM_BIN"
     write_status "Verified make at $MAKE_BIN"
     write_status "Verified CMake at $CMAKE_BIN"
+    write_status "Verified Python at $PYTHON_BIN"
+    write_status "Verified pip at $PIP_BIN"
+    write_status "Verified Rust compiler at $RUSTC_EXE"
+    write_status "Verified Zig compiler at $ZIG_EXE"
+    if [ -n "$LPYTHON_EXE" ]; then
+        write_status "Verified LPython at $LPYTHON_EXE"
+    else
+        write_status 'LPython compiler was not auto-discovered; the available PyPI package may only provide support modules on this machine. Apollo inline foreign Python will remain disabled until APOLLO_LPYTHON_EXE points to a real LPython compiler'
+    fi
+    write_status "Verified Go at $GO_BIN"
+    write_status "Verified Node.js at $NODE_BIN"
+    write_status "Verified npm at $NPM_BIN"
+    if [ -n "$SWIFTC_EXE" ]; then
+        write_status "Verified Swift compiler at $SWIFTC_EXE"
+    else
+        write_status 'Swift compiler was not auto-discovered; set APOLLO_SWIFTC_EXE if installed separately'
+    fi
+    if [ -n "$GOLLVM_EXE" ]; then
+        write_status "Verified GoLLVM at $GOLLVM_EXE"
+    else
+        write_status 'GoLLVM was not auto-discovered; Apollo will use its built-in Go inline foreign fallback for the currently supported surface. Set APOLLO_GOLLVM_EXE after installing llvm-goc if you want to prefer an external compiler'
+    fi
+    if [ -n "$LLTS_EXE" ]; then
+        write_status "Verified LLTS at $LLTS_EXE"
+    else
+        write_status 'LLTS was not auto-discovered after the cargo bootstrap attempt; Apollo will use its built-in TypeScript inline foreign fallback for the currently supported surface. Set APOLLO_LLTS_EXE after installing lltsc if you want to prefer an external compiler'
+    fi
     write_status "Verified Boehm GC include dir at $GC_INCLUDE_DIR"
     write_status "Verified Boehm GC lib dir at $GC_LIB_DIR"
     write_status "Verified SDL include dir at $SDL_INCLUDE_DIR"
@@ -562,6 +836,8 @@ publish_cli_shims
 validate_cli_shims
 
 ensure_dependencies
+ensure_lpython
+ensure_llts
 verify_dependencies
 
 JAVA_BIN=$(resolve_java_bin)
@@ -573,12 +849,37 @@ GC_INCLUDE_DIR=$(resolve_gc_include_dir)
 GC_LIB_DIR=$(resolve_gc_lib_dir)
 SDL_INCLUDE_DIR=$(resolve_sdl_include_dir)
 SDL_LIB_DIR=$(resolve_sdl_lib_dir)
+PYTHON_BIN=$(resolve_python_bin)
+PIP_BIN=$(resolve_pip_bin)
+RUSTC_EXE=$(resolve_rustc_exe)
+SWIFTC_EXE=$(resolve_swiftc_exe)
+ZIG_EXE=$(resolve_zig_exe)
+LPYTHON_EXE=$(resolve_lpython_exe)
+GOLLVM_EXE=$(resolve_gollvm_exe)
+LLTS_EXE=$(resolve_llts_exe)
+GO_BIN=$(resolve_go_bin)
+NODE_BIN=$(resolve_node_bin)
+NPM_BIN=$(resolve_npm_bin)
 
 cat > "$TOOLCHAIN_LOCAL_ENV_SH" <<EOF
+export APOLLO_GOLLVM_REPO="https://go.googlesource.com/gollvm/"
+export APOLLO_LLTS_REPO="cargo:lltsc"
 export APOLLO_JAVA_BIN="${JAVA_BIN}"
 export APOLLO_LLVM_BIN="${LLVM_BIN}"
 export APOLLO_MAKE_EXE="${MAKE_BIN}"
 export APOLLO_CMAKE_EXE="${CMAKE_BIN}"
+export APOLLO_PYTHON_BIN="${PYTHON_BIN}"
+export APOLLO_PIP_EXE="${PIP_BIN}"
+export APOLLO_RUSTC_EXE="${RUSTC_EXE}"
+export APOLLO_SWIFTC_EXE="${SWIFTC_EXE}"
+export APOLLO_ZIG_EXE="${ZIG_EXE}"
+export APOLLO_LPYTHON_EXE="${LPYTHON_EXE}"
+export APOLLO_GOLLVM_EXE="${GOLLVM_EXE}"
+export APOLLO_TANGOLLVM_EXE="${GOLLVM_EXE}"
+export APOLLO_LLTS_EXE="${LLTS_EXE}"
+export APOLLO_GO_EXE="${GO_BIN}"
+export APOLLO_NODE_EXE="${NODE_BIN}"
+export APOLLO_NPM_EXE="${NPM_BIN}"
 export APOLLO_ANTLR4_RUNTIME_CMAKE_DIR="${ANTLR4_RUNTIME_CMAKE_DIR}"
 export APOLLO_GC_INCLUDE_DIR="${GC_INCLUDE_DIR}"
 export APOLLO_GC_LIB_DIR="${GC_LIB_DIR}"

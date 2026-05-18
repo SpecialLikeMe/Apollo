@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -47,12 +48,15 @@ int main(int argc, char** argv) {
     try {
         ApolloDriver::compileApollo(sourcePath, outputPath);
         if (showFileDetails()) {
+            const auto normalizedSourcePath = std::filesystem::absolute(sourcePath).lexically_normal();
+            const auto importRoot = normalizedSourcePath.has_parent_path() ? normalizedSourcePath.parent_path() : std::filesystem::current_path();
+            const std::string displaySourcePath = ApolloDriver::displaySourcePath(importRoot, normalizedSourcePath);
             const std::string sourceText = readSourceFile(sourcePath);
-            ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(sourcePath, sourceText);
+            ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(displaySourcePath, sourceText);
             runtimeCycle.runPreCodegenPhases();
             auto* tree = runtimeCycle.tree();
             const ApolloCodegenOptimizationPlan optimizationPlan = ApolloCodegenOptimizationPlan::analyze(tree);
-            std::cout << "Parsed Apollo source successfully: " << sourcePath << '\n';
+            std::cout << "Parsed Apollo source successfully: " << displaySourcePath << '\n';
             std::cout << "SoA-eligible types: " << optimizationPlan.soaEligibleTypes().size() << '\n';
             std::cout << "Uses IR runtime: " << (runtimeCycle.runtimeFeatures().usesIrRuntime() ? "yes" : "no") << '\n';
             std::cout << "Emitted LLVM IR to: " << outputPath << '\n';

@@ -10,7 +10,14 @@
 enum class ApolloInlineForeignLanguage {
     C,
     Cpp,
+    ObjectiveC,
+    ObjectiveCpp,
     Rust,
+    Swift,
+    Zig,
+    Python,
+    Go,
+    TypeScript,
     Unsupported,
 };
 
@@ -40,10 +47,18 @@ struct ApolloInlineForeignBlock {
     std::string languageText;
     std::string payload;
     std::string stableId;
+    std::string runnerName;
     int line = 0;
     int column = 0;
+    bool executesAtRuntime = false;
     std::vector<ApolloInlineForeignSymbol> functions;
     std::vector<ApolloInlineForeignSymbol> globals;
+};
+
+struct ApolloInlineForeignCapture {
+    std::string sourceText;
+    std::string bindingName;
+    std::string apolloType;
 };
 
 std::vector<ApolloInlineForeignBlock> collectInlineForeignBlocks(compilerv1Parser::ProgramContext* tree);
@@ -53,3 +68,10 @@ void linkInlineForeignModules(llvm::Module& module,
     const std::filesystem::path& outputPath,
     compilerv1Parser::ProgramContext* tree,
     const std::vector<ApolloInlineForeignBlock>& blocks);
+
+void ensureRuntimeInlineForeignModule(llvm::Module& module,
+    const std::filesystem::path& sourcePath,
+    const std::filesystem::path& outputPath,
+    const ApolloInlineForeignBlock& block,
+    const std::vector<ApolloInlineForeignBlock>& blocks,
+    const std::vector<ApolloInlineForeignCapture>& captures);

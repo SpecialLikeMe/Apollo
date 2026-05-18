@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../../libLLVMFrontendOpenMP.a CMakeFiles/LLVMFrontendOpenMP.dir/OMP.cpp.o CMakeFiles/LLVMFrontendOpenMP.dir/OMPContext.cpp.o CMakeFiles/LLVMFrontendOpenMP.dir/OMPIRBuilder.cpp.o CMakeFiles/LLVMFrontendOpenMP.dir/DirectiveNameParser.cpp.o
-/usr/sbin/ranlib -D ../../libLLVMFrontendOpenMP.a

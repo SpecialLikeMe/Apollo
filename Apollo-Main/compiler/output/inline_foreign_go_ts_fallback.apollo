@@ -1,0 +1,17 @@
+@unsafe {
+    inline::go {
+        var go_value int32 = 12;
+        func go_read() int32 { return go_value }
+    }
+}
+@unsafe {
+    inline::typescript {
+        let ts_value: i32 = 13;
+        function ts_read(): i32 { return ts_value; }
+    }
+}
+int main() {
+    sys.println(go_read());
+    sys.println(ts_read());
+    return 0;
+}

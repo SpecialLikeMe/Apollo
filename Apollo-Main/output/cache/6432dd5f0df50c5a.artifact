@@ -1,0 +1,92 @@
+; ModuleID = 'inline_foreign_inl_runtime_surface'
+source_filename = "/mnt/c/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/inline_foreign_inl_runtime_surface.apollo"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+@_ZN28__apollo_inline_inline_2_5_013foreign_valueE = dso_local global i32 4, align 4
+@apollo.print.fmt = private unnamed_addr constant [6 x i8] c"%lld\0A\00"
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind sspstrong willreturn memory(read, argmem: none, inaccessiblemem: none, target_mem0: none, target_mem1: none) uwtable
+define dso_local noundef i32 @_ZN28__apollo_inline_inline_2_5_010read_valueEv() local_unnamed_addr #0 {
+  %1 = load i32, ptr @_ZN28__apollo_inline_inline_2_5_013foreign_valueE, align 4, !tbaa !20
+  ret i32 %1
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind sspstrong willreturn memory(read, argmem: none, inaccessiblemem: none, target_mem0: none, target_mem1: none) uwtable
+define dso_local i32 @read_value() local_unnamed_addr #0 {
+  %1 = load i32, ptr @_ZN28__apollo_inline_inline_2_5_013foreign_valueE, align 4, !tbaa !20
+  ret i32 %1
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind sspstrong willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @__apollo_inline_get_inline_2_5_0_foreign_value() local_unnamed_addr #1 {
+  ret ptr @_ZN28__apollo_inline_inline_2_5_013foreign_valueE
+}
+
+; Function Attrs: mustprogress sspstrong uwtable
+define dso_local void @__apollo_inline_run_inline_10_9_1() local_unnamed_addr #2 {
+  %1 = tail call noundef ptr @_Z46__apollo_inline_get_inline_2_5_0_foreign_valuev()
+  %2 = tail call noundef i32 @_Z10read_valuev()
+  %3 = add nsw i32 %2, 3
+  %4 = tail call noundef ptr @_Z46__apollo_inline_get_inline_2_5_0_foreign_valuev()
+  store i32 %3, ptr %4, align 4, !tbaa !20
+  ret void
+}
+
+declare noundef ptr @_Z46__apollo_inline_get_inline_2_5_0_foreign_valuev() local_unnamed_addr #3
+
+declare noundef i32 @_Z10read_valuev() local_unnamed_addr #3
+
+define i32 @main() {
+entry:
+  %0 = call ptr @__apollo_inline_get_inline_2_5_0_foreign_value()
+  call void @__apollo_inline_run_inline_10_9_1()
+  %1 = load i32, ptr %0, align 4
+  %2 = sext i32 %1 to i64
+  %3 = call i32 (ptr, ...) @printf(ptr @apollo.print.fmt, i64 %2)
+  ret i32 0
+}
+
+declare i32 @printf(ptr, ...)
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind sspstrong willreturn memory(read, argmem: none, inaccessiblemem: none, target_mem0: none, target_mem1: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nofree norecurse nosync nounwind sspstrong willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { mustprogress sspstrong uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+!llvm.ident = !{!19}
+!llvm.errno.tbaa = !{!20}
+!llvm.module.flags = !{!24, !25, !26, !27}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"inline_foreign_inl_runtime_surface"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"void", !"void"}
+!4 = !{!"f64", !"double"}
+!5 = !{!"double", !"double"}
+!6 = !{!"short", !"i16"}
+!7 = !{!"u8", !"i8"}
+!8 = !{!"u64", !"i64"}
+!9 = !{!"i16", !"i16"}
+!10 = !{!"u32", !"i32"}
+!11 = !{!"u16", !"i16"}
+!12 = !{!"bool", !"i1"}
+!13 = !{!"i32", !"i32"}
+!14 = !{!"float", !"float"}
+!15 = !{!"int", !"i32"}
+!16 = !{!"i8", !"i8"}
+!17 = !{!"i64", !"i64"}
+!18 = !{!"long", !"i64"}
+!19 = !{!"clang version 22.1.5"}
+!20 = !{!21, !21, i64 0}
+!21 = !{!"int", !22, i64 0}
+!22 = !{!"omnipotent char", !23, i64 0}
+!23 = !{!"Simple C++ TBAA"}
+!24 = !{i32 1, !"wchar_size", i32 4}
+!25 = !{i32 8, !"PIC Level", i32 2}
+!26 = !{i32 7, !"PIE Level", i32 2}
+!27 = !{i32 7, !"uwtable", i32 2}

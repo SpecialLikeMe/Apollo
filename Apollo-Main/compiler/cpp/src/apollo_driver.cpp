@@ -1,5 +1,6 @@
 #include "apollo_driver.h"
 
+#include <cctype>
 #include <chrono>
 #include <filesystem>
 #include <fstream>
@@ -97,6 +98,25 @@ std::string stableHashHex(std::string_view text) {
     std::ostringstream builder;
     builder << std::hex << std::setw(16) << std::setfill('0') << value;
     return builder.str();
+}
+
+std::string formatDisplayPath(const std::filesystem::path& path) {
+    const std::string generic = path.generic_string();
+#ifdef _WIN32
+    return generic;
+#else
+    if (generic.size() > 7
+        && generic.rfind("/mnt/", 0) == 0
+        && std::isalpha(static_cast<unsigned char>(generic[5]))
+        && generic[6] == '/') {
+        std::string converted;
+        converted.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(generic[5]))));
+        converted.push_back(':');
+        converted.append(generic.substr(6));
+        return converted;
+    }
+    return generic;
+#endif
 }
 
 std::string buildModuleKeyForImportRoot(const std::filesystem::path& importRoot, const std::filesystem::path& sourcePath) {
@@ -332,8 +352,9 @@ void compileApolloRecursive(const std::filesystem::path& sourcePath,
         }
 
         const std::string program = readTextFile(normalizedSource);
+        const std::string displayPath = ApolloDriver::displaySourcePath(importRoot, normalizedSource);
 
-        ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(normalizedSource.string(), program);
+        ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(displayPath, program);
         runtimeCycle.runPreCodegenPhases();
 
         const std::vector<std::string> dependencies = collectDependencyMetadata(runtimeCycle.tree());
@@ -354,6 +375,7 @@ void compileApolloRecursive(const std::filesystem::path& sourcePath,
         const ApolloIrLayoutPlan layoutPlan = ApolloIrLayoutPlan::analyze(runtimeCycle.tree(), optimizationPlan);
         ApolloIrCodegen::emitModule(normalizedOutput,
             buildModuleKeyForImportRoot(importRoot, normalizedSource),
+            displayPath,
             normalizedSource,
             runtimeCycle.tree(),
             runtimeCycle.runtimeFeatures(),
@@ -389,14 +411,16 @@ void ApolloDriver::emitDirectIrPrototype(const std::string& inputPath, const std
     const auto sourcePath = std::filesystem::absolute(inputPath).lexically_normal();
     const auto importRoot = determineImportRoot(sourcePath);
     const std::string program = readTextFile(sourcePath);
+    const std::string displayPath = displaySourcePath(importRoot, sourcePath);
 
-    ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(sourcePath.string(), program);
+    ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(displayPath, program);
     runtimeCycle.runPreCodegenPhases();
 
     const ApolloCodegenOptimizationPlan optimizationPlan = ApolloCodegenOptimizationPlan::analyze(runtimeCycle.tree());
     const ApolloIrLayoutPlan layoutPlan = ApolloIrLayoutPlan::analyze(runtimeCycle.tree(), optimizationPlan);
     ApolloIrCodegen::emitPrototypeModule(std::filesystem::path(outputPath),
         buildModuleKey(importRoot, sourcePath),
+        displayPath,
         sourcePath,
         runtimeCycle.tree(),
         runtimeCycle.runtimeFeatures(),
@@ -408,6 +432,22 @@ void ApolloDriver::emitDirectIrPrototype(const std::string& inputPath, const std
 std::filesystem::path ApolloDriver::determineImportRoot(const std::filesystem::path& sourcePath) {
     const auto absolute = std::filesystem::absolute(sourcePath).lexically_normal();
     return absolute.has_parent_path() ? absolute.parent_path() : std::filesystem::current_path();
+}
+
+std::string ApolloDriver::displaySourcePath(const std::filesystem::path& importRoot, const std::filesystem::path& sourcePath) {
+    const auto normalizedImportRoot = std::filesystem::absolute(importRoot).lexically_normal();
+    const auto normalizedSourcePath = std::filesystem::absolute(sourcePath).lexically_normal();
+
+    std::error_code error;
+    const auto relativePath = std::filesystem::relative(normalizedSourcePath, normalizedImportRoot, error);
+    if (!error && !relativePath.empty()) {
+        const std::string relativeText = relativePath.generic_string();
+        if (!relativeText.starts_with("..")) {
+            return relativeText;
+        }
+    }
+
+    return formatDisplayPath(normalizedSourcePath);
 }
 
 std::string ApolloDriver::buildModuleKey(const std::filesystem::path& importRoot, const std::filesystem::path& sourcePath) {

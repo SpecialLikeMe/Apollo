@@ -19,6 +19,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitStdimport(compilerv1Parser::StdimportContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitDirective(compilerv1Parser::DirectiveContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -124,10 +128,6 @@ public:
   }
 
   virtual std::any visitTemplateParams(compilerv1Parser::TemplateParamsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitDircpp(compilerv1Parser::DircppContext *ctx) override {
     return visitChildren(ctx);
   }
 

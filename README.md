@@ -97,10 +97,12 @@ extern [&macro] announce(str message) {
 Native C++ header injection is also supported inside bypass/native blocks:
 
 ```apollo
-std -hres {
+inl::cxx {
     #include <memory>
 }
 ```
+
+Inline foreign blocks use `inline::lang { ... }` or `inl::lang { ... }`. The older `lang { ... }py;` form is no longer part of the grammar.
 
 Apollo resolves `extern {package.name}` style imports relative to the entry `.apollo` file directory.
 
@@ -478,7 +480,7 @@ Apollo distinguishes between two escape hatches.
     i32* alias _&base;
     * slot = i32[] *;
     crt null slot;
-    std -hres {
+    inl::cxx {
         #include <memory>
     }
     void heap;

@@ -97,7 +97,22 @@ function Ensure-NativeBuild {
             $configureArgs += @('-G', $env:APOLLO_NATIVE_GENERATOR)
         }
         $configureArgs += @('-S', $nativeSourceDir, '-B', $nativeBuildDir)
-        if ($env:CMAKE_TOOLCHAIN_FILE) {
+        $usingMingwGenerator = $env:APOLLO_NATIVE_GENERATOR -eq 'MinGW Makefiles'
+        if ($usingMingwGenerator) {
+            if ($env:APOLLO_NATIVE_C_COMPILER) {
+                $configureArgs += "-DCMAKE_C_COMPILER=$($env:APOLLO_NATIVE_C_COMPILER)"
+            }
+            if ($env:APOLLO_NATIVE_CXX_COMPILER) {
+                $configureArgs += "-DCMAKE_CXX_COMPILER=$($env:APOLLO_NATIVE_CXX_COMPILER)"
+            }
+            if ($env:APOLLO_NATIVE_MAKE_PROGRAM) {
+                $configureArgs += "-DCMAKE_MAKE_PROGRAM=$($env:APOLLO_NATIVE_MAKE_PROGRAM)"
+            }
+            if ($env:APOLLO_NATIVE_CMAKE_PREFIX) {
+                $configureArgs += "-DCMAKE_PREFIX_PATH=$($env:APOLLO_NATIVE_CMAKE_PREFIX)"
+            }
+        }
+        elseif ($env:CMAKE_TOOLCHAIN_FILE) {
             $configureArgs += "-DCMAKE_TOOLCHAIN_FILE=$($env:CMAKE_TOOLCHAIN_FILE)"
         }
         elseif ($env:VCPKG_ROOT) {
@@ -184,7 +199,7 @@ $tests = @(
         Name = 'unsafe-alias-surface'
         Path = 'tests\grammar\pass\unsafe_alias_surface.apollo'
         ShouldPass = $true
-        Covers = 'lang native alias and percent-prefixed unsafe-line sugar lower through existing native and unsafe machinery'
+        Covers = 'async native alias and percent-prefixed unsafe-line sugar lower through existing native and unsafe machinery'
         OutputMustContainAll = @(
             'void* heap = malloc((2) * sizeof(int));',
             'std::int32_t* alias = &base;',
@@ -234,7 +249,7 @@ $tests = @(
         Name = 'alias-sugar-surface'
         Path = 'tests\grammar\pass\alias_sugar_surface.apollo'
         ShouldPass = $true
-        Covers = 'ato and := auto declaration sugar, ins/stat instance aliases, and cxx::std raw C++ aliasing'
+        Covers = 'ato and := auto declaration sugar, ins/stat instance aliases, and inl::cxx raw C++ aliasing'
         OutputMustContainAll = @(
             'const auto counter = apo_Counter{};',
             'auto total = 4;',
@@ -529,7 +544,7 @@ $tests = @(
         Name = 'runtime-surface'
         Path = 'tests\grammar\pass\runtime_surface.apollo'
         ShouldPass = $true
-        Covers = 'threads, async calls, syscall, autoreleasepool, bridge init, unsafe blocks, malloc/free, plcnew, pointer aliasing, placement new, dircpp, native override'
+        Covers = 'threads, async calls, syscall, autoreleasepool, bridge init, unsafe blocks, malloc/free, plcnew, pointer aliasing, placement new, inline foreign C++, native override'
     },
     [pscustomobject]@{
         Name = 'bypass-surface'
@@ -569,6 +584,18 @@ $tests = @(
         Path = 'tests\grammar\pass\raw_cpp_declared_types.apollo'
         ShouldPass = $true
         Covers = 'raw C++ blocks can reference Apollo declared class names and pointer member access'
+    },
+    [pscustomobject]@{
+        Name = 'inline-foreign-inl-runtime-surface'
+        Path = 'tests\grammar\pass\inline_foreign_inl_runtime_surface.apollo'
+        ShouldPass = $true
+        Covers = 'inl alias parses and statement-position inline foreign blocks lower to callable runners with imported foreign bindings'
+        OutputMustContainAll = @(
+            '__apollo_inline_run_inline_10_9_1',
+            '__apollo_inline_get_inline_2_5_0_foreign_value',
+            'define void @main()',
+            'call void @__apollo_inline_run_inline_10_9_1()'
+        )
     },
     [pscustomobject]@{
         Name = 'import-include'

@@ -100,7 +100,7 @@ int main() {
     sys.stdout(i);
     }
     @unsafe {
-        std -hres {
+        inl::cxx {
             #include <memory>
         }
     }

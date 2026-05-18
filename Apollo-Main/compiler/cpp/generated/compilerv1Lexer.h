@@ -23,20 +23,20 @@ public:
     T__50 = 51, T__51 = 52, T__52 = 53, T__53 = 54, T__54 = 55, T__55 = 56, 
     T__56 = 57, T__57 = 58, T__58 = 59, T__59 = 60, T__60 = 61, T__61 = 62, 
     T__62 = 63, T__63 = 64, T__64 = 65, T__65 = 66, T__66 = 67, T__67 = 68, 
-    T__68 = 69, T__69 = 70, IF = 71, ELSE = 72, WHILE = 73, FOR = 74, IN = 75, 
-    SWITCH = 76, CASE = 77, DEFAULT = 78, TRY = 79, CATCH = 80, TERMINALEXCEPTION = 81, 
-    AUTOCATCH = 82, SUCCESS = 83, TYPE = 84, FTYPE = 85, CLSTYPE = 86, STATIC = 87, 
-    VIRTUAL = 88, INSTANCE_MODE = 89, INS = 90, STAT = 91, ATO = 92, SRC = 93, 
-    ASG = 94, LTO = 95, MNT = 96, INDEF = 97, ANNOT_OVERRIDE = 98, INLINE = 99, 
-    ASYNC = 100, LANG = 101, INLINE_SEP = 102, DIRCPP_HDR = 103, OVERRIDE = 104, 
-    SYSCALL = 105, ALL = 106, APND = 107, CONST = 108, NCONST = 109, THREADMODE = 110, 
-    JOIN = 111, GLOBAL = 112, BRIDGE = 113, UNSAFE = 114, BYPASS = 115, 
-    AUTOFMTDECLARE = 116, INDUCT = 117, RELEASE = 118, COMMUNAL = 119, CMGLOBAL = 120, 
-    STDEF = 121, OPSTRUCT = 122, MEMSTRUCT = 123, SCHEDULE = 124, MANDATORY = 125, 
-    DETATCH = 126, DETACH = 127, SCHVOID = 128, GC_NAME = 129, GCMODE_NAME = 130, 
-    BORROW_CHECKER_NAME = 131, BORROW_CHECK_NAME = 132, ID = 133, NATIVE = 134, 
-    INCLUSIVE = 135, LBRACE = 136, RBRACE = 137, STRING = 138, TEMPLATE_STRING = 139, 
-    INT = 140, WS = 141, COMMENT = 142
+    T__68 = 69, T__69 = 70, T__70 = 71, IF = 72, ELSE = 73, WHILE = 74, 
+    FOR = 75, IN = 76, SWITCH = 77, CASE = 78, DEFAULT = 79, TRY = 80, CATCH = 81, 
+    TERMINALEXCEPTION = 82, AUTOCATCH = 83, SUCCESS = 84, TYPE = 85, FTYPE = 86, 
+    CLSTYPE = 87, STATIC = 88, VIRTUAL = 89, INSTANCE_MODE = 90, INS = 91, 
+    STAT = 92, ATO = 93, SRC = 94, ASG = 95, LTO = 96, MNT = 97, INDEF = 98, 
+    ANNOT_OVERRIDE = 99, INLINE = 100, ASYNC = 101, INLINE_SEP = 102, OVERRIDE = 103, 
+    SYSCALL = 104, ALL = 105, LET = 106, APND = 107, CONST = 108, NCONST = 109, 
+    THREADMODE = 110, JOIN = 111, GLOBAL = 112, BRIDGE = 113, UNSAFE = 114, 
+    BYPASS = 115, AUTOFMTDECLARE = 116, INDUCT = 117, RELEASE = 118, COMMUNAL = 119, 
+    CMGLOBAL = 120, STDEF = 121, OPSTRUCT = 122, MEMSTRUCT = 123, SCHEDULE = 124, 
+    MANDATORY = 125, DETATCH = 126, DETACH = 127, SCHVOID = 128, GC_NAME = 129, 
+    GCMODE_NAME = 130, BORROW_CHECKER_NAME = 131, BORROW_CHECK_NAME = 132, 
+    ID = 133, NATIVE = 134, INCLUSIVE = 135, LBRACE = 136, RBRACE = 137, 
+    STRING = 138, TEMPLATE_STRING = 139, INT = 140, WS = 141, COMMENT = 142
   };
 
   explicit compilerv1Lexer(antlr4::CharStream *input);
@@ -97,9 +97,7 @@ private:
   // Individual action functions triggered by action() above.
   void INLINEAction(antlr4::RuleContext *context, size_t actionIndex);
   void ASYNCAction(antlr4::RuleContext *context, size_t actionIndex);
-  void LANGAction(antlr4::RuleContext *context, size_t actionIndex);
   void INLINE_SEPAction(antlr4::RuleContext *context, size_t actionIndex);
-  void DIRCPP_HDRAction(antlr4::RuleContext *context, size_t actionIndex);
   void IDAction(antlr4::RuleContext *context, size_t actionIndex);
   void NATIVEAction(antlr4::RuleContext *context, size_t actionIndex);
   void INCLUSIVEAction(antlr4::RuleContext *context, size_t actionIndex);

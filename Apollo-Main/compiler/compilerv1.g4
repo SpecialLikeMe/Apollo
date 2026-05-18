@@ -26,7 +26,8 @@ grammar compilerv1;
     }
 }
 
-program      : (directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | dircpp | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
+program      : (stdimport | directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
+stdimport    : 'extern' 'std' ID ';'? ;
 directive    : gcDirective | borrowCheckerDirective | runtimeDirective | settingDirective ;
 gcDirective  : '#[' (GC_NAME | GCMODE_NAME) '(' ID ')' ']' ;
 borrowCheckerDirective : '#[' (BORROW_CHECKER_NAME | BORROW_CHECK_NAME) '(' ID ')' ']' ;
@@ -56,7 +57,6 @@ block        : LBRACE (statement | returnStmt)* RBRACE ;
 classBody    : LBRACE classMember* RBRACE ;
 templateDecl : 'template' ID '(' templateParams ')' classBody ;
 templateParams : ID (',' ID)* ;
-dircpp       : DIRCPP_HDR INCLUSIVE ;
 inlineForeignBlock : INLINE INLINE_SEP (NATIVE | ID) INCLUSIVE ';'? ;
 structBody   : LBRACE structMember* RBRACE ;
 scheduleDecl : SCHEDULE ID LBRACE scheduleMember* RBRACE ;
@@ -65,7 +65,7 @@ mandatoryScheduleMember : MANDATORY ID block ;
 classMember  : method | field | templateDecl | class | struct ;
 structMember : method | field | templateDecl | class | struct ;
 print        : 'sys' '.' ('stdout' | 'println') '(' expression ')' ';' ;
-nativemode   : (ASYNC | LANG) ('-' OVERRIDE)? INCLUSIVE (NATIVE | ID) ';' ;
+nativemode   : ASYNC ('-' OVERRIDE)? INCLUSIVE (NATIVE | ID) ';' ;
 asyncCall    : ASYNC functionCall ';' ;
 syscallStmt  : SYSCALL ('-' ALL)? ';' ;
 globalInit   : GLOBAL init ;
@@ -117,7 +117,6 @@ unsafeLinePayload
              | delalc
              | free
              | plcnew
-             | dircpp
              | nativemode
              ;
 statement    : pointer
@@ -142,7 +141,6 @@ statement    : pointer
              | releaseStmt
              | cscope
              | plcnew
-             | dircpp
              | assignment
              | lambda
              | functionCall ';'
@@ -211,7 +209,7 @@ ltoTypesetStmt : ID '.' 'typeset' '(' typeRef ')' ('.' 'cast' '(' ')')? ';' ;
 easyInit       : (((CONST | NCONST)? ATO ID '=' expression)
                | ((CONST | NCONST)? ID ':=' expression)) ';'
                ;
-initCore       : (CONST | NCONST)? typeRef ID ( '=' expression )? ;
+initCore       : (CONST | NCONST)? typeRef ID ( '=' expression )? | LET (CONST | NCONST)? ID ':' typeRef ( '=' expression )?  ;
 forInit        : initCore
                | assignmentCore
                | expression ;
@@ -321,22 +319,21 @@ LTO      : 'lto' ;
 MNT      : 'mnt' ;
 INDEF    : 'indef' ;
 ANNOT_OVERRIDE : '@Override' ;
-INLINE   : 'inline' { pendingInlineSeparator = true; } ;
+INLINE   : ('inline' | 'inl') { pendingInlineSeparator = true; } ;
 ASYNC    : 'async' { expectInclusive = shouldExpectInclusiveAfterInlinePayload(); } ;
-LANG     : 'lang' { expectInclusive = shouldExpectInclusiveAfterInlinePayload(); } ;
 INLINE_SEP : '::' {
     if (pendingInlineSeparator) {
       awaitingInlinePayloadLanguage = true;
       pendingInlineSeparator = false;
     }
 } ;
-DIRCPP_HDR : ('std -hres' | 'cxx::std') { expectInclusive = true; } ;
 OVERRIDE : 'override' ;
 SYSCALL  : 'syscall' ;
 ALL      : 'recursive' ;
-APND     : 'apnd' ;
+LET      : 'let' ;
+APND     : 'apnd' | 'itx' ;
 CONST    : 'const' ;
-NCONST   : 'nconst' ;
+NCONST   : 'nconst' | 'nst' | 'stt' ;
 THREADMODE : 'prll' ;
 JOIN     : 'join' ;
 GLOBAL   : 'global' ;

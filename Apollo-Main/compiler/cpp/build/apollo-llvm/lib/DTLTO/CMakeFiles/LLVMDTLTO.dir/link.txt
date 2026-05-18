@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../libLLVMDTLTO.a CMakeFiles/LLVMDTLTO.dir/DTLTO.cpp.o
-/usr/sbin/ranlib -D ../libLLVMDTLTO.a

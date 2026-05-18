@@ -1,2 +1,0 @@
-/usr/sbin/ar Dqc ../../libLLVMCFGuard.a CMakeFiles/LLVMCFGuard.dir/CFGuard.cpp.o
-/usr/sbin/ranlib -D ../../libLLVMCFGuard.a
