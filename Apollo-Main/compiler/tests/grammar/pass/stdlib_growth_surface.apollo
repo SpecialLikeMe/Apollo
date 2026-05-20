@@ -1,0 +1,94 @@
+extern std prelude;
+
+i32 main() {
+    {i32, bool} sum = sys.overflowing_add(2147483647, 1);
+    {f64, i32} exponent_parts = sys.frexp(8.0);
+    {f64, f64} mod_parts = sys.modf(3.5);
+
+    vector items = sys.vec_new();
+    sys.vec_push(items, "alpha");
+    sys.vec_push(items, "beta");
+
+    map table = sys.map_new();
+    sys.map_insert(table, "joined", sys.vec_join(items, ","));
+
+    set tags = sys.set_new();
+    sys.set_insert(tags, "alpha");
+
+    queue work = sys.queue_new();
+    sys.queue_enqueue(work, sys.map_get(table, "joined"));
+
+    heap numbers = sys.heap_new_max();
+    sys.heap_push(numbers, 7);
+    sys.heap_push(numbers, 2);
+
+    regex matcher = sys.regex_compile("ap.*");
+    random rng = sys.rand_new();
+    sys.rand_seed(rng, 1234);
+
+    str encoded = sys.hex_encode("apollo");
+    str decoded = sys.hex_decode(encoded);
+    str cwd = sys.current_dir();
+    str file_name = sys.path_file_name(sys.path_join(cwd, "note.txt"));
+    str local_now = sys.datetime_now_local();
+
+    sys.log_debug(file_name);
+
+    if (sys.map_contains_key(table, "joined") == 0) {
+        return 1;
+    }
+    if (sum[0] >= 0) {
+        return 11;
+    }
+    if (sum[1] == false) {
+        return 12;
+    }
+    if (exponent_parts[0] != 0.5) {
+        return 13;
+    }
+    if (exponent_parts[1] != 4) {
+        return 14;
+    }
+    if (mod_parts[0] != 0.5) {
+        return 15;
+    }
+    if (mod_parts[1] != 3.0) {
+        return 16;
+    }
+    if (sys.set_contains(tags, "alpha") == 0) {
+        return 2;
+    }
+    if (sys.queue_len(work) == 0) {
+        return 3;
+    }
+    if (sys.heap_peek(numbers) != 7) {
+        return 4;
+    }
+    if (sys.regex_is_match(matcher, "apollo") == 0) {
+        return 5;
+    }
+    if (sys.utf8_validate(decoded) == 0) {
+        return 6;
+    }
+    if (sys.vec_contains(items, "beta") == 0) {
+        return 7;
+    }
+    if (sys.str_len(file_name) == 0) {
+        return 8;
+    }
+    if (sys.str_len(local_now) == 0) {
+        return 9;
+    }
+    if (sys.rand_range_i32(rng, 1, 6) < 1) {
+        return 10;
+    }
+
+    sys.handle_destroy(items);
+    sys.handle_destroy(table);
+    sys.handle_destroy(tags);
+    sys.handle_destroy(work);
+    sys.handle_destroy(numbers);
+    sys.handle_destroy(matcher);
+    sys.handle_destroy(rng);
+    return 0;
+}

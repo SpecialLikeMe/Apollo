@@ -69,8 +69,8 @@ nativemode   : ASYNC ('-' OVERRIDE)? INCLUSIVE (NATIVE | ID) ';' ;
 asyncCall    : ASYNC functionCall ';' ;
 syscallStmt  : SYSCALL ('-' ALL)? ';' ;
 globalInit   : GLOBAL init ;
-malloc       : 'void*' ID '.' 'alc' '(' typeRef ')' ';'
-             | 'void*' ID '.' 'alc' '(' expression ')' typeRef ';' ;
+malloc       : 'void*' ID '.' ('alc'|'mmap') '(' typeRef ')' ';'
+             | 'void*' ID '.' ('alc'|'mmap') '(' expression ')' typeRef ';' ;
 mntDecl      : MNT typeRef ID '=' expression ';' ;
 delalc       : 'crt null' ID ';' ;
 free         : 'void' ID ';' ;
@@ -82,12 +82,14 @@ returnType   : 'void' | typeRef ;
 typeRef      : typeAtom typeModifier* ;
 thread       : (THREADMODE | JOIN) 'thread' ID functionCall ';' ;
 typeAtom     : genericType
+             | shapeType
              | functionType
              | TYPE
              | FTYPE
              | ID ;
 typeModifier : '*' | '&' ;
 genericType  : ID '<' typeRef (',' typeRef)? '>' ;
+shapeType    : LBRACE typeRef (',' typeRef)+ ','? RBRACE ;
 functionType : 'fn' '<' returnType '(' functionTypeArgs? ')' '>' ;
 functionTypeArgs : typeRef (',' typeRef)* ;
 macro        : macroQualifier ID '(' params? ')' block ;
@@ -242,7 +244,13 @@ addExpr        : multExpr (('+' | '-') multExpr)* ;
 multExpr       : primary (('*' | '/' | '%') primary)* ;
 
 primary        : INT
+               | FLOAT
                | SUCCESS
+               | TRUE
+               | FALSE
+               | NULL_LITERAL
+               | CHAR
+               | BYTE
                | STRING
                | templateString
                | stdinValue
@@ -304,7 +312,10 @@ CATCH    : 'catch' ;
 TERMINALEXCEPTION : 'terminalexception' ;
 AUTOCATCH : 'autocatch' ;
 SUCCESS  : 'success' ;
-TYPE     : 'i16' | 'i32' | 'i64' | 'u16' | 'u32' | 'u64' | 'str' | 'f64' ;
+TRUE     : 'true' ;
+FALSE    : 'false' ;
+NULL_LITERAL : 'null' ;
+TYPE     : 'bool' | 'byte' | 'char' | 'i8' | 'i16' | 'i32' | 'i64' | 'isize' | 'u8' | 'u16' | 'u32' | 'u64' | 'usize' | 'str' | 'f64' ;
 FTYPE    : 'int' | 'short' | 'long' | 'float' | 'double' ;
 CLSTYPE  : 'public' | 'private' ;
 STATIC   : 'static' ;
@@ -379,6 +390,9 @@ fragment INCLUSIVE_CONTENT
     ;
 STRING   : '"' .*? '"' ;
 TEMPLATE_STRING : '`' .*? '`' ;
+CHAR     : '\'' ( '\\' . | ~['\\\r\n] ) '\'' ;
+BYTE     : 'b' '\'' ( '\\' . | ~['\\\r\n] ) '\'' ;
+FLOAT    : [0-9]+ '.' [0-9]+ ([eE] [+-]? [0-9]+)? ;
 INT      : [0-9]+ ;
 WS       : [ \t\r\n]+ -> skip ;
 COMMENT  : '//' .*? '\n' -> skip ;

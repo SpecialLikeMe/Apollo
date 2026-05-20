@@ -1,0 +1,10 @@
+extern std prelude;
+
+int main() {
+    sys.echo_i32(sys.div_floor(0 - 7, 3));
+    sys.echo_i32(sys.popcount(13));
+    sys.echo_str(sys.str_lowercase(sys.str_trim("  MiXeD  ")));
+    sys.println(sys.parse_int("2a", 16));
+    sys.echo_i32(sys.is_hex_digit("f"));
+    return 0;
+}

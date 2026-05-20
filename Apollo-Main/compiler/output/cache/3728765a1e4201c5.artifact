@@ -1,5 +1,5 @@
 ; ModuleID = 'src_callable_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/src_callable_surface.apollo"
+source_filename = "src_callable_surface.apollo"
 
 @apollo.str.literal = private unnamed_addr constant [6 x i8] c"hello\00"
 @apollo.print.fmt = private unnamed_addr constant [4 x i8] c"%s\0A\00"

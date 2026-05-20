@@ -1,5 +1,5 @@
 ; ModuleID = 'manual_new_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/manual_new_surface.apollo"
+source_filename = "manual_new_surface.apollo"
 
 define i32 @main() {
 entry:

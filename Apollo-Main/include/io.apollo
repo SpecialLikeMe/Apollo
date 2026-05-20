@@ -1,0 +1,128 @@
+extern std core;
+extern std strings;
+
+namespace sys {
+    void puts(nconst str& value) {
+        sys.println(value);
+    }
+
+    void echo_str(nconst str& value) {
+        sys.println(value);
+    }
+
+    void echo_i32(i32 value) {
+        sys.println(value);
+    }
+
+    void echo_pair(nconst str& label, i32 value) {
+        sys.println(sys.label_i32(label, value));
+    }
+
+    void banner(nconst str& label) {
+        sys.println(sys.brackets(label));
+    }
+
+    void divider(nconst str& label) {
+        sys.println("==== ${label} ====");
+    }
+
+    void debug_bool(nconst str& label, i32 value) {
+        sys.println(sys.label_i32(label, sys.boolify(value)));
+    }
+
+    void blank() {
+        sys.println("");
+    }
+
+    void term_print_raw(nconst str& value) {
+        sys__native_term_print_raw(value);
+    }
+
+    void term_println_raw(nconst str& value) {
+        sys__native_term_println_raw(value);
+    }
+
+    str term_read_line() {
+        return sys__native_term_read_line();
+    }
+
+    i32 term_is_tty() {
+        return sys__native_term_is_tty();
+    }
+
+    void term_clear() {
+        sys__native_term_clear();
+    }
+
+    void term_set_cursor(i32 column, i32 row) {
+        sys__native_term_set_cursor(column, row);
+    }
+
+    void term_show_cursor() {
+        sys__native_term_show_cursor();
+    }
+
+    void term_hide_cursor() {
+        sys__native_term_hide_cursor();
+    }
+
+    void term_set_color_fg(i32 color) {
+        sys__native_term_set_color_fg(color);
+    }
+
+    void term_set_color_bg(i32 color) {
+        sys__native_term_set_color_bg(color);
+    }
+
+    void term_set_style(nconst str& style) {
+        sys__native_term_set_style(style);
+    }
+
+    void term_reset() {
+        sys__native_term_reset();
+    }
+
+    void log_info(nconst str& value) {
+        sys__native_log_info(value);
+    }
+
+    void log_warn(nconst str& value) {
+        sys__native_log_warn(value);
+    }
+
+    void log_error(nconst str& value) {
+        sys__native_log_error(value);
+    }
+
+    void log_debug(nconst str& value) {
+        sys__native_log_debug(value);
+    }
+
+    void log_trace(nconst str& value) {
+        sys__native_log_trace(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void sys__native_term_print_raw(const char* value) { __apo_stdlib::term_print_raw(__apo_stdlib::view_or_empty(value)); }
+        void sys__native_term_println_raw(const char* value) { __apo_stdlib::term_println_raw(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_term_read_line() { return __apo_stdlib::term_read_line(); }
+        int sys__native_term_is_tty() { return __apo_stdlib::term_is_tty(); }
+        void sys__native_term_clear() { __apo_stdlib::term_clear(); }
+        void sys__native_term_set_cursor(int column, int row) { __apo_stdlib::term_set_cursor(column, row); }
+        void sys__native_term_show_cursor() { __apo_stdlib::term_show_cursor(); }
+        void sys__native_term_hide_cursor() { __apo_stdlib::term_hide_cursor(); }
+        void sys__native_term_set_color_fg(int color) { __apo_stdlib::term_set_color_fg(color); }
+        void sys__native_term_set_color_bg(int color) { __apo_stdlib::term_set_color_bg(color); }
+        void sys__native_term_set_style(const char* style) { __apo_stdlib::term_set_style(__apo_stdlib::view_or_empty(style)); }
+        void sys__native_term_reset() { __apo_stdlib::term_reset(); }
+        void sys__native_log_info(const char* value) { __apo_stdlib::log_info(__apo_stdlib::view_or_empty(value)); }
+        void sys__native_log_warn(const char* value) { __apo_stdlib::log_warn(__apo_stdlib::view_or_empty(value)); }
+        void sys__native_log_error(const char* value) { __apo_stdlib::log_error(__apo_stdlib::view_or_empty(value)); }
+        void sys__native_log_debug(const char* value) { __apo_stdlib::log_debug(__apo_stdlib::view_or_empty(value)); }
+        void sys__native_log_trace(const char* value) { __apo_stdlib::log_trace(__apo_stdlib::view_or_empty(value)); }
+    }
+}

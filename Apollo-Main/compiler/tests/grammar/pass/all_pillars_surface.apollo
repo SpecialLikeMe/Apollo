@@ -1,0 +1,51 @@
+extern std prelude;
+
+nominal<i32, str> parse_value(bool flag) {
+    if (flag) {
+        return nominal(7);
+    }
+    return cerr("bad input");
+}
+
+nominal<str, str> read_label(bool flag) {
+    if (flag) {
+        return nominal("ready");
+    }
+    return terminalcerr("missing label");
+}
+
+i32 main() {
+    nominal<i32, str> good = parse_value(true);
+    nominal<i32, str> bad = parse_value(false);
+    nominal<str, str> label = read_label(true);
+
+    buffer log = sys.buffer();
+    sys.buffer_push_str(log, "value=");
+    sys.buffer_push_i32(log, sys.unwrap_i32(good));
+    sys.buffer_push_str(log, ", label=");
+    sys.buffer_push_str(log, sys.unwrap_str(label));
+
+    file out = sys.file_open(sys.path_join("output", "all_pillars.txt"), "w");
+    sys.file_write(out, sys.buffer_text(log));
+    sys.file_close(out);
+
+    process proc = sys.process_spawn("echo apollo");
+    task ready = sys.task_ready_i32(12);
+
+    if (sys.is_nominal(good) == 0) {
+        return 1;
+    }
+    if (sys.is_cerr(bad) == 0) {
+        return 2;
+    }
+    if (sys.is_terminal(read_label(false)) == 0) {
+        return 3;
+    }
+    if (sys.task_done(ready) == 0) {
+        return 4;
+    }
+    if (sys.host_is_windows() == 1) {
+        return sys.process_wait(proc) + sys.task_await_i32(ready) - 12;
+    }
+    return sys.process_exit_code(proc) + sys.task_await_i32(ready) - 12;
+}

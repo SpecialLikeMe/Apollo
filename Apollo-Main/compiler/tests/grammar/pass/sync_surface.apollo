@@ -1,0 +1,72 @@
+extern std prelude;
+
+i32 main() {
+    task ready_bool = sys.task_ready_bool(true);
+    task ready_f64 = sys.task_ready_f64(2.5);
+
+    mutex gate = sys.mutex_new();
+    condvar wake = sys.condvar_new();
+    channel inbox = sys.channel_unbounded();
+    channel limited = sys.channel_bounded(1);
+
+    if (sys.mutex_lock(gate) == 0) {
+        return 1;
+    }
+    if (sys.mutex_unlock(gate) == 0) {
+        return 2;
+    }
+    if (sys.channel_send_i32(inbox, 41) == 0) {
+        return 3;
+    }
+    if (sys.channel_send_str(inbox, "apollo") == 0) {
+        return 4;
+    }
+    if (sys.channel_recv_i32(inbox) != 41) {
+        return 5;
+    }
+    if (sys.channel_recv_str(inbox) != "apollo") {
+        return 6;
+    }
+    if (sys.channel_try_send_bool(limited, true) == 0) {
+        return 7;
+    }
+    if (sys.channel_try_send_bool(limited, false) != 0) {
+        return 8;
+    }
+    if (sys.channel_recv_bool(limited) == 0) {
+        return 9;
+    }
+    if (sys.channel_len(limited) != 0) {
+        return 10;
+    }
+    if (sys.task_done(ready_bool) == 0) {
+        return 11;
+    }
+    if (sys.task_is_bool(ready_bool) == 0) {
+        return 12;
+    }
+    if (sys.task_await_bool(ready_bool) == 0) {
+        return 13;
+    }
+    if (sys.task_is_f64(ready_f64) == 0) {
+        return 14;
+    }
+    if (sys.task_await_f64(ready_f64) != 2.5) {
+        return 15;
+    }
+    if (sys.thread_get_raw_id() == 0) {
+        return 16;
+    }
+
+    sys.condvar_notify_one(wake);
+    sys.thread_yield();
+    sys.channel_close(inbox);
+
+    sys.handle_destroy(ready_bool);
+    sys.handle_destroy(ready_f64);
+    sys.handle_destroy(gate);
+    sys.handle_destroy(wake);
+    sys.handle_destroy(inbox);
+    sys.handle_destroy(limited);
+    return 0;
+}

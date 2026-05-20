@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
             const auto normalizedSourcePath = std::filesystem::absolute(sourcePath).lexically_normal();
             const auto importRoot = normalizedSourcePath.has_parent_path() ? normalizedSourcePath.parent_path() : std::filesystem::current_path();
             const std::string displaySourcePath = ApolloDriver::displaySourcePath(importRoot, normalizedSourcePath);
-            const std::string sourceText = readSourceFile(sourcePath);
+            const std::string sourceText = ApolloDriver::preprocessSource(normalizedSourcePath, readSourceFile(sourcePath));
             ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(displaySourcePath, sourceText);
             runtimeCycle.runPreCodegenPhases();
             auto* tree = runtimeCycle.tree();

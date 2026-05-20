@@ -1,5 +1,5 @@
 ; ModuleID = 'implicit_this_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/implicit_this_surface.apollo"
+source_filename = "implicit_this_surface.apollo"
 
 %apollo.aggregate.Counter = type { i32 }
 
@@ -40,24 +40,28 @@ entry:
 !apollo.backend = !{!0}
 !apollo.runtime.features = !{!1}
 !apollo.soa.mode = !{!2}
-!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+!apollo.layouts = !{!3}
+!apollo.layout.fields = !{!4}
+!apollo.primitive.types = !{!5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20}
 
 !0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"implicit_this_surface"}
 !1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
-!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
-!3 = !{!"double", !"double"}
-!4 = !{!"float", !"float"}
-!5 = !{!"long", !"i64"}
-!6 = !{!"short", !"i16"}
-!7 = !{!"u32", !"i32"}
-!8 = !{!"f64", !"double"}
-!9 = !{!"i32", !"i32"}
-!10 = !{!"u8", !"i8"}
-!11 = !{!"u64", !"i64"}
-!12 = !{!"bool", !"i1"}
-!13 = !{!"int", !"i32"}
-!14 = !{!"void", !"void"}
-!15 = !{!"u16", !"i16"}
-!16 = !{!"i16", !"i16"}
-!17 = !{!"i8", !"i8"}
-!18 = !{!"i64", !"i64"}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 true}
+!3 = !{!"Counter", !"full-soa", i32 1, i1 true, i1 false, i1 false, !"full-soa-eligible"}
+!4 = !{!"Counter", !"value", !"i32", i1 true}
+!5 = !{!"double", !"double"}
+!6 = !{!"float", !"float"}
+!7 = !{!"long", !"i64"}
+!8 = !{!"short", !"i16"}
+!9 = !{!"u32", !"i32"}
+!10 = !{!"f64", !"double"}
+!11 = !{!"i32", !"i32"}
+!12 = !{!"u8", !"i8"}
+!13 = !{!"u64", !"i64"}
+!14 = !{!"bool", !"i1"}
+!15 = !{!"int", !"i32"}
+!16 = !{!"void", !"void"}
+!17 = !{!"u16", !"i16"}
+!18 = !{!"i16", !"i16"}
+!19 = !{!"i8", !"i8"}
+!20 = !{!"i64", !"i64"}

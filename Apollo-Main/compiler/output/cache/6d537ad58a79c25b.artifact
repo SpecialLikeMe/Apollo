@@ -1,5 +1,5 @@
 ; ModuleID = 'any_typeset_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/any_typeset_surface.apollo"
+source_filename = "any_typeset_surface.apollo"
 
 define i32 @main() {
 entry:

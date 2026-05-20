@@ -232,6 +232,39 @@ apollo_driver_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/build
 .PHONY : apollo_driver_tests/fast
 
+C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.obj: C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.i: C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.s: C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+
 generated/compilerv1BaseVisitor.obj: generated/compilerv1BaseVisitor.cpp.obj
 .PHONY : generated/compilerv1BaseVisitor.obj
 
@@ -625,6 +658,39 @@ src/apollo_runtime_tests.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/apollo_runtime_tests.cpp.s
 .PHONY : src/apollo_runtime_tests.cpp.s
 
+src/apollo_source_preprocessor.obj: src/apollo_source_preprocessor.cpp.obj
+.PHONY : src/apollo_source_preprocessor.obj
+
+# target to build an object file
+src/apollo_source_preprocessor.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/apollo_source_preprocessor.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/apollo_source_preprocessor.cpp.obj
+.PHONY : src/apollo_source_preprocessor.cpp.obj
+
+src/apollo_source_preprocessor.i: src/apollo_source_preprocessor.cpp.i
+.PHONY : src/apollo_source_preprocessor.i
+
+# target to preprocess a source file
+src/apollo_source_preprocessor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/apollo_source_preprocessor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/apollo_source_preprocessor.cpp.i
+.PHONY : src/apollo_source_preprocessor.cpp.i
+
+src/apollo_source_preprocessor.s: src/apollo_source_preprocessor.cpp.s
+.PHONY : src/apollo_source_preprocessor.s
+
+# target to generate assembly for a file
+src/apollo_source_preprocessor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/apollo_source_preprocessor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/apollo_source_preprocessor.cpp.s
+.PHONY : src/apollo_source_preprocessor.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -699,6 +765,9 @@ help:
 	@echo ... apollo_driver_tests
 	@echo ... apollo_frontend_native
 	@echo ... apollo_runtime_tests
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.s
 	@echo ... generated/compilerv1BaseVisitor.obj
 	@echo ... generated/compilerv1BaseVisitor.i
 	@echo ... generated/compilerv1BaseVisitor.s
@@ -738,6 +807,9 @@ help:
 	@echo ... src/apollo_runtime_tests.obj
 	@echo ... src/apollo_runtime_tests.i
 	@echo ... src/apollo_runtime_tests.s
+	@echo ... src/apollo_source_preprocessor.obj
+	@echo ... src/apollo_source_preprocessor.i
+	@echo ... src/apollo_source_preprocessor.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

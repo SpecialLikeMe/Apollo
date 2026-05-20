@@ -1,0 +1,83 @@
+namespace sys {
+    i32 id(i32 value) {
+        return value;
+    }
+
+    i32 min(i32 left, i32 right) {
+        if (left < right) {
+            return left;
+        }
+        return right;
+    }
+
+    i32 max(i32 left, i32 right) {
+        if (left > right) {
+            return left;
+        }
+        return right;
+    }
+
+    i32 clamp(i32 value, i32 low, i32 high) {
+        if (value < low) {
+            return low;
+        }
+        if (value > high) {
+            return high;
+        }
+        return value;
+    }
+
+    i32 abs_diff(i32 left, i32 right) {
+        if (left < right) {
+            return right - left;
+        }
+        return left - right;
+    }
+
+    i32 choose(i32 condition, i32 when_true, i32 when_false) {
+        if (condition != 0) {
+            return when_true;
+        }
+        return when_false;
+    }
+
+    i32 boolify(i32 value) {
+        if (value != 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    i32 average_floor(i32 left, i32 right) {
+        return (left + right) >> 1;
+    }
+
+    i32 between(i32 value, i32 low, i32 high) {
+        if (value < low) {
+            return 0;
+        }
+        if (value > high) {
+            return 0;
+        }
+        return 1;
+    }
+
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_stdlib_runtime.hpp"
+
+        int sys__div_floor(int left, int right) { return __apo_stdlib::div_floor_i32(left, right); }
+        int sys__mod_euc(int left, int right) { return __apo_stdlib::mod_euclid_i32(left, right); }
+        int sys__saturating_add(int left, int right) { return __apo_stdlib::saturating_add_i32(left, right); }
+        int sys__saturating_sub(int left, int right) { return __apo_stdlib::saturating_sub_i32(left, right); }
+        int sys__saturating_mul(int left, int right) { return __apo_stdlib::saturating_mul_i32(left, right); }
+        int sys__wrapping_add(int left, int right) { return __apo_stdlib::wrapping_add_i32(left, right); }
+        int sys__wrapping_sub(int left, int right) { return __apo_stdlib::wrapping_sub_i32(left, right); }
+        int sys__overflowing_add_value(int left, int right) { return __apo_stdlib::overflowing_add_value_i32(left, right); }
+        int sys__overflowing_add_overflow(int left, int right) { return __apo_stdlib::overflowing_add_overflow_i32(left, right); }
+        int sys__lcm(int left, int right) { return __apo_stdlib::lcm_i32(left, right); }
+        int sys__signum(int value) { return __apo_stdlib::signum_i32(value); }
+    }
+}

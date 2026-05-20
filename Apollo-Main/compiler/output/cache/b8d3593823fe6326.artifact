@@ -1,5 +1,5 @@
 ; ModuleID = 'reference_branch_same_origin_call'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/safety/pass/reference_branch_same_origin_call.apollo"
+source_filename = "reference_branch_same_origin_call.apollo"
 
 @apollo.str.literal = private unnamed_addr constant [6 x i8] c"alpha\00"
 @apollo.str.literal.1 = private unnamed_addr constant [5 x i8] c"beta\00"

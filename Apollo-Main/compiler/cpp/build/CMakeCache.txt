@@ -496,8 +496,6 @@ FFI_STATIC_LIBRARIES-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_FFI:INTERNAL=[C:/msys64/clang64/lib/libffi.dll.a][1][v()]
 //Details about finding LibXml2
 FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[C:/msys64/clang64/lib/libxml2.dll.a][C:/msys64/clang64/include/libxml2][v2.15.2()]
-//Details about finding Threads
-FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding ZLIB
 FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[C:/msys64/clang64/lib/libz.dll.a][C:/msys64/clang64/include][ ][v1.3.2()]
 //ADVANCED property for variable: HAVE_FFI_CALL

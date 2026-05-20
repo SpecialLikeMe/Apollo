@@ -1,0 +1,33 @@
+namespace sys {
+    regex regex_compile(nconst str& pattern) {
+        return sys__native_regex_compile(pattern);
+    }
+
+    i32 regex_is_match(nconst regex& value, nconst str& text) {
+        return sys__native_regex_is_match(value, text);
+    }
+
+    str regex_find(nconst regex& value, nconst str& text) {
+        return sys__native_regex_find(value, text);
+    }
+
+    str regex_replace(nconst regex& value, nconst str& text, nconst str& replacement) {
+        return sys__native_regex_replace(value, text, replacement);
+    }
+
+    str regex_error(nconst regex& value) {
+        return sys__native_regex_error(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_regex_compile(const char* pattern) { return __apo_stdlib::regex_compile(__apo_stdlib::text_or_empty(pattern)); }
+        int sys__native_regex_is_match(void* value, const char* text) { return __apo_stdlib::regex_is_match(value, __apo_stdlib::view_or_empty(text)); }
+        const char* sys__native_regex_find(void* value, const char* text) { return __apo_stdlib::regex_find(value, __apo_stdlib::view_or_empty(text)); }
+        const char* sys__native_regex_replace(void* value, const char* text, const char* replacement) { return __apo_stdlib::regex_replace(value, __apo_stdlib::view_or_empty(text), __apo_stdlib::view_or_empty(replacement)); }
+        const char* sys__native_regex_error(void* value) { return __apo_stdlib::regex_error(value); }
+    }
+}

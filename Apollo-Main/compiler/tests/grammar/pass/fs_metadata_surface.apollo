@@ -1,0 +1,49 @@
+extern std prelude;
+
+i32 main() {
+    str root = sys.path_join("output", "fs_meta");
+    if (sys.fs_create_dir_all(root) == 0) {
+        return 1;
+    }
+
+    file created = sys.file_create(sys.path_join(root, "sample.txt"));
+    if (sys.file_write(created, "apollo") == 0) {
+        return 2;
+    }
+    if (sys.file_set_len(created, 3) == 0) {
+        return 3;
+    }
+    if (sys.file_sync_all(created) == 0) {
+        return 4;
+    }
+
+    metadata info = sys.file_metadata(created);
+    if (sys.meta_is_file(info) == 0) {
+        return 5;
+    }
+    if (sys.meta_size(info) != 3) {
+        return 6;
+    }
+    if (sys.str_len(sys.meta_modified(info)) == 0) {
+        return 7;
+    }
+
+    str link_path = sys.path_join(root, "sample-link.txt");
+    sys.fs_remove_file(link_path);
+    sys.fs_symlink(sys.file_path(created), link_path);
+
+    if (sys.fs_exists(sys.file_path(created)) == 0) {
+        return 8;
+    }
+    if (sys.str_len(sys.path_file_name(sys.file_path(created))) == 0) {
+        return 9;
+    }
+    if (sys.str_len(sys.path_components(sys.file_path(created), "/")) == 0) {
+        return 10;
+    }
+
+    sys.file_close(created);
+    sys.handle_destroy(created);
+    sys.handle_destroy(info);
+    return 0;
+}

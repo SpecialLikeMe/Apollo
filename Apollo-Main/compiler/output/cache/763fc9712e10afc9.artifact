@@ -1,5 +1,5 @@
 ; ModuleID = 'reference_identity'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/safety/pass/reference_identity.apollo"
+source_filename = "reference_identity.apollo"
 
 @apollo.str.literal = private unnamed_addr constant [3 x i8] c"ok\00"
 

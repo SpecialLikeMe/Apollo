@@ -1,0 +1,38 @@
+namespace sys {
+    process process_spawn(nconst str& command) {
+        return sys__native_process_spawn(command);
+    }
+
+    i32 process_wait(nconst process& value) {
+        return sys__native_process_wait(value);
+    }
+
+    i32 process_try_wait(nconst process& value) {
+        return sys__native_process_try_wait(value);
+    }
+
+    i32 process_exit_code(nconst process& value) {
+        return sys__native_process_exit_code(value);
+    }
+
+    i32 process_completed(nconst process& value) {
+        return sys__native_process_completed(value);
+    }
+
+    str process_command(nconst process& value) {
+        return sys__native_process_command(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_process_spawn(const char* command) { return __apo_stdlib::process_spawn(__apo_stdlib::text_or_empty(command)); }
+        int sys__native_process_wait(void* value) { return __apo_stdlib::process_wait(value); }
+        int sys__native_process_try_wait(void* value) { return __apo_stdlib::process_try_wait(value); }
+        int sys__native_process_exit_code(void* value) { return __apo_stdlib::process_exit_code(value); }
+        int sys__native_process_completed(void* value) { return __apo_stdlib::process_completed(value); }
+        const char* sys__native_process_command(void* value) { return __apo_stdlib::process_command(value); }
+    }
+}

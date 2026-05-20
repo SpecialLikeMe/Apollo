@@ -1,1 +1,0 @@
-@unsafe { inline::go { var go_value int32 = 12; func go_read() int32 { return go_value } } } int main() { sys.println(go_read()); return 0; }

@@ -1,0 +1,49 @@
+namespace sys {
+    i32 bit_and(i32 left, i32 right) {
+        return left & right;
+    }
+
+    i32 bit_or(i32 left, i32 right) {
+        return left | right;
+    }
+
+    i32 bit_xor(i32 left, i32 right) {
+        return left ^ right;
+    }
+
+    i32 shl(i32 value, i32 amount) {
+        return value << amount;
+    }
+
+    i32 shr(i32 value, i32 amount) {
+        return value >> amount;
+    }
+
+    i32 has_any(i32 value, i32 mask) {
+        if ((value & mask) != 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    i32 has_all(i32 value, i32 mask) {
+        if ((value & mask) == mask) {
+            return 1;
+        }
+        return 0;
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_stdlib_runtime.hpp"
+
+        int sys__clz(int value) { return __apo_stdlib::clz_i32(value); }
+        int sys__ctz(int value) { return __apo_stdlib::ctz_i32(value); }
+        int sys__popcount(int value) { return __apo_stdlib::popcount_i32(value); }
+        int sys__ffs(int value) { return __apo_stdlib::ffs_i32(value); }
+        int sys__rotate_left(int value, int amount) { return __apo_stdlib::rotate_left_i32(value, amount); }
+        int sys__rotate_right(int value, int amount) { return __apo_stdlib::rotate_right_i32(value, amount); }
+        int sys__bswap(int value) { return __apo_stdlib::bswap_i32(value); }
+    }
+}

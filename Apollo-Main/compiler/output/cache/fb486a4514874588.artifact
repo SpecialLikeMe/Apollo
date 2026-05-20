@@ -1,5 +1,5 @@
 ; ModuleID = 'autofmt_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/autofmt_surface.apollo"
+source_filename = "autofmt_surface.apollo"
 
 %apollo.aggregate.Box = type { i8 }
 
@@ -31,24 +31,26 @@ entry:
 !apollo.backend = !{!0}
 !apollo.runtime.features = !{!1}
 !apollo.soa.mode = !{!2}
-!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+!apollo.layouts = !{!3}
+!apollo.primitive.types = !{!4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19}
 
 !0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"autofmt_surface"}
-!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
-!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
-!3 = !{!"double", !"double"}
-!4 = !{!"float", !"float"}
-!5 = !{!"long", !"i64"}
-!6 = !{!"short", !"i16"}
-!7 = !{!"u32", !"i32"}
-!8 = !{!"f64", !"double"}
-!9 = !{!"i32", !"i32"}
-!10 = !{!"u8", !"i8"}
-!11 = !{!"u64", !"i64"}
-!12 = !{!"bool", !"i1"}
-!13 = !{!"int", !"i32"}
-!14 = !{!"void", !"void"}
-!15 = !{!"u16", !"i16"}
-!16 = !{!"i16", !"i16"}
-!17 = !{!"i8", !"i8"}
-!18 = !{!"i64", !"i64"}
+!1 = !{!"autofmt", i1 true, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 true}
+!3 = !{!"Box", !"full-soa", i32 0, i1 true, i1 false, i1 false, !"full-soa-eligible"}
+!4 = !{!"double", !"double"}
+!5 = !{!"float", !"float"}
+!6 = !{!"long", !"i64"}
+!7 = !{!"short", !"i16"}
+!8 = !{!"u32", !"i32"}
+!9 = !{!"f64", !"double"}
+!10 = !{!"i32", !"i32"}
+!11 = !{!"u8", !"i8"}
+!12 = !{!"u64", !"i64"}
+!13 = !{!"bool", !"i1"}
+!14 = !{!"int", !"i32"}
+!15 = !{!"void", !"void"}
+!16 = !{!"u16", !"i16"}
+!17 = !{!"i16", !"i16"}
+!18 = !{!"i8", !"i8"}
+!19 = !{!"i64", !"i64"}

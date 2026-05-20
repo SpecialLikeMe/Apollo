@@ -1,0 +1,38 @@
+namespace sys {
+    random rand_new() {
+        return sys__native_rand_new();
+    }
+
+    void rand_seed(nconst random& value, i32 seed) {
+        sys__native_rand_seed(value, seed);
+    }
+
+    i32 rand_i32(nconst random& value) {
+        return sys__native_rand_i32(value);
+    }
+
+    i32 rand_range_i32(nconst random& value, i32 low, i32 high) {
+        return sys__native_rand_range_i32(value, low, high);
+    }
+
+    f64 rand_f64(nconst random& value) {
+        return sys__native_rand_f64(value);
+    }
+
+    i32 rand_bool(nconst random& value) {
+        return sys__native_rand_bool(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_rand_new() { return __apo_stdlib::rand_new(); }
+        void sys__native_rand_seed(void* value, int seed) { __apo_stdlib::rand_seed(value, seed); }
+        int sys__native_rand_i32(void* value) { return __apo_stdlib::rand_i32(value); }
+        int sys__native_rand_range_i32(void* value, int low, int high) { return __apo_stdlib::rand_range_i32(value, low, high); }
+        double sys__native_rand_f64(void* value) { return __apo_stdlib::rand_f64(value); }
+        int sys__native_rand_bool(void* value) { return __apo_stdlib::rand_bool(value); }
+    }
+}

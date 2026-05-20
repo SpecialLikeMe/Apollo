@@ -1,0 +1,53 @@
+namespace sys {
+    i32 ascii_validate(nconst str& value) {
+        return sys__native_ascii_validate(value);
+    }
+
+    i32 utf8_validate(nconst str& value) {
+        return sys__native_utf8_validate(value);
+    }
+
+    i32 utf8_char_count(nconst str& value) {
+        return sys__native_utf8_char_count(value);
+    }
+
+    str hex_encode(nconst str& value) {
+        return sys__native_hex_encode(value);
+    }
+
+    str hex_decode(nconst str& value) {
+        return sys__native_hex_decode(value);
+    }
+
+    str url_encode(nconst str& value) {
+        return sys__native_url_encode(value);
+    }
+
+    str url_decode(nconst str& value) {
+        return sys__native_url_decode(value);
+    }
+
+    str base64_encode(nconst str& value) {
+        return sys__native_base64_encode(value);
+    }
+
+    str base64_decode(nconst str& value) {
+        return sys__native_base64_decode(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_stdlib_runtime.hpp"
+
+        int sys__native_ascii_validate(const char* value) { return __apo_stdlib::ascii_validate(__apo_stdlib::view_or_empty(value)); }
+        int sys__native_utf8_validate(const char* value) { return __apo_stdlib::utf8_validate(__apo_stdlib::view_or_empty(value)); }
+        int sys__native_utf8_char_count(const char* value) { return __apo_stdlib::utf8_char_count(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_hex_encode(const char* value) { return __apo_stdlib::hex_encode(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_hex_decode(const char* value) { return __apo_stdlib::hex_decode(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_url_encode(const char* value) { return __apo_stdlib::url_encode(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_url_decode(const char* value) { return __apo_stdlib::url_decode(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_base64_encode(const char* value) { return __apo_stdlib::base64_encode(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_base64_decode(const char* value) { return __apo_stdlib::base64_decode(__apo_stdlib::view_or_empty(value)); }
+    }
+}

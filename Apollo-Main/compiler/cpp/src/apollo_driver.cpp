@@ -14,6 +14,7 @@
 #include "apollo_codegen_optimization_plan.h"
 #include "apollo_ir_layout_plan.h"
 #include "apollo_runtime.h"
+#include "apollo_source_preprocessor.h"
 #include "visitor.h"
 
 namespace {
@@ -204,7 +205,7 @@ std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path
     if (compilerSignature.empty() || compilerSignature != ApolloDriver::currentCompilerSignature()) {
         return std::nullopt;
     }
-    if (sourceHash.empty() || sourceHash != stableHashHex(readTextFile(sourcePath))) {
+    if (sourceHash.empty() || sourceHash != stableHashHex(ApolloDriver::preprocessSourceFromFile(sourcePath))) {
         return std::nullopt;
     }
 
@@ -249,7 +250,7 @@ void writeCompileCache(const std::filesystem::path& sourcePath, const std::files
     }
     output << "version=" << kCompilerCacheVersion << '\n';
     output << "compilerSignature=" << ApolloDriver::currentCompilerSignature() << '\n';
-    output << "sourceHash=" << stableHashHex(readTextFile(sourcePath)) << '\n';
+    output << "sourceHash=" << stableHashHex(ApolloDriver::preprocessSourceFromFile(sourcePath)) << '\n';
     output << "outputHash=" << stableHashHex(readTextFile(outputPath)) << '\n';
     for (const auto& dependency : dependencies) {
         output << "dependency=" << dependency << '\n';
@@ -351,7 +352,7 @@ void compileApolloRecursive(const std::filesystem::path& sourcePath,
             return;
         }
 
-        const std::string program = readTextFile(normalizedSource);
+        const std::string program = ApolloDriver::preprocessSource(normalizedSource, readTextFile(normalizedSource));
         const std::string displayPath = ApolloDriver::displaySourcePath(importRoot, normalizedSource);
 
         ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(displayPath, program);
@@ -410,7 +411,7 @@ void ApolloDriver::compileApollo(const std::string& inputPath, const std::string
 void ApolloDriver::emitDirectIrPrototype(const std::string& inputPath, const std::string& outputPath) {
     const auto sourcePath = std::filesystem::absolute(inputPath).lexically_normal();
     const auto importRoot = determineImportRoot(sourcePath);
-    const std::string program = readTextFile(sourcePath);
+    const std::string program = preprocessSource(sourcePath, readTextFile(sourcePath));
     const std::string displayPath = displaySourcePath(importRoot, sourcePath);
 
     ApolloCompilerRuntimeCycle runtimeCycle = ApolloCompilerRuntimeCycle::create(displayPath, program);
@@ -427,6 +428,14 @@ void ApolloDriver::emitDirectIrPrototype(const std::string& inputPath, const std
         layoutPlan);
 
     writeCleanupManifest({ std::filesystem::absolute(std::filesystem::path(outputPath)).lexically_normal().string() });
+}
+
+std::string ApolloDriver::preprocessSource(const std::filesystem::path& sourcePath, const std::string& sourceText) {
+    return preprocessApolloSource(sourcePath, sourceText);
+}
+
+std::string ApolloDriver::preprocessSourceFromFile(const std::filesystem::path& sourcePath) {
+    return preprocessApolloSourceFromFile(sourcePath);
 }
 
 std::filesystem::path ApolloDriver::determineImportRoot(const std::filesystem::path& sourcePath) {
@@ -482,6 +491,8 @@ std::string ApolloDriver::currentCompilerSignature() {
         cppRoot / "src" / "apollo_ir_layout_plan.h",
         cppRoot / "src" / "apollo_runtime.cpp",
         cppRoot / "src" / "apollo_runtime.h",
+        cppRoot / "src" / "apollo_source_preprocessor.cpp",
+        cppRoot / "src" / "apollo_source_preprocessor.h",
         cppRoot / "src" / "apollo_codegen_optimization_plan.cpp",
         cppRoot / "src" / "apollo_codegen_optimization_plan.h",
         compilerRoot / "compilerv1.g4"

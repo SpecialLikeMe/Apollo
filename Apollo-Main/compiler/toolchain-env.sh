@@ -38,21 +38,6 @@ resolve_library_file() {
     return 1
 }
 
-resolve_gc_header() {
-    include_dir=$1
-    for candidate in \
-        "$include_dir/gc_cpp.h" \
-        "$include_dir/gc/gc_cpp.h" \
-        "$include_dir/gc.h" \
-        "$include_dir/gc/gc.h"; do
-        if [ -f "$candidate" ]; then
-            printf '%s\n' "$candidate"
-            return 0
-        fi
-    done
-    return 1
-}
-
 resolve_sdl_header() {
     include_dir=$1
     for candidate in \
@@ -189,78 +174,6 @@ resolve_antlr4_runtime_cmake_dir() {
     return 1
 }
 
-resolve_gc_include_dir() {
-    if [ -n "${APOLLO_GC_INCLUDE_DIR:-}" ] && [ -d "$APOLLO_GC_INCLUDE_DIR" ]; then
-        printf '%s\n' "$APOLLO_GC_INCLUDE_DIR"
-        return 0
-    fi
-    for package_name in bdw-gc bdw_gc gc; do
-        if include_dir=$(pkg_config_first_path "$package_name" --cflags-only-I); then
-            include_dir=$(normalize_search_dir "$include_dir")
-            if resolve_gc_header "$include_dir" >/dev/null 2>&1; then
-                printf '%s\n' "$include_dir"
-                return 0
-            fi
-        fi
-        if include_dir=$(pkg_config_variable "$package_name" includedir); then
-            include_dir=$(normalize_search_dir "$include_dir")
-            if resolve_gc_header "$include_dir" >/dev/null 2>&1; then
-                printf '%s\n' "$include_dir"
-                return 0
-            fi
-        fi
-    done
-    for candidate in \
-        /opt/homebrew/include \
-        /usr/local/include \
-        /usr/include \
-        /opt/local/include \
-        /usr/include/gc; do
-        if [ -d "$candidate" ] && resolve_gc_header "$candidate" >/dev/null 2>&1; then
-            printf '%s\n' "$candidate"
-            return 0
-        fi
-    done
-    return 1
-}
-
-resolve_gc_lib_dir() {
-    if [ -n "${APOLLO_GC_LIB_DIR:-}" ] && [ -d "$APOLLO_GC_LIB_DIR" ]; then
-        printf '%s\n' "$APOLLO_GC_LIB_DIR"
-        return 0
-    fi
-    for package_name in bdw-gc bdw_gc gc; do
-        if lib_dir=$(pkg_config_first_path "$package_name" --libs-only-L); then
-            if resolve_library_file "$lib_dir" libgc.a libgc.so libgc.dylib >/dev/null 2>&1 \
-                && resolve_library_file "$lib_dir" libgccpp.a libgccpp.so libgccpp.dylib >/dev/null 2>&1; then
-                printf '%s\n' "$lib_dir"
-                return 0
-            fi
-        fi
-        if lib_dir=$(pkg_config_variable "$package_name" libdir); then
-            if resolve_library_file "$lib_dir" libgc.a libgc.so libgc.dylib >/dev/null 2>&1 \
-                && resolve_library_file "$lib_dir" libgccpp.a libgccpp.so libgccpp.dylib >/dev/null 2>&1; then
-                printf '%s\n' "$lib_dir"
-                return 0
-            fi
-        fi
-    done
-    for candidate in \
-        /opt/homebrew/lib \
-        /usr/local/lib \
-        /usr/lib64 \
-        /usr/lib \
-        /opt/local/lib; do
-        if [ -d "$candidate" ] \
-            && resolve_library_file "$candidate" libgc.a libgc.so libgc.dylib >/dev/null 2>&1 \
-            && resolve_library_file "$candidate" libgccpp.a libgccpp.so libgccpp.dylib >/dev/null 2>&1; then
-            printf '%s\n' "$candidate"
-            return 0
-        fi
-    done
-    return 1
-}
-
 resolve_sdl_include_dir() {
     if [ -n "${APOLLO_SDL_INCLUDE_DIR:-}" ] && [ -d "$APOLLO_SDL_INCLUDE_DIR" ]; then
         printf '%s\n' "$APOLLO_SDL_INCLUDE_DIR"
@@ -354,14 +267,6 @@ fi
 
 if antlr4_runtime_cmake_dir=$(resolve_antlr4_runtime_cmake_dir 2>/dev/null); then
     export APOLLO_ANTLR4_RUNTIME_CMAKE_DIR="$antlr4_runtime_cmake_dir"
-fi
-
-if gc_include_dir=$(resolve_gc_include_dir 2>/dev/null); then
-    export APOLLO_GC_INCLUDE_DIR="$gc_include_dir"
-fi
-
-if gc_lib_dir=$(resolve_gc_lib_dir 2>/dev/null); then
-    export APOLLO_GC_LIB_DIR="$gc_lib_dir"
 fi
 
 if sdl_include_dir=$(resolve_sdl_include_dir 2>/dev/null); then

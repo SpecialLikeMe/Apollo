@@ -1,5 +1,5 @@
 ; ModuleID = 'mutable_borrow_last_use'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/safety/pass/mutable_borrow_last_use.apollo"
+source_filename = "mutable_borrow_last_use.apollo"
 
 @apollo.print.fmt = private unnamed_addr constant [4 x i8] c"%s\0A\00"
 @apollo.str.literal = private unnamed_addr constant [6 x i8] c"hello\00"

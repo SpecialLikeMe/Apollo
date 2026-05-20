@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <fstream>
 #include <functional>
-#include <gc/gc.h>
 #include <iostream>
 #include <memory>
 #include <new>

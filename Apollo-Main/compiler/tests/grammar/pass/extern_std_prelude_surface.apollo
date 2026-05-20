@@ -1,0 +1,8 @@
+extern std prelude;
+
+int main() {
+    sys.echo_pair("clamp", sys.clamp(9, 0, 5));
+    sys.echo_i32(sys.abs(0 - 4));
+    sys.echo_str(sys.brackets("std"));
+    return sys.sum_range(1, 4);
+}

@@ -1,6 +1,6 @@
 version=apollo-native-cache-v1
-compilerSignature=58a1a484094aa9b4
+compilerSignature=a35233a623fd1b33
 sourceHash=e816ee76ff36f717
-outputHash=68cf1c9b48f43265
+outputHash=c505af5d5bcccd29
 dependency=gc/gc_cpp.h
 dependency=support/helper.apollo

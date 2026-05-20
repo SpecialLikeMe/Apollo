@@ -1,0 +1,9 @@
+namespace util {
+    i32 triple(i32 value) {
+        return value + value + value;
+    }
+}
+
+int main() {
+    return util::triple(4) + util.triple(1);
+}

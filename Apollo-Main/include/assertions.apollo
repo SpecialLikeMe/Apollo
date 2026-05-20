@@ -1,0 +1,25 @@
+namespace sys {
+    i32 require(i32 condition, str message) {
+        if (condition == 0) {
+            sys.println("assertion failed: ${message}");
+            return 0;
+        }
+        return 1;
+    }
+
+    i32 require_equal(i32 left, i32 right, str label) {
+        if (left != right) {
+            sys.println("${label}: ${left} != ${right}");
+            return 0;
+        }
+        return 1;
+    }
+
+    i32 require_nonzero(i32 value, str label) {
+        if (value == 0) {
+            sys.println("${label}: expected non-zero");
+            return 0;
+        }
+        return value;
+    }
+}

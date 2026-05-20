@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "C:/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp" "CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj.d"
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.cpp" "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1BaseVisitor.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1BaseVisitor.cpp.obj.d"
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.cpp" "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Lexer.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Lexer.cpp.obj.d"
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp" "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Parser.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Parser.cpp.obj.d"
@@ -19,6 +20,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_inline_foreign.cpp" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_inline_foreign.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_inline_foreign.cpp.obj.d"
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.cpp" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_ir_layout_plan.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_ir_layout_plan.cpp.obj.d"
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_runtime.cpp" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_runtime.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_runtime.cpp.obj.d"
+  "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.obj.d"
   "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/visitor.cpp" "CMakeFiles/apollo_build_driver_native.dir/src/visitor.cpp.obj" "gcc" "CMakeFiles/apollo_build_driver_native.dir/src/visitor.cpp.obj.d"
   )
 

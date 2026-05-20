@@ -180,6 +180,8 @@ set(APOLLO_NATIVE_FRONTEND_SOURCES
     src/visitor.cpp
     src/apollo_ir_layout_plan.cpp
     src/apollo_runtime.cpp
+    src/apollo_source_preprocessor.cpp
+    ../../brc/borrow_checker.cpp
     ${APOLLO_NATIVE_GENERATED_SOURCES}
 )
 
@@ -207,6 +209,7 @@ add_executable(apollo_driver_tests
 foreach(apollo_target IN ITEMS apollo_frontend_native apollo_build_driver_native apollo_runtime_tests apollo_driver_tests)
     target_include_directories(${apollo_target}
         PRIVATE
+            "${APOLLO_CPP_SOURCE_DIR}/../.."
             "${APOLLO_NATIVE_GENERATED_DIR}"
             ${LLVM_INCLUDE_DIRS}
     )

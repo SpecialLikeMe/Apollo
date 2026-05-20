@@ -1,0 +1,155 @@
+namespace sys {
+    mutex mutex_new() {
+        return sys__native_mutex_new();
+    }
+
+    i32 mutex_lock(nconst mutex& value) {
+        return sys__native_mutex_lock(value);
+    }
+
+    i32 mutex_try_lock(nconst mutex& value) {
+        return sys__native_mutex_try_lock(value);
+    }
+
+    i32 mutex_unlock(nconst mutex& value) {
+        return sys__native_mutex_unlock(value);
+    }
+
+    condvar condvar_new() {
+        return sys__native_condvar_new();
+    }
+
+    i32 condvar_wait_ms(nconst condvar& value, i32 timeout_ms) {
+        return sys__native_condvar_wait_ms(value, timeout_ms);
+    }
+
+    void condvar_notify_one(nconst condvar& value) {
+        sys__native_condvar_notify_one(value);
+    }
+
+    void condvar_notify_all(nconst condvar& value) {
+        sys__native_condvar_notify_all(value);
+    }
+
+    channel channel_bounded(i32 capacity) {
+        return sys__native_channel_bounded(capacity);
+    }
+
+    channel channel_unbounded() {
+        return sys__native_channel_unbounded();
+    }
+
+    i32 channel_send_i32(nconst channel& value, i32 item) {
+        return sys__native_channel_send_i32(value, item);
+    }
+
+    i32 channel_send_str(nconst channel& value, nconst str& item) {
+        return sys__native_channel_send_str(value, item);
+    }
+
+    i32 channel_send_bool(nconst channel& value, i32 item) {
+        return sys__native_channel_send_bool(value, item);
+    }
+
+    i32 channel_send_f64(nconst channel& value, f64 item) {
+        return sys__native_channel_send_f64(value, item);
+    }
+
+    i32 channel_try_send_i32(nconst channel& value, i32 item) {
+        return sys__native_channel_try_send_i32(value, item);
+    }
+
+    i32 channel_try_send_str(nconst channel& value, nconst str& item) {
+        return sys__native_channel_try_send_str(value, item);
+    }
+
+    i32 channel_try_send_bool(nconst channel& value, i32 item) {
+        return sys__native_channel_try_send_bool(value, item);
+    }
+
+    i32 channel_try_send_f64(nconst channel& value, f64 item) {
+        return sys__native_channel_try_send_f64(value, item);
+    }
+
+    i32 channel_recv_i32(nconst channel& value) {
+        return sys__native_channel_recv_i32(value);
+    }
+
+    str channel_recv_str(nconst channel& value) {
+        return sys__native_channel_recv_str(value);
+    }
+
+    i32 channel_recv_bool(nconst channel& value) {
+        return sys__native_channel_recv_bool(value);
+    }
+
+    f64 channel_recv_f64(nconst channel& value) {
+        return sys__native_channel_recv_f64(value);
+    }
+
+    i32 channel_try_recv_i32(nconst channel& value, i32 fallback) {
+        return sys__native_channel_try_recv_i32(value, fallback);
+    }
+
+    str channel_try_recv_str(nconst channel& value) {
+        return sys__native_channel_try_recv_str(value);
+    }
+
+    i32 channel_try_recv_bool(nconst channel& value, i32 fallback) {
+        return sys__native_channel_try_recv_bool(value, fallback);
+    }
+
+    f64 channel_try_recv_f64(nconst channel& value, f64 fallback) {
+        return sys__native_channel_try_recv_f64(value, fallback);
+    }
+
+    i32 channel_len(nconst channel& value) {
+        return sys__native_channel_len(value);
+    }
+
+    i32 channel_close(nconst channel& value) {
+        return sys__native_channel_close(value);
+    }
+
+    i32 channel_is_closed(nconst channel& value) {
+        return sys__native_channel_is_closed(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_mutex_new() { return __apo_stdlib::mutex_new(); }
+        int sys__native_mutex_lock(void* value) { return __apo_stdlib::mutex_lock(value); }
+        int sys__native_mutex_try_lock(void* value) { return __apo_stdlib::mutex_try_lock(value); }
+        int sys__native_mutex_unlock(void* value) { return __apo_stdlib::mutex_unlock(value); }
+
+        void* sys__native_condvar_new() { return __apo_stdlib::condvar_new(); }
+        int sys__native_condvar_wait_ms(void* value, int timeout_ms) { return __apo_stdlib::condvar_wait_ms(value, timeout_ms); }
+        void sys__native_condvar_notify_one(void* value) { __apo_stdlib::condvar_notify_one(value); }
+        void sys__native_condvar_notify_all(void* value) { __apo_stdlib::condvar_notify_all(value); }
+
+        void* sys__native_channel_bounded(int capacity) { return __apo_stdlib::channel_bounded(capacity); }
+        void* sys__native_channel_unbounded() { return __apo_stdlib::channel_unbounded(); }
+        int sys__native_channel_send_i32(void* value, int item) { return __apo_stdlib::channel_send_i32(value, item); }
+        int sys__native_channel_send_str(void* value, const char* item) { return __apo_stdlib::channel_send_str(value, __apo_stdlib::text_or_empty(item)); }
+        int sys__native_channel_send_bool(void* value, int item) { return __apo_stdlib::channel_send_bool(value, item); }
+        int sys__native_channel_send_f64(void* value, double item) { return __apo_stdlib::channel_send_f64(value, item); }
+        int sys__native_channel_try_send_i32(void* value, int item) { return __apo_stdlib::channel_try_send_i32(value, item); }
+        int sys__native_channel_try_send_str(void* value, const char* item) { return __apo_stdlib::channel_try_send_str(value, __apo_stdlib::text_or_empty(item)); }
+        int sys__native_channel_try_send_bool(void* value, int item) { return __apo_stdlib::channel_try_send_bool(value, item); }
+        int sys__native_channel_try_send_f64(void* value, double item) { return __apo_stdlib::channel_try_send_f64(value, item); }
+        int sys__native_channel_recv_i32(void* value) { return __apo_stdlib::channel_recv_i32(value); }
+        const char* sys__native_channel_recv_str(void* value) { return __apo_stdlib::channel_recv_str(value); }
+        int sys__native_channel_recv_bool(void* value) { return __apo_stdlib::channel_recv_bool(value); }
+        double sys__native_channel_recv_f64(void* value) { return __apo_stdlib::channel_recv_f64(value); }
+        int sys__native_channel_try_recv_i32(void* value, int fallback) { return __apo_stdlib::channel_try_recv_i32(value, fallback); }
+        const char* sys__native_channel_try_recv_str(void* value) { return __apo_stdlib::channel_try_recv_str(value); }
+        int sys__native_channel_try_recv_bool(void* value, int fallback) { return __apo_stdlib::channel_try_recv_bool(value, fallback); }
+        double sys__native_channel_try_recv_f64(void* value, double fallback) { return __apo_stdlib::channel_try_recv_f64(value, fallback); }
+        int sys__native_channel_len(void* value) { return __apo_stdlib::channel_len(value); }
+        int sys__native_channel_close(void* value) { return __apo_stdlib::channel_close(value); }
+        int sys__native_channel_is_closed(void* value) { return __apo_stdlib::channel_is_closed(value); }
+    }
+}

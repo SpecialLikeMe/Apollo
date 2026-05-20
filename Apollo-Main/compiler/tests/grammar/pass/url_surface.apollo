@@ -1,0 +1,34 @@
+extern std prelude;
+
+i32 main() {
+    url site = sys.url_parse("https://user:pass@example.com:8080/docs/index.html?q=apollo#intro");
+    str joined = sys.url_join("https://example.com/docs/index.html", "guide/getting-started.html");
+
+    if (sys.url_scheme(site) != "https") {
+        return 1;
+    }
+    if (sys.url_username(site) != "user") {
+        return 2;
+    }
+    if (sys.url_password(site) != "pass") {
+        return 3;
+    }
+    if (sys.url_host(site) != "example.com") {
+        return 4;
+    }
+    if (sys.url_port(site) != "8080") {
+        return 5;
+    }
+    if (sys.url_query(site) != "q=apollo") {
+        return 6;
+    }
+    if (sys.url_fragment(site) != "intro") {
+        return 7;
+    }
+    if (sys.str_len(joined) == 0) {
+        return 8;
+    }
+
+    sys.handle_destroy(site);
+    return 0;
+}

@@ -1,0 +1,34 @@
+namespace sys {
+    buffer buffer() {
+        return sys__native_buffer();
+    }
+
+    void buffer_push_str(nconst buffer& value, nconst str& text) {
+        sys__native_buffer_push_str(value, text);
+    }
+
+    void buffer_push_i32(nconst buffer& value, i32 number) {
+        sys__native_buffer_push_i32(value, number);
+    }
+
+    str buffer_text(nconst buffer& value) {
+        return sys__native_buffer_text(value);
+    }
+
+    void buffer_clear(nconst buffer& value) {
+        sys__native_buffer_clear(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_buffer() { return __apo_stdlib::buffer_create(); }
+        void sys__native_buffer_push_str(void* value, const char* text) { __apo_stdlib::buffer_push_text(value, __apo_stdlib::view_or_empty(text)); }
+        void sys__native_buffer_push_i32(void* value, int number) { __apo_stdlib::buffer_push_i64(value, number); }
+        const char* sys__native_buffer_text(void* value) { return __apo_stdlib::buffer_text(value); }
+        void sys__native_buffer_clear(void* value) { __apo_stdlib::buffer_clear(value); }
+        void sys__handle_destroy(void* value) { __apo_stdlib::handle_destroy(value); }
+    }
+}

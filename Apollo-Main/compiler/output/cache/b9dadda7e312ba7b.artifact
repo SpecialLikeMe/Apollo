@@ -1,5 +1,5 @@
 ; ModuleID = 'nconst_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/nconst_surface.apollo"
+source_filename = "nconst_surface.apollo"
 
 define i32 @loadBorrow(ptr %source) {
 entry:

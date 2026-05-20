@@ -129,6 +129,8 @@ public:
 
     virtual std::any visitGenericType(compilerv1Parser::GenericTypeContext *context) = 0;
 
+    virtual std::any visitShapeType(compilerv1Parser::ShapeTypeContext *context) = 0;
+
     virtual std::any visitFunctionType(compilerv1Parser::FunctionTypeContext *context) = 0;
 
     virtual std::any visitFunctionTypeArgs(compilerv1Parser::FunctionTypeArgsContext *context) = 0;

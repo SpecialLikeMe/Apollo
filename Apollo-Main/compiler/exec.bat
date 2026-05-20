@@ -58,10 +58,11 @@ shift
 set "COMMAND=analyze"
 
 :parse_done
-for %%I in ("%~f0") do set "SCRIPT_DIR=%%~dpI"
-if not "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR%\"
-if not exist "%SCRIPT_DIR%cleanup-output.ps1" if exist "%SCRIPT_DIR%compiler\cleanup-output.ps1" set "SCRIPT_DIR=%SCRIPT_DIR%compiler\"
-if not exist "%SCRIPT_DIR%cleanup-output.ps1" if exist "%CD%\compiler\cleanup-output.ps1" set "SCRIPT_DIR=%CD%\compiler\"
+set "SCRIPT_DIR="
+if defined APOLLO_COMPILER_DIR call :use_compiler_dir_if_valid "%APOLLO_COMPILER_DIR%"
+if not defined SCRIPT_DIR if defined APOLLO_DIR call :use_compiler_dir_if_valid "%APOLLO_DIR%\compiler"
+if not defined SCRIPT_DIR call :use_compiler_dir_if_valid "%~dp0"
+if not defined SCRIPT_DIR call :use_compiler_dir_if_valid "%CD%\compiler"
 if not exist "%SCRIPT_DIR%cleanup-output.ps1" (
     echo Apollo compiler directory could not be resolved.
     exit /b 1
@@ -651,6 +652,13 @@ if not exist "%APOLLO_GC_LIB_DIR%\libgc.a" if not exist "%APOLLO_GC_LIB_DIR%\lib
 if not exist "%APOLLO_GC_LIB_DIR%\libgccpp.a" if not exist "%APOLLO_GC_LIB_DIR%\libgccpp.dll.a" goto :gc_missing
 set "GC_INCLUDE_DIR=%APOLLO_GC_INCLUDE_DIR%"
 set "GC_LIB_DIR=%APOLLO_GC_LIB_DIR%"
+exit /b 0
+
+:use_compiler_dir_if_valid
+set "CANDIDATE_DIR=%~1"
+if "%CANDIDATE_DIR%"=="" exit /b 0
+if not "%CANDIDATE_DIR:~-1%"=="\" set "CANDIDATE_DIR=%CANDIDATE_DIR%\"
+if exist "%CANDIDATE_DIR%cleanup-output.ps1" set "SCRIPT_DIR=%CANDIDATE_DIR%"
 exit /b 0
 
 :prepare_pch

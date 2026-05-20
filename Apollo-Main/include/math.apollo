@@ -1,0 +1,128 @@
+extern std core;
+
+namespace sys {
+    i32 abs(i32 value) {
+        if (value < 0) {
+            return 0 - value;
+        }
+        return value;
+    }
+
+    i32 sign(i32 value) {
+        if (value < 0) {
+            return 0 - 1;
+        }
+        if (value > 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    i32 twice(i32 value) {
+        return value + value;
+    }
+
+    i32 triple(i32 value) {
+        return value + value + value;
+    }
+
+    i32 square(i32 value) {
+        i32 magnitude = sys.abs(value);
+        i32 factor = magnitude;
+        i32 result = 0;
+        while (factor > 0) {
+            result = result + magnitude;
+            factor = factor - 1;
+        }
+        return result;
+    }
+
+    i32 pow2(i32 exponent) {
+        i32 remaining = exponent;
+        i32 value = 1;
+        while (remaining > 0) {
+            value = value + value;
+            remaining = remaining - 1;
+        }
+        return value;
+    }
+
+    i32 triangular(i32 limit) {
+        i32 current = 1;
+        i32 total = 0;
+        while (current <= limit) {
+            total = total + current;
+            current = current + 1;
+        }
+        return total;
+    }
+
+    i32 gcd(i32 left, i32 right) {
+        i32 a = sys.abs(left);
+        i32 b = sys.abs(right);
+        if (a == 0) {
+            return b;
+        }
+        if (b == 0) {
+            return a;
+        }
+        while (a != b) {
+            if (a > b) {
+                a = a - b;
+            } else {
+                b = b - a;
+            }
+        }
+        return a;
+    }
+
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_stdlib_runtime.hpp"
+
+        double sys__abs_f64(double value) { return std::fabs(value); }
+        double sys__ceil(double value) { return std::ceil(value); }
+        double sys__floor(double value) { return std::floor(value); }
+        double sys__round(double value) { return std::round(value); }
+        double sys__trunc(double value) { return std::trunc(value); }
+        double sys__sqrt(double value) { return std::sqrt(value); }
+        double sys__cbrt(double value) { return std::cbrt(value); }
+        double sys__hypot(double left, double right) { return std::hypot(left, right); }
+        double sys__sin(double value) { return std::sin(value); }
+        double sys__cos(double value) { return std::cos(value); }
+        double sys__tan(double value) { return std::tan(value); }
+        double sys__asin(double value) { return std::asin(value); }
+        double sys__acos(double value) { return std::acos(value); }
+        double sys__atan(double value) { return std::atan(value); }
+        double sys__atan2(double left, double right) { return std::atan2(left, right); }
+        double sys__sinh(double value) { return std::sinh(value); }
+        double sys__cosh(double value) { return std::cosh(value); }
+        double sys__tanh(double value) { return std::tanh(value); }
+        double sys__asinh(double value) { return std::asinh(value); }
+        double sys__acosh(double value) { return std::acosh(value); }
+        double sys__atanh(double value) { return std::atanh(value); }
+        double sys__exp(double value) { return std::exp(value); }
+        double sys__exp2(double value) { return std::exp2(value); }
+        double sys__expm1(double value) { return std::expm1(value); }
+        double sys__log(double value) { return std::log(value); }
+        double sys__log2(double value) { return std::log2(value); }
+        double sys__log10(double value) { return std::log10(value); }
+        double sys__log1p(double value) { return std::log1p(value); }
+        double sys__pow(double left, double right) { return std::pow(left, right); }
+        double sys__fma(double x, double y, double z) { return std::fma(x, y, z); }
+        double sys__copysign(double x, double y) { return std::copysign(x, y); }
+        double sys__nextafter(double x, double y) { return std::nextafter(x, y); }
+        double sys__ldexp(double value, int exponent) { return std::ldexp(value, exponent); }
+        double sys__frexp_fraction(double value) { return __apo_stdlib::frexp_fraction_f64(value); }
+        int sys__frexp_exponent(double value) { return __apo_stdlib::frexp_exponent_f64(value); }
+        double sys__modf_fraction(double value) { return __apo_stdlib::modf_fraction_f64(value); }
+        double sys__modf_integral(double value) { return __apo_stdlib::modf_integral_f64(value); }
+        int sys__isnan(double value) { return std::isnan(value) ? 1 : 0; }
+        int sys__isinf(double value) { return std::isinf(value) ? 1 : 0; }
+        int sys__isfinite(double value) { return std::isfinite(value) ? 1 : 0; }
+        int sys__isnormal(double value) { return std::isnormal(value) ? 1 : 0; }
+        double sys__signum_f64(double value) { return __apo_stdlib::signum_f64(value); }
+    }
+}

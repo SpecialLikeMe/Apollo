@@ -1,0 +1,40 @@
+extern std prelude;
+
+i32 main() {
+    i32 fnv = sys.hash_fnv1a_32("apollo");
+    i32 crc = sys.hash_crc32("apollo");
+    i32 adler = sys.hash_adler32("apollo");
+    i32 murmur = sys.hash_murmur3_32("apollo");
+    str bool_text = sys.json_write_bool(true);
+    str num_text = sys.json_write_int(42);
+    str str_text = sys.json_write_str("apollo");
+
+    if (fnv == 0) {
+        return 1;
+    }
+    if (crc == 0) {
+        return 2;
+    }
+    if (adler == 0) {
+        return 3;
+    }
+    if (murmur == 0) {
+        return 4;
+    }
+    if (sys.json_parse_bool(bool_text) == 0) {
+        return 5;
+    }
+    if (sys.json_parse_int(num_text) != 42) {
+        return 6;
+    }
+    if (sys.json_parse_str(str_text) != "apollo") {
+        return 7;
+    }
+    if (sys.str_len(sys.json_write_array_start()) != 1) {
+        return 8;
+    }
+    if (sys.str_len(sys.json_write_object_end()) != 1) {
+        return 9;
+    }
+    return 0;
+}

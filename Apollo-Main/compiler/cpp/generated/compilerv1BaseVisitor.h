@@ -235,6 +235,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitShapeType(compilerv1Parser::ShapeTypeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitFunctionType(compilerv1Parser::FunctionTypeContext *ctx) override {
     return visitChildren(ctx);
   }

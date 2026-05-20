@@ -1,0 +1,73 @@
+namespace sys {
+    task task_ready_i32(i32 value) {
+        return sys__native_task_ready_i32(value);
+    }
+
+    task task_ready_str(nconst str& value) {
+        return sys__native_task_ready_str(value);
+    }
+
+    task task_ready_bool(i32 value) {
+        return sys__native_task_ready_bool(value);
+    }
+
+    task task_ready_f64(f64 value) {
+        return sys__native_task_ready_f64(value);
+    }
+
+    i32 task_done(nconst task& value) {
+        return sys__native_task_done(value);
+    }
+
+    i32 task_await_i32(nconst task& value) {
+        return sys__native_task_await_i32(value);
+    }
+
+    str task_await_str(nconst task& value) {
+        return sys__native_task_await_str(value);
+    }
+
+    i32 task_await_bool(nconst task& value) {
+        return sys__native_task_await_bool(value);
+    }
+
+    f64 task_await_f64(nconst task& value) {
+        return sys__native_task_await_f64(value);
+    }
+
+    i32 task_is_i32(nconst task& value) {
+        return sys__native_task_is_i32(value);
+    }
+
+    i32 task_is_str(nconst task& value) {
+        return sys__native_task_is_str(value);
+    }
+
+    i32 task_is_bool(nconst task& value) {
+        return sys__native_task_is_bool(value);
+    }
+
+    i32 task_is_f64(nconst task& value) {
+        return sys__native_task_is_f64(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_task_ready_i32(int value) { return __apo_stdlib::task_ready_i32(value); }
+        void* sys__native_task_ready_str(const char* value) { return __apo_stdlib::task_ready_str(__apo_stdlib::text_or_empty(value)); }
+        void* sys__native_task_ready_bool(int value) { return __apo_stdlib::task_ready_bool(value); }
+        void* sys__native_task_ready_f64(double value) { return __apo_stdlib::task_ready_f64(value); }
+        int sys__native_task_done(void* value) { return __apo_stdlib::task_done(value); }
+        int sys__native_task_await_i32(void* value) { return __apo_stdlib::task_await_i32(value); }
+        const char* sys__native_task_await_str(void* value) { return __apo_stdlib::task_await_str(value); }
+        int sys__native_task_await_bool(void* value) { return __apo_stdlib::task_await_bool(value); }
+        double sys__native_task_await_f64(void* value) { return __apo_stdlib::task_await_f64(value); }
+        int sys__native_task_is_i32(void* value) { return __apo_stdlib::task_is_i32(value); }
+        int sys__native_task_is_str(void* value) { return __apo_stdlib::task_is_str(value); }
+        int sys__native_task_is_bool(void* value) { return __apo_stdlib::task_is_bool(value); }
+        int sys__native_task_is_f64(void* value) { return __apo_stdlib::task_is_f64(value); }
+    }
+}

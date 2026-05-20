@@ -1,6 +1,7 @@
 #include "..\..\runtime_support\apo_autofmt_owner_runtime.hpp"
 
 #include <exception>
+#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -116,6 +117,23 @@ static void test_metrics_report_runtime_activity() {
     require(metrics.collectThreshold >= metrics.managedBytes, "metrics should keep threshold at or above live bytes");
 }
 
+static void test_total_gc_preserves_interior_pointers() {
+    __apo_total_gc_runtime runtime;
+    runtime.init();
+
+    auto* base = static_cast<std::uint8_t*>(runtime.alloc(32));
+    require(base != nullptr, "total-program GC allocation should return storage");
+    base[8] = 42;
+
+    std::uint8_t* interior = base + 8;
+    base = nullptr;
+
+    runtime.collect();
+
+    require(runtime.owns_address(interior), "total-program GC should retain allocations reachable through interior pointers");
+    require(*interior == 42, "interior pointers should remain readable after collection");
+}
+
 int main() {
     try {
         test_collects_unrooted_values();
@@ -124,6 +142,7 @@ int main() {
         test_release_moves_value_out_and_invalidates_handle();
         test_weak_handles_do_not_keep_values_alive();
         test_metrics_report_runtime_activity();
+        test_total_gc_preserves_interior_pointers();
         std::cout << "gc runtime probe passed" << std::endl;
         return 0;
     } catch (const std::exception& ex) {

@@ -688,7 +688,6 @@ function Ensure-MingwPackages {
         'mingw-w64-clang-x86_64-antlr4-runtime-cpp',
         'mingw-w64-clang-x86_64-compiler-rt',
         'mingw-w64-clang-x86_64-llvm',
-        'mingw-w64-clang-x86_64-gc',
         'mingw-w64-clang-x86_64-make',
         'mingw-w64-clang-x86_64-SDL2',
         'mingw-w64-clang-x86_64-SDL2_image'
@@ -697,7 +696,7 @@ function Ensure-MingwPackages {
     Write-Status 'Refreshing MSYS2 package metadata'
     Invoke-MsysBash -Root $MsysRoot -Command 'pacman -Sy --noconfirm'
 
-    Write-Status 'Ensuring clang64 clang, ANTLR4 runtime, compiler-rt, llvm, make, Boehm GC, SDL2, and SDL2_image packages are installed'
+    Write-Status 'Ensuring clang64 clang, ANTLR4 runtime, compiler-rt, llvm, make, SDL2, and SDL2_image packages are installed'
     Invoke-MsysBash -Root $MsysRoot -Command ("pacman -S --needed --noconfirm " + ($packages -join ' '))
 }
 
@@ -901,8 +900,6 @@ function Write-ToolchainEnv {
         ('set "APOLLO_NATIVE_CXX_COMPILER={0}"' -f (Join-Path $mingwBin 'clang++.exe')),
         ('set "APOLLO_NATIVE_MAKE_PROGRAM={0}"' -f $makeProgram),
         ('set "APOLLO_NATIVE_CMAKE_PREFIX={0}"' -f (Join-Path $MsysRoot 'clang64')),
-        ('set "APOLLO_GC_INCLUDE_DIR={0}"' -f $includeDir),
-        ('set "APOLLO_GC_LIB_DIR={0}"' -f $libDir),
         ('set "APOLLO_SDL_INCLUDE_DIR={0}"' -f $includeDir),
         ('set "APOLLO_SDL_LIB_DIR={0}"' -f $libDir),
         ('set "APOLLO_JAVA_BIN={0}"' -f $JavaBin),
@@ -951,8 +948,6 @@ function Set-SessionToolchainEnv {
     $env:APOLLO_NATIVE_CXX_COMPILER = Join-Path $mingwBin 'clang++.exe'
     $env:APOLLO_NATIVE_MAKE_PROGRAM = $makeProgram
     $env:APOLLO_NATIVE_CMAKE_PREFIX = Join-Path $MsysRoot 'clang64'
-    $env:APOLLO_GC_INCLUDE_DIR = $includeDir
-    $env:APOLLO_GC_LIB_DIR = $libDir
     $env:APOLLO_SDL_INCLUDE_DIR = $includeDir
     $env:APOLLO_SDL_LIB_DIR = $libDir
     $env:APOLLO_JAVA_BIN = $JavaBin
@@ -1000,7 +995,7 @@ function Invoke-ApolloValidation {
 $InstallDir = [System.IO.Path]::GetFullPath($InstallDir)
 Write-Status "Bootstrapping dependencies for Apollo at $InstallDir"
 
-$installCoreDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_CORE_DEPS' -Prompt 'Install Apollo core dependencies (Git, Python, MSYS2 clang/LLVM, ANTLR runtime, GC, SDL2)?' -InteractiveDefault $true -NonInteractiveDefault $true
+$installCoreDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_CORE_DEPS' -Prompt 'Install Apollo core dependencies (Git, Python, MSYS2 clang/LLVM, ANTLR runtime, SDL2)?' -InteractiveDefault $true -NonInteractiveDefault $true
 $installFeatureDependencies = Resolve-InstallerSelection -EnvName 'APOLLO_INSTALL_FEATURE_DEPS' -Prompt 'Install optional inline-foreign toolchains (Java/Kotlin runtime support, Rust, Go, Node, Zig, Swift, LLTS, LPython)?' -InteractiveDefault $false -NonInteractiveDefault $true
 
 if ($installCoreDependencies) {

@@ -1,0 +1,58 @@
+namespace sys {
+    url url_parse(nconst str& value) {
+        return sys__native_url_parse(value);
+    }
+
+    str url_scheme(nconst url& value) {
+        return sys__native_url_scheme(value);
+    }
+
+    str url_username(nconst url& value) {
+        return sys__native_url_username(value);
+    }
+
+    str url_password(nconst url& value) {
+        return sys__native_url_password(value);
+    }
+
+    str url_host(nconst url& value) {
+        return sys__native_url_host(value);
+    }
+
+    str url_port(nconst url& value) {
+        return sys__native_url_port(value);
+    }
+
+    str url_path(nconst url& value) {
+        return sys__native_url_path(value);
+    }
+
+    str url_query(nconst url& value) {
+        return sys__native_url_query(value);
+    }
+
+    str url_fragment(nconst url& value) {
+        return sys__native_url_fragment(value);
+    }
+
+    str url_join(nconst str& base, nconst str& relative) {
+        return sys__native_url_join(base, relative);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_url_parse(const char* value) { return __apo_stdlib::url_parse(__apo_stdlib::text_or_empty(value)); }
+        const char* sys__native_url_scheme(void* value) { return __apo_stdlib::url_scheme(value); }
+        const char* sys__native_url_username(void* value) { return __apo_stdlib::url_username(value); }
+        const char* sys__native_url_password(void* value) { return __apo_stdlib::url_password(value); }
+        const char* sys__native_url_host(void* value) { return __apo_stdlib::url_host(value); }
+        const char* sys__native_url_port(void* value) { return __apo_stdlib::url_port(value); }
+        const char* sys__native_url_path(void* value) { return __apo_stdlib::url_path(value); }
+        const char* sys__native_url_query(void* value) { return __apo_stdlib::url_query(value); }
+        const char* sys__native_url_fragment(void* value) { return __apo_stdlib::url_fragment(value); }
+        const char* sys__native_url_join(const char* base, const char* relative) { return __apo_stdlib::url_join(__apo_stdlib::view_or_empty(base), __apo_stdlib::view_or_empty(relative)); }
+    }
+}

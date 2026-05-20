@@ -1,5 +1,5 @@
 ; ModuleID = 'import_include'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/import_include.apollo"
+source_filename = "import_include.apollo"
 
 define i32 @main() {
 entry:

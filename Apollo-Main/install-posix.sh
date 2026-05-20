@@ -105,7 +105,7 @@ install_with_brew() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git llvm antlr4-cpp-runtime boehm-gc make cmake sdl2 sdl2_image python"
+        packages="$packages git llvm antlr4-cpp-runtime make cmake sdl2 sdl2_image python"
     fi
     if [ "$install_features" = "1" ]; then
         packages="$packages openjdk rust zig go node"
@@ -122,7 +122,7 @@ install_with_apt() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git clang llvm make cmake libantlr4-runtime-dev libgc-dev libsdl2-dev libsdl2-image-dev python3 python3-pip"
+        packages="$packages git clang llvm make cmake libantlr4-runtime-dev libsdl2-dev libsdl2-image-dev python3 python3-pip"
     fi
     if [ "$install_features" = "1" ]; then
         packages="$packages openjdk-21-jdk rustc cargo zig golang-go nodejs npm"
@@ -140,7 +140,7 @@ install_with_dnf() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git clang llvm make cmake antlr4-runtime-devel gc-devel SDL2-devel SDL2_image-devel python3 python3-pip"
+        packages="$packages git clang llvm make cmake antlr4-runtime-devel SDL2-devel SDL2_image-devel python3 python3-pip"
     fi
     if [ "$install_features" = "1" ]; then
         packages="$packages java-21-openjdk-devel rust cargo zig golang nodejs npm"
@@ -157,7 +157,7 @@ install_with_pacman() {
     install_features=$2
     packages=''
     if [ "$install_core" = "1" ]; then
-        packages="$packages git clang llvm make cmake antlr4-runtime gc sdl2 sdl2_image python python-pip"
+        packages="$packages git clang llvm make cmake antlr4-runtime sdl2 sdl2_image python python-pip"
     fi
     if [ "$install_features" = "1" ]; then
         packages="$packages jdk21-openjdk rust zig go nodejs npm"
@@ -206,7 +206,7 @@ ensure_dependencies() {
         install_with_pacman "$install_core" "$install_features"
         return
     fi
-    printf 'Unsupported platform package manager. Install Clang/LLVM, the ANTLR4 C++ runtime, make, cmake, and Boehm GC manually.\n' >&2
+    printf 'Unsupported platform package manager. Install Clang/LLVM, the ANTLR4 C++ runtime, make, cmake, SDL2, and Python manually.\n' >&2
     exit 1
 }
 
@@ -765,8 +765,6 @@ dependency_snapshot() {
     node_bin=$(resolve_node_bin)
     npm_bin=$(resolve_npm_bin)
     git_bin=$(command -v git 2>/dev/null || printf '')
-    gc_include_dir=$(resolve_gc_include_dir)
-    gc_lib_dir=$(resolve_gc_lib_dir)
     sdl_include_dir=$(resolve_sdl_include_dir)
     sdl_lib_dir=$(resolve_sdl_lib_dir)
 
@@ -787,12 +785,6 @@ dependency_snapshot() {
     [ -x "$python_bin" ] || return 1
     [ -n "$pip_bin" ] || return 1
     [ -x "$pip_bin" ] || return 1
-
-    [ -n "$gc_include_dir" ] || return 1
-    [ -n "$gc_lib_dir" ] || return 1
-    resolve_gc_header "$gc_include_dir" >/dev/null || return 1
-    resolve_library_file "$gc_lib_dir" libgc.a libgc.so libgc.dylib >/dev/null || return 1
-    resolve_library_file "$gc_lib_dir" libgccpp.a libgccpp.so libgccpp.dylib >/dev/null || return 1
 
     [ -n "$sdl_include_dir" ] || return 1
     [ -n "$sdl_lib_dir" ] || return 1
@@ -816,15 +808,13 @@ dependency_snapshot() {
     printf 'GO_BIN=%s\n' "$go_bin"
     printf 'NODE_BIN=%s\n' "$node_bin"
     printf 'NPM_BIN=%s\n' "$npm_bin"
-    printf 'GC_INCLUDE_DIR=%s\n' "$gc_include_dir"
-    printf 'GC_LIB_DIR=%s\n' "$gc_lib_dir"
     printf 'SDL_INCLUDE_DIR=%s\n' "$sdl_include_dir"
     printf 'SDL_LIB_DIR=%s\n' "$sdl_lib_dir"
 }
 
 verify_dependencies() {
     if ! snapshot=$(dependency_snapshot); then
-        printf 'Apollo dependency verification failed. Required components: git, clang, clang++, llc, make/gmake, cmake, the ANTLR4 C++ runtime development files, python, pip, Boehm GC headers/libs, and SDL2/SDL2_image headers/libs. Java and other language toolchains are optional and only needed for their corresponding inline-foreign surfaces.\n' >&2
+        printf 'Apollo dependency verification failed. Required components: git, clang, clang++, llc, make/gmake, cmake, the ANTLR4 C++ runtime development files, python, pip, and SDL2/SDL2_image headers/libs. Java and other language toolchains are optional and only needed for their corresponding inline-foreign surfaces.\n' >&2
         return 1
     fi
 
@@ -885,8 +875,6 @@ verify_dependencies() {
     else
         write_status 'LLTS was not auto-discovered after the cargo bootstrap attempt; Apollo will use its built-in TypeScript inline foreign fallback for the currently supported surface. Set APOLLO_LLTS_EXE after installing lltsc if you want to prefer an external compiler'
     fi
-    write_status "Verified Boehm GC include dir at $GC_INCLUDE_DIR"
-    write_status "Verified Boehm GC lib dir at $GC_LIB_DIR"
     write_status "Verified SDL include dir at $SDL_INCLUDE_DIR"
     write_status "Verified SDL lib dir at $SDL_LIB_DIR"
 }
@@ -993,7 +981,7 @@ publish_cli_shims
 validate_cli_shims
 
 INSTALL_CORE_DEPS=0
-if should_install_dependency_group APOLLO_INSTALL_CORE_DEPS 'Install Apollo core build dependencies (LLVM/Clang, ANTLR4 C++ runtime, CMake, GC, SDL2, Python)?' 1 1; then
+if should_install_dependency_group APOLLO_INSTALL_CORE_DEPS 'Install Apollo core build dependencies (LLVM/Clang, ANTLR4 C++ runtime, CMake, SDL2, Python)?' 1 1; then
     INSTALL_CORE_DEPS=1
 fi
 
@@ -1016,8 +1004,6 @@ LLVM_BIN=$(resolve_llvm_bin)
 MAKE_BIN=$(resolve_make_bin)
 CMAKE_BIN=$(resolve_cmake_bin)
 ANTLR4_RUNTIME_CMAKE_DIR=$(resolve_antlr4_runtime_cmake_dir)
-GC_INCLUDE_DIR=$(resolve_gc_include_dir)
-GC_LIB_DIR=$(resolve_gc_lib_dir)
 SDL_INCLUDE_DIR=$(resolve_sdl_include_dir)
 SDL_LIB_DIR=$(resolve_sdl_lib_dir)
 PYTHON_BIN=$(resolve_python_bin)
@@ -1052,8 +1038,6 @@ export APOLLO_GO_EXE="${GO_BIN}"
 export APOLLO_NODE_EXE="${NODE_BIN}"
 export APOLLO_NPM_EXE="${NPM_BIN}"
 export APOLLO_ANTLR4_RUNTIME_CMAKE_DIR="${ANTLR4_RUNTIME_CMAKE_DIR}"
-export APOLLO_GC_INCLUDE_DIR="${GC_INCLUDE_DIR}"
-export APOLLO_GC_LIB_DIR="${GC_LIB_DIR}"
 export APOLLO_SDL_INCLUDE_DIR="${SDL_INCLUDE_DIR}"
 export APOLLO_SDL_LIB_DIR="${SDL_LIB_DIR}"
 export APOLLO_CXX_STD="c++20"

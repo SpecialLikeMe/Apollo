@@ -1,0 +1,54 @@
+namespace sys {
+    i32 count_up(i32 start, i32 stop) {
+        i32 count = 0;
+        i32 current = start;
+        while (current < stop) {
+            count = count + 1;
+            current = current + 1;
+        }
+        return count;
+    }
+
+    i32 sum_range(i32 start, i32 stop) {
+        if (start > stop) {
+            return 0;
+        }
+        i32 current = start;
+        i32 total = 0;
+        while (current <= stop) {
+            total = total + current;
+            current = current + 1;
+        }
+        return total;
+    }
+
+    i32 sum_step(i32 start, i32 stop, i32 step) {
+        if (step == 0) {
+            return 0;
+        }
+        i32 current = start;
+        i32 total = 0;
+        if (step > 0) {
+            while (current <= stop) {
+                total = total + current;
+                current = current + step;
+            }
+            return total;
+        }
+        while (current >= stop) {
+            total = total + current;
+            current = current + step;
+        }
+        return total;
+    }
+
+    i32 repeat_add(i32 value, i32 times) {
+        i32 remaining = times;
+        i32 total = 0;
+        while (remaining > 0) {
+            total = total + value;
+            remaining = remaining - 1;
+        }
+        return total;
+    }
+}

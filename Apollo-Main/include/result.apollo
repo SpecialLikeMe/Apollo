@@ -1,0 +1,8 @@
+// nominal<T, E> is Apollo's canonical result carrier.
+// nominal(...), cerr(...), and terminalcerr(...) are lowered by the native frontend.
+// sys.is_nominal(...), sys.is_cerr(...), sys.is_terminal(...), sys.unwrap_i32(...),
+// sys.unwrap_bool(...), sys.unwrap_f64(...), sys.unwrap_str(...), and sys.error_message(...)
+// are compiler-backed result helpers.
+
+namespace sys {
+}

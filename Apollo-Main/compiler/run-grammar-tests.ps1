@@ -320,7 +320,7 @@ $tests = @(
         ShouldPass = $true
         Covers = '#[gc(total)] forces whole-program GC bootstrap and #[borrow_checker(off)] disables ownership and borrow diagnostics'
         OutputMustContainAll = @(
-            '#include <gc/gc.h>',
+            '#include "runtime_support/apo_autofmt_owner_runtime.hpp"',
             'GC_INIT();',
             'const int& alias = value;',
             'value = 2;'
@@ -332,7 +332,7 @@ $tests = @(
         ShouldPass = $true
         Covers = '#[gcmode(total)] and #[borrow_check(none)] map onto the existing whole-program GC and borrow checker controls'
         OutputMustContainAll = @(
-            '#include <gc/gc.h>',
+            '#include "runtime_support/apo_autofmt_owner_runtime.hpp"',
             'GC_INIT();',
             'const int& alias = value;',
             'value = 2;'
@@ -370,7 +370,7 @@ $tests = @(
         ShouldPass = $true
         Covers = '#[gcmode(total)] reroutes the existing percent-prefixed unsafe malloc/new/free sugar through GC-managed allocation and suppresses manual free/delete lowering'
         OutputMustContainAll = @(
-            '#include <gc/gc.h>',
+            '#include "runtime_support/apo_autofmt_owner_runtime.hpp"',
             'GC_INIT();',
             'void* raw = GC_MALLOC(sizeof(std::int32_t));',
             'std::int32_t* value = new (GC_MALLOC(sizeof(std::int32_t))) std::int32_t(4);',
@@ -602,6 +602,66 @@ $tests = @(
         Path = 'tests\grammar\pass\import_include.apollo'
         ShouldPass = $true
         Covers = 'extern {package.name}, header-path imports, dependency compilation'
+    },
+    [pscustomobject]@{
+        Name = 'namespace-surface'
+        Path = 'tests\grammar\pass\namespace_surface.apollo'
+        ShouldPass = $true
+        Covers = 'namespace blocks and dotted or scoped access are normalized before parse in the native frontend'
+    },
+    [pscustomobject]@{
+        Name = 'extern-std-prelude-surface'
+        Path = 'tests\grammar\pass\extern_std_prelude_surface.apollo'
+        ShouldPass = $true
+        Covers = 'extern std prelude expands Apollo stdlib modules from include and exposes sys namespace helpers'
+    },
+    [pscustomobject]@{
+        Name = 'extern-std-scalar-surface'
+        Path = 'tests\grammar\pass\extern_std_scalar_surface.apollo'
+        ShouldPass = $true
+        Covers = 'extern std prelude exposes native-backed scalar math, bit, parse, and string helpers through sys namespace'
+    },
+    [pscustomobject]@{
+        Name = 'literal-shape-surface'
+        Path = 'tests\grammar\pass\literal_shape_surface.apollo'
+        ShouldPass = $true
+        Covers = 'float, char, byte, bool, null, usize, and brace-shaped multi-value return types lower through the native frontend'
+    },
+    [pscustomobject]@{
+        Name = 'all-pillars-surface'
+        Path = 'tests\grammar\pass\all_pillars_surface.apollo'
+        ShouldPass = $true
+        Covers = 'nominal and cerr result values, opaque-handle stdlib objects, portability helpers, and the expanded sys prelude lower through the native frontend'
+    },
+    [pscustomobject]@{
+        Name = 'stdlib-growth-surface'
+        Path = 'tests\grammar\pass\stdlib_growth_surface.apollo'
+        ShouldPass = $true
+        Covers = 'expanded collections, filesystem, encoding, regex, random, time, and terminal-backed sys helpers lower through the std prelude'
+    },
+    [pscustomobject]@{
+        Name = 'sync-surface'
+        Path = 'tests\grammar\pass\sync_surface.apollo'
+        ShouldPass = $true
+        Covers = 'expanded task values plus mutex, channel, condvar, and thread utility helpers lower through the std prelude'
+    },
+    [pscustomobject]@{
+        Name = 'fs-metadata-surface'
+        Path = 'tests\grammar\pass\fs_metadata_surface.apollo'
+        ShouldPass = $true
+        Covers = 'expanded file creation, metadata, symlink, and path helper surfaces lower through the std prelude'
+    },
+    [pscustomobject]@{
+        Name = 'data-surface'
+        Path = 'tests\grammar\pass\data_surface.apollo'
+        ShouldPass = $true
+        Covers = 'hashing and lightweight JSON helpers lower through the std prelude'
+    },
+    [pscustomobject]@{
+        Name = 'url-surface'
+        Path = 'tests\grammar\pass\url_surface.apollo'
+        ShouldPass = $true
+        Covers = 'URL parsing and URL component helpers lower through the std prelude'
     },
     [pscustomobject]@{
         Name = 'unsafe-required'

@@ -1,0 +1,83 @@
+namespace sys {
+    i32 host_is_windows() {
+        return sys__native_host_is_windows();
+    }
+
+    str path_separator() {
+        return sys__native_path_separator();
+    }
+
+    str exe_suffix() {
+        return sys__native_exe_suffix();
+    }
+
+    str env_get(nconst str& key) {
+        return sys__native_env_get(key);
+    }
+
+    i32 env_set(nconst str& key, nconst str& value) {
+        return sys__native_env_set(key, value);
+    }
+
+    i32 env_remove(nconst str& key) {
+        return sys__native_env_remove(key);
+    }
+
+    str current_dir() {
+        return sys__native_current_dir();
+    }
+
+    i32 set_current_dir(nconst str& path) {
+        return sys__native_set_current_dir(path);
+    }
+
+    str executable_path() {
+        return sys__native_executable_path();
+    }
+
+    i32 process_id() {
+        return sys__native_process_id();
+    }
+
+    i32 cpu_count() {
+        return sys__native_cpu_count();
+    }
+
+    str host_name() {
+        return sys__native_host_name();
+    }
+
+    str temp_dir() {
+        return sys__native_temp_dir();
+    }
+
+    str path_join(nconst str& left, nconst str& right) {
+        return sys__native_path_join(left, right);
+    }
+
+    void sleep_ms(i32 value) {
+        sys__native_sleep_ms(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        int sys__native_host_is_windows() { return __apo_stdlib::host_is_windows(); }
+        const char* sys__native_path_separator() { return __apo_stdlib::path_separator(); }
+        const char* sys__native_exe_suffix() { return __apo_stdlib::exe_suffix(); }
+        const char* sys__native_env_get(const char* key) { return __apo_stdlib::env_get(__apo_stdlib::view_or_empty(key)); }
+        int sys__native_env_set(const char* key, const char* value) { return __apo_stdlib::env_set(__apo_stdlib::view_or_empty(key), __apo_stdlib::view_or_empty(value)); }
+        int sys__native_env_remove(const char* key) { return __apo_stdlib::env_remove(__apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_current_dir() { return __apo_stdlib::current_dir(); }
+        int sys__native_set_current_dir(const char* path) { return __apo_stdlib::set_current_dir(__apo_stdlib::view_or_empty(path)); }
+        const char* sys__native_executable_path() { return __apo_stdlib::executable_path(); }
+        int sys__native_process_id() { return __apo_stdlib::process_id(); }
+        int sys__native_cpu_count() { return __apo_stdlib::cpu_count(); }
+        const char* sys__native_host_name() { return __apo_stdlib::host_name(); }
+        const char* sys__native_temp_dir() { return __apo_stdlib::temp_dir(); }
+        const char* sys__native_path_join(const char* left, const char* right) { return __apo_stdlib::path_join(__apo_stdlib::view_or_empty(left), __apo_stdlib::view_or_empty(right)); }
+        void sys__native_sleep_ms(int value) { __apo_stdlib::sleep_ms(value); }
+    }
+}

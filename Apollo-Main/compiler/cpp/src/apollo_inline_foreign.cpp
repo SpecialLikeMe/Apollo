@@ -105,6 +105,38 @@ std::string optLevelFromEnvironment() {
     return defaulted(std::getenv("APOLLO_OPT_LEVEL"), "3");
 }
 
+std::vector<std::filesystem::path> inlineForeignIncludeDirs(const std::filesystem::path& sourcePath,
+    const std::filesystem::path& outputPath) {
+    std::vector<std::filesystem::path> dirs;
+    if (sourcePath.has_parent_path()) {
+        dirs.push_back(std::filesystem::absolute(sourcePath.parent_path()).lexically_normal());
+    }
+
+    std::filesystem::path compilerDir = outputPath.has_parent_path()
+        ? outputPath.parent_path().parent_path()
+        : std::filesystem::current_path();
+    if (compilerDir.empty()) {
+        compilerDir = std::filesystem::current_path();
+    }
+    const auto runtimeSupportDir = (compilerDir / "runtime_support").lexically_normal();
+    if (std::filesystem::exists(runtimeSupportDir)) {
+        dirs.push_back(runtimeSupportDir);
+    }
+
+    std::sort(dirs.begin(), dirs.end());
+    dirs.erase(std::unique(dirs.begin(), dirs.end()), dirs.end());
+    return dirs;
+}
+
+void appendIncludeSearchPaths(std::vector<std::string>& command,
+    const std::filesystem::path& sourcePath,
+    const std::filesystem::path& outputPath) {
+    for (const auto& dir : inlineForeignIncludeDirs(sourcePath, outputPath)) {
+        command.push_back("-I");
+        command.push_back(dir.string());
+    }
+}
+
 std::string firstDefined(const char* primary, const char* secondary, const char* fallback) {
     const std::string primaryValue = defaulted(primary, "");
     if (!primaryValue.empty()) {
@@ -224,7 +256,7 @@ bool inlineForeignToolAvailable(std::string command) {
 
 std::string sanitizeClikeExportType(std::string typeText) {
     std::string normalized = collapseSpaces(std::move(typeText));
-    for (const std::string_view prefix : {std::string_view("extern \"C\" "), std::string_view("static "), std::string_view("const ")}) {
+    for (const std::string_view prefix : {std::string_view("extern \"C\" "), std::string_view("static ")}) {
         while (normalized.rfind(prefix, 0) == 0) {
             normalized.erase(0, prefix.size());
             normalized = trimCopy(normalized);
@@ -243,6 +275,8 @@ bool isClikeLanguage(ApolloInlineForeignLanguage language) {
 bool isStringApolloType(std::string_view typeText) {
     return typeText == "str";
 }
+
+std::pair<std::string, std::string> splitCppPreamble(std::string_view payload);
 
 std::string regexEscape(std::string_view text) {
     std::string escaped;
@@ -350,6 +384,9 @@ std::string rewritePrivateFunctionNames(const ApolloInlineForeignBlock& block, s
 std::string apolloTypeToClikeAbi(std::string_view apolloType) {
     if (apolloType == "str") {
         return "const char*";
+    }
+    if (apolloType == "indef") {
+        return "void*";
     }
     if (apolloType == "bool") {
         return "bool";
@@ -619,6 +656,9 @@ std::optional<std::string> mapClikeTypeToApollo(std::string_view typeText) {
     if (normalized == "char*" || normalized == "char *" || normalized == "const char*" || normalized == "const char *"
         || normalized == "char const*" || normalized == "char const *") {
         return "str";
+    }
+    if (normalized == "void*" || normalized == "void *" || normalized == "const void*" || normalized == "const void *") {
+        return "indef";
     }
     if (normalized == "bool") {
         return "bool";
@@ -1074,7 +1114,7 @@ std::optional<ApolloInlineForeignParameter> parseRustParameter(std::string_view 
 }
 
 std::vector<ApolloInlineForeignSymbol> collectClikeFunctions(std::string_view payload) {
-    static const std::regex kFunctionPattern(R"(^((?:extern\s+"C"\s+)?(?:static\s+)?[A-Za-z_][A-Za-z0-9_:]*)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)\s*\{)", std::regex::optimize);
+    static const std::regex kFunctionPattern(R"(^\s*((?:extern\s+"C"\s+)?(?:static\s+)?(?:const\s+)?[A-Za-z_][A-Za-z0-9_:]*(?:\s+const)?(?:\s*[*&]+)?)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)\s*\{)", std::regex::optimize);
 
     std::vector<ApolloInlineForeignSymbol> functions;
     for (const auto& chunk : splitTopLevelChunks(payload)) {
@@ -1111,7 +1151,7 @@ std::vector<ApolloInlineForeignSymbol> collectClikeFunctions(std::string_view pa
 }
 
 std::vector<ApolloInlineForeignSymbol> collectClikeGlobals(std::string_view payload) {
-    static const std::regex kGlobalPattern(R"(^((?:static\s+)?[A-Za-z_][A-Za-z0-9_:]*)\s+([A-Za-z_][A-Za-z0-9_]*)\s*=)", std::regex::optimize);
+    static const std::regex kGlobalPattern(R"(^\s*((?:static\s+)?(?:const\s+)?[A-Za-z_][A-Za-z0-9_:]*(?:\s+const)?(?:\s*[*&]+)?)\s+([A-Za-z_][A-Za-z0-9_]*)\s*=)", std::regex::optimize);
 
     std::vector<ApolloInlineForeignSymbol> globals;
     for (const auto& chunk : splitTopLevelChunks(payload)) {
@@ -1530,8 +1570,11 @@ ApolloInlineForeignBlock buildInlineForeignBlock(compilerv1Parser::InlineForeign
     case ApolloInlineForeignLanguage::Cpp:
     case ApolloInlineForeignLanguage::ObjectiveC:
     case ApolloInlineForeignLanguage::ObjectiveCpp:
-        block.functions = collectClikeFunctions(block.payload);
-        block.globals = collectClikeGlobals(block.payload);
+        {
+            const auto [ignoredPreamble, clikeBody] = splitCppPreamble(block.payload);
+            block.functions = collectClikeFunctions(clikeBody);
+            block.globals = collectClikeGlobals(clikeBody);
+        }
         break;
     case ApolloInlineForeignLanguage::Rust:
         block.functions = collectRustFunctions(block.payload);
@@ -1891,6 +1934,13 @@ std::string buildCppSource(const ApolloInlineForeignBlock& block,
         return builder.str();
     }
     builder << renderImportedClikeDefinitionAliases(block, allBlocks);
+    if (block.functions.empty() && block.globals.empty()
+        && (body.find("sys__native_") != std::string::npos || body.find("sys__") != std::string::npos)) {
+        builder << "extern \"C\" {\n";
+        builder << body;
+        builder << "}\n";
+        return builder.str();
+    }
     builder << "namespace " << namespaceName << " {\n";
     builder << body;
     builder << "}\n";
@@ -2883,6 +2933,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
         if (!sysroot.empty()) {
             command.push_back("--sysroot=" + sysroot);
         }
+        appendIncludeSearchPaths(command, sourcePath, outputPath);
         command.push_back("-x");
         command.push_back("c");
         command.push_back("-O" + optLevelFromEnvironment());
@@ -2900,6 +2951,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
         if (!sysroot.empty()) {
             command.push_back("--sysroot=" + sysroot);
         }
+        appendIncludeSearchPaths(command, sourcePath, outputPath);
         command.push_back("-std=" + cxxStdFromEnvironment());
         command.push_back("-O" + optLevelFromEnvironment());
         command.push_back("-S");
@@ -2916,6 +2968,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
         if (!sysroot.empty()) {
             command.push_back("--sysroot=" + sysroot);
         }
+        appendIncludeSearchPaths(command, sourcePath, outputPath);
         command.push_back("-x");
         command.push_back("objective-c");
         command.push_back("-O" + optLevelFromEnvironment());
@@ -2933,6 +2986,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
         if (!sysroot.empty()) {
             command.push_back("--sysroot=" + sysroot);
         }
+        appendIncludeSearchPaths(command, sourcePath, outputPath);
         command.push_back("-x");
         command.push_back("objective-c++");
         command.push_back("-std=" + cxxStdFromEnvironment());
@@ -3011,6 +3065,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
             if (!sysroot.empty()) {
                 command.push_back("--sysroot=" + sysroot);
             }
+            appendIncludeSearchPaths(command, sourcePath, outputPath);
             command.push_back("-x");
             command.push_back("c");
             command.push_back("-O" + optLevelFromEnvironment());
@@ -3039,6 +3094,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
             if (!sysroot.empty()) {
                 command.push_back("--sysroot=" + sysroot);
             }
+            appendIncludeSearchPaths(command, sourcePath, outputPath);
             command.push_back("-x");
             command.push_back("c");
             command.push_back("-O" + optLevelFromEnvironment());

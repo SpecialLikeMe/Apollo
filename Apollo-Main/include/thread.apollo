@@ -1,0 +1,18 @@
+namespace sys {
+    i32 thread_get_raw_id() {
+        return sys__native_thread_get_raw_id();
+    }
+
+    void thread_yield() {
+        sys__native_thread_yield();
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        int sys__native_thread_get_raw_id() { return __apo_stdlib::thread_get_raw_id(); }
+        void sys__native_thread_yield() { __apo_stdlib::thread_yield(); }
+    }
+}

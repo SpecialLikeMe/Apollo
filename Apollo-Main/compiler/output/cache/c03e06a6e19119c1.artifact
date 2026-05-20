@@ -1,5 +1,5 @@
 ; ModuleID = 'support/helper'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/support/helper.apollo"
+source_filename = "support/helper.apollo"
 
 @apollo.print.fmt = private unnamed_addr constant [6 x i8] c"%lld\0A\00"
 

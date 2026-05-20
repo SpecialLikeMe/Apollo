@@ -1,5 +1,5 @@
 ; ModuleID = 'branch_reference_rebind_dead_after_if'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/safety/pass/branch_reference_rebind_dead_after_if.apollo"
+source_filename = "branch_reference_rebind_dead_after_if.apollo"
 
 @apollo.print.fmt = private unnamed_addr constant [4 x i8] c"%s\0A\00"
 

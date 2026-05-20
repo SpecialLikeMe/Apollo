@@ -1,5 +1,7 @@
 ; ModuleID = 'bypass_surface'
-source_filename = "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass/bypass_surface.apollo"
+source_filename = "bypass_surface.apollo"
+target datalayout = "e-m:w-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-w64-windows-gnu"
 
 define i32 @main() {
 entry:
@@ -13,6 +15,7 @@ entry:
   store ptr %base, ptr %alias, align 8
   store ptr null, ptr %slot, align 8
   store ptr null, ptr %slot, align 8
+  call void @__apollo_inline_run_inline_8_9_0()
   %1 = load ptr, ptr %heap, align 8
   call void @free(ptr %1)
   store ptr null, ptr %heap, align 8
@@ -22,12 +25,23 @@ entry:
 
 declare ptr @malloc(i64)
 
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @__apollo_inline_run_inline_8_9_0() local_unnamed_addr #0 {
+  ret void
+}
+
 declare void @free(ptr)
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !apollo.backend = !{!0}
 !apollo.runtime.features = !{!1}
 !apollo.soa.mode = !{!2}
 !apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
+!llvm.dbg.cu = !{!19}
+!llvm.ident = !{!21}
+!llvm.errno.tbaa = !{!22}
+!llvm.module.flags = !{!26, !27, !28, !29, !30}
 
 !0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"bypass_surface"}
 !1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
@@ -48,3 +62,15 @@ declare void @free(ptr)
 !16 = !{!"i16", !"i16"}
 !17 = !{!"i8", !"i8"}
 !18 = !{!"i64", !"i64"}
+!19 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus_14, file: !20, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!20 = !DIFile(filename: "C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cache\\inline_foreign/e32c8bc3b3dd194b.cpp", directory: "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass")
+!21 = !{!"clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)"}
+!22 = !{!23, !23, i64 0}
+!23 = !{!"int", !24, i64 0}
+!24 = !{!"omnipotent char", !25, i64 0}
+!25 = !{!"Simple C++ TBAA"}
+!26 = !{i32 2, !"Debug Info Version", i32 3}
+!27 = !{i32 1, !"wchar_size", i32 2}
+!28 = !{i32 8, !"PIC Level", i32 2}
+!29 = !{i32 7, !"uwtable", i32 2}
+!30 = !{i32 1, !"MaxTLSAlign", i32 65536}

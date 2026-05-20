@@ -174,35 +174,6 @@ std::string joinFlags(const std::vector<std::string>& flags) {
     return builder.str();
 }
 
-std::optional<std::pair<std::filesystem::path, std::filesystem::path>> resolveGcPaths() {
-    if (const char* includeRaw = std::getenv("APOLLO_GC_INCLUDE_DIR"); includeRaw != nullptr && !isBlank(includeRaw)) {
-        const char* libRaw = std::getenv("APOLLO_GC_LIB_DIR");
-        if (libRaw != nullptr && !isBlank(libRaw)) {
-            const std::filesystem::path includeDir(includeRaw);
-            const std::filesystem::path libDir(libRaw);
-            if (fileExistsInAny(includeDir, {"gc_cpp.h", "gc\\gc_cpp.h", "gc.h", "gc\\gc.h"})
-                && fileExistsInAny(libDir, {"libgc.a", "libgc.dll.a"})
-                && fileExistsInAny(libDir, {"libgccpp.a", "libgccpp.dll.a"})) {
-                return std::make_pair(includeDir, libDir);
-            }
-        }
-    }
-
-    for (const auto& prefix : candidateMsysPrefixes()) {
-        for (const auto* variant : {"clang64", "mingw64"}) {
-            const auto includeDir = prefix / variant / "include";
-            const auto libDir = prefix / variant / "lib";
-            if (fileExistsInAny(includeDir, {"gc_cpp.h", "gc\\gc_cpp.h", "gc.h", "gc\\gc.h"})
-                && fileExistsInAny(libDir, {"libgc.a", "libgc.dll.a"})
-                && fileExistsInAny(libDir, {"libgccpp.a", "libgccpp.dll.a"})) {
-                return std::make_pair(includeDir, libDir);
-            }
-        }
-    }
-
-    return std::nullopt;
-}
-
 std::optional<std::pair<std::filesystem::path, std::filesystem::path>> resolveSdlPaths() {
     auto validate = [](const std::filesystem::path& includeDir, const std::filesystem::path& libDir)
         -> std::optional<std::pair<std::filesystem::path, std::filesystem::path>> {
@@ -242,10 +213,13 @@ std::optional<std::pair<std::filesystem::path, std::filesystem::path>> resolveSd
 
 std::string directIrRuntimeSupportSource() {
     return R"APOLLO(#include <cctype>
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "runtime_support/apo_autofmt_owner_runtime.hpp"
 
 namespace {
 
@@ -655,6 +629,14 @@ int executeApolloStatement(const std::string& rawStatement,
 
 } // namespace
 
+extern "C" void apollo_gc_init() {
+    ::__apollo_gc_init_impl();
+}
+
+extern "C" void* apollo_gc_alloc(std::size_t bytes) {
+    return ::__apollo_gc_alloc_impl(bytes);
+}
+
 extern "C" int apollo_execute_apollo_payload(const char* code) {
     if (code == nullptr) {
         return -1;
@@ -756,6 +738,26 @@ bool llvmRuntimeFeatureEnabled(std::string_view llvmIr, std::string_view feature
     return llvmIr.find(needle) != std::string_view::npos;
 }
 
+bool llvmDefinesStandaloneEntrypoint(std::string_view llvmIr) {
+    std::istringstream lines{std::string(llvmIr)};
+    std::string line;
+    while (std::getline(lines, line)) {
+        if (line.rfind("define ", 0) == 0 && line.find("@main(") != std::string::npos) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ensureStandaloneEntrypointPresent(const BuildEnvironment& env, const std::filesystem::path& llvmIrPath) {
+    const std::string llvmIr = readTextFile(llvmIrPath);
+    if (!llvmDefinesStandaloneEntrypoint(llvmIr)) {
+        throw BuildDriverException(
+            "Apollo source did not define a standalone program entrypoint. "
+            "No `main` function was emitted for: " + env.inputFile.string());
+    }
+}
+
 RuntimeRequirements directRuntimeRequirements(const BuildEnvironment& env, const std::filesystem::path& llvmIrPath) {
     RuntimeRequirements requirements;
     const std::string llvmIr = readTextFile(llvmIrPath);
@@ -772,16 +774,6 @@ RuntimeRequirements directRuntimeRequirements(const BuildEnvironment& env, const
                 << "apollo_payload_runtime=" << (usesApolloPayloadRuntime ? "1" : "0") << '\n'
                 << "total_program_gc=" << (totalProgramGc ? "1" : "0");
 
-    if (totalProgramGc) {
-        const auto gcPaths = resolveGcPaths();
-        if (!gcPaths.has_value()) {
-            throw BuildDriverException("Apollo GC runtime was requested by emitted LLVM IR, but Boehm GC could not be resolved.");
-        }
-        appendUnique(requirements.linkFlags, "-L" + gcPaths->second.string());
-        appendUnique(requirements.linkFlags, "-lgccpp");
-        appendUnique(requirements.linkFlags, "-lgc");
-    }
-
     if (usesGuiRuntime) {
         const auto sdlPaths = resolveSdlPaths();
         if (!sdlPaths.has_value()) {
@@ -792,7 +784,7 @@ RuntimeRequirements directRuntimeRequirements(const BuildEnvironment& env, const
         appendUnique(requirements.linkFlags, "-lSDL2_image");
     }
 
-    if (usesIrRuntime || usesApolloPayloadRuntime) {
+    if (totalProgramGc || usesIrRuntime || usesApolloPayloadRuntime) {
         appendUnique(requirements.linkFlags, buildDirectIrRuntimeSupportObject(env).string());
     }
 
@@ -971,21 +963,22 @@ std::vector<std::string> standaloneLinkFlags(const BuildEnvironment& env) {
     const bool windowsStaticLink = std::getenv("APOLLO_WINDOWS_STATIC_LINK") == nullptr
         ? true
         : envEnabled("APOLLO_WINDOWS_STATIC_LINK", false);
+    const auto windowsFlags = [&]() {
+        return windowsStaticLink
+            ? std::vector<std::string>{"-mconsole", "-static", "-static-libstdc++", "-static-libgcc"}
+            : std::vector<std::string>{"-mconsole"};
+    };
     if (!isBlank(env.targetTriple)) {
         const std::string triple = env.targetTriple;
         if (triple.find("linux") != std::string::npos) {
             return {"-no-pie", "-static-libstdc++", "-static-libgcc"};
         }
         if (triple.find("windows") != std::string::npos || triple.find("mingw") != std::string::npos) {
-            return windowsStaticLink
-                ? std::vector<std::string>{"-static", "-static-libstdc++", "-static-libgcc"}
-                : std::vector<std::string>{};
+            return windowsFlags();
         }
     }
 #ifdef _WIN32
-    return windowsStaticLink
-        ? std::vector<std::string>{"-static", "-static-libstdc++", "-static-libgcc"}
-        : std::vector<std::string>{};
+    return windowsFlags();
 #elif defined(__linux__)
     return {"-no-pie", "-static-libstdc++", "-static-libgcc"};
 #else
@@ -1142,6 +1135,7 @@ void linkStandaloneObject(const BuildEnvironment& env,
 
 void buildAot(const BuildEnvironment& env, const std::filesystem::path& linkOutput) {
     emitLl(env, env.llvmOutput);
+    ensureStandaloneEntrypointPresent(env, env.llvmOutput);
     const RuntimeRequirements requirements = directRuntimeRequirements(env, env.llvmOutput);
     const BuildArtifactCache cache = buildArtifactCacheFor(env, "build-aot", requirements, linkOutput, env.inputFile);
     if (restoreCachedArtifact(cache, linkOutput)) {
@@ -1164,6 +1158,7 @@ void buildAotDirectPrototype(const BuildEnvironment& env, const std::filesystem:
     }
 
     emitDirectPrototypeLl(env, env.llvmOutput);
+    ensureStandaloneEntrypointPresent(env, env.llvmOutput);
     if (!linkOutput.parent_path().empty()) {
         std::filesystem::create_directories(linkOutput.parent_path());
     }

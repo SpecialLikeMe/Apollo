@@ -1049,5 +1049,6 @@ CMakeFiles/apollo_driver_tests.dir/src/apollo_runtime.cpp.obj: \
   C:/msys64/clang64/include/antlr4-runtime/tree/xpath/XPathWildcardElement.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/../../brc/borrow_checker.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.h

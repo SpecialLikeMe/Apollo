@@ -1,0 +1,53 @@
+namespace sys {
+    str datetime_now_utc() {
+        return sys__native_datetime_now_utc();
+    }
+
+    str datetime_now_local() {
+        return sys__native_datetime_now_local();
+    }
+
+    i32 datetime_year_local() {
+        return sys__native_datetime_year_local();
+    }
+
+    i32 datetime_month_local() {
+        return sys__native_datetime_month_local();
+    }
+
+    i32 datetime_day_local() {
+        return sys__native_datetime_day_local();
+    }
+
+    i32 datetime_hour_local() {
+        return sys__native_datetime_hour_local();
+    }
+
+    i32 datetime_minute_local() {
+        return sys__native_datetime_minute_local();
+    }
+
+    i32 datetime_second_local() {
+        return sys__native_datetime_second_local();
+    }
+
+    i32 monotonic_millis() {
+        return sys__native_monotonic_millis();
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        const char* sys__native_datetime_now_utc() { return __apo_stdlib::datetime_now_utc(); }
+        const char* sys__native_datetime_now_local() { return __apo_stdlib::datetime_now_local(); }
+        int sys__native_datetime_year_local() { return __apo_stdlib::datetime_year_local(); }
+        int sys__native_datetime_month_local() { return __apo_stdlib::datetime_month_local(); }
+        int sys__native_datetime_day_local() { return __apo_stdlib::datetime_day_local(); }
+        int sys__native_datetime_hour_local() { return __apo_stdlib::datetime_hour_local(); }
+        int sys__native_datetime_minute_local() { return __apo_stdlib::datetime_minute_local(); }
+        int sys__native_datetime_second_local() { return __apo_stdlib::datetime_second_local(); }
+        int sys__native_monotonic_millis() { return __apo_stdlib::monotonic_millis(); }
+    }
+}
