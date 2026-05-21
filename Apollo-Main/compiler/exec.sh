@@ -326,7 +326,6 @@ reuse_native_targets() {
 
 ensure_native_targets() {
     resolve_cmake || return 1
-    normalize_llvm_shell_scripts
     mkdir -p "$NATIVE_BUILD_DIR"
 
     if reuse_native_targets "$@"; then
@@ -338,6 +337,7 @@ ensure_native_targets() {
     fi
 
     if [ ! -f "$NATIVE_BUILD_DIR/CMakeCache.txt" ]; then
+        normalize_llvm_shell_scripts
         configure_native_build
     fi
 
