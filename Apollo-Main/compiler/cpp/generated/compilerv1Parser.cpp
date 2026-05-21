@@ -6,6 +6,8 @@
 
 #include "compilerv1Parser.h"
 
+#include <mutex>
+
 
 using namespace antlrcpp;
 
@@ -36,7 +38,7 @@ struct Compilerv1ParserStaticData final {
   std::unique_ptr<antlr4::atn::ATN> atn;
 };
 
-::antlr4::internal::OnceFlag compilerv1ParserOnceFlag;
+std::once_flag compilerv1ParserOnceFlag;
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
 static thread_local
 #endif
@@ -14018,6 +14020,6 @@ void compilerv1Parser::initialize() {
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
   compilerv1ParserInitialize();
 #else
-  ::antlr4::internal::call_once(compilerv1ParserOnceFlag, compilerv1ParserInitialize);
+  std::call_once(compilerv1ParserOnceFlag, compilerv1ParserInitialize);
 #endif
 }

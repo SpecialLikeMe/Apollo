@@ -1,0 +1,1 @@
+extern std prelude; i32 main() { process proc = sys.process_spawn("echo apollo"); return sys.process_exit_code(proc); }

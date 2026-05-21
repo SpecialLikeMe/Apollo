@@ -115,6 +115,8 @@ else()
 endif()
 
 set(APOLLO_ANTLR4_RUNTIME_TARGET "")
+set(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR "")
+set(APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR "")
 find_package(antlr4-runtime CONFIG QUIET)
 
 foreach(apollo_antlr_target IN ITEMS antlr4_shared antlr4_static antlr4-runtime antlr4_runtime)
@@ -123,20 +125,42 @@ foreach(apollo_antlr_target IN ITEMS antlr4_shared antlr4_static antlr4-runtime 
     endif()
 endforeach()
 
+if(APOLLO_ANTLR4_RUNTIME_TARGET)
+    get_target_property(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR ${APOLLO_ANTLR4_RUNTIME_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
+    if(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR STREQUAL "APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR-NOTFOUND")
+        set(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR "")
+    endif()
+endif()
+
+if(NOT APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR AND DEFINED APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR AND EXISTS "${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}/antlr4-runtime.h")
+    set(APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR "${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}")
+endif()
+
+if(NOT APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR AND DEFINED ENV{APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR} AND EXISTS "$ENV{APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}/antlr4-runtime.h")
+    set(APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR "$ENV{APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}")
+endif()
+
+find_path(APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR
+    NAMES antlr4-runtime.h
+    HINTS
+        "${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}"
+        "$ENV{APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}"
+        "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/include"
+        "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/include/antlr4-runtime"
+    PATH_SUFFIXES
+        antlr4-runtime
+        include
+        include/antlr4-runtime)
+
+if(NOT APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR)
+    set(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR "${APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR}")
+endif()
+
 if(NOT APOLLO_ANTLR4_RUNTIME_TARGET)
-    find_path(APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR
-        NAMES antlr4-runtime.h
-        HINTS
-            "$ENV{APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}"
-            "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/include"
-            "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/include/antlr4-runtime"
-        PATH_SUFFIXES
-            antlr4-runtime
-            include
-            include/antlr4-runtime)
     find_library(APOLLO_ANTLR4_RUNTIME_LIBRARY
         NAMES antlr4-runtime antlr4_runtime antlr4_shared
         HINTS
+            "${APOLLO_ANTLR4_RUNTIME_LIB_DIR}"
             "$ENV{APOLLO_ANTLR4_RUNTIME_LIB_DIR}"
             "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/lib"
             "$ENV{APOLLO_NATIVE_CMAKE_PREFIX}/lib64")
@@ -211,6 +235,8 @@ foreach(apollo_target IN ITEMS apollo_frontend_native apollo_build_driver_native
         PRIVATE
             "${APOLLO_CPP_SOURCE_DIR}/../.."
             "${APOLLO_NATIVE_GENERATED_DIR}"
+            ${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR}
+                ${APOLLO_ANTLR4_RUNTIME_FALLBACK_INCLUDE_DIR}
             ${LLVM_INCLUDE_DIRS}
     )
 

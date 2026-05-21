@@ -15,19 +15,19 @@ namespace sys {
         return "\t";
     }
 
-    str brackets(str value) {
+    str brackets(nconst str& value) {
         return "[${value}]";
     }
 
-    str parens(str value) {
+    str parens(nconst str& value) {
         return "(${value})";
     }
 
-    str join_space(str left, str right) {
+    str join_space(nconst str& left, nconst str& right) {
         return "${left} ${right}";
     }
 
-    str join_colon(str left, str right) {
+    str join_colon(nconst str& left, nconst str& right) {
         return "${left}: ${right}";
     }
 
@@ -35,45 +35,199 @@ namespace sys {
         return "${left}, ${right}";
     }
 
-    str label_i32(str label, i32 value) {
+    str label_i32(nconst str& label, i32 value) {
         return "${label}: ${value}";
     }
 
-    str status(str label, str value) {
+    str status(nconst str& label, nconst str& value) {
         return "${label}: ${value}";
+    }
+
+    i32 str_len(nconst str& value) {
+        return sys__native_str_len(value);
+    }
+
+    str str_concat(nconst str& left, nconst str& right) {
+        return sys__native_str_concat(left, right);
+    }
+
+    str str_trim(nconst str& value) {
+        return sys__native_str_trim(value);
+    }
+
+    str str_trim_start(nconst str& value) {
+        return sys__native_str_trim_start(value);
+    }
+
+    str str_trim_end(nconst str& value) {
+        return sys__native_str_trim_end(value);
+    }
+
+    str str_lowercase(nconst str& value) {
+        return sys__native_str_lowercase(value);
+    }
+
+    str str_uppercase(nconst str& value) {
+        return sys__native_str_uppercase(value);
+    }
+
+    str str_titlecase(nconst str& value) {
+        return sys__native_str_titlecase(value);
+    }
+
+    i32 str_contains(nconst str& value, nconst str& sub) {
+        return sys__native_str_contains(value, sub);
+    }
+
+    i32 str_starts_with(nconst str& value, nconst str& prefix) {
+        return sys__native_str_starts_with(value, prefix);
+    }
+
+    i32 str_ends_with(nconst str& value, nconst str& suffix) {
+        return sys__native_str_ends_with(value, suffix);
+    }
+
+    i32 str_find(nconst str& value, nconst str& sub) {
+        return sys__native_str_find(value, sub);
+    }
+
+    i32 str_rfind(nconst str& value, nconst str& sub) {
+        return sys__native_str_rfind(value, sub);
+    }
+
+    str str_replace(nconst str& value, nconst str& old_text, nconst str& new_text) {
+        return sys__native_str_replace(value, old_text, new_text);
+    }
+
+    str str_replace_n(nconst str& value, nconst str& old_text, nconst str& new_text, i32 count) {
+        return sys__native_str_replace_n(value, old_text, new_text, count);
+    }
+
+    str str_reverse(nconst str& value) {
+        return sys__native_str_reverse(value);
+    }
+
+    str str_repeat(nconst str& value, i32 count) {
+        return sys__native_str_repeat(value, count);
+    }
+
+    str str_pad_left(nconst str& value, i32 target_len, nconst str& fill) {
+        return sys__native_str_pad_left(value, target_len, fill);
+    }
+
+    str str_pad_right(nconst str& value, i32 target_len, nconst str& fill) {
+        return sys__native_str_pad_right(value, target_len, fill);
+    }
+
+    str str_substring(nconst str& value, i32 start, i32 len) {
+        return sys__native_str_substring(value, start, len);
+    }
+
+    i32 str_cmp(nconst str& left, nconst str& right) {
+        return sys__native_str_cmp(left, right);
+    }
+
+    i32 str_casecmp(nconst str& left, nconst str& right) {
+        return sys__native_str_casecmp(left, right);
+    }
+
+    vector str_split(nconst str& value, nconst str& delimiter) {
+        return sys__native_str_split(value, delimiter);
+    }
+
+    vector str_split_n(nconst str& value, nconst str& delimiter, i32 max_parts) {
+        return sys__native_str_split_n(value, delimiter, max_parts);
+    }
+
+    vector str_split_lines(nconst str& value) {
+        return sys__native_str_split_lines(value);
+    }
+
+    long parse_int(nconst str& value, i32 base) {
+        return sys__native_parse_int(value, base);
+    }
+
+    i32 parse_bool(nconst str& value) {
+        return sys__native_parse_bool(value);
+    }
+
+    f64 parse_float(nconst str& value) {
+        return sys__native_parse_float(value);
+    }
+
+    i32 is_alpha(nconst str& value) {
+        return sys__native_is_alpha(value);
+    }
+
+    i32 is_digit(nconst str& value) {
+        return sys__native_is_digit(value);
+    }
+
+    i32 is_alnum(nconst str& value) {
+        return sys__native_is_alnum(value);
+    }
+
+    i32 is_whitespace(nconst str& value) {
+        return sys__native_is_whitespace(value);
+    }
+
+    i32 is_control(nconst str& value) {
+        return sys__native_is_control(value);
+    }
+
+    i32 is_punctuation(nconst str& value) {
+        return sys__native_is_punctuation(value);
+    }
+
+    i32 is_graph(nconst str& value) {
+        return sys__native_is_graph(value);
+    }
+
+    i32 is_print(nconst str& value) {
+        return sys__native_is_print(value);
+    }
+
+    i32 is_hex_digit(nconst str& value) {
+        return sys__native_is_hex_digit(value);
+    }
+
+    i32 is_ascii(nconst str& value) {
+        return sys__native_is_ascii(value);
     }
 }
 
 @unsafe {
     inline::cpp {
         #include "apo_stdlib_runtime.hpp"
+        #include "apo_std_object_runtime.hpp"
 
-        int sys__str_len(const char* value) { return static_cast<int>(__apo_stdlib::view_or_empty(value).size()); }
-        const char* sys__str_concat(const char* left, const char* right) { return __apo_stdlib::store_string(__apo_stdlib::text_or_empty(left) + __apo_stdlib::text_or_empty(right)); }
-        const char* sys__str_trim(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::trim_copy(__apo_stdlib::view_or_empty(value))); }
-        const char* sys__str_trim_start(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::trim_start_copy(__apo_stdlib::view_or_empty(value))); }
-        const char* sys__str_trim_end(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::trim_end_copy(__apo_stdlib::view_or_empty(value))); }
-        const char* sys__str_lowercase(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::lowercase_ascii_copy(__apo_stdlib::text_or_empty(value))); }
-        const char* sys__str_uppercase(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::uppercase_ascii_copy(__apo_stdlib::text_or_empty(value))); }
-        const char* sys__str_titlecase(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::titlecase_ascii_copy(__apo_stdlib::text_or_empty(value))); }
-        int sys__str_contains(const char* value, const char* sub) { return __apo_stdlib::text_or_empty(value).find(__apo_stdlib::text_or_empty(sub)) == std::string::npos ? 0 : 1; }
-        int sys__str_starts_with(const char* value, const char* prefix) { return __apo_stdlib::view_or_empty(value).starts_with(__apo_stdlib::view_or_empty(prefix)) ? 1 : 0; }
-        int sys__str_ends_with(const char* value, const char* suffix) { return __apo_stdlib::view_or_empty(value).ends_with(__apo_stdlib::view_or_empty(suffix)) ? 1 : 0; }
-        int sys__str_find(const char* value, const char* sub) {
+        int sys__native_str_len(const char* value) { return static_cast<int>(__apo_stdlib::view_or_empty(value).size()); }
+        const char* sys__native_str_concat(const char* left, const char* right) { return __apo_stdlib::store_string(__apo_stdlib::text_or_empty(left) + __apo_stdlib::text_or_empty(right)); }
+        const char* sys__native_str_trim(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::trim_copy(__apo_stdlib::view_or_empty(value))); }
+        const char* sys__native_str_trim_start(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::trim_start_copy(__apo_stdlib::view_or_empty(value))); }
+        const char* sys__native_str_trim_end(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::trim_end_copy(__apo_stdlib::view_or_empty(value))); }
+        const char* sys__native_str_lowercase(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::lowercase_ascii_copy(__apo_stdlib::text_or_empty(value))); }
+        const char* sys__native_str_uppercase(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::uppercase_ascii_copy(__apo_stdlib::text_or_empty(value))); }
+        const char* sys__native_str_titlecase(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::titlecase_ascii_copy(__apo_stdlib::text_or_empty(value))); }
+        int sys__native_str_contains(const char* value, const char* sub) { return __apo_stdlib::text_or_empty(value).find(__apo_stdlib::text_or_empty(sub)) == std::string::npos ? 0 : 1; }
+        int sys__native_str_starts_with(const char* value, const char* prefix) { return __apo_stdlib::view_or_empty(value).starts_with(__apo_stdlib::view_or_empty(prefix)) ? 1 : 0; }
+        int sys__native_str_ends_with(const char* value, const char* suffix) { return __apo_stdlib::view_or_empty(value).ends_with(__apo_stdlib::view_or_empty(suffix)) ? 1 : 0; }
+        int sys__native_str_find(const char* value, const char* sub) {
             const std::size_t match = __apo_stdlib::text_or_empty(value).find(__apo_stdlib::text_or_empty(sub));
             return match == std::string::npos ? -1 : static_cast<int>(match);
         }
-        int sys__str_rfind(const char* value, const char* sub) {
+        int sys__native_str_rfind(const char* value, const char* sub) {
             const std::size_t match = __apo_stdlib::text_or_empty(value).rfind(__apo_stdlib::text_or_empty(sub));
             return match == std::string::npos ? -1 : static_cast<int>(match);
         }
-        const char* sys__str_replace(const char* value, const char* old_text, const char* new_text) {
+        const char* sys__native_str_replace(const char* value, const char* old_text, const char* new_text) {
             return __apo_stdlib::store_string(__apo_stdlib::replace_n_copy(__apo_stdlib::text_or_empty(value), __apo_stdlib::view_or_empty(old_text), __apo_stdlib::view_or_empty(new_text), -1));
         }
-        const char* sys__str_replace_n(const char* value, const char* old_text, const char* new_text, int count) {
+        const char* sys__native_str_replace_n(const char* value, const char* old_text, const char* new_text, int count) {
             return __apo_stdlib::store_string(__apo_stdlib::replace_n_copy(__apo_stdlib::text_or_empty(value), __apo_stdlib::view_or_empty(old_text), __apo_stdlib::view_or_empty(new_text), count));
         }
-        const char* sys__str_repeat(const char* value, int count) {
+        const char* sys__native_str_reverse(const char* value) { return __apo_stdlib::store_string(__apo_stdlib::reverse_copy(__apo_stdlib::text_or_empty(value))); }
+        const char* sys__native_str_repeat(const char* value, int count) {
             std::string out;
             if (count > 0) {
                 const std::string text = __apo_stdlib::text_or_empty(value);
@@ -83,7 +237,7 @@ namespace sys {
             }
             return __apo_stdlib::store_string(std::move(out));
         }
-        const char* sys__str_pad_left(const char* value, int target_len, const char* fill) {
+        const char* sys__native_str_pad_left(const char* value, int target_len, const char* fill) {
             std::string text = __apo_stdlib::text_or_empty(value);
             const char pad = __apo_stdlib::pad_char(__apo_stdlib::view_or_empty(fill));
             while (static_cast<int>(text.size()) < target_len) {
@@ -91,7 +245,7 @@ namespace sys {
             }
             return __apo_stdlib::store_string(std::move(text));
         }
-        const char* sys__str_pad_right(const char* value, int target_len, const char* fill) {
+        const char* sys__native_str_pad_right(const char* value, int target_len, const char* fill) {
             std::string text = __apo_stdlib::text_or_empty(value);
             const char pad = __apo_stdlib::pad_char(__apo_stdlib::view_or_empty(fill));
             while (static_cast<int>(text.size()) < target_len) {
@@ -99,37 +253,41 @@ namespace sys {
             }
             return __apo_stdlib::store_string(std::move(text));
         }
-        const char* sys__str_substring(const char* value, int start, int len) {
+        const char* sys__native_str_substring(const char* value, int start, int len) {
             const std::string text = __apo_stdlib::text_or_empty(value);
             if (start < 0 || len <= 0 || start >= static_cast<int>(text.size())) {
                 return __apo_stdlib::store_string("");
             }
             return __apo_stdlib::store_string(text.substr(static_cast<std::size_t>(start), static_cast<std::size_t>(len)));
         }
-        int sys__str_cmp(const char* left, const char* right) { return __apo_stdlib::compare_strings(__apo_stdlib::view_or_empty(left), __apo_stdlib::view_or_empty(right)); }
-        int sys__str_casecmp(const char* left, const char* right) { return __apo_stdlib::compare_strings_casefold_ascii(__apo_stdlib::view_or_empty(left), __apo_stdlib::view_or_empty(right)); }
-        long sys__parse_int(const char* value, int base) {
+        int sys__native_str_cmp(const char* left, const char* right) { return __apo_stdlib::compare_strings(__apo_stdlib::view_or_empty(left), __apo_stdlib::view_or_empty(right)); }
+        int sys__native_str_casecmp(const char* left, const char* right) { return __apo_stdlib::compare_strings_casefold_ascii(__apo_stdlib::view_or_empty(left), __apo_stdlib::view_or_empty(right)); }
+        void* sys__native_str_split(const char* value, const char* delimiter) { return __apo_stdlib::str_split_handle(__apo_stdlib::view_or_empty(value), __apo_stdlib::view_or_empty(delimiter), -1); }
+        void* sys__native_str_split_n(const char* value, const char* delimiter, int max_parts) { return __apo_stdlib::str_split_handle(__apo_stdlib::view_or_empty(value), __apo_stdlib::view_or_empty(delimiter), max_parts); }
+        void* sys__native_str_split_lines(const char* value) { return __apo_stdlib::str_split_lines_handle(__apo_stdlib::view_or_empty(value)); }
+        long sys__native_parse_int(const char* value, int base) {
             const std::string text = __apo_stdlib::trim_copy(__apo_stdlib::view_or_empty(value));
             if (text.empty()) { return 0; }
             char* end = nullptr;
             const int normalized_base = base == 0 ? 0 : (base < 2 || base > 36 ? 10 : base);
             return std::strtol(text.c_str(), &end, normalized_base);
         }
-        double sys__parse_float(const char* value) {
+        int sys__native_parse_bool(const char* value) { return __apo_stdlib::parse_bool_ascii(__apo_stdlib::view_or_empty(value)); }
+        double sys__native_parse_float(const char* value) {
             const std::string text = __apo_stdlib::trim_copy(__apo_stdlib::view_or_empty(value));
             if (text.empty()) { return 0.0; }
             char* end = nullptr;
             return std::strtod(text.c_str(), &end);
         }
-        int sys__is_alpha(const char* value) { return std::isalpha(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_digit(const char* value) { return std::isdigit(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_alnum(const char* value) { return std::isalnum(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_whitespace(const char* value) { return std::isspace(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_control(const char* value) { return std::iscntrl(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_punctuation(const char* value) { return std::ispunct(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_graph(const char* value) { return std::isgraph(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_print(const char* value) { return std::isprint(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_hex_digit(const char* value) { return std::isxdigit(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
-        int sys__is_ascii(const char* value) { return __apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value)) <= 0x7F ? 1 : 0; }
+        int sys__native_is_alpha(const char* value) { return std::isalpha(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_digit(const char* value) { return std::isdigit(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_alnum(const char* value) { return std::isalnum(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_whitespace(const char* value) { return std::isspace(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_control(const char* value) { return std::iscntrl(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_punctuation(const char* value) { return std::ispunct(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_graph(const char* value) { return std::isgraph(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_print(const char* value) { return std::isprint(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_hex_digit(const char* value) { return std::isxdigit(__apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value))) != 0 ? 1 : 0; }
+        int sys__native_is_ascii(const char* value) { return __apo_stdlib::first_byte(__apo_stdlib::view_or_empty(value)) <= 0x7F ? 1 : 0; }
     }
 }

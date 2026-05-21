@@ -83,6 +83,18 @@ std::string targetTripleFromEnvironment() {
     return defaulted(std::getenv("APOLLO_TARGET_TRIPLE"), "");
 }
 
+std::string hostPlatformCacheTag() {
+#if defined(_WIN32)
+    return "windows";
+#elif defined(__APPLE__)
+    return "macos";
+#elif defined(__linux__)
+    return "linux";
+#else
+    return "unknown";
+#endif
+}
+
 std::string rustTargetTripleFromApolloTarget(std::string targetTriple) {
     if (targetTriple == "x86_64-w64-windows-gnu") {
         return "x86_64-pc-windows-gnu";
@@ -2907,7 +2919,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
         break;
     }
     const std::string cacheKey = stableHashHex(sourcePath.string() + "\n" + outputPath.string() + "\n" + block.stableId + "\n"
-        + block.languageText + "\n" + renderedSource + "\n" + targetTripleFromEnvironment() + "\n"
+        + block.languageText + "\n" + renderedSource + "\n" + hostPlatformCacheTag() + "\n" + targetTripleFromEnvironment() + "\n"
         + sysrootFromEnvironment() + "\n" + cxxStdFromEnvironment() + "\n" + optLevelFromEnvironment() + "\n"
         + compileSignature);
 

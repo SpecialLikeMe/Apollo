@@ -13,6 +13,8 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <utility>
+#include <vector>
 
 namespace __apo_stdlib {
 
@@ -154,16 +156,66 @@ inline std::int32_t from_u32(std::uint32_t value) {
     return static_cast<std::int32_t>(value);
 }
 
+inline std::int32_t countl_zero_u32(std::uint32_t value) {
+    if (value == 0) {
+        return 32;
+    }
+    std::int32_t count = 0;
+    std::uint32_t mask = 0x80000000u;
+    while ((value & mask) == 0u) {
+        ++count;
+        mask >>= 1;
+    }
+    return count;
+}
+
+inline std::int32_t countr_zero_u32(std::uint32_t value) {
+    if (value == 0) {
+        return 32;
+    }
+    std::int32_t count = 0;
+    while ((value & 1u) == 0u) {
+        ++count;
+        value >>= 1;
+    }
+    return count;
+}
+
+inline std::int32_t popcount_u32(std::uint32_t value) {
+    std::int32_t count = 0;
+    while (value != 0u) {
+        count += static_cast<std::int32_t>(value & 1u);
+        value >>= 1;
+    }
+    return count;
+}
+
+inline std::uint32_t rotl_u32(std::uint32_t value, std::int32_t amount) {
+    const unsigned int shift = static_cast<unsigned int>(amount) & 31u;
+    if (shift == 0u) {
+        return value;
+    }
+    return (value << shift) | (value >> ((32u - shift) & 31u));
+}
+
+inline std::uint32_t rotr_u32(std::uint32_t value, std::int32_t amount) {
+    const unsigned int shift = static_cast<unsigned int>(amount) & 31u;
+    if (shift == 0u) {
+        return value;
+    }
+    return (value >> shift) | (value << ((32u - shift) & 31u));
+}
+
 inline std::int32_t clz_i32(std::int32_t value) {
-    return static_cast<std::int32_t>(std::countl_zero(as_u32(value)));
+    return countl_zero_u32(as_u32(value));
 }
 
 inline std::int32_t ctz_i32(std::int32_t value) {
-    return static_cast<std::int32_t>(std::countr_zero(as_u32(value)));
+    return countr_zero_u32(as_u32(value));
 }
 
 inline std::int32_t popcount_i32(std::int32_t value) {
-    return static_cast<std::int32_t>(std::popcount(as_u32(value)));
+    return popcount_u32(as_u32(value));
 }
 
 inline std::int32_t ffs_i32(std::int32_t value) {
@@ -171,15 +223,15 @@ inline std::int32_t ffs_i32(std::int32_t value) {
     if (bits == 0) {
         return 0;
     }
-    return static_cast<std::int32_t>(std::countr_zero(bits)) + 1;
+    return countr_zero_u32(bits) + 1;
 }
 
 inline std::int32_t rotate_left_i32(std::int32_t value, std::int32_t amount) {
-    return from_u32(std::rotl(as_u32(value), amount));
+    return from_u32(rotl_u32(as_u32(value), amount));
 }
 
 inline std::int32_t rotate_right_i32(std::int32_t value, std::int32_t amount) {
-    return from_u32(std::rotr(as_u32(value), amount));
+    return from_u32(rotr_u32(as_u32(value), amount));
 }
 
 inline std::int32_t bswap_i32(std::int32_t value) {
@@ -303,6 +355,22 @@ inline std::string replace_n_copy(std::string text, std::string_view from, std::
         }
     }
     return text;
+}
+
+inline std::string reverse_copy(std::string text) {
+    std::reverse(text.begin(), text.end());
+    return text;
+}
+
+inline std::int32_t parse_bool_ascii(std::string_view text) {
+    const std::string normalized = lowercase_ascii_copy(trim_copy(text));
+    if (normalized == "1" || normalized == "true" || normalized == "yes" || normalized == "on") {
+        return 1;
+    }
+    if (normalized == "0" || normalized == "false" || normalized == "no" || normalized == "off") {
+        return 0;
+    }
+    return 0;
 }
 
 inline char pad_char(std::string_view fill) {
@@ -558,10 +626,10 @@ inline std::uint32_t hash_murmur3_32(std::string_view text) {
             | (static_cast<std::uint32_t>(data[index * 4 + 2]) << 16)
             | (static_cast<std::uint32_t>(data[index * 4 + 3]) << 24);
         k1 *= c1;
-        k1 = std::rotl(k1, 15);
+        k1 = rotl_u32(k1, 15);
         k1 *= c2;
         hash ^= k1;
-        hash = std::rotl(hash, 13);
+        hash = rotl_u32(hash, 13);
         hash = hash * 5u + 0xe6546b64u;
     }
 
@@ -577,7 +645,7 @@ inline std::uint32_t hash_murmur3_32(std::string_view text) {
     case 1:
         tail ^= static_cast<std::uint32_t>(tailData[0]);
         tail *= c1;
-        tail = std::rotl(tail, 15);
+        tail = rotl_u32(tail, 15);
         tail *= c2;
         hash ^= tail;
         break;
@@ -688,6 +756,147 @@ inline const char* json_write_object_start() {
 
 inline const char* json_write_object_end() {
     return store_string("}");
+}
+
+inline std::vector<std::string> json_split_top_level(std::string_view text) {
+    std::vector<std::string> parts;
+    std::size_t start = 0;
+    int depth = 0;
+    bool inString = false;
+    bool escaped = false;
+    for (std::size_t index = 0; index < text.size(); ++index) {
+        const char ch = text[index];
+        if (inString) {
+            if (escaped) {
+                escaped = false;
+            } else if (ch == '\\') {
+                escaped = true;
+            } else if (ch == '"') {
+                inString = false;
+            }
+            continue;
+        }
+        if (ch == '"') {
+            inString = true;
+            continue;
+        }
+        if (ch == '[' || ch == '{') {
+            ++depth;
+            continue;
+        }
+        if (ch == ']' || ch == '}') {
+            if (depth > 0) {
+                --depth;
+            }
+            continue;
+        }
+        if (ch == ',' && depth == 0) {
+            parts.push_back(trim_copy(text.substr(start, index - start)));
+            start = index + 1;
+        }
+    }
+    if (start <= text.size()) {
+        parts.push_back(trim_copy(text.substr(start)));
+    }
+    if (parts.size() == 1 && parts.front().empty()) {
+        parts.clear();
+    }
+    return parts;
+}
+
+inline std::size_t json_find_top_level_colon(std::string_view text) {
+    int depth = 0;
+    bool inString = false;
+    bool escaped = false;
+    for (std::size_t index = 0; index < text.size(); ++index) {
+        const char ch = text[index];
+        if (inString) {
+            if (escaped) {
+                escaped = false;
+            } else if (ch == '\\') {
+                escaped = true;
+            } else if (ch == '"') {
+                inString = false;
+            }
+            continue;
+        }
+        if (ch == '"') {
+            inString = true;
+            continue;
+        }
+        if (ch == '[' || ch == '{') {
+            ++depth;
+            continue;
+        }
+        if (ch == ']' || ch == '}') {
+            if (depth > 0) {
+                --depth;
+            }
+            continue;
+        }
+        if (ch == ':' && depth == 0) {
+            return index;
+        }
+    }
+    return std::string_view::npos;
+}
+
+inline std::string json_parse_key(std::string_view text) {
+    const std::string trimmed = trim_copy(text);
+    if (trimmed.size() >= 2 && trimmed.front() == '"' && trimmed.back() == '"') {
+        return json_unescape_text(std::string_view(trimmed).substr(1, trimmed.size() - 2));
+    }
+    return trimmed;
+}
+
+inline std::vector<std::string> json_parse_array_items(std::string_view text) {
+    const std::string trimmed = trim_copy(text);
+    if (trimmed.size() < 2 || trimmed.front() != '[' || trimmed.back() != ']') {
+        return {};
+    }
+    return json_split_top_level(std::string_view(trimmed).substr(1, trimmed.size() - 2));
+}
+
+inline std::vector<std::pair<std::string, std::string>> json_parse_object_items(std::string_view text) {
+    const std::string trimmed = trim_copy(text);
+    if (trimmed.size() < 2 || trimmed.front() != '{' || trimmed.back() != '}') {
+        return {};
+    }
+    std::vector<std::pair<std::string, std::string>> items;
+    for (const std::string& part : json_split_top_level(std::string_view(trimmed).substr(1, trimmed.size() - 2))) {
+        const std::size_t colon = json_find_top_level_colon(part);
+        if (colon == std::string::npos) {
+            continue;
+        }
+        items.emplace_back(json_parse_key(std::string_view(part).substr(0, colon)), trim_copy(std::string_view(part).substr(colon + 1)));
+    }
+    return items;
+}
+
+inline std::string json_write_array_fragments(const std::vector<std::string>& items) {
+    std::string out = "[";
+    for (std::size_t index = 0; index < items.size(); ++index) {
+        if (index != 0) {
+            out.push_back(',');
+        }
+        out += items[index];
+    }
+    out.push_back(']');
+    return out;
+}
+
+inline std::string json_write_object_fragments(const std::vector<std::pair<std::string, std::string>>& items) {
+    std::string out = "{";
+    for (std::size_t index = 0; index < items.size(); ++index) {
+        if (index != 0) {
+            out.push_back(',');
+        }
+        out += json_escape_text(items[index].first);
+        out.push_back(':');
+        out += items[index].second;
+    }
+    out.push_back('}');
+    return out;
 }
 
 } // namespace __apo_stdlib

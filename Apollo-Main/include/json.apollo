@@ -1,3 +1,5 @@
+extern std collections;
+
 namespace sys {
     i32 json_parse_bool(nconst str& value) {
         return sys__native_json_parse_bool(value);
@@ -15,6 +17,14 @@ namespace sys {
         return sys__native_json_parse_str(value);
     }
 
+    vector json_parse_array(nconst str& value) {
+        return sys__native_json_parse_array(value);
+    }
+
+    map json_parse_object(nconst str& value) {
+        return sys__native_json_parse_object(value);
+    }
+
     str json_write_bool(i32 value) {
         return sys__native_json_write_bool(value);
     }
@@ -29,6 +39,14 @@ namespace sys {
 
     str json_write_str(nconst str& value) {
         return sys__native_json_write_str(value);
+    }
+
+    str json_write_array(nconst vector& value) {
+        return sys__native_json_write_array(value);
+    }
+
+    str json_write_object(nconst map& value) {
+        return sys__native_json_write_object(value);
     }
 
     str json_write_array_start() {
@@ -51,15 +69,20 @@ namespace sys {
 @unsafe {
     inline::cpp {
         #include "apo_stdlib_runtime.hpp"
+        #include "apo_std_object_runtime.hpp"
 
         int sys__native_json_parse_bool(const char* value) { return __apo_stdlib::json_parse_bool(__apo_stdlib::view_or_empty(value)); }
         long sys__native_json_parse_int(const char* value) { return static_cast<long>(__apo_stdlib::json_parse_int(__apo_stdlib::view_or_empty(value))); }
         double sys__native_json_parse_float(const char* value) { return __apo_stdlib::json_parse_float(__apo_stdlib::view_or_empty(value)); }
         const char* sys__native_json_parse_str(const char* value) { return __apo_stdlib::json_parse_str(__apo_stdlib::view_or_empty(value)); }
+        void* sys__native_json_parse_array(const char* value) { return __apo_stdlib::json_parse_array_handle(__apo_stdlib::view_or_empty(value)); }
+        void* sys__native_json_parse_object(const char* value) { return __apo_stdlib::json_parse_object_handle(__apo_stdlib::view_or_empty(value)); }
         const char* sys__native_json_write_bool(int value) { return __apo_stdlib::json_write_bool(value); }
         const char* sys__native_json_write_int(long value) { return __apo_stdlib::json_write_int(value); }
         const char* sys__native_json_write_float(double value) { return __apo_stdlib::json_write_float(value); }
         const char* sys__native_json_write_str(const char* value) { return __apo_stdlib::json_write_str(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_json_write_array(void* value) { return __apo_stdlib::json_write_array_from_vector(value); }
+        const char* sys__native_json_write_object(void* value) { return __apo_stdlib::json_write_object_from_map(value); }
         const char* sys__native_json_write_array_start() { return __apo_stdlib::json_write_array_start(); }
         const char* sys__native_json_write_array_end() { return __apo_stdlib::json_write_array_end(); }
         const char* sys__native_json_write_object_start() { return __apo_stdlib::json_write_object_start(); }

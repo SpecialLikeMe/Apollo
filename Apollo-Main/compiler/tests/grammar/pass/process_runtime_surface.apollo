@@ -1,0 +1,28 @@
+extern std prelude;
+
+i32 main() {
+    i32 pending = sys.previous_index(0);
+
+    process quick = sys.process_spawn("exit 7");
+    if (sys.process_command(quick) != "exit 7") {
+        return 1;
+    }
+    if (sys.process_wait(quick) != 7) {
+        return 2;
+    }
+    if (sys.process_completed(quick) == 0) {
+        return 3;
+    }
+
+    process slow = sys.process_spawn("ping -n 6 127.0.0.1 > nul");
+    if (sys.process_completed(slow) != 0 && sys.process_try_wait(slow) != pending) {
+        return 4;
+    }
+    if (sys.process_kill(slow) == 0) {
+        return 5;
+    }
+
+    sys.handle_destroy(quick);
+    sys.handle_destroy(slow);
+    return 0;
+}

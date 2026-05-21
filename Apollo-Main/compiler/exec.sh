@@ -229,6 +229,14 @@ configure_native_build() {
         set -- "$@" "-Dantlr4-runtime_DIR=$APOLLO_ANTLR4_RUNTIME_CMAKE_DIR"
     fi
 
+    if [ -n "${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR:-}" ]; then
+        set -- "$@" "-DAPOLLO_ANTLR4_RUNTIME_INCLUDE_DIR=$APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR"
+    fi
+
+    if [ -n "${APOLLO_ANTLR4_RUNTIME_LIB_DIR:-}" ]; then
+        set -- "$@" "-DAPOLLO_ANTLR4_RUNTIME_LIB_DIR=$APOLLO_ANTLR4_RUNTIME_LIB_DIR"
+    fi
+
     run_quiet_command "$@"
 }
 

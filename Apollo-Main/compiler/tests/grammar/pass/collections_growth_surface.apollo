@@ -1,0 +1,42 @@
+extern std prelude;
+
+i32 main() {
+    vector items = sys.vec_new();
+    sys.vec_push(items, "alpha");
+    sys.vec_push(items, "beta");
+    sys.vec_push(items, "beta");
+
+    str swapped = sys.vec_swap_remove(items, 0);
+    sys.vec_resize(items, 4, "pad");
+    sys.vec_dedup(items);
+
+    map table = sys.map_new();
+    sys.map_insert(table, "greeting", "hello");
+    sys.map_reserve(table, 8);
+    str existing = sys.map_get_mut(table, "greeting");
+    str inserted = sys.map_entry_or_insert(table, "subject", "apollo");
+    sys.map_rehash(table);
+
+    if (swapped != "alpha") {
+        return 1;
+    }
+    if (sys.vec_len(items) != 3) {
+        return 2;
+    }
+    if (sys.vec_get(items, 1) != "pad") {
+        return 3;
+    }
+    if (existing != "hello") {
+        return 4;
+    }
+    if (inserted != "apollo") {
+        return 5;
+    }
+    if (sys.map_contains_key(table, "subject") == 0) {
+        return 6;
+    }
+
+    sys.handle_destroy(items);
+    sys.handle_destroy(table);
+    return 0;
+}

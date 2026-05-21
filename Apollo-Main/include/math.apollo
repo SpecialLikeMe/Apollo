@@ -76,53 +76,205 @@ namespace sys {
         return a;
     }
 
+    f64 abs_f64(f64 value) {
+        return sys__native_abs_f64(value);
+    }
+
+    f64 ceil(f64 value) {
+        return sys__native_ceil(value);
+    }
+
+    f64 floor(f64 value) {
+        return sys__native_floor(value);
+    }
+
+    f64 round(f64 value) {
+        return sys__native_round(value);
+    }
+
+    f64 trunc(f64 value) {
+        return sys__native_trunc(value);
+    }
+
+    f64 sqrt(f64 value) {
+        return sys__native_sqrt(value);
+    }
+
+    f64 cbrt(f64 value) {
+        return sys__native_cbrt(value);
+    }
+
+    f64 hypot(f64 left, f64 right) {
+        return sys__native_hypot(left, right);
+    }
+
+    f64 sin(f64 value) {
+        return sys__native_sin(value);
+    }
+
+    f64 cos(f64 value) {
+        return sys__native_cos(value);
+    }
+
+    f64 tan(f64 value) {
+        return sys__native_tan(value);
+    }
+
+    f64 asin(f64 value) {
+        return sys__native_asin(value);
+    }
+
+    f64 acos(f64 value) {
+        return sys__native_acos(value);
+    }
+
+    f64 atan(f64 value) {
+        return sys__native_atan(value);
+    }
+
+    f64 atan2(f64 left, f64 right) {
+        return sys__native_atan2(left, right);
+    }
+
+    f64 sinh(f64 value) {
+        return sys__native_sinh(value);
+    }
+
+    f64 cosh(f64 value) {
+        return sys__native_cosh(value);
+    }
+
+    f64 tanh(f64 value) {
+        return sys__native_tanh(value);
+    }
+
+    f64 asinh(f64 value) {
+        return sys__native_asinh(value);
+    }
+
+    f64 acosh(f64 value) {
+        return sys__native_acosh(value);
+    }
+
+    f64 atanh(f64 value) {
+        return sys__native_atanh(value);
+    }
+
+    f64 exp(f64 value) {
+        return sys__native_exp(value);
+    }
+
+    f64 exp2(f64 value) {
+        return sys__native_exp2(value);
+    }
+
+    f64 expm1(f64 value) {
+        return sys__native_expm1(value);
+    }
+
+    f64 log(f64 value) {
+        return sys__native_log(value);
+    }
+
+    f64 log2(f64 value) {
+        return sys__native_log2(value);
+    }
+
+    f64 log10(f64 value) {
+        return sys__native_log10(value);
+    }
+
+    f64 log1p(f64 value) {
+        return sys__native_log1p(value);
+    }
+
+    f64 pow(f64 left, f64 right) {
+        return sys__native_pow(left, right);
+    }
+
+    f64 fma(f64 x, f64 y, f64 z) {
+        return sys__native_fma(x, y, z);
+    }
+
+    f64 copysign(f64 x, f64 y) {
+        return sys__native_copysign(x, y);
+    }
+
+    f64 nextafter(f64 x, f64 y) {
+        return sys__native_nextafter(x, y);
+    }
+
+    f64 ldexp(f64 value, i32 exponent) {
+        return sys__native_ldexp(value, exponent);
+    }
+
+    i32 isnan(f64 value) {
+        return sys__native_isnan(value);
+    }
+
+    i32 isinf(f64 value) {
+        return sys__native_isinf(value);
+    }
+
+    i32 isfinite(f64 value) {
+        return sys__native_isfinite(value);
+    }
+
+    i32 isnormal(f64 value) {
+        return sys__native_isnormal(value);
+    }
+
+    f64 signum_f64(f64 value) {
+        return sys__native_signum_f64(value);
+    }
+
 }
 
 @unsafe {
     inline::cpp {
         #include "apo_stdlib_runtime.hpp"
 
-        double sys__abs_f64(double value) { return std::fabs(value); }
-        double sys__ceil(double value) { return std::ceil(value); }
-        double sys__floor(double value) { return std::floor(value); }
-        double sys__round(double value) { return std::round(value); }
-        double sys__trunc(double value) { return std::trunc(value); }
-        double sys__sqrt(double value) { return std::sqrt(value); }
-        double sys__cbrt(double value) { return std::cbrt(value); }
-        double sys__hypot(double left, double right) { return std::hypot(left, right); }
-        double sys__sin(double value) { return std::sin(value); }
-        double sys__cos(double value) { return std::cos(value); }
-        double sys__tan(double value) { return std::tan(value); }
-        double sys__asin(double value) { return std::asin(value); }
-        double sys__acos(double value) { return std::acos(value); }
-        double sys__atan(double value) { return std::atan(value); }
-        double sys__atan2(double left, double right) { return std::atan2(left, right); }
-        double sys__sinh(double value) { return std::sinh(value); }
-        double sys__cosh(double value) { return std::cosh(value); }
-        double sys__tanh(double value) { return std::tanh(value); }
-        double sys__asinh(double value) { return std::asinh(value); }
-        double sys__acosh(double value) { return std::acosh(value); }
-        double sys__atanh(double value) { return std::atanh(value); }
-        double sys__exp(double value) { return std::exp(value); }
-        double sys__exp2(double value) { return std::exp2(value); }
-        double sys__expm1(double value) { return std::expm1(value); }
-        double sys__log(double value) { return std::log(value); }
-        double sys__log2(double value) { return std::log2(value); }
-        double sys__log10(double value) { return std::log10(value); }
-        double sys__log1p(double value) { return std::log1p(value); }
-        double sys__pow(double left, double right) { return std::pow(left, right); }
-        double sys__fma(double x, double y, double z) { return std::fma(x, y, z); }
-        double sys__copysign(double x, double y) { return std::copysign(x, y); }
-        double sys__nextafter(double x, double y) { return std::nextafter(x, y); }
-        double sys__ldexp(double value, int exponent) { return std::ldexp(value, exponent); }
+        double sys__native_abs_f64(double value) { return std::fabs(value); }
+        double sys__native_ceil(double value) { return std::ceil(value); }
+        double sys__native_floor(double value) { return std::floor(value); }
+        double sys__native_round(double value) { return std::round(value); }
+        double sys__native_trunc(double value) { return std::trunc(value); }
+        double sys__native_sqrt(double value) { return std::sqrt(value); }
+        double sys__native_cbrt(double value) { return std::cbrt(value); }
+        double sys__native_hypot(double left, double right) { return std::hypot(left, right); }
+        double sys__native_sin(double value) { return std::sin(value); }
+        double sys__native_cos(double value) { return std::cos(value); }
+        double sys__native_tan(double value) { return std::tan(value); }
+        double sys__native_asin(double value) { return std::asin(value); }
+        double sys__native_acos(double value) { return std::acos(value); }
+        double sys__native_atan(double value) { return std::atan(value); }
+        double sys__native_atan2(double left, double right) { return std::atan2(left, right); }
+        double sys__native_sinh(double value) { return std::sinh(value); }
+        double sys__native_cosh(double value) { return std::cosh(value); }
+        double sys__native_tanh(double value) { return std::tanh(value); }
+        double sys__native_asinh(double value) { return std::asinh(value); }
+        double sys__native_acosh(double value) { return std::acosh(value); }
+        double sys__native_atanh(double value) { return std::atanh(value); }
+        double sys__native_exp(double value) { return std::exp(value); }
+        double sys__native_exp2(double value) { return std::exp2(value); }
+        double sys__native_expm1(double value) { return std::expm1(value); }
+        double sys__native_log(double value) { return std::log(value); }
+        double sys__native_log2(double value) { return std::log2(value); }
+        double sys__native_log10(double value) { return std::log10(value); }
+        double sys__native_log1p(double value) { return std::log1p(value); }
+        double sys__native_pow(double left, double right) { return std::pow(left, right); }
+        double sys__native_fma(double x, double y, double z) { return std::fma(x, y, z); }
+        double sys__native_copysign(double x, double y) { return std::copysign(x, y); }
+        double sys__native_nextafter(double x, double y) { return std::nextafter(x, y); }
+        double sys__native_ldexp(double value, int exponent) { return std::ldexp(value, exponent); }
         double sys__frexp_fraction(double value) { return __apo_stdlib::frexp_fraction_f64(value); }
         int sys__frexp_exponent(double value) { return __apo_stdlib::frexp_exponent_f64(value); }
         double sys__modf_fraction(double value) { return __apo_stdlib::modf_fraction_f64(value); }
         double sys__modf_integral(double value) { return __apo_stdlib::modf_integral_f64(value); }
-        int sys__isnan(double value) { return std::isnan(value) ? 1 : 0; }
-        int sys__isinf(double value) { return std::isinf(value) ? 1 : 0; }
-        int sys__isfinite(double value) { return std::isfinite(value) ? 1 : 0; }
-        int sys__isnormal(double value) { return std::isnormal(value) ? 1 : 0; }
-        double sys__signum_f64(double value) { return __apo_stdlib::signum_f64(value); }
+        int sys__native_isnan(double value) { return std::isnan(value) ? 1 : 0; }
+        int sys__native_isinf(double value) { return std::isinf(value) ? 1 : 0; }
+        int sys__native_isfinite(double value) { return std::isfinite(value) ? 1 : 0; }
+        int sys__native_isnormal(double value) { return std::isnormal(value) ? 1 : 0; }
+        double sys__native_signum_f64(double value) { return __apo_stdlib::signum_f64(value); }
     }
 }

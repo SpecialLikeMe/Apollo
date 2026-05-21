@@ -628,6 +628,30 @@ $tests = @(
         Covers = 'float, char, byte, bool, null, usize, and brace-shaped multi-value return types lower through the native frontend'
     },
     [pscustomobject]@{
+        Name = 'tuple-option-surface'
+        Path = 'tests\grammar\pass\tuple_option_surface.apollo'
+        ShouldPass = $true
+        Covers = 'tuple<T, ...> lowers as an explicit structural multi-value type and option<T>/option<T, cerr> lower through the tagged result path'
+    },
+    [pscustomobject]@{
+        Name = 'host-portability-surface'
+        Path = 'tests\grammar\pass\host_portability_surface.apollo'
+        ShouldPass = $true
+        Covers = 'portability helpers report the active host runtime correctly on both Windows and POSIX targets'
+    },
+    [pscustomobject]@{
+        Name = 'process-runtime-surface'
+        Path = 'tests\grammar\pass\process_runtime_surface.apollo'
+        ShouldPass = $true
+        Covers = 'process spawn, wait, try-wait, completion, exit code, and kill helpers run through the native runtime on Windows and POSIX'
+    },
+    [pscustomobject]@{
+        Name = 'process-task-branch-surface'
+        Path = 'tests\grammar\pass\process_task_branch_surface.apollo'
+        ShouldPass = $true
+        Covers = 'host-conditional process and task result paths lower and execute consistently across Windows and POSIX runtimes'
+    },
+    [pscustomobject]@{
         Name = 'all-pillars-surface'
         Path = 'tests\grammar\pass\all_pillars_surface.apollo'
         ShouldPass = $true

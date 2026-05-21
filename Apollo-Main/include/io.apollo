@@ -50,6 +50,14 @@ namespace sys {
         return sys__native_term_is_tty();
     }
 
+    i32 term_columns() {
+        return sys__native_term_columns();
+    }
+
+    i32 term_rows() {
+        return sys__native_term_rows();
+    }
+
     void term_clear() {
         sys__native_term_clear();
     }
@@ -111,6 +119,8 @@ namespace sys {
         void sys__native_term_println_raw(const char* value) { __apo_stdlib::term_println_raw(__apo_stdlib::view_or_empty(value)); }
         const char* sys__native_term_read_line() { return __apo_stdlib::term_read_line(); }
         int sys__native_term_is_tty() { return __apo_stdlib::term_is_tty(); }
+        int sys__native_term_columns() { return __apo_stdlib::term_columns(); }
+        int sys__native_term_rows() { return __apo_stdlib::term_rows(); }
         void sys__native_term_clear() { __apo_stdlib::term_clear(); }
         void sys__native_term_set_cursor(int column, int row) { __apo_stdlib::term_set_cursor(column, row); }
         void sys__native_term_show_cursor() { __apo_stdlib::term_show_cursor(); }

@@ -1,8 +1,248 @@
 // nominal<T, E> is Apollo's canonical result carrier.
+// option<T> and option<T, E> lower to the same tagged result layout.
 // nominal(...), cerr(...), and terminalcerr(...) are lowered by the native frontend.
 // sys.is_nominal(...), sys.is_cerr(...), sys.is_terminal(...), sys.unwrap_i32(...),
 // sys.unwrap_bool(...), sys.unwrap_f64(...), sys.unwrap_str(...), and sys.error_message(...)
 // are compiler-backed result helpers.
 
 namespace sys {
+	i32 is_nominal(nconst nominal<i32, str>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst nominal<bool, str>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst nominal<f64, str>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst nominal<str, str>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<i32>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<bool>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<f64>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<str>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<i32, cerr>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<bool, cerr>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<f64, cerr>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_nominal(nconst option<str, cerr>& value) {
+		return sys__is_nominal(value);
+	}
+
+	i32 is_cerr(nconst nominal<i32, str>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst nominal<bool, str>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst nominal<f64, str>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst nominal<str, str>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<i32>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<bool>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<f64>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<str>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<i32, cerr>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<bool, cerr>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<f64, cerr>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_cerr(nconst option<str, cerr>& value) {
+		return sys__is_cerr(value);
+	}
+
+	i32 is_terminal(nconst nominal<i32, str>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst nominal<bool, str>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst nominal<f64, str>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst nominal<str, str>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<i32>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<bool>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<f64>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<str>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<i32, cerr>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<bool, cerr>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<f64, cerr>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 is_terminal(nconst option<str, cerr>& value) {
+		return sys__is_terminal(value);
+	}
+
+	i32 unwrap_i32(nconst nominal<i32, str>& value) {
+		return sys__unwrap_i32(value);
+	}
+
+	i32 unwrap_i32(nconst option<i32>& value) {
+		return sys__unwrap_i32(value);
+	}
+
+	i32 unwrap_i32(nconst option<i32, cerr>& value) {
+		return sys__unwrap_i32(value);
+	}
+
+	i32 unwrap_bool(nconst nominal<bool, str>& value) {
+		return sys__unwrap_bool(value);
+	}
+
+	i32 unwrap_bool(nconst option<bool>& value) {
+		return sys__unwrap_bool(value);
+	}
+
+	i32 unwrap_bool(nconst option<bool, cerr>& value) {
+		return sys__unwrap_bool(value);
+	}
+
+	f64 unwrap_f64(nconst nominal<f64, str>& value) {
+		return sys__unwrap_f64(value);
+	}
+
+	f64 unwrap_f64(nconst option<f64>& value) {
+		return sys__unwrap_f64(value);
+	}
+
+	f64 unwrap_f64(nconst option<f64, cerr>& value) {
+		return sys__unwrap_f64(value);
+	}
+
+	str unwrap_str(nconst nominal<str, str>& value) {
+		return sys__unwrap_str(value);
+	}
+
+	str unwrap_str(nconst option<str>& value) {
+		return sys__unwrap_str(value);
+	}
+
+	str unwrap_str(nconst option<str, cerr>& value) {
+		return sys__unwrap_str(value);
+	}
+
+	str error_message(nconst nominal<i32, str>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst nominal<bool, str>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst nominal<f64, str>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst nominal<str, str>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<i32>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<bool>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<f64>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<str>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<i32, cerr>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<bool, cerr>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<f64, cerr>& value) {
+		return sys__error_message(value);
+	}
+
+	str error_message(nconst option<str, cerr>& value) {
+		return sys__error_message(value);
+	}
 }

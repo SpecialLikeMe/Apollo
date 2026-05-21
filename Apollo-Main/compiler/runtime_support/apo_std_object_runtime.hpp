@@ -14,6 +14,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <list>
 #include <map>
 #include <random>
 #include <regex>
@@ -35,7 +36,10 @@
 #include <io.h>
 #include <processthreadsapi.h>
 #else
+#include <signal.h>
+#include <sys/ioctl.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #endif
 
@@ -64,6 +68,16 @@ enum class handle_kind {
     Channel,
     Metadata,
     Url,
+    Entry,
+    EntryIterator,
+    LinkedList,
+    RingBuffer,
+    BitVec,
+    MultiMap,
+    WeakMap,
+    LruCache,
+    EnumSet,
+    Grid2d,
 };
 
 struct opaque_handle {
@@ -358,28 +372,170 @@ struct process_handle final : opaque_handle {
     std::string command;
     int exitCode = -1;
     bool completed = false;
+
+#ifdef _WIN32
+    HANDLE nativeProcess = nullptr;
+    HANDLE nativeThread = nullptr;
+    DWORD processId = 0;
+
+    ~process_handle() override {
+        if (nativeThread != nullptr) {
+            CloseHandle(nativeThread);
+            nativeThread = nullptr;
+        }
+        if (nativeProcess != nullptr) {
+            CloseHandle(nativeProcess);
+            nativeProcess = nullptr;
+        }
+    }
+#else
+    pid_t pid = -1;
+#endif
 };
+
+inline void process_mark_completed(process_handle* handle, int exitCode) {
+    if (handle == nullptr) {
+        return;
+    }
+    handle->exitCode = exitCode;
+    handle->completed = true;
+}
 
 inline void* process_spawn(std::string command) {
     auto* handle = new process_handle(std::move(command));
-    handle->exitCode = std::system(handle->command.c_str());
-    handle->completed = true;
+
+#ifdef _WIN32
+    const char* shellPath = std::getenv("COMSPEC");
+    std::string shell = shellPath != nullptr && *shellPath != '\0'
+        ? std::string(shellPath)
+        : std::string("C:\\Windows\\System32\\cmd.exe");
+    std::string commandLine = std::string("cmd.exe /C ") + handle->command;
+    std::vector<char> mutableCommand(commandLine.begin(), commandLine.end());
+    mutableCommand.push_back('\0');
+
+    STARTUPINFOA startupInfo{};
+    startupInfo.cb = sizeof(startupInfo);
+    PROCESS_INFORMATION processInfo{};
+    if (CreateProcessA(shell.c_str(), mutableCommand.data(), nullptr, nullptr, FALSE, 0, nullptr, nullptr, &startupInfo, &processInfo) == 0) {
+        process_mark_completed(handle, -1);
+        return handle;
+    }
+    handle->nativeProcess = processInfo.hProcess;
+    handle->nativeThread = processInfo.hThread;
+    handle->processId = processInfo.dwProcessId;
+#else
+    const pid_t pid = fork();
+    if (pid < 0) {
+        process_mark_completed(handle, -1);
+        return handle;
+    }
+    if (pid == 0) {
+        execl("/bin/sh", "sh", "-c", handle->command.c_str(), static_cast<char*>(nullptr));
+        _exit(127);
+    }
+    handle->pid = pid;
+#endif
+
     return handle;
+}
+
+inline int process_refresh_status(process_handle* handle, bool wait) {
+    if (handle == nullptr) {
+        return -1;
+    }
+    if (handle->completed) {
+        return handle->exitCode;
+    }
+
+#ifdef _WIN32
+    if (handle->nativeProcess == nullptr) {
+        process_mark_completed(handle, -1);
+        return handle->exitCode;
+    }
+    const DWORD waitResult = WaitForSingleObject(handle->nativeProcess, wait ? INFINITE : 0);
+    if (waitResult == WAIT_TIMEOUT) {
+        return -1;
+    }
+    DWORD code = STILL_ACTIVE;
+    if (GetExitCodeProcess(handle->nativeProcess, &code) == 0) {
+        process_mark_completed(handle, -1);
+        return handle->exitCode;
+    }
+    process_mark_completed(handle, code == STILL_ACTIVE ? -1 : static_cast<int>(code));
+    return handle->exitCode;
+#else
+    if (handle->pid <= 0) {
+        process_mark_completed(handle, -1);
+        return handle->exitCode;
+    }
+    int status = 0;
+    const pid_t result = waitpid(handle->pid, &status, wait ? 0 : WNOHANG);
+    if (result == 0) {
+        return -1;
+    }
+    if (result < 0) {
+        process_mark_completed(handle, -1);
+        return handle->exitCode;
+    }
+    if (WIFEXITED(status)) {
+        process_mark_completed(handle, WEXITSTATUS(status));
+    } else if (WIFSIGNALED(status)) {
+        process_mark_completed(handle, 128 + WTERMSIG(status));
+    } else {
+        process_mark_completed(handle, -1);
+    }
+    return handle->exitCode;
+#endif
 }
 
 inline int process_wait(void* rawHandle) {
     auto* handle = checked_handle<process_handle>(rawHandle, handle_kind::Process);
-    return handle != nullptr ? handle->exitCode : -1;
+    return process_refresh_status(handle, true);
 }
 
 inline int process_exit_code(void* rawHandle) {
     auto* handle = checked_handle<process_handle>(rawHandle, handle_kind::Process);
-    return handle != nullptr ? handle->exitCode : -1;
+    if (handle == nullptr) {
+        return -1;
+    }
+    return process_refresh_status(handle, true);
 }
 
 inline const char* process_command(void* rawHandle) {
     auto* handle = checked_handle<process_handle>(rawHandle, handle_kind::Process);
     return store_string(handle != nullptr ? handle->command : std::string());
+}
+
+inline std::int32_t process_kill(void* rawHandle) {
+    auto* handle = checked_handle<process_handle>(rawHandle, handle_kind::Process);
+    if (handle == nullptr) {
+        return 0;
+    }
+    if (handle->completed) {
+        return 1;
+    }
+
+#ifdef _WIN32
+    if (handle->nativeProcess == nullptr) {
+        process_mark_completed(handle, -1);
+        return 0;
+    }
+    if (TerminateProcess(handle->nativeProcess, 1) == 0) {
+        return 0;
+    }
+    process_refresh_status(handle, true);
+    return 1;
+#else
+    if (handle->pid <= 0) {
+        process_mark_completed(handle, -1);
+        return 0;
+    }
+    if (kill(handle->pid, SIGTERM) != 0) {
+        return 0;
+    }
+    process_refresh_status(handle, true);
+    return 1;
+#endif
 }
 
 enum class task_value_kind {
@@ -483,6 +639,75 @@ struct vector_handle final : opaque_handle {
     std::vector<std::string> items;
 };
 
+inline void* vec_from_items(std::vector<std::string> items) {
+    auto* handle = new vector_handle();
+    handle->items = std::move(items);
+    return handle;
+}
+
+inline void* str_split_handle(std::string_view text, std::string_view delimiter, std::int32_t maxParts) {
+    std::vector<std::string> items;
+    if (delimiter.empty()) {
+        items.reserve(text.size());
+        for (char ch : text) {
+            items.emplace_back(1, ch);
+        }
+        if (items.empty()) {
+            items.emplace_back();
+        }
+        return vec_from_items(std::move(items));
+    }
+
+    std::size_t cursor = 0;
+    while (cursor <= text.size()) {
+        if (maxParts > 0 && static_cast<std::int32_t>(items.size()) + 1 >= maxParts) {
+            items.emplace_back(text.substr(cursor));
+            return vec_from_items(std::move(items));
+        }
+
+        const std::size_t match = text.find(delimiter, cursor);
+        if (match == std::string_view::npos) {
+            items.emplace_back(text.substr(cursor));
+            break;
+        }
+
+        items.emplace_back(text.substr(cursor, match - cursor));
+        cursor = match + delimiter.size();
+    }
+
+    if (items.empty()) {
+        items.emplace_back();
+    }
+    return vec_from_items(std::move(items));
+}
+
+inline void* str_split_lines_handle(std::string_view text) {
+    std::vector<std::string> items;
+    std::size_t cursor = 0;
+    while (cursor <= text.size()) {
+        const std::size_t match = text.find_first_of("\r\n", cursor);
+        if (match == std::string_view::npos) {
+            items.emplace_back(text.substr(cursor));
+            break;
+        }
+
+        items.emplace_back(text.substr(cursor, match - cursor));
+        cursor = match + 1;
+        if (match + 1 < text.size() && text[match] == '\r' && text[match + 1] == '\n') {
+            ++cursor;
+        }
+        if (cursor == text.size()) {
+            items.emplace_back();
+            break;
+        }
+    }
+
+    if (items.empty()) {
+        items.emplace_back();
+    }
+    return vec_from_items(std::move(items));
+}
+
 inline void* vec_new() {
     return new vector_handle();
 }
@@ -551,6 +776,20 @@ inline const char* vec_remove(void* rawHandle, std::int32_t index) {
     return store_string(std::move(value));
 }
 
+inline const char* vec_swap_remove(void* rawHandle, std::int32_t index) {
+    auto* handle = checked_handle<vector_handle>(rawHandle, handle_kind::Vector);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->items.size()) {
+        return store_string("");
+    }
+    const std::size_t target = static_cast<std::size_t>(index);
+    std::string value = std::move(handle->items[target]);
+    if (target + 1 != handle->items.size()) {
+        handle->items[target] = std::move(handle->items.back());
+    }
+    handle->items.pop_back();
+    return store_string(std::move(value));
+}
+
 inline void vec_clear(void* rawHandle) {
     if (auto* handle = checked_handle<vector_handle>(rawHandle, handle_kind::Vector)) {
         handle->items.clear();
@@ -577,6 +816,20 @@ inline void vec_reserve(void* rawHandle, std::int32_t additional) {
 inline void vec_shrink_to_fit(void* rawHandle) {
     if (auto* handle = checked_handle<vector_handle>(rawHandle, handle_kind::Vector)) {
         handle->items.shrink_to_fit();
+    }
+}
+
+inline void vec_resize(void* rawHandle, std::int32_t newLength, std::string value) {
+    if (auto* handle = checked_handle<vector_handle>(rawHandle, handle_kind::Vector)) {
+        const std::size_t target = newLength <= 0 ? 0 : static_cast<std::size_t>(newLength);
+        handle->items.resize(target, value);
+    }
+}
+
+inline void vec_dedup(void* rawHandle) {
+    if (auto* handle = checked_handle<vector_handle>(rawHandle, handle_kind::Vector)) {
+        auto newEnd = std::unique(handle->items.begin(), handle->items.end());
+        handle->items.erase(newEnd, handle->items.end());
     }
 }
 
@@ -632,6 +885,10 @@ inline const char* map_get(void* rawHandle, std::string_view key) {
     return store_string(found != handle->items.end() ? found->second : std::string());
 }
 
+inline const char* map_get_mut(void* rawHandle, std::string_view key) {
+    return map_get(rawHandle, key);
+}
+
 inline const char* map_remove(void* rawHandle, std::string_view key) {
     auto* handle = checked_handle<unordered_map_handle>(rawHandle, handle_kind::UnorderedMap);
     if (handle == nullptr) {
@@ -654,6 +911,30 @@ inline std::int32_t map_contains_key(void* rawHandle, std::string_view key) {
 inline void map_clear(void* rawHandle) {
     if (auto* handle = checked_handle<unordered_map_handle>(rawHandle, handle_kind::UnorderedMap)) {
         handle->items.clear();
+    }
+}
+
+inline void map_reserve(void* rawHandle, std::int32_t capacity) {
+    if (auto* handle = checked_handle<unordered_map_handle>(rawHandle, handle_kind::UnorderedMap)) {
+        if (capacity > 0) {
+            handle->items.reserve(static_cast<std::size_t>(capacity));
+        }
+    }
+}
+
+inline const char* map_entry_or_insert(void* rawHandle, std::string key, std::string defaultValue) {
+    auto* handle = checked_handle<unordered_map_handle>(rawHandle, handle_kind::UnorderedMap);
+    if (handle == nullptr) {
+        return store_string("");
+    }
+    auto [iterator, inserted] = handle->items.try_emplace(std::move(key), std::move(defaultValue));
+    (void)inserted;
+    return store_string(iterator->second);
+}
+
+inline void map_rehash(void* rawHandle) {
+    if (auto* handle = checked_handle<unordered_map_handle>(rawHandle, handle_kind::UnorderedMap)) {
+        handle->items.rehash(handle->items.size());
     }
 }
 
@@ -698,6 +979,38 @@ inline const char* map_entries(void* rawHandle, std::string_view delimiter) {
     return store_string(join_strings(values, delimiter));
 }
 
+inline void* json_parse_array_handle(std::string_view text) {
+    return vec_from_items(json_parse_array_items(text));
+}
+
+inline void* json_parse_object_handle(std::string_view text) {
+    auto* handle = new unordered_map_handle();
+    for (auto& [key, value] : json_parse_object_items(text)) {
+        handle->items[std::move(key)] = std::move(value);
+    }
+    return handle;
+}
+
+inline const char* json_write_array_from_vector(void* rawHandle) {
+    auto* handle = checked_handle<vector_handle>(rawHandle, handle_kind::Vector);
+    return store_string(handle != nullptr ? json_write_array_fragments(handle->items) : std::string("[]"));
+}
+
+inline const char* json_write_object_from_map(void* rawHandle) {
+    auto* handle = checked_handle<unordered_map_handle>(rawHandle, handle_kind::UnorderedMap);
+    std::vector<std::pair<std::string, std::string>> items;
+    if (handle != nullptr) {
+        items.reserve(handle->items.size());
+        for (const auto& entry : handle->items) {
+            items.push_back(entry);
+        }
+        std::sort(items.begin(), items.end(), [](const auto& left, const auto& right) {
+            return left.first < right.first;
+        });
+    }
+    return store_string(json_write_object_fragments(items));
+}
+
 struct ordered_map_handle final : opaque_handle {
     ordered_map_handle() : opaque_handle(handle_kind::OrderedMap) {
     }
@@ -705,14 +1018,84 @@ struct ordered_map_handle final : opaque_handle {
     std::map<std::string, std::string> items;
 };
 
+struct entry_handle final : opaque_handle {
+    entry_handle(std::string entryKey, std::string entryValue)
+        : opaque_handle(handle_kind::Entry), key(std::move(entryKey)), value(std::move(entryValue)) {
+    }
+
+    std::string key;
+    std::string value;
+};
+
+inline void* entry_create(std::string key, std::string value) {
+    return new entry_handle(std::move(key), std::move(value));
+}
+
+inline const char* entry_key(void* rawHandle) {
+    auto* handle = checked_handle<entry_handle>(rawHandle, handle_kind::Entry);
+    return store_string(handle != nullptr ? handle->key : std::string());
+}
+
+inline const char* entry_value(void* rawHandle) {
+    auto* handle = checked_handle<entry_handle>(rawHandle, handle_kind::Entry);
+    return store_string(handle != nullptr ? handle->value : std::string());
+}
+
+struct entry_iter_handle final : opaque_handle {
+    entry_iter_handle() : opaque_handle(handle_kind::EntryIterator) {
+    }
+
+    std::vector<std::pair<std::string, std::string>> entries;
+    std::size_t index = 0;
+};
+
+inline void* entry_iter_create(std::vector<std::pair<std::string, std::string>> entries) {
+    auto* handle = new entry_iter_handle();
+    handle->entries = std::move(entries);
+    return handle;
+}
+
+inline std::int32_t entry_iter_has_next(void* rawHandle) {
+    auto* handle = checked_handle<entry_iter_handle>(rawHandle, handle_kind::EntryIterator);
+    return handle != nullptr && handle->index < handle->entries.size() ? 1 : 0;
+}
+
+inline void* entry_iter_next(void* rawHandle) {
+    auto* handle = checked_handle<entry_iter_handle>(rawHandle, handle_kind::EntryIterator);
+    if (handle == nullptr || handle->index >= handle->entries.size()) {
+        return entry_create("", "");
+    }
+    const auto& current = handle->entries[handle->index++];
+    return entry_create(current.first, current.second);
+}
+
 inline void* tmap_new() {
     return new ordered_map_handle();
+}
+
+inline std::int32_t tmap_len(void* rawHandle) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
 }
 
 inline void tmap_insert(void* rawHandle, std::string key, std::string value) {
     if (auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap)) {
         handle->items[std::move(key)] = std::move(value);
     }
+}
+
+inline const char* tmap_get(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    if (handle == nullptr) {
+        return store_string("");
+    }
+    const auto found = handle->items.find(std::string(key));
+    return store_string(found != handle->items.end() ? found->second : std::string());
+}
+
+inline std::int32_t tmap_contains_key(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    return handle != nullptr && handle->items.find(std::string(key)) != handle->items.end() ? 1 : 0;
 }
 
 inline const char* tmap_remove(void* rawHandle, std::string_view key) {
@@ -767,6 +1150,595 @@ inline const char* tmap_ceiling_key(void* rawHandle, std::string_view key) {
     }
     const auto iterator = handle->items.lower_bound(std::string(key));
     return store_string(iterator != handle->items.end() ? iterator->first : std::string());
+}
+
+inline void* tmap_pop_first(void* rawHandle) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    if (handle == nullptr || handle->items.empty()) {
+        return entry_create("", "");
+    }
+    auto iterator = handle->items.begin();
+    void* entry = entry_create(iterator->first, iterator->second);
+    handle->items.erase(iterator);
+    return entry;
+}
+
+inline void* tmap_pop_last(void* rawHandle) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    if (handle == nullptr || handle->items.empty()) {
+        return entry_create("", "");
+    }
+    auto iterator = std::prev(handle->items.end());
+    void* entry = entry_create(iterator->first, iterator->second);
+    handle->items.erase(iterator);
+    return entry;
+}
+
+inline void* tmap_iter(void* rawHandle) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    std::vector<std::pair<std::string, std::string>> entries;
+    if (handle != nullptr) {
+        entries.reserve(handle->items.size());
+        for (const auto& item : handle->items) {
+            entries.push_back(item);
+        }
+    }
+    return entry_iter_create(std::move(entries));
+}
+
+inline void* tmap_range_iter(void* rawHandle, std::string_view startKey, std::string_view endKey) {
+    auto* handle = checked_handle<ordered_map_handle>(rawHandle, handle_kind::OrderedMap);
+    std::vector<std::pair<std::string, std::string>> entries;
+    if (handle == nullptr) {
+        return entry_iter_create(std::move(entries));
+    }
+    std::string start(startKey);
+    std::string end(endKey);
+    if (compare_strings(start, end) > 0) {
+        std::swap(start, end);
+    }
+    for (auto iterator = handle->items.lower_bound(start); iterator != handle->items.end() && compare_strings(iterator->first, end) <= 0; ++iterator) {
+        entries.push_back(*iterator);
+    }
+    return entry_iter_create(std::move(entries));
+}
+
+struct list_handle final : opaque_handle {
+    list_handle() : opaque_handle(handle_kind::LinkedList) {
+    }
+
+    std::list<std::string> items;
+};
+
+inline void* list_new() {
+    return new list_handle();
+}
+
+inline void list_push_front(void* rawHandle, std::string value) {
+    if (auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList)) {
+        handle->items.push_front(std::move(value));
+    }
+}
+
+inline void list_push_back(void* rawHandle, std::string value) {
+    if (auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList)) {
+        handle->items.push_back(std::move(value));
+    }
+}
+
+inline const char* list_pop_front(void* rawHandle) {
+    auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList);
+    if (handle == nullptr || handle->items.empty()) {
+        return store_string("");
+    }
+    std::string value = std::move(handle->items.front());
+    handle->items.pop_front();
+    return store_string(std::move(value));
+}
+
+inline const char* list_pop_back(void* rawHandle) {
+    auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList);
+    if (handle == nullptr || handle->items.empty()) {
+        return store_string("");
+    }
+    std::string value = std::move(handle->items.back());
+    handle->items.pop_back();
+    return store_string(std::move(value));
+}
+
+inline const char* list_front(void* rawHandle) {
+    auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList);
+    return store_string(handle != nullptr && !handle->items.empty() ? handle->items.front() : std::string());
+}
+
+inline const char* list_back(void* rawHandle) {
+    auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList);
+    return store_string(handle != nullptr && !handle->items.empty() ? handle->items.back() : std::string());
+}
+
+inline std::int32_t list_len(void* rawHandle) {
+    auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+inline void list_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList)) {
+        handle->items.clear();
+    }
+}
+
+inline const char* list_values(void* rawHandle, std::string_view delimiter) {
+    auto* handle = checked_handle<list_handle>(rawHandle, handle_kind::LinkedList);
+    return store_string(handle != nullptr ? join_string_range(handle->items.begin(), handle->items.end(), delimiter) : std::string());
+}
+
+struct ring_buffer_handle final : opaque_handle {
+    explicit ring_buffer_handle(std::size_t bufferCapacity)
+        : opaque_handle(handle_kind::RingBuffer), capacity(bufferCapacity == 0 ? 1 : bufferCapacity) {
+    }
+
+    std::deque<std::string> items;
+    std::size_t capacity;
+};
+
+inline void* ring_buffer_new(std::int32_t capacity) {
+    return new ring_buffer_handle(capacity <= 0 ? 1u : static_cast<std::size_t>(capacity));
+}
+
+inline void ring_buffer_push_back(void* rawHandle, std::string value) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    if (handle == nullptr) {
+        return;
+    }
+    if (handle->items.size() >= handle->capacity) {
+        handle->items.pop_front();
+    }
+    handle->items.push_back(std::move(value));
+}
+
+inline void ring_buffer_push_front(void* rawHandle, std::string value) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    if (handle == nullptr) {
+        return;
+    }
+    if (handle->items.size() >= handle->capacity) {
+        handle->items.pop_back();
+    }
+    handle->items.push_front(std::move(value));
+}
+
+inline const char* ring_buffer_pop_front(void* rawHandle) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    if (handle == nullptr || handle->items.empty()) {
+        return store_string("");
+    }
+    std::string value = std::move(handle->items.front());
+    handle->items.pop_front();
+    return store_string(std::move(value));
+}
+
+inline const char* ring_buffer_pop_back(void* rawHandle) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    if (handle == nullptr || handle->items.empty()) {
+        return store_string("");
+    }
+    std::string value = std::move(handle->items.back());
+    handle->items.pop_back();
+    return store_string(std::move(value));
+}
+
+inline const char* ring_buffer_front(void* rawHandle) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    return store_string(handle != nullptr && !handle->items.empty() ? handle->items.front() : std::string());
+}
+
+inline const char* ring_buffer_back(void* rawHandle) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    return store_string(handle != nullptr && !handle->items.empty() ? handle->items.back() : std::string());
+}
+
+inline std::int32_t ring_buffer_len(void* rawHandle) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+inline std::int32_t ring_buffer_capacity(void* rawHandle) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->capacity) : 0;
+}
+
+inline void ring_buffer_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer)) {
+        handle->items.clear();
+    }
+}
+
+inline const char* ring_buffer_values(void* rawHandle, std::string_view delimiter) {
+    auto* handle = checked_handle<ring_buffer_handle>(rawHandle, handle_kind::RingBuffer);
+    return store_string(handle != nullptr ? join_string_range(handle->items.begin(), handle->items.end(), delimiter) : std::string());
+}
+
+struct bitvec_handle final : opaque_handle {
+    bitvec_handle() : opaque_handle(handle_kind::BitVec) {
+    }
+
+    std::vector<std::uint8_t> bits;
+};
+
+inline void* bitvec_new() {
+    return new bitvec_handle();
+}
+
+inline void bitvec_push(void* rawHandle, std::int32_t bit) {
+    if (auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec)) {
+        handle->bits.push_back(bit != 0 ? 1u : 0u);
+    }
+}
+
+inline std::int32_t bitvec_get(void* rawHandle, std::int32_t index) {
+    auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->bits.size()) {
+        return 0;
+    }
+    return handle->bits[static_cast<std::size_t>(index)] != 0 ? 1 : 0;
+}
+
+inline void bitvec_set(void* rawHandle, std::int32_t index, std::int32_t bit) {
+    auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->bits.size()) {
+        return;
+    }
+    handle->bits[static_cast<std::size_t>(index)] = bit != 0 ? 1u : 0u;
+}
+
+inline std::int32_t bitvec_len(void* rawHandle) {
+    auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->bits.size()) : 0;
+}
+
+inline std::int32_t bitvec_count_ones(void* rawHandle) {
+    auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec);
+    if (handle == nullptr) {
+        return 0;
+    }
+    return static_cast<std::int32_t>(std::count(handle->bits.begin(), handle->bits.end(), static_cast<std::uint8_t>(1)));
+}
+
+inline void bitvec_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec)) {
+        handle->bits.clear();
+    }
+}
+
+inline const char* bitvec_text(void* rawHandle) {
+    auto* handle = checked_handle<bitvec_handle>(rawHandle, handle_kind::BitVec);
+    std::string text;
+    if (handle != nullptr) {
+        text.reserve(handle->bits.size());
+        for (const std::uint8_t bit : handle->bits) {
+            text.push_back(bit != 0 ? '1' : '0');
+        }
+    }
+    return store_string(std::move(text));
+}
+
+struct multimap_handle final : opaque_handle {
+    multimap_handle() : opaque_handle(handle_kind::MultiMap) {
+    }
+
+    std::multimap<std::string, std::string> items;
+};
+
+inline void* multimap_new() {
+    return new multimap_handle();
+}
+
+inline void multimap_insert(void* rawHandle, std::string key, std::string value) {
+    if (auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap)) {
+        handle->items.emplace(std::move(key), std::move(value));
+    }
+}
+
+inline void* multimap_get_all(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap);
+    std::vector<std::string> values;
+    if (handle != nullptr) {
+        const auto range = handle->items.equal_range(std::string(key));
+        for (auto iterator = range.first; iterator != range.second; ++iterator) {
+            values.push_back(iterator->second);
+        }
+    }
+    return vec_from_items(std::move(values));
+}
+
+inline std::int32_t multimap_remove_all(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.erase(std::string(key))) : 0;
+}
+
+inline std::int32_t multimap_contains_key(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap);
+    return handle != nullptr && handle->items.find(std::string(key)) != handle->items.end() ? 1 : 0;
+}
+
+inline std::int32_t multimap_len(void* rawHandle) {
+    auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+inline void multimap_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap)) {
+        handle->items.clear();
+    }
+}
+
+inline const char* multimap_entries(void* rawHandle, std::string_view delimiter) {
+    auto* handle = checked_handle<multimap_handle>(rawHandle, handle_kind::MultiMap);
+    std::vector<std::string> values;
+    if (handle != nullptr) {
+        values.reserve(handle->items.size());
+        for (const auto& [key, value] : handle->items) {
+            values.push_back(key + "=" + value);
+        }
+    }
+    return store_string(join_strings(values, delimiter));
+}
+
+struct weak_map_handle final : opaque_handle {
+    weak_map_handle() : opaque_handle(handle_kind::WeakMap) {
+    }
+
+    std::unordered_map<std::string, std::string> items;
+};
+
+inline void* weak_map_new() {
+    return new weak_map_handle();
+}
+
+inline void weak_map_insert(void* rawHandle, std::string key, std::string value) {
+    if (auto* handle = checked_handle<weak_map_handle>(rawHandle, handle_kind::WeakMap)) {
+        handle->items[std::move(key)] = std::move(value);
+    }
+}
+
+inline const char* weak_map_get(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<weak_map_handle>(rawHandle, handle_kind::WeakMap);
+    if (handle == nullptr) {
+        return store_string("");
+    }
+    const auto found = handle->items.find(std::string(key));
+    return store_string(found != handle->items.end() ? found->second : std::string());
+}
+
+inline const char* weak_map_remove(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<weak_map_handle>(rawHandle, handle_kind::WeakMap);
+    if (handle == nullptr) {
+        return store_string("");
+    }
+    const auto found = handle->items.find(std::string(key));
+    if (found == handle->items.end()) {
+        return store_string("");
+    }
+    std::string value = std::move(found->second);
+    handle->items.erase(found);
+    return store_string(std::move(value));
+}
+
+inline std::int32_t weak_map_contains_key(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<weak_map_handle>(rawHandle, handle_kind::WeakMap);
+    return handle != nullptr && handle->items.find(std::string(key)) != handle->items.end() ? 1 : 0;
+}
+
+inline std::int32_t weak_map_len(void* rawHandle) {
+    auto* handle = checked_handle<weak_map_handle>(rawHandle, handle_kind::WeakMap);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+inline void weak_map_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<weak_map_handle>(rawHandle, handle_kind::WeakMap)) {
+        handle->items.clear();
+    }
+}
+
+struct lru_cache_handle final : opaque_handle {
+    explicit lru_cache_handle(std::size_t cacheCapacity)
+        : opaque_handle(handle_kind::LruCache), capacity(cacheCapacity == 0 ? 1 : cacheCapacity) {
+    }
+
+    std::size_t capacity;
+    std::list<std::string> order;
+    std::unordered_map<std::string, std::pair<std::string, std::list<std::string>::iterator>> items;
+};
+
+inline void lru_cache_touch(lru_cache_handle* handle, std::unordered_map<std::string, std::pair<std::string, std::list<std::string>::iterator>>::iterator found) {
+    handle->order.erase(found->second.second);
+    handle->order.push_front(found->first);
+    found->second.second = handle->order.begin();
+}
+
+inline void lru_cache_trim(lru_cache_handle* handle) {
+    while (handle->items.size() > handle->capacity && !handle->order.empty()) {
+        const std::string victim = handle->order.back();
+        handle->order.pop_back();
+        handle->items.erase(victim);
+    }
+}
+
+inline void* lru_cache_new(std::int32_t capacity) {
+    return new lru_cache_handle(capacity <= 0 ? 1u : static_cast<std::size_t>(capacity));
+}
+
+inline void lru_cache_put(void* rawHandle, std::string key, std::string value) {
+    auto* handle = checked_handle<lru_cache_handle>(rawHandle, handle_kind::LruCache);
+    if (handle == nullptr) {
+        return;
+    }
+    auto found = handle->items.find(key);
+    if (found != handle->items.end()) {
+        found->second.first = std::move(value);
+        lru_cache_touch(handle, found);
+        return;
+    }
+    handle->order.push_front(key);
+    handle->items.emplace(key, std::make_pair(std::move(value), handle->order.begin()));
+    lru_cache_trim(handle);
+}
+
+inline const char* lru_cache_get(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<lru_cache_handle>(rawHandle, handle_kind::LruCache);
+    if (handle == nullptr) {
+        return store_string("");
+    }
+    auto found = handle->items.find(std::string(key));
+    if (found == handle->items.end()) {
+        return store_string("");
+    }
+    lru_cache_touch(handle, found);
+    return store_string(found->second.first);
+}
+
+inline std::int32_t lru_cache_contains_key(void* rawHandle, std::string_view key) {
+    auto* handle = checked_handle<lru_cache_handle>(rawHandle, handle_kind::LruCache);
+    return handle != nullptr && handle->items.find(std::string(key)) != handle->items.end() ? 1 : 0;
+}
+
+inline std::int32_t lru_cache_len(void* rawHandle) {
+    auto* handle = checked_handle<lru_cache_handle>(rawHandle, handle_kind::LruCache);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+inline void lru_cache_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<lru_cache_handle>(rawHandle, handle_kind::LruCache)) {
+        handle->order.clear();
+        handle->items.clear();
+    }
+}
+
+inline const char* lru_cache_keys(void* rawHandle, std::string_view delimiter) {
+    auto* handle = checked_handle<lru_cache_handle>(rawHandle, handle_kind::LruCache);
+    return store_string(handle != nullptr ? join_string_range(handle->order.begin(), handle->order.end(), delimiter) : std::string());
+}
+
+struct enum_set_handle final : opaque_handle {
+    enum_set_handle() : opaque_handle(handle_kind::EnumSet) {
+    }
+
+    std::unordered_set<std::string> items;
+};
+
+inline void* enum_set_new() {
+    return new enum_set_handle();
+}
+
+inline std::int32_t enum_set_insert(void* rawHandle, std::string value) {
+    auto* handle = checked_handle<enum_set_handle>(rawHandle, handle_kind::EnumSet);
+    return handle != nullptr && handle->items.insert(std::move(value)).second ? 1 : 0;
+}
+
+inline std::int32_t enum_set_remove(void* rawHandle, std::string_view value) {
+    auto* handle = checked_handle<enum_set_handle>(rawHandle, handle_kind::EnumSet);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.erase(std::string(value))) : 0;
+}
+
+inline std::int32_t enum_set_contains(void* rawHandle, std::string_view value) {
+    auto* handle = checked_handle<enum_set_handle>(rawHandle, handle_kind::EnumSet);
+    return handle != nullptr && handle->items.find(std::string(value)) != handle->items.end() ? 1 : 0;
+}
+
+inline std::int32_t enum_set_len(void* rawHandle) {
+    auto* handle = checked_handle<enum_set_handle>(rawHandle, handle_kind::EnumSet);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+inline void enum_set_clear(void* rawHandle) {
+    if (auto* handle = checked_handle<enum_set_handle>(rawHandle, handle_kind::EnumSet)) {
+        handle->items.clear();
+    }
+}
+
+inline const char* enum_set_values(void* rawHandle, std::string_view delimiter) {
+    auto* handle = checked_handle<enum_set_handle>(rawHandle, handle_kind::EnumSet);
+    std::vector<std::string> values;
+    if (handle != nullptr) {
+        values.reserve(handle->items.size());
+        for (const auto& value : handle->items) {
+            values.push_back(value);
+        }
+        std::sort(values.begin(), values.end());
+    }
+    return store_string(join_strings(values, delimiter));
+}
+
+struct grid2d_handle final : opaque_handle {
+    grid2d_handle(std::size_t gridRows, std::size_t gridCols, std::string fillValue)
+        : opaque_handle(handle_kind::Grid2d), rows(gridRows), cols(gridCols), cells(gridRows * gridCols, std::move(fillValue)) {
+    }
+
+    std::size_t rows;
+    std::size_t cols;
+    std::vector<std::string> cells;
+};
+
+inline std::size_t grid2d_index(const grid2d_handle* handle, std::int32_t row, std::int32_t column) {
+    if (handle == nullptr || row < 0 || column < 0) {
+        return std::numeric_limits<std::size_t>::max();
+    }
+    const std::size_t rowIndex = static_cast<std::size_t>(row);
+    const std::size_t columnIndex = static_cast<std::size_t>(column);
+    if (rowIndex >= handle->rows || columnIndex >= handle->cols) {
+        return std::numeric_limits<std::size_t>::max();
+    }
+    return rowIndex * handle->cols + columnIndex;
+}
+
+inline void* grid2d_new(std::int32_t rows, std::int32_t cols, std::string fillValue) {
+    const std::size_t rowCount = rows <= 0 ? 0u : static_cast<std::size_t>(rows);
+    const std::size_t colCount = cols <= 0 ? 0u : static_cast<std::size_t>(cols);
+    return new grid2d_handle(rowCount, colCount, std::move(fillValue));
+}
+
+inline std::int32_t grid2d_rows(void* rawHandle) {
+    auto* handle = checked_handle<grid2d_handle>(rawHandle, handle_kind::Grid2d);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->rows) : 0;
+}
+
+inline std::int32_t grid2d_cols(void* rawHandle) {
+    auto* handle = checked_handle<grid2d_handle>(rawHandle, handle_kind::Grid2d);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->cols) : 0;
+}
+
+inline const char* grid2d_get(void* rawHandle, std::int32_t row, std::int32_t column) {
+    auto* handle = checked_handle<grid2d_handle>(rawHandle, handle_kind::Grid2d);
+    const std::size_t index = grid2d_index(handle, row, column);
+    return store_string(index == std::numeric_limits<std::size_t>::max() ? std::string() : handle->cells[index]);
+}
+
+inline void grid2d_set(void* rawHandle, std::int32_t row, std::int32_t column, std::string value) {
+    auto* handle = checked_handle<grid2d_handle>(rawHandle, handle_kind::Grid2d);
+    const std::size_t index = grid2d_index(handle, row, column);
+    if (index == std::numeric_limits<std::size_t>::max()) {
+        return;
+    }
+    handle->cells[index] = std::move(value);
+}
+
+inline void grid2d_fill(void* rawHandle, std::string value) {
+    if (auto* handle = checked_handle<grid2d_handle>(rawHandle, handle_kind::Grid2d)) {
+        std::fill(handle->cells.begin(), handle->cells.end(), value);
+    }
+}
+
+inline const char* grid2d_row_text(void* rawHandle, std::int32_t row, std::string_view delimiter) {
+    auto* handle = checked_handle<grid2d_handle>(rawHandle, handle_kind::Grid2d);
+    if (handle == nullptr || row < 0 || static_cast<std::size_t>(row) >= handle->rows) {
+        return store_string("");
+    }
+    std::vector<std::string> values;
+    values.reserve(handle->cols);
+    for (std::size_t column = 0; column < handle->cols; ++column) {
+        values.push_back(handle->cells[static_cast<std::size_t>(row) * handle->cols + column]);
+    }
+    return store_string(join_strings(values, delimiter));
 }
 
 struct unordered_set_handle final : opaque_handle {
@@ -1533,11 +2505,16 @@ inline const char* url_join(std::string_view base, std::string_view relative) {
 
 inline std::int32_t process_completed(void* rawHandle) {
     auto* handle = checked_handle<process_handle>(rawHandle, handle_kind::Process);
-    return handle != nullptr && handle->completed ? 1 : 0;
+    if (handle == nullptr) {
+        return 0;
+    }
+    process_refresh_status(handle, false);
+    return handle->completed ? 1 : 0;
 }
 
 inline std::int32_t process_try_wait(void* rawHandle) {
-    return process_wait(rawHandle);
+    auto* handle = checked_handle<process_handle>(rawHandle, handle_kind::Process);
+    return process_refresh_status(handle, false);
 }
 
 inline std::int32_t fs_create_dir(std::string_view path) {
@@ -1792,6 +2769,34 @@ inline std::int32_t term_is_tty() {
     return _isatty(_fileno(stdout)) ? 1 : 0;
 #else
     return isatty(fileno(stdout)) ? 1 : 0;
+#endif
+}
+
+inline std::int32_t term_columns() {
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info{};
+    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (output != INVALID_HANDLE_VALUE && GetConsoleScreenBufferInfo(output, &info) != 0) {
+        return static_cast<std::int32_t>(info.srWindow.Right - info.srWindow.Left + 1);
+    }
+    return 80;
+#else
+    struct winsize size {};
+    return ioctl(fileno(stdout), TIOCGWINSZ, &size) == 0 && size.ws_col > 0 ? static_cast<std::int32_t>(size.ws_col) : 80;
+#endif
+}
+
+inline std::int32_t term_rows() {
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info{};
+    const HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (output != INVALID_HANDLE_VALUE && GetConsoleScreenBufferInfo(output, &info) != 0) {
+        return static_cast<std::int32_t>(info.srWindow.Bottom - info.srWindow.Top + 1);
+    }
+    return 25;
+#else
+    struct winsize size {};
+    return ioctl(fileno(stdout), TIOCGWINSZ, &size) == 0 && size.ws_row > 0 ? static_cast<std::int32_t>(size.ws_row) : 25;
 #endif
 }
 

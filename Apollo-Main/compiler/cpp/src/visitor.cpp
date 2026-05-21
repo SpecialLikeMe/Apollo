@@ -531,18 +531,29 @@ bool isNominalGenericType(compilerv1Parser::GenericTypeContext* genericType) {
         && genericType->typeRef().size() == 2;
 }
 
-llvm::StructType* lowerNominalType(llvm::LLVMContext& context, compilerv1Parser::GenericTypeContext* genericType) {
-    if (!isNominalGenericType(genericType)) {
-        return nullptr;
-    }
+bool isOptionGenericType(compilerv1Parser::GenericTypeContext* genericType) {
+    return genericType != nullptr
+        && genericType->ID() != nullptr
+        && genericType->ID()->getText() == "option"
+        && (genericType->typeRef().size() == 1 || genericType->typeRef().size() == 2);
+}
 
-    llvm::Type* okType = lowerTypeRef(context, genericType->typeRef(0));
-    llvm::Type* errType = lowerTypeRef(context, genericType->typeRef(1));
+bool isTupleGenericType(compilerv1Parser::GenericTypeContext* genericType) {
+    return genericType != nullptr
+        && genericType->ID() != nullptr
+        && genericType->ID()->getText() == "tuple"
+        && genericType->typeRef().size() >= 2;
+}
+
+llvm::StructType* lowerTaggedResultType(llvm::LLVMContext& context,
+    std::string_view genericText,
+    llvm::Type* okType,
+    llvm::Type* errType) {
     if (okType == nullptr || errType == nullptr) {
         return nullptr;
     }
 
-    const std::string typeName = std::string(kNominalStructPrefix) + mangleTypeName(genericType->getText());
+    const std::string typeName = std::string(kNominalStructPrefix) + mangleTypeName(genericText);
     if (llvm::StructType* existing = llvm::StructType::getTypeByName(context, typeName)) {
         if (existing->isOpaque()) {
             existing->setBody({
@@ -561,6 +572,36 @@ llvm::StructType* lowerNominalType(llvm::LLVMContext& context, compilerv1Parser:
         okType,
         errType,
     }, typeName, false);
+}
+
+llvm::StructType* lowerNominalType(llvm::LLVMContext& context, compilerv1Parser::GenericTypeContext* genericType) {
+    if (!isNominalGenericType(genericType)) {
+        return nullptr;
+    }
+
+    llvm::Type* okType = lowerTypeRef(context, genericType->typeRef(0));
+    llvm::Type* errType = lowerTypeRef(context, genericType->typeRef(1));
+    if (okType == nullptr || errType == nullptr) {
+        return nullptr;
+    }
+
+    return lowerTaggedResultType(context, genericType->getText(), okType, errType);
+}
+
+llvm::StructType* lowerOptionType(llvm::LLVMContext& context, compilerv1Parser::GenericTypeContext* genericType) {
+    if (!isOptionGenericType(genericType)) {
+        return nullptr;
+    }
+
+    llvm::Type* okType = lowerTypeRef(context, genericType->typeRef(0));
+    llvm::Type* errType = genericType->typeRef().size() == 2
+        ? lowerTypeRef(context, genericType->typeRef(1))
+        : llvm::PointerType::getUnqual(context);
+    if (okType == nullptr || errType == nullptr) {
+        return nullptr;
+    }
+
+    return lowerTaggedResultType(context, genericType->getText(), okType, errType);
 }
 
 bool isNominalStructType(llvm::Type* type) {
@@ -952,6 +993,23 @@ llvm::Type* lowerShapeType(llvm::LLVMContext& context, compilerv1Parser::ShapeTy
     return llvm::StructType::get(context, elementTypes, false);
 }
 
+llvm::Type* lowerTupleType(llvm::LLVMContext& context, compilerv1Parser::GenericTypeContext* genericType) {
+    if (!isTupleGenericType(genericType)) {
+        return nullptr;
+    }
+
+    std::vector<llvm::Type*> elementTypes;
+    elementTypes.reserve(genericType->typeRef().size());
+    for (auto* elementType : genericType->typeRef()) {
+        llvm::Type* loweredElement = lowerTypeRef(context, elementType);
+        if (loweredElement == nullptr) {
+            return nullptr;
+        }
+        elementTypes.push_back(loweredElement);
+    }
+    return llvm::StructType::get(context, elementTypes, false);
+}
+
 llvm::Type* lowerTypeRef(llvm::LLVMContext& context, compilerv1Parser::TypeRefContext* typeRef) {
     if (typeRef == nullptr || typeRef->typeAtom() == nullptr) {
         return nullptr;
@@ -962,6 +1020,10 @@ llvm::Type* lowerTypeRef(llvm::LLVMContext& context, compilerv1Parser::TypeRefCo
         lowered = lowerShapeType(context, typeRef->typeAtom()->shapeType());
     } else if (typeRef->typeAtom()->genericType() != nullptr && isNominalGenericType(typeRef->typeAtom()->genericType())) {
         lowered = lowerNominalType(context, typeRef->typeAtom()->genericType());
+    } else if (typeRef->typeAtom()->genericType() != nullptr && isOptionGenericType(typeRef->typeAtom()->genericType())) {
+        lowered = lowerOptionType(context, typeRef->typeAtom()->genericType());
+    } else if (typeRef->typeAtom()->genericType() != nullptr && isTupleGenericType(typeRef->typeAtom()->genericType())) {
+        lowered = lowerTupleType(context, typeRef->typeAtom()->genericType());
     } else {
         const std::string baseType = typeRef->typeAtom()->getText();
         lowered = lowerPrimitiveType(context, baseType);

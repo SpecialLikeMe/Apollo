@@ -1,0 +1,43 @@
+extern std prelude;
+
+i32 main() {
+    str quoted_two = sys.json_write_str("two");
+    str quoted_apollo = sys.json_write_str("apollo");
+    str quoted_hi = sys.json_write_str("hi");
+    str quoted_name = sys.json_write_str("name");
+    str quoted_ok = sys.json_write_str("ok");
+    str count_fragment = sys.str_concat(sys.json_write_str("count"), ":3");
+
+    vector items = sys.json_parse_array(sys.str_concat("[1,", sys.str_concat(quoted_two, ",true]")));
+    if (sys.vec_len(items) != 3) {
+        return 1;
+    }
+    if (sys.vec_get(items, 1) != quoted_two) {
+        return 2;
+    }
+
+    map obj = sys.json_parse_object(sys.str_concat("{", sys.str_concat(quoted_name, sys.str_concat(":", sys.str_concat(quoted_apollo, sys.str_concat(",", sys.str_concat(quoted_ok, ":true}")))))));
+    if (sys.map_get(obj, "name") != quoted_apollo) {
+        return 3;
+    }
+
+    vector out_items = sys.vec_new();
+    sys.vec_push(out_items, sys.json_write_int(7));
+    sys.vec_push(out_items, sys.json_write_str("hi"));
+    if (sys.json_write_array(out_items) != sys.str_concat("[7,", sys.str_concat(quoted_hi, "]"))) {
+        return 4;
+    }
+
+    map out_obj = sys.map_new();
+    sys.map_insert(out_obj, "count", sys.json_write_int(3));
+    sys.map_insert(out_obj, "label", sys.json_write_str("ok"));
+    if (sys.str_contains(sys.json_write_object(out_obj), count_fragment) == 0) {
+        return 5;
+    }
+
+    sys.handle_destroy(items);
+    sys.handle_destroy(obj);
+    sys.handle_destroy(out_items);
+    sys.handle_destroy(out_obj);
+    return 0;
+}

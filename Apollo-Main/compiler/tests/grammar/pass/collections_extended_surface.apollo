@@ -1,0 +1,94 @@
+extern std prelude;
+
+i32 main() {
+    tmap ordered = sys.tmap_new();
+    sys.tmap_insert(ordered, "b", "bee");
+    sys.tmap_insert(ordered, "a", "aye");
+    sys.tmap_insert(ordered, "c", "see");
+
+    entry first = sys.tmap_pop_first(ordered);
+    if (sys.entry_key(first) != "a") {
+        return 1;
+    }
+
+    entry_iter remaining = sys.tmap_range_iter(ordered, "b", "z");
+    if (sys.entry_iter_has_next(remaining) == 0) {
+        return 2;
+    }
+    entry next_item = sys.entry_iter_next(remaining);
+    if (sys.entry_value(next_item) != "bee") {
+        return 3;
+    }
+
+    list names = sys.list_new();
+    sys.list_push_back(names, "red");
+    sys.list_push_front(names, "blue");
+    if (sys.list_front(names) != "blue") {
+        return 4;
+    }
+
+    ring_buffer ring = sys.ring_buffer_new(2);
+    sys.ring_buffer_push_back(ring, "one");
+    sys.ring_buffer_push_back(ring, "two");
+    sys.ring_buffer_push_back(ring, "three");
+    if (sys.ring_buffer_front(ring) != "two") {
+        return 5;
+    }
+
+    bitvec bits = sys.bitvec_new();
+    sys.bitvec_push(bits, 1);
+    sys.bitvec_push(bits, 0);
+    sys.bitvec_push(bits, 1);
+    if (sys.bitvec_count_ones(bits) != 2) {
+        return 6;
+    }
+
+    multimap aliases = sys.multimap_new();
+    sys.multimap_insert(aliases, "lang", "apollo");
+    sys.multimap_insert(aliases, "lang", "apo");
+    vector alias_values = sys.multimap_get_all(aliases, "lang");
+    if (sys.vec_len(alias_values) != 2) {
+        return 7;
+    }
+
+    weak_map weak = sys.weak_map_new();
+    sys.weak_map_insert(weak, "session", "open");
+    if (sys.weak_map_get(weak, "session") != "open") {
+        return 8;
+    }
+
+    lru_cache cache = sys.lru_cache_new(2);
+    sys.lru_cache_put(cache, "a", "1");
+    sys.lru_cache_put(cache, "b", "2");
+    sys.lru_cache_put(cache, "c", "3");
+    if (sys.lru_cache_contains_key(cache, "a") != 0) {
+        return 9;
+    }
+
+    enum_set modes = sys.enum_set_new();
+    sys.enum_set_insert(modes, "fast");
+    if (sys.enum_set_contains(modes, "fast") == 0) {
+        return 10;
+    }
+
+    grid2d board = sys.grid2d_new(2, 2, ".");
+    sys.grid2d_set(board, 1, 1, "X");
+    if (sys.grid2d_get(board, 1, 1) != "X") {
+        return 11;
+    }
+
+    sys.handle_destroy(first);
+    sys.handle_destroy(remaining);
+    sys.handle_destroy(next_item);
+    sys.handle_destroy(ordered);
+    sys.handle_destroy(names);
+    sys.handle_destroy(ring);
+    sys.handle_destroy(bits);
+    sys.handle_destroy(aliases);
+    sys.handle_destroy(alias_values);
+    sys.handle_destroy(weak);
+    sys.handle_destroy(cache);
+    sys.handle_destroy(modes);
+    sys.handle_destroy(board);
+    return 0;
+}

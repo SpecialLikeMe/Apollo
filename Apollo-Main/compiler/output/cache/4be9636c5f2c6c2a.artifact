@@ -1,0 +1,91 @@
+; ModuleID = 'literal_shape_surface'
+source_filename = "literal_shape_surface.apollo"
+target triple = "x86_64-w64-windows-gnu"
+
+define i1 @invert(i1 %value) {
+entry:
+  %value1 = alloca i1, align 1
+  store i1 %value, ptr %value1, align 1
+  %0 = load i1, ptr %value1, align 1
+  br i1 %0, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  ret i1 false
+
+if.end:                                           ; preds = %entry
+  ret i1 true
+}
+
+define i32 @first_codepoint() {
+entry:
+  ret i32 97
+}
+
+define i8 @first_byte() {
+entry:
+  ret i8 97
+}
+
+define i64 @handle_id(i64 %value) {
+entry:
+  %value1 = alloca i64, align 8
+  store i64 %value, ptr %value1, align 4
+  %0 = load i64, ptr %value1, align 4
+  ret i64 %0
+}
+
+define double @circle_ratio() {
+entry:
+  ret double 3.141590e+00
+}
+
+define ptr @none_value() {
+entry:
+  ret ptr null
+}
+
+define { i32, i1 } @literal_bundle() {
+entry:
+  ret { i32, i1 } { i32 122, i1 true }
+}
+
+define i32 @main() {
+entry:
+  %0 = call i1 @invert(i1 false)
+  br i1 %0, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  ret i32 1
+
+if.end:                                           ; preds = %entry
+  ret i32 0
+}
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21, !22}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"literal_shape_surface"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"float", !"float"}
+!4 = !{!"long", !"i64"}
+!5 = !{!"isize", !"i64"}
+!6 = !{!"i64", !"i64"}
+!7 = !{!"short", !"i16"}
+!8 = !{!"u32", !"i32"}
+!9 = !{!"bool", !"i1"}
+!10 = !{!"int", !"i32"}
+!11 = !{!"void", !"void"}
+!12 = !{!"u16", !"i16"}
+!13 = !{!"i16", !"i16"}
+!14 = !{!"u64", !"i64"}
+!15 = !{!"u8", !"i8"}
+!16 = !{!"f64", !"double"}
+!17 = !{!"i32", !"i32"}
+!18 = !{!"double", !"double"}
+!19 = !{!"usize", !"i64"}
+!20 = !{!"byte", !"i8"}
+!21 = !{!"i8", !"i8"}
+!22 = !{!"char", !"i32"}

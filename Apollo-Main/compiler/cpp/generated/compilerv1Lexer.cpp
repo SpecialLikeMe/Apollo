@@ -4,6 +4,8 @@
 
 #include "compilerv1Lexer.h"
 
+#include <mutex>
+
 
 using namespace antlr4;
 
@@ -41,7 +43,7 @@ struct Compilerv1LexerStaticData final {
   std::unique_ptr<antlr4::atn::ATN> atn;
 };
 
-::antlr4::internal::OnceFlag compilerv1lexerLexerOnceFlag;
+std::once_flag compilerv1lexerLexerOnceFlag;
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
 static thread_local
 #endif
@@ -797,6 +799,6 @@ void compilerv1Lexer::initialize() {
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
   compilerv1lexerLexerInitialize();
 #else
-  ::antlr4::internal::call_once(compilerv1lexerLexerOnceFlag, compilerv1lexerLexerInitialize);
+	std::call_once(compilerv1lexerLexerOnceFlag, compilerv1lexerLexerInitialize);
 #endif
 }

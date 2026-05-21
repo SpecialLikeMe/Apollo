@@ -1,0 +1,11 @@
+extern std prelude;
+
+i32 main() {
+    process proc = sys.process_spawn("echo apollo");
+    task ready = sys.task_ready_i32(12);
+
+    if (sys.host_is_windows() == 1) {
+        return sys.process_wait(proc) + sys.task_await_i32(ready) - 12;
+    }
+    return sys.process_exit_code(proc) + sys.task_await_i32(ready) - 12;
+}

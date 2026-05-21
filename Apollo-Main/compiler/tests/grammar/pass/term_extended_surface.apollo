@@ -1,0 +1,11 @@
+extern std prelude;
+
+i32 main() {
+    if (sys.term_columns() <= 0) {
+        return 1;
+    }
+    if (sys.term_rows() <= 0) {
+        return 2;
+    }
+    return 0;
+}

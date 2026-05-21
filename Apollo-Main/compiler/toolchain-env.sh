@@ -174,6 +174,83 @@ resolve_antlr4_runtime_cmake_dir() {
     return 1
 }
 
+resolve_antlr4_runtime_include_dir() {
+    if [ -n "${APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR:-}" ]; then
+        for candidate in \
+            "$APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR" \
+            "$APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR/antlr4-runtime"; do
+            if [ -f "$candidate/antlr4-runtime.h" ]; then
+                printf '%s\n' "$candidate"
+                return 0
+            fi
+        done
+    fi
+    if include_dir=$(pkg_config_first_path antlr4-runtime --cflags-only-I); then
+        for candidate in \
+            "$include_dir" \
+            "$include_dir/antlr4-runtime"; do
+            if [ -f "$candidate/antlr4-runtime.h" ]; then
+                printf '%s\n' "$candidate"
+                return 0
+            fi
+        done
+    fi
+    if include_dir=$(pkg_config_variable antlr4-runtime includedir); then
+        for candidate in \
+            "$include_dir" \
+            "$include_dir/antlr4-runtime"; do
+            if [ -f "$candidate/antlr4-runtime.h" ]; then
+                printf '%s\n' "$candidate"
+                return 0
+            fi
+        done
+    fi
+    for candidate in \
+        /usr/include/antlr4-runtime \
+        /usr/local/include/antlr4-runtime \
+        /opt/homebrew/include/antlr4-runtime \
+        /opt/local/include/antlr4-runtime; do
+        if [ -f "$candidate/antlr4-runtime.h" ]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+    return 1
+}
+
+resolve_antlr4_runtime_lib_dir() {
+    if [ -n "${APOLLO_ANTLR4_RUNTIME_LIB_DIR:-}" ] && [ -d "$APOLLO_ANTLR4_RUNTIME_LIB_DIR" ]; then
+        printf '%s\n' "$APOLLO_ANTLR4_RUNTIME_LIB_DIR"
+        return 0
+    fi
+    if lib_dir=$(pkg_config_first_path antlr4-runtime --libs-only-L); then
+        if resolve_library_file "$lib_dir" libantlr4-runtime.so libantlr4-runtime.a libantlr4_runtime.so libantlr4_runtime.a >/dev/null 2>&1; then
+            printf '%s\n' "$lib_dir"
+            return 0
+        fi
+    fi
+    if lib_dir=$(pkg_config_variable antlr4-runtime libdir); then
+        if resolve_library_file "$lib_dir" libantlr4-runtime.so libantlr4-runtime.a libantlr4_runtime.so libantlr4_runtime.a >/dev/null 2>&1; then
+            printf '%s\n' "$lib_dir"
+            return 0
+        fi
+    fi
+    for candidate in \
+        /usr/lib/x86_64-linux-gnu \
+        /usr/lib64 \
+        /usr/lib \
+        /usr/local/lib \
+        /opt/homebrew/lib \
+        /opt/local/lib; do
+        if [ -d "$candidate" ] \
+            && resolve_library_file "$candidate" libantlr4-runtime.so libantlr4-runtime.a libantlr4_runtime.so libantlr4_runtime.a >/dev/null 2>&1; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+    return 1
+}
+
 resolve_sdl_include_dir() {
     if [ -n "${APOLLO_SDL_INCLUDE_DIR:-}" ] && [ -d "$APOLLO_SDL_INCLUDE_DIR" ]; then
         printf '%s\n' "$APOLLO_SDL_INCLUDE_DIR"
@@ -267,6 +344,14 @@ fi
 
 if antlr4_runtime_cmake_dir=$(resolve_antlr4_runtime_cmake_dir 2>/dev/null); then
     export APOLLO_ANTLR4_RUNTIME_CMAKE_DIR="$antlr4_runtime_cmake_dir"
+fi
+
+if antlr4_runtime_include_dir=$(resolve_antlr4_runtime_include_dir 2>/dev/null); then
+    export APOLLO_ANTLR4_RUNTIME_INCLUDE_DIR="$antlr4_runtime_include_dir"
+fi
+
+if antlr4_runtime_lib_dir=$(resolve_antlr4_runtime_lib_dir 2>/dev/null); then
+    export APOLLO_ANTLR4_RUNTIME_LIB_DIR="$antlr4_runtime_lib_dir"
 fi
 
 if sdl_include_dir=$(resolve_sdl_include_dir 2>/dev/null); then

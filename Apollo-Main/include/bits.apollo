@@ -32,18 +32,46 @@ namespace sys {
         }
         return 0;
     }
+
+    i32 clz(i32 value) {
+        return sys__native_clz(value);
+    }
+
+    i32 ctz(i32 value) {
+        return sys__native_ctz(value);
+    }
+
+    i32 popcount(i32 value) {
+        return sys__native_popcount(value);
+    }
+
+    i32 ffs(i32 value) {
+        return sys__native_ffs(value);
+    }
+
+    i32 rotate_left(i32 value, i32 amount) {
+        return sys__native_rotate_left(value, amount);
+    }
+
+    i32 rotate_right(i32 value, i32 amount) {
+        return sys__native_rotate_right(value, amount);
+    }
+
+    i32 bswap(i32 value) {
+        return sys__native_bswap(value);
+    }
 }
 
 @unsafe {
     inline::cpp {
         #include "apo_stdlib_runtime.hpp"
 
-        int sys__clz(int value) { return __apo_stdlib::clz_i32(value); }
-        int sys__ctz(int value) { return __apo_stdlib::ctz_i32(value); }
-        int sys__popcount(int value) { return __apo_stdlib::popcount_i32(value); }
-        int sys__ffs(int value) { return __apo_stdlib::ffs_i32(value); }
-        int sys__rotate_left(int value, int amount) { return __apo_stdlib::rotate_left_i32(value, amount); }
-        int sys__rotate_right(int value, int amount) { return __apo_stdlib::rotate_right_i32(value, amount); }
-        int sys__bswap(int value) { return __apo_stdlib::bswap_i32(value); }
+        int sys__native_clz(int value) { return __apo_stdlib::clz_i32(value); }
+        int sys__native_ctz(int value) { return __apo_stdlib::ctz_i32(value); }
+        int sys__native_popcount(int value) { return __apo_stdlib::popcount_i32(value); }
+        int sys__native_ffs(int value) { return __apo_stdlib::ffs_i32(value); }
+        int sys__native_rotate_left(int value, int amount) { return __apo_stdlib::rotate_left_i32(value, amount); }
+        int sys__native_rotate_right(int value, int amount) { return __apo_stdlib::rotate_right_i32(value, amount); }
+        int sys__native_bswap(int value) { return __apo_stdlib::bswap_i32(value); }
     }
 }

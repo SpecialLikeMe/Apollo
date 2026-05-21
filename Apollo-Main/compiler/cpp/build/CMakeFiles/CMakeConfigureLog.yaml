@@ -44,6 +44,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -170,6 +176,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -268,6 +280,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -378,6 +396,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -476,6 +500,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -586,6 +616,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -684,6 +720,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -794,6 +836,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -892,6 +940,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -1002,6 +1056,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -1100,6 +1160,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -1307,6 +1373,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -1734,6 +1806,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -2149,6 +2227,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -2576,6 +2660,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -2640,6 +2730,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -3089,6 +3185,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -3504,6 +3606,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -3931,6 +4039,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -4054,6 +4168,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -4103,8 +4223,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl"
-      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl"
+      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq"
+      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/msys64/clang64/bin/clang-scan-deps.exe"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -4115,19 +4235,19 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl'
+        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq'
         
-        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_81b98/fast
-        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_81b98.dir\\build.make CMakeFiles/cmTC_81b98.dir/build
-        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl'
-        Building C object CMakeFiles/cmTC_81b98.dir/CMakeCCompilerABI.c.obj
-        C:\\msys64\\clang64\\bin\\clang.exe   -v -MD -MT CMakeFiles/cmTC_81b98.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles\\cmTC_81b98.dir\\CMakeCCompilerABI.c.obj.d -o CMakeFiles\\cmTC_81b98.dir\\CMakeCCompilerABI.c.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"
+        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_a6034/fast
+        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_a6034.dir\\build.make CMakeFiles/cmTC_a6034.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq'
+        Building C object CMakeFiles/cmTC_a6034.dir/CMakeCCompilerABI.c.obj
+        C:\\msys64\\clang64\\bin\\clang.exe   -v -MD -MT CMakeFiles/cmTC_a6034.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles\\cmTC_a6034.dir\\CMakeCCompilerABI.c.obj.d -o CMakeFiles\\cmTC_a6034.dir\\CMakeCCompilerABI.c.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"
         clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)
         Target: x86_64-w64-windows-gnu
         Thread model: posix
         InstalledDir: C:/msys64/clang64/bin
          (in-process)
-         "C:/msys64/clang64/bin/clang.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_81b98.dir\\\\CMakeCCompilerABI.c.obj.d" -MT CMakeFiles/cmTC_81b98.dir/CMakeCCompilerABI.c.obj -sys-header-deps -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_81b98.dir\\\\CMakeCCompilerABI.c.obj" -x c "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCCompilerABI.c"
+         "C:/msys64/clang64/bin/clang.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_a6034.dir\\\\CMakeCCompilerABI.c.obj.d" -MT CMakeFiles/cmTC_a6034.dir/CMakeCCompilerABI.c.obj -sys-header-deps -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_a6034.dir\\\\CMakeCCompilerABI.c.obj" -x c "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCCompilerABI.c"
         clang -cc1 version 22.1.4 based upon LLVM 22.1.4 default target x86_64-w64-windows-gnu
         ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/include"
         ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/usr/include"
@@ -4136,18 +4256,18 @@ events:
          C:/msys64/clang64/lib/clang/22/include
          C:/msys64/clang64/include
         End of search list.
-        Linking C executable cmTC_81b98.exe
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_81b98.dir\\link.txt --verbose=1
+        Linking C executable cmTC_a6034.exe
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_a6034.dir\\link.txt --verbose=1
         clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)
         Target: x86_64-w64-windows-gnu
         Thread model: posix
         InstalledDir: C:/msys64/clang64/bin
-         "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_81b98.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_81b98.dir/objects.a" --no-whole-archive --out-implib libcmTC_81b98.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o
+         "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_a6034.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_a6034.dir/objects.a" --no-whole-archive --out-implib libcmTC_a6034.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o
         LLD 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b) (compatible with GNU linkers)
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_81b98.dir/objects.a
-        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_81b98.dir/objects.a @CMakeFiles\\cmTC_81b98.dir\\objects1.rsp
-        C:\\msys64\\clang64\\bin\\clang.exe  -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_81b98.dir/objects.a -Wl,--no-whole-archive -o cmTC_81b98.exe -Wl,--out-implib,libcmTC_81b98.dll.a -Wl,--major-image-version,0,--minor-image-version,0
-        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl'
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_a6034.dir/objects.a
+        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_a6034.dir/objects.a @CMakeFiles\\cmTC_a6034.dir\\objects1.rsp
+        C:\\msys64\\clang64\\bin\\clang.exe  -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_a6034.dir/objects.a -Wl,--no-whole-archive -o cmTC_a6034.exe -Wl,--out-implib,libcmTC_a6034.dll.a -Wl,--major-image-version,0,--minor-image-version,0
+        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq'
         
       exitCode: 0
   -
@@ -4178,19 +4298,19 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl']
+        ignore line: [Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq']
         ignore line: []
-        ignore line: [Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_81b98/fast]
-        ignore line: [C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_81b98.dir\\build.make CMakeFiles/cmTC_81b98.dir/build]
-        ignore line: [mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl']
-        ignore line: [Building C object CMakeFiles/cmTC_81b98.dir/CMakeCCompilerABI.c.obj]
-        ignore line: [C:\\msys64\\clang64\\bin\\clang.exe   -v -MD -MT CMakeFiles/cmTC_81b98.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles\\cmTC_81b98.dir\\CMakeCCompilerABI.c.obj.d -o CMakeFiles\\cmTC_81b98.dir\\CMakeCCompilerABI.c.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"]
+        ignore line: [Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_a6034/fast]
+        ignore line: [C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_a6034.dir\\build.make CMakeFiles/cmTC_a6034.dir/build]
+        ignore line: [mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq']
+        ignore line: [Building C object CMakeFiles/cmTC_a6034.dir/CMakeCCompilerABI.c.obj]
+        ignore line: [C:\\msys64\\clang64\\bin\\clang.exe   -v -MD -MT CMakeFiles/cmTC_a6034.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles\\cmTC_a6034.dir\\CMakeCCompilerABI.c.obj.d -o CMakeFiles\\cmTC_a6034.dir\\CMakeCCompilerABI.c.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCCompilerABI.c"]
         ignore line: [clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)]
         ignore line: [Target: x86_64-w64-windows-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: C:/msys64/clang64/bin]
         ignore line: [ (in-process)]
-        ignore line: [ "C:/msys64/clang64/bin/clang.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-shsnnl -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_81b98.dir\\\\CMakeCCompilerABI.c.obj.d" -MT CMakeFiles/cmTC_81b98.dir/CMakeCCompilerABI.c.obj -sys-header-deps -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_81b98.dir\\\\CMakeCCompilerABI.c.obj" -x c "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCCompilerABI.c"]
+        ignore line: [ "C:/msys64/clang64/bin/clang.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-5e62jq -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_a6034.dir\\\\CMakeCCompilerABI.c.obj.d" -MT CMakeFiles/cmTC_a6034.dir/CMakeCCompilerABI.c.obj -sys-header-deps -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_a6034.dir\\\\CMakeCCompilerABI.c.obj" -x c "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCCompilerABI.c"]
         ignore line: [clang -cc1 version 22.1.4 based upon LLVM 22.1.4 default target x86_64-w64-windows-gnu]
         ignore line: [ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/include"]
         ignore line: [ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/usr/include"]
@@ -4199,19 +4319,19 @@ events:
         ignore line: [ C:/msys64/clang64/lib/clang/22/include]
         ignore line: [ C:/msys64/clang64/include]
         ignore line: [End of search list.]
-        ignore line: [Linking C executable cmTC_81b98.exe]
-        ignore line: ["C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_81b98.dir\\link.txt --verbose=1]
+        ignore line: [Linking C executable cmTC_a6034.exe]
+        ignore line: ["C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_a6034.dir\\link.txt --verbose=1]
         ignore line: [clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)]
         ignore line: [Target: x86_64-w64-windows-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: C:/msys64/clang64/bin]
-        link line: [ "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_81b98.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_81b98.dir/objects.a" --no-whole-archive --out-implib libcmTC_81b98.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o]
+        link line: [ "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_a6034.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_a6034.dir/objects.a" --no-whole-archive --out-implib libcmTC_a6034.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o]
           arg [C:/msys64/clang64/bin/ld.lld] ==> ignore
           arg [-m] ==> ignore
           arg [i386pep] ==> ignore
           arg [-Bdynamic] ==> search dynamic
           arg [-o] ==> ignore
-          arg [cmTC_81b98.exe] ==> ignore
+          arg [cmTC_a6034.exe] ==> ignore
           arg [C:/msys64/clang64/lib/crt2.o] ==> obj [C:/msys64/clang64/lib/crt2.o]
           arg [C:/msys64/clang64/lib/crtbegin.o] ==> obj [C:/msys64/clang64/lib/crtbegin.o]
           arg [-LC:/msys64/clang64/x86_64-w64-mingw32/lib] ==> dir [C:/msys64/clang64/x86_64-w64-mingw32/lib]
@@ -4220,10 +4340,10 @@ events:
           arg [-LC:/msys64/clang64/lib/clang/22/lib/windows] ==> dir [C:/msys64/clang64/lib/clang/22/lib/windows]
           arg [-v] ==> ignore
           arg [--whole-archive] ==> ignore
-          arg [CMakeFiles\\\\cmTC_81b98.dir/objects.a] ==> ignore
+          arg [CMakeFiles\\\\cmTC_a6034.dir/objects.a] ==> ignore
           arg [--no-whole-archive] ==> ignore
           arg [--out-implib] ==> ignore
-          arg [libcmTC_81b98.dll.a] ==> ignore
+          arg [libcmTC_a6034.dll.a] ==> ignore
           arg [--major-image-version] ==> ignore
           arg [0] ==> ignore
           arg [--minor-image-version] ==> ignore
@@ -4280,8 +4400,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn"
-      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn"
+      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov"
+      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/msys64/clang64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: ""
@@ -4293,19 +4413,19 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn'
+        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov'
         
-        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_52786/fast
-        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_52786.dir\\build.make CMakeFiles/cmTC_52786.dir/build
-        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn'
-        Building CXX object CMakeFiles/cmTC_52786.dir/CMakeCXXCompilerABI.cpp.obj
-        C:\\msys64\\clang64\\bin\\clang++.exe   -v -MD -MT CMakeFiles/cmTC_52786.dir/CMakeCXXCompilerABI.cpp.obj -MF CMakeFiles\\cmTC_52786.dir\\CMakeCXXCompilerABI.cpp.obj.d -o CMakeFiles\\cmTC_52786.dir\\CMakeCXXCompilerABI.cpp.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"
+        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_a3d3c/fast
+        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_a3d3c.dir\\build.make CMakeFiles/cmTC_a3d3c.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov'
+        Building CXX object CMakeFiles/cmTC_a3d3c.dir/CMakeCXXCompilerABI.cpp.obj
+        C:\\msys64\\clang64\\bin\\clang++.exe   -v -MD -MT CMakeFiles/cmTC_a3d3c.dir/CMakeCXXCompilerABI.cpp.obj -MF CMakeFiles\\cmTC_a3d3c.dir\\CMakeCXXCompilerABI.cpp.obj.d -o CMakeFiles\\cmTC_a3d3c.dir\\CMakeCXXCompilerABI.cpp.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"
         clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)
         Target: x86_64-w64-windows-gnu
         Thread model: posix
         InstalledDir: C:/msys64/clang64/bin
          (in-process)
-         "C:/msys64/clang64/bin/clang++.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_52786.dir\\\\CMakeCXXCompilerABI.cpp.obj.d" -MT CMakeFiles/cmTC_52786.dir/CMakeCXXCompilerABI.cpp.obj -sys-header-deps -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include/c++/v1 -internal-isystem C:/msys64/clang64/include/c++/v1 -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -fdeprecated-macro -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_52786.dir\\\\CMakeCXXCompilerABI.cpp.obj" -x c++ "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCXXCompilerABI.cpp"
+         "C:/msys64/clang64/bin/clang++.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_a3d3c.dir\\\\CMakeCXXCompilerABI.cpp.obj.d" -MT CMakeFiles/cmTC_a3d3c.dir/CMakeCXXCompilerABI.cpp.obj -sys-header-deps -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include/c++/v1 -internal-isystem C:/msys64/clang64/include/c++/v1 -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -fdeprecated-macro -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_a3d3c.dir\\\\CMakeCXXCompilerABI.cpp.obj" -x c++ "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCXXCompilerABI.cpp"
         clang -cc1 version 22.1.4 based upon LLVM 22.1.4 default target x86_64-w64-windows-gnu
         ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/include/c++/v1"
         ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/include"
@@ -4316,18 +4436,18 @@ events:
          C:/msys64/clang64/lib/clang/22/include
          C:/msys64/clang64/include
         End of search list.
-        Linking CXX executable cmTC_52786.exe
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_52786.dir\\link.txt --verbose=1
+        Linking CXX executable cmTC_a3d3c.exe
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_a3d3c.dir\\link.txt --verbose=1
         clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)
         Target: x86_64-w64-windows-gnu
         Thread model: posix
         InstalledDir: C:/msys64/clang64/bin
-         "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_52786.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_52786.dir/objects.a" --no-whole-archive --out-implib libcmTC_52786.dll.a --major-image-version 0 --minor-image-version 0 -lc++ -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o
+         "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_a3d3c.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_a3d3c.dir/objects.a" --no-whole-archive --out-implib libcmTC_a3d3c.dll.a --major-image-version 0 --minor-image-version 0 -lc++ -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o
         LLD 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b) (compatible with GNU linkers)
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_52786.dir/objects.a
-        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_52786.dir/objects.a @CMakeFiles\\cmTC_52786.dir\\objects1.rsp
-        C:\\msys64\\clang64\\bin\\clang++.exe  -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_52786.dir/objects.a -Wl,--no-whole-archive -o cmTC_52786.exe -Wl,--out-implib,libcmTC_52786.dll.a -Wl,--major-image-version,0,--minor-image-version,0
-        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn'
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_a3d3c.dir/objects.a
+        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_a3d3c.dir/objects.a @CMakeFiles\\cmTC_a3d3c.dir\\objects1.rsp
+        C:\\msys64\\clang64\\bin\\clang++.exe  -v -Wl,-v -Wl,--whole-archive CMakeFiles\\cmTC_a3d3c.dir/objects.a -Wl,--no-whole-archive -o cmTC_a3d3c.exe -Wl,--out-implib,libcmTC_a3d3c.dll.a -Wl,--major-image-version,0,--minor-image-version,0
+        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov'
         
       exitCode: 0
   -
@@ -4360,19 +4480,19 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn']
+        ignore line: [Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov']
         ignore line: []
-        ignore line: [Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_52786/fast]
-        ignore line: [C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_52786.dir\\build.make CMakeFiles/cmTC_52786.dir/build]
-        ignore line: [mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn']
-        ignore line: [Building CXX object CMakeFiles/cmTC_52786.dir/CMakeCXXCompilerABI.cpp.obj]
-        ignore line: [C:\\msys64\\clang64\\bin\\clang++.exe   -v -MD -MT CMakeFiles/cmTC_52786.dir/CMakeCXXCompilerABI.cpp.obj -MF CMakeFiles\\cmTC_52786.dir\\CMakeCXXCompilerABI.cpp.obj.d -o CMakeFiles\\cmTC_52786.dir\\CMakeCXXCompilerABI.cpp.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"]
+        ignore line: [Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_a3d3c/fast]
+        ignore line: [C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_a3d3c.dir\\build.make CMakeFiles/cmTC_a3d3c.dir/build]
+        ignore line: [mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov']
+        ignore line: [Building CXX object CMakeFiles/cmTC_a3d3c.dir/CMakeCXXCompilerABI.cpp.obj]
+        ignore line: [C:\\msys64\\clang64\\bin\\clang++.exe   -v -MD -MT CMakeFiles/cmTC_a3d3c.dir/CMakeCXXCompilerABI.cpp.obj -MF CMakeFiles\\cmTC_a3d3c.dir\\CMakeCXXCompilerABI.cpp.obj.d -o CMakeFiles\\cmTC_a3d3c.dir\\CMakeCXXCompilerABI.cpp.obj -c "C:\\Program Files\\CMake\\share\\cmake-4.3\\Modules\\CMakeCXXCompilerABI.cpp"]
         ignore line: [clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)]
         ignore line: [Target: x86_64-w64-windows-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: C:/msys64/clang64/bin]
         ignore line: [ (in-process)]
-        ignore line: [ "C:/msys64/clang64/bin/clang++.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-mzmxbn -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_52786.dir\\\\CMakeCXXCompilerABI.cpp.obj.d" -MT CMakeFiles/cmTC_52786.dir/CMakeCXXCompilerABI.cpp.obj -sys-header-deps -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include/c++/v1 -internal-isystem C:/msys64/clang64/include/c++/v1 -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -fdeprecated-macro -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_52786.dir\\\\CMakeCXXCompilerABI.cpp.obj" -x c++ "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCXXCompilerABI.cpp"]
+        ignore line: [ "C:/msys64/clang64/bin/clang++.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -fno-sized-deallocation -fno-use-init-array -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov -v -fcoverage-compilation-dir=C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-apr2ov -resource-dir C:/msys64/clang64/lib/clang/22 -dependency-file "CMakeFiles\\\\cmTC_a3d3c.dir\\\\CMakeCXXCompilerABI.cpp.obj.d" -MT CMakeFiles/cmTC_a3d3c.dir/CMakeCXXCompilerABI.cpp.obj -sys-header-deps -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include/c++/v1 -internal-isystem C:/msys64/clang64/include/c++/v1 -internal-isystem C:/msys64/clang64/lib/clang/22/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/include -internal-isystem C:/msys64/clang64/x86_64-w64-mingw32/usr/include -internal-isystem C:/msys64/clang64/include -fdeprecated-macro -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -exception-model=seh -faddrsig -o "CMakeFiles\\\\cmTC_a3d3c.dir\\\\CMakeCXXCompilerABI.cpp.obj" -x c++ "C:\\\\Program Files\\\\CMake\\\\share\\\\cmake-4.3\\\\Modules\\\\CMakeCXXCompilerABI.cpp"]
         ignore line: [clang -cc1 version 22.1.4 based upon LLVM 22.1.4 default target x86_64-w64-windows-gnu]
         ignore line: [ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/include/c++/v1"]
         ignore line: [ignoring nonexistent directory "C:/msys64/clang64/x86_64-w64-mingw32/include"]
@@ -4383,19 +4503,19 @@ events:
         ignore line: [ C:/msys64/clang64/lib/clang/22/include]
         ignore line: [ C:/msys64/clang64/include]
         ignore line: [End of search list.]
-        ignore line: [Linking CXX executable cmTC_52786.exe]
-        ignore line: ["C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_52786.dir\\link.txt --verbose=1]
+        ignore line: [Linking CXX executable cmTC_a3d3c.exe]
+        ignore line: ["C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_a3d3c.dir\\link.txt --verbose=1]
         ignore line: [clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)]
         ignore line: [Target: x86_64-w64-windows-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: C:/msys64/clang64/bin]
-        link line: [ "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_52786.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_52786.dir/objects.a" --no-whole-archive --out-implib libcmTC_52786.dll.a --major-image-version 0 --minor-image-version 0 -lc++ -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o]
+        link line: [ "C:/msys64/clang64/bin/ld.lld" -m i386pep -Bdynamic -o cmTC_a3d3c.exe C:/msys64/clang64/lib/crt2.o C:/msys64/clang64/lib/crtbegin.o -LC:/msys64/clang64/x86_64-w64-mingw32/lib -LC:/msys64/clang64/x86_64-w64-mingw32/mingw/lib -LC:/msys64/clang64/lib -LC:/msys64/clang64/lib/clang/22/lib/windows -v --whole-archive "CMakeFiles\\\\cmTC_a3d3c.dir/objects.a" --no-whole-archive --out-implib libcmTC_a3d3c.dll.a --major-image-version 0 --minor-image-version 0 -lc++ -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 C:/msys64/clang64/lib/clang/22/lib/windows/libclang_rt.builtins-x86_64.a -lunwind -lmoldname -lmingwex -lmsvcrt -lkernel32 C:/msys64/clang64/lib/crtend.o]
           arg [C:/msys64/clang64/bin/ld.lld] ==> ignore
           arg [-m] ==> ignore
           arg [i386pep] ==> ignore
           arg [-Bdynamic] ==> search dynamic
           arg [-o] ==> ignore
-          arg [cmTC_52786.exe] ==> ignore
+          arg [cmTC_a3d3c.exe] ==> ignore
           arg [C:/msys64/clang64/lib/crt2.o] ==> obj [C:/msys64/clang64/lib/crt2.o]
           arg [C:/msys64/clang64/lib/crtbegin.o] ==> obj [C:/msys64/clang64/lib/crtbegin.o]
           arg [-LC:/msys64/clang64/x86_64-w64-mingw32/lib] ==> dir [C:/msys64/clang64/x86_64-w64-mingw32/lib]
@@ -4404,10 +4524,10 @@ events:
           arg [-LC:/msys64/clang64/lib/clang/22/lib/windows] ==> dir [C:/msys64/clang64/lib/clang/22/lib/windows]
           arg [-v] ==> ignore
           arg [--whole-archive] ==> ignore
-          arg [CMakeFiles\\\\cmTC_52786.dir/objects.a] ==> ignore
+          arg [CMakeFiles\\\\cmTC_a3d3c.dir/objects.a] ==> ignore
           arg [--no-whole-archive] ==> ignore
           arg [--out-implib] ==> ignore
-          arg [libcmTC_52786.dll.a] ==> ignore
+          arg [libcmTC_a3d3c.dll.a] ==> ignore
           arg [--major-image-version] ==> ignore
           arg [0] ==> ignore
           arg [--minor-image-version] ==> ignore
@@ -4538,6 +4658,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -5152,6 +5278,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -5267,6 +5399,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -5390,6 +5528,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -5523,6 +5667,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -5578,8 +5728,8 @@ events:
     checks:
       - "Performing Test HAVE_FFI_CALL"
     directories:
-      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-s694na"
-      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-s694na"
+      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-xzvhv0"
+      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-xzvhv0"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/msys64/clang64/bin/clang-scan-deps.exe"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -5591,19 +5741,19 @@ events:
       variable: "HAVE_FFI_CALL"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-s694na'
+        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-xzvhv0'
         
-        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_8ee54/fast
-        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_8ee54.dir\\build.make CMakeFiles/cmTC_8ee54.dir/build
-        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-s694na'
-        Building C object CMakeFiles/cmTC_8ee54.dir/src.c.obj
-        C:\\msys64\\clang64\\bin\\clang.exe -DHAVE_FFI_CALL   -MD -MT CMakeFiles/cmTC_8ee54.dir/src.c.obj -MF CMakeFiles\\cmTC_8ee54.dir\\src.c.obj.d -o CMakeFiles\\cmTC_8ee54.dir\\src.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-s694na\\src.c
-        Linking C executable cmTC_8ee54.exe
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_8ee54.dir\\link.txt --verbose=1
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_8ee54.dir/objects.a
-        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_8ee54.dir/objects.a @CMakeFiles\\cmTC_8ee54.dir\\objects1.rsp
-        C:\\msys64\\clang64\\bin\\clang.exe -Wl,--whole-archive CMakeFiles\\cmTC_8ee54.dir/objects.a -Wl,--no-whole-archive -o cmTC_8ee54.exe -Wl,--out-implib,libcmTC_8ee54.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_8ee54.dir\\linkLibs.rsp
-        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-s694na'
+        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_10709/fast
+        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_10709.dir\\build.make CMakeFiles/cmTC_10709.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-xzvhv0'
+        Building C object CMakeFiles/cmTC_10709.dir/src.c.obj
+        C:\\msys64\\clang64\\bin\\clang.exe -DHAVE_FFI_CALL   -MD -MT CMakeFiles/cmTC_10709.dir/src.c.obj -MF CMakeFiles\\cmTC_10709.dir\\src.c.obj.d -o CMakeFiles\\cmTC_10709.dir\\src.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-xzvhv0\\src.c
+        Linking C executable cmTC_10709.exe
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_10709.dir\\link.txt --verbose=1
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_10709.dir/objects.a
+        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_10709.dir/objects.a @CMakeFiles\\cmTC_10709.dir\\objects1.rsp
+        C:\\msys64\\clang64\\bin\\clang.exe -Wl,--whole-archive CMakeFiles\\cmTC_10709.dir/objects.a -Wl,--no-whole-archive -o cmTC_10709.exe -Wl,--out-implib,libcmTC_10709.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_10709.dir\\linkLibs.rsp
+        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-xzvhv0'
         
       exitCode: 0
   -
@@ -5736,6 +5886,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -5930,6 +6086,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -7063,6 +7225,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -7190,6 +7358,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -7364,6 +7538,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -7483,6 +7663,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -7616,6 +7802,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"
@@ -7768,6 +7960,12 @@ events:
         - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
         - "C:\\Program Files\\Go\\bin"
         - "C:\\Program Files\\nodejs"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\Program Files\\PowerShell\\7"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand"
         - "c:\\Users\\devon\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\copilotCli"
@@ -7818,10 +8016,10 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
       - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
       - "C:/msys64/clang64/lib/cmake/antlr4-runtime/antlr4-runtime-config.cmake:33 (find_dependency)"
-      - "CMakeLists.txt:118 (find_package)"
+      - "CMakeLists.txt:120 (find_package)"
     directories:
-      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-f4v3wp"
-      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-f4v3wp"
+      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-txnce5"
+      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-txnce5"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/msys64/clang64/bin/clang-scan-deps.exe"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -7833,15 +8031,15 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-f4v3wp'
+        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-txnce5'
         
-        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_e2727/fast
-        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_e2727.dir\\build.make CMakeFiles/cmTC_e2727.dir/build
-        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-f4v3wp'
-        Building C object CMakeFiles/cmTC_e2727.dir/src.c.obj
-        C:\\msys64\\clang64\\bin\\clang.exe -DCMAKE_HAVE_LIBC_PTHREAD   -MD -MT CMakeFiles/cmTC_e2727.dir/src.c.obj -MF CMakeFiles\\cmTC_e2727.dir\\src.c.obj.d -o CMakeFiles\\cmTC_e2727.dir\\src.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f4v3wp\\src.c
-        Linking C executable cmTC_e2727.exe
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_e2727.dir\\link.txt --verbose=1
+        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_1b31f/fast
+        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_1b31f.dir\\build.make CMakeFiles/cmTC_1b31f.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-txnce5'
+        Building C object CMakeFiles/cmTC_1b31f.dir/src.c.obj
+        C:\\msys64\\clang64\\bin\\clang.exe -DCMAKE_HAVE_LIBC_PTHREAD   -MD -MT CMakeFiles/cmTC_1b31f.dir/src.c.obj -MF CMakeFiles\\cmTC_1b31f.dir\\src.c.obj.d -o CMakeFiles\\cmTC_1b31f.dir\\src.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-txnce5\\src.c
+        Linking C executable cmTC_1b31f.exe
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_1b31f.dir\\link.txt --verbose=1
         ld.lld: error: undefined symbol: pthread_create
         >>> referenced by objects.a(src.c.obj):(main)
         
@@ -7857,12 +8055,12 @@ events:
         ld.lld: error: undefined symbol: pthread_exit
         >>> referenced by objects.a(src.c.obj):(main)
         clang: error: linker command failed with exit code 1 (use -v to see invocation)
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_e2727.dir/objects.a
-        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_e2727.dir/objects.a @CMakeFiles\\cmTC_e2727.dir\\objects1.rsp
-        C:\\msys64\\clang64\\bin\\clang.exe -Wl,--whole-archive CMakeFiles\\cmTC_e2727.dir/objects.a -Wl,--no-whole-archive -o cmTC_e2727.exe -Wl,--out-implib,libcmTC_e2727.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_e2727.dir\\linkLibs.rsp
-        mingw32-make[1]: *** [CMakeFiles\\cmTC_e2727.dir\\build.make:104: cmTC_e2727.exe] Error 1
-        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-f4v3wp'
-        mingw32-make: *** [Makefile:133: cmTC_e2727/fast] Error 2
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_1b31f.dir/objects.a
+        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_1b31f.dir/objects.a @CMakeFiles\\cmTC_1b31f.dir\\objects1.rsp
+        C:\\msys64\\clang64\\bin\\clang.exe -Wl,--whole-archive CMakeFiles\\cmTC_1b31f.dir/objects.a -Wl,--no-whole-archive -o cmTC_1b31f.exe -Wl,--out-implib,libcmTC_1b31f.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_1b31f.dir\\linkLibs.rsp
+        mingw32-make[1]: *** [CMakeFiles\\cmTC_1b31f.dir\\build.make:104: cmTC_1b31f.exe] Error 1
+        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-txnce5'
+        mingw32-make: *** [Makefile:133: cmTC_1b31f/fast] Error 2
         
       exitCode: 2
   -
@@ -7874,10 +8072,10 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
       - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
       - "C:/msys64/clang64/lib/cmake/antlr4-runtime/antlr4-runtime-config.cmake:33 (find_dependency)"
-      - "CMakeLists.txt:118 (find_package)"
+      - "CMakeLists.txt:120 (find_package)"
     directories:
-      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-pmmbit"
-      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-pmmbit"
+      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-szts6s"
+      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-szts6s"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/msys64/clang64/bin/clang-scan-deps.exe"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -7889,23 +8087,23 @@ events:
       variable: "CMAKE_HAVE_PTHREADS_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-pmmbit'
+        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-szts6s'
         
-        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_e2644/fast
-        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_e2644.dir\\build.make CMakeFiles/cmTC_e2644.dir/build
-        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-pmmbit'
-        Building C object CMakeFiles/cmTC_e2644.dir/CheckFunctionExists.c.obj
-        C:\\msys64\\clang64\\bin\\clang.exe   -DCHECK_FUNCTION_EXISTS=pthread_create -MD -MT CMakeFiles/cmTC_e2644.dir/CheckFunctionExists.c.obj -MF CMakeFiles\\cmTC_e2644.dir\\CheckFunctionExists.c.obj.d -o CMakeFiles\\cmTC_e2644.dir\\CheckFunctionExists.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pmmbit\\CheckFunctionExists.c
-        Linking C executable cmTC_e2644.exe
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_e2644.dir\\link.txt --verbose=1
+        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_2a8b8/fast
+        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_2a8b8.dir\\build.make CMakeFiles/cmTC_2a8b8.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-szts6s'
+        Building C object CMakeFiles/cmTC_2a8b8.dir/CheckFunctionExists.c.obj
+        C:\\msys64\\clang64\\bin\\clang.exe   -DCHECK_FUNCTION_EXISTS=pthread_create -MD -MT CMakeFiles/cmTC_2a8b8.dir/CheckFunctionExists.c.obj -MF CMakeFiles\\cmTC_2a8b8.dir\\CheckFunctionExists.c.obj.d -o CMakeFiles\\cmTC_2a8b8.dir\\CheckFunctionExists.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-szts6s\\CheckFunctionExists.c
+        Linking C executable cmTC_2a8b8.exe
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_2a8b8.dir\\link.txt --verbose=1
         lld: error: unable to find library -lpthreads
         clang: error: linker command failed with exit code 1 (use -v to see invocation)
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_e2644.dir/objects.a
-        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_e2644.dir/objects.a @CMakeFiles\\cmTC_e2644.dir\\objects1.rsp
-        C:\\msys64\\clang64\\bin\\clang.exe  -DCHECK_FUNCTION_EXISTS=pthread_create -Wl,--whole-archive CMakeFiles\\cmTC_e2644.dir/objects.a -Wl,--no-whole-archive -o cmTC_e2644.exe -Wl,--out-implib,libcmTC_e2644.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_e2644.dir\\linkLibs.rsp
-        mingw32-make[1]: *** [CMakeFiles\\cmTC_e2644.dir\\build.make:104: cmTC_e2644.exe] Error 1
-        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-pmmbit'
-        mingw32-make: *** [Makefile:133: cmTC_e2644/fast] Error 2
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_2a8b8.dir/objects.a
+        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_2a8b8.dir/objects.a @CMakeFiles\\cmTC_2a8b8.dir\\objects1.rsp
+        C:\\msys64\\clang64\\bin\\clang.exe  -DCHECK_FUNCTION_EXISTS=pthread_create -Wl,--whole-archive CMakeFiles\\cmTC_2a8b8.dir/objects.a -Wl,--no-whole-archive -o cmTC_2a8b8.exe -Wl,--out-implib,libcmTC_2a8b8.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_2a8b8.dir\\linkLibs.rsp
+        mingw32-make[1]: *** [CMakeFiles\\cmTC_2a8b8.dir\\build.make:104: cmTC_2a8b8.exe] Error 1
+        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-szts6s'
+        mingw32-make: *** [Makefile:133: cmTC_2a8b8/fast] Error 2
         
       exitCode: 2
   -
@@ -7917,10 +8115,10 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
       - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
       - "C:/msys64/clang64/lib/cmake/antlr4-runtime/antlr4-runtime-config.cmake:33 (find_dependency)"
-      - "CMakeLists.txt:118 (find_package)"
+      - "CMakeLists.txt:120 (find_package)"
     directories:
-      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-fc88n5"
-      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-fc88n5"
+      source: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-htxmi2"
+      binary: "C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-htxmi2"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/msys64/clang64/bin/clang-scan-deps.exe"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -7932,25 +8130,25 @@ events:
       variable: "CMAKE_HAVE_PTHREAD_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-fc88n5'
+        Change Dir: 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-htxmi2'
         
-        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_d5586/fast
-        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_d5586.dir\\build.make CMakeFiles/cmTC_d5586.dir/build
-        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-fc88n5'
-        Building C object CMakeFiles/cmTC_d5586.dir/CheckFunctionExists.c.obj
-        C:\\msys64\\clang64\\bin\\clang.exe   -DCHECK_FUNCTION_EXISTS=pthread_create -MD -MT CMakeFiles/cmTC_d5586.dir/CheckFunctionExists.c.obj -MF CMakeFiles\\cmTC_d5586.dir\\CheckFunctionExists.c.obj.d -o CMakeFiles\\cmTC_d5586.dir\\CheckFunctionExists.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fc88n5\\CheckFunctionExists.c
-        Linking C executable cmTC_d5586.exe
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_d5586.dir\\link.txt --verbose=1
-        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_d5586.dir/objects.a
-        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_d5586.dir/objects.a @CMakeFiles\\cmTC_d5586.dir\\objects1.rsp
-        C:\\msys64\\clang64\\bin\\clang.exe  -DCHECK_FUNCTION_EXISTS=pthread_create -Wl,--whole-archive CMakeFiles\\cmTC_d5586.dir/objects.a -Wl,--no-whole-archive -o cmTC_d5586.exe -Wl,--out-implib,libcmTC_d5586.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_d5586.dir\\linkLibs.rsp
-        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-fc88n5'
+        Run Build Command(s): "C:/Program Files/CMake/bin/cmake.exe" -E env VERBOSE=1 C:\\msys64\\clang64\\bin\\mingw32-make.exe -f Makefile cmTC_8de21/fast
+        C:/msys64/clang64/bin/mingw32-make.exe  -f CMakeFiles\\cmTC_8de21.dir\\build.make CMakeFiles/cmTC_8de21.dir/build
+        mingw32-make[1]: Entering directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-htxmi2'
+        Building C object CMakeFiles/cmTC_8de21.dir/CheckFunctionExists.c.obj
+        C:\\msys64\\clang64\\bin\\clang.exe   -DCHECK_FUNCTION_EXISTS=pthread_create -MD -MT CMakeFiles/cmTC_8de21.dir/CheckFunctionExists.c.obj -MF CMakeFiles\\cmTC_8de21.dir\\CheckFunctionExists.c.obj.d -o CMakeFiles\\cmTC_8de21.dir\\CheckFunctionExists.c.obj -c C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cpp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-htxmi2\\CheckFunctionExists.c
+        Linking C executable cmTC_8de21.exe
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E cmake_link_script CMakeFiles\\cmTC_8de21.dir\\link.txt --verbose=1
+        "C:\\Program Files\\CMake\\bin\\cmake.exe" -E rm -f CMakeFiles\\cmTC_8de21.dir/objects.a
+        C:\\msys64\\clang64\\bin\\llvm-ar.exe qc CMakeFiles\\cmTC_8de21.dir/objects.a @CMakeFiles\\cmTC_8de21.dir\\objects1.rsp
+        C:\\msys64\\clang64\\bin\\clang.exe  -DCHECK_FUNCTION_EXISTS=pthread_create -Wl,--whole-archive CMakeFiles\\cmTC_8de21.dir/objects.a -Wl,--no-whole-archive -o cmTC_8de21.exe -Wl,--out-implib,libcmTC_8de21.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\\cmTC_8de21.dir\\linkLibs.rsp
+        mingw32-make[1]: Leaving directory 'C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/build/CMakeFiles/CMakeScratch/TryCompile-htxmi2'
         
       exitCode: 0
   -
     kind: "find_package-v1"
     backtrace:
-      - "CMakeLists.txt:118 (find_package)"
+      - "CMakeLists.txt:120 (find_package)"
     name: "antlr4-runtime"
     configs:
       -
@@ -8032,6 +8230,12 @@ events:
         - "C:\\msys64\\clang64"
       ENV{PATH}:
         - "C:\\msys64\\clang64\\bin"
+        - "C:\\msys64\\clang64\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Users\\devon\\.cargo\\bin"
+        - "C:\\Users\\devon\\AppData\\Local\\Microsoft\\WinGet\\Packages\\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\\zig-x86_64-windows-0.15.2"
+        - "C:\\Program Files\\Go\\bin"
+        - "C:\\Program Files\\nodejs"
         - "C:\\msys64\\clang64\\bin"
         - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
         - "C:\\Users\\devon\\.cargo\\bin"

@@ -77,7 +77,7 @@ free         : 'void' ID ';' ;
 plcnew       : plcnewType ID '=' typeRef '[]' plcnewType ';' ;
 plcnewType   : typeRef | '*' ;
 pointer      : typeRef ID '_' '&' ID ';' ;
-include      : 'extern' '{' importPath '}' ';'? ;
+include      : 'extern' '{' importPath '}' ';'? | 'extern' 'inc' importPath ';'? ;
 returnType   : 'void' | typeRef ;
 typeRef      : typeAtom typeModifier* ;
 thread       : (THREADMODE | JOIN) 'thread' ID functionCall ';' ;
@@ -88,7 +88,7 @@ typeAtom     : genericType
              | FTYPE
              | ID ;
 typeModifier : '*' | '&' ;
-genericType  : ID '<' typeRef (',' typeRef)? '>' ;
+genericType  : ID '<' typeRef (',' typeRef)* '>' ;
 shapeType    : LBRACE typeRef (',' typeRef)+ ','? RBRACE ;
 functionType : 'fn' '<' returnType '(' functionTypeArgs? ')' '>' ;
 functionTypeArgs : typeRef (',' typeRef)* ;

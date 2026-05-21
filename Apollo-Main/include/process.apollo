@@ -19,6 +19,10 @@ namespace sys {
         return sys__native_process_completed(value);
     }
 
+    i32 process_kill(nconst process& value) {
+        return sys__native_process_kill(value);
+    }
+
     str process_command(nconst process& value) {
         return sys__native_process_command(value);
     }
@@ -33,6 +37,7 @@ namespace sys {
         int sys__native_process_try_wait(void* value) { return __apo_stdlib::process_try_wait(value); }
         int sys__native_process_exit_code(void* value) { return __apo_stdlib::process_exit_code(value); }
         int sys__native_process_completed(void* value) { return __apo_stdlib::process_completed(value); }
+        int sys__native_process_kill(void* value) { return __apo_stdlib::process_kill(value); }
         const char* sys__native_process_command(void* value) { return __apo_stdlib::process_command(value); }
     }
 }

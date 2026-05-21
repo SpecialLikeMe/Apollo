@@ -1,0 +1,5 @@
+extern std prelude;
+
+i32 main() {
+    return sys.host_is_windows();
+}

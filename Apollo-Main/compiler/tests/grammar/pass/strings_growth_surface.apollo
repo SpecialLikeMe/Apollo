@@ -1,0 +1,35 @@
+extern std prelude;
+
+i32 main() {
+    str reversed = sys.str_reverse("stressed");
+    vector parts = sys.str_split("a,b,c", ",");
+    vector head_tail = sys.str_split_n("left:right:tail", ":", 2);
+    vector lines = sys.str_split_lines("one\r\ntwo\nthree");
+
+    if (reversed != "desserts") {
+        return 1;
+    }
+    if (sys.vec_len(parts) != 3) {
+        return 2;
+    }
+    if (sys.vec_get(parts, 1) != "b") {
+        return 3;
+    }
+    if (sys.vec_len(head_tail) != 2) {
+        return 4;
+    }
+    if (sys.vec_get(head_tail, 1) != "right:tail") {
+        return 5;
+    }
+    if (sys.vec_len(lines) != 3) {
+        return 6;
+    }
+    if (sys.parse_bool(" YeS ") == 0) {
+        return 7;
+    }
+
+    sys.handle_destroy(parts);
+    sys.handle_destroy(head_tail);
+    sys.handle_destroy(lines);
+    return 0;
+}
