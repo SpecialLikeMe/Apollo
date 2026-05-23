@@ -1,0 +1,48 @@
+extern std prelude;
+
+typedef opstruct stringbench {
+    asg("stringbench ${name}") -> {
+    }
+
+    src("${name} apply ${BODY}") -> {
+        BODY
+    }
+}
+
+int main() {
+    stringbench worker;
+    str rolling = "apollo";
+    i32 checksum = 0;
+    i32 phase = 0;
+    str alphaCode = `sys.stdout("");`;
+    str gammaCode = `sys.stdout("");`;
+    str betaCode = `sys.stdout("");`;
+    for (i32 index = 0; index < __LIMIT__; index = index + 1) {
+        str chunk = "beta";
+        str code = betaCode;
+        if (phase == 0) {
+            chunk = "alpha";
+            code = alphaCode;
+        } else {
+            if (phase == 1) {
+                chunk = "gamma";
+                code = gammaCode;
+            }
+        }
+
+        worker apply [code];
+
+        rolling = sys.str_concat(rolling, chunk);
+        if (sys.str_len(rolling) > 48) {
+            rolling = sys.str_substring(rolling, sys.str_len(rolling) - 48, 48);
+        }
+        checksum = checksum + sys.str_len(rolling) + sys.str_contains(rolling, "ta");
+        phase = phase + 1;
+        if (phase == 3) {
+            phase = 0;
+        }
+    }
+
+    sys.stdout(checksum);
+    return 0;
+}

@@ -6,10 +6,9 @@ i32 main() {
 
     @autofmtdeclare {
         @induct value;
-        fn<void()> useValue = lmd-> () {
+        fn<void()> useValue = clr-> [&]() in let main::() =
             Box copy = value;
             return;
-        }
     }
 
     return 0;

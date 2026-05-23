@@ -1,0 +1,17 @@
+extern std prelude;
+
+i32 gcd(i32 left, i32 right) {
+    while (right != 0) {
+        i32 cc_next;
+        cc_next = left % right;
+        left = right;
+        right = cc_next;
+    }
+    return left;
+}
+i32 main() {
+    if (gcd(84, 18) == 6) {
+        return 0;
+    }
+    return 1;
+}

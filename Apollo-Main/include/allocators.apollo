@@ -1,0 +1,651 @@
+memstruct DefaultAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct GeneralPurposeAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct ArenaAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct BumpAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct PoolAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct SlabAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct StackAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct ScratchAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct PageAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+memstruct TlsfAllocator {
+    str label;
+    str strategy;
+    i32 default_block_bytes;
+    bool thread_safe;
+    bool relocatable;
+    str last_type;
+    i32 allocation_count;
+    i32 release_count;
+    i32 reserved_bytes;
+    i32 peak_bytes;
+
+    public i32 alloc(str type_name, i32 requested_bytes) {
+        last_type = type_name;
+        allocation_count = allocation_count + 1;
+        reserved_bytes = reserved_bytes + requested_bytes;
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 resize(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        last_type = type_name;
+        reserved_bytes = reserved_bytes - previous_bytes + requested_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        if (reserved_bytes > peak_bytes) {
+            peak_bytes = reserved_bytes;
+        }
+        return requested_bytes;
+    }
+
+    public i32 remap(str type_name, i32 previous_bytes, i32 requested_bytes) {
+        return resize(type_name, previous_bytes, requested_bytes);
+    }
+
+    public i32 free(str type_name, i32 released_bytes) {
+        last_type = type_name;
+        release_count = release_count + 1;
+        reserved_bytes = reserved_bytes - released_bytes;
+        if (reserved_bytes < 0) {
+            reserved_bytes = 0;
+        }
+        return reserved_bytes;
+    }
+}
+
+namespace sys {
+    DefaultAllocator alloc_default() {
+        DefaultAllocator allocator = {
+            .label = "default",
+            .strategy = "general",
+            .default_block_bytes = 4096,
+            .thread_safe = true,
+            .relocatable = true,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    GeneralPurposeAllocator alloc_gpa() {
+        GeneralPurposeAllocator allocator = {
+            .label = "gpa",
+            .strategy = "general-purpose",
+            .default_block_bytes = 4096,
+            .thread_safe = true,
+            .relocatable = true,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    ArenaAllocator alloc_arena() {
+        ArenaAllocator allocator = {
+            .label = "arena",
+            .strategy = "arena",
+            .default_block_bytes = 16384,
+            .thread_safe = false,
+            .relocatable = false,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    BumpAllocator alloc_bump() {
+        BumpAllocator allocator = {
+            .label = "bump",
+            .strategy = "bump",
+            .default_block_bytes = 8192,
+            .thread_safe = false,
+            .relocatable = false,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    PoolAllocator alloc_pool() {
+        PoolAllocator allocator = {
+            .label = "pool",
+            .strategy = "pool",
+            .default_block_bytes = 2048,
+            .thread_safe = true,
+            .relocatable = false,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    SlabAllocator alloc_slab() {
+        SlabAllocator allocator = {
+            .label = "slab",
+            .strategy = "slab",
+            .default_block_bytes = 4096,
+            .thread_safe = true,
+            .relocatable = false,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    StackAllocator alloc_stack() {
+        StackAllocator allocator = {
+            .label = "stack",
+            .strategy = "stack",
+            .default_block_bytes = 1024,
+            .thread_safe = false,
+            .relocatable = false,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    ScratchAllocator alloc_scratch() {
+        ScratchAllocator allocator = {
+            .label = "scratch",
+            .strategy = "scratch",
+            .default_block_bytes = 1024,
+            .thread_safe = false,
+            .relocatable = true,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    PageAllocator alloc_page() {
+        PageAllocator allocator = {
+            .label = "page",
+            .strategy = "page",
+            .default_block_bytes = 65536,
+            .thread_safe = true,
+            .relocatable = false,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+
+    TlsfAllocator alloc_tlsf() {
+        TlsfAllocator allocator = {
+            .label = "tlsf",
+            .strategy = "tlsf",
+            .default_block_bytes = 4096,
+            .thread_safe = true,
+            .relocatable = true,
+            .last_type = "",
+            .allocation_count = 0,
+            .release_count = 0,
+            .reserved_bytes = 0,
+            .peak_bytes = 0
+        };
+        return allocator;
+    }
+}

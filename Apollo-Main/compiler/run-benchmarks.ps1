@@ -22,13 +22,63 @@ $benchmarks = @(
         Name = 'sum-loop'
         ApolloTemplate = Join-Path $benchmarkDir 'sum_loop.apollo.tmpl'
         CppTemplate = Join-Path $benchmarkDir 'sum_loop.cpp.tmpl'
+        ScaleDivisor = 1
+        Description = 'Numeric accumulation baseline without string-heavy runtime features'
     },
     [pscustomobject]@{
         Name = 'branch-mix'
         ApolloTemplate = Join-Path $benchmarkDir 'branch_mix.apollo.tmpl'
         CppTemplate = Join-Path $benchmarkDir 'branch_mix.cpp.tmpl'
+        ScaleDivisor = 1
+        Description = 'Branch-heavy integer workload baseline'
+    },
+    [pscustomobject]@{
+        Name = 'string-runtime'
+        ApolloTemplate = Join-Path $benchmarkDir 'string_runtime.apollo.tmpl'
+        CppTemplate = Join-Path $benchmarkDir 'string_runtime.cpp.tmpl'
+        ScaleDivisor = 200
+        Description = 'Plain Apollo runtime string operations against direct C++ std::string code'
+    },
+    [pscustomobject]@{
+        Name = 'typedef-opstruct-strings'
+        ApolloTemplate = Join-Path $benchmarkDir 'typedef_opstruct_strings.apollo.tmpl'
+        CppTemplate = Join-Path $benchmarkDir 'typedef_opstruct_strings.cpp.tmpl'
+        ScaleDivisor = 200
+        Description = 'typedef opstruct phrase surface driving the same runtime string kernel'
+    },
+    [pscustomobject]@{
+        Name = 'gc-strings'
+        ApolloTemplate = Join-Path $benchmarkDir 'gc_strings.apollo.tmpl'
+        CppTemplate = Join-Path $benchmarkDir 'gc_strings.cpp.tmpl'
+        ScaleDivisor = 250
+        Description = 'Whole-program GC benchmark over managed string-bearing state'
+    },
+    [pscustomobject]@{
+        Name = 'gc-typedef-opstruct-strings'
+        ApolloTemplate = Join-Path $benchmarkDir 'gc_typedef_opstruct_strings.apollo.tmpl'
+        CppTemplate = Join-Path $benchmarkDir 'gc_typedef_opstruct_strings.cpp.tmpl'
+        ScaleDivisor = 250
+        Description = 'Whole-program GC plus typedef opstruct runtime-string workload'
     }
 )
+
+function Resolve-WorkloadLimit {
+    param(
+        [long]$RequestedLimit,
+        [object]$Benchmark
+    )
+
+    $divisor = 1
+    if ($null -ne $Benchmark.PSObject.Properties['ScaleDivisor'] -and $Benchmark.ScaleDivisor -gt 0) {
+        $divisor = [long]$Benchmark.ScaleDivisor
+    }
+
+    $scaled = [math]::Floor([double]$RequestedLimit / [double]$divisor)
+    if ($scaled -lt 1) {
+        return 1L
+    }
+    return [long]$scaled
+}
 
 function Resolve-Clangxx {
     if ($env:APOLLO_MINGW_BIN) {
@@ -177,13 +227,14 @@ $clangxx = Resolve-Clangxx
 $results = New-Object System.Collections.Generic.List[object]
 
 foreach ($benchmark in $benchmarks) {
+    $effectiveWorkload = Resolve-WorkloadLimit -RequestedLimit $WorkloadSize -Benchmark $benchmark
     $apolloSource = Join-Path $generatedDir ($benchmark.Name + '.apollo')
     $cppSource = Join-Path $generatedDir ($benchmark.Name + '.cpp')
     $apolloBinary = Join-Path $binaryDir ($benchmark.Name + '-apollo.exe')
     $cppBinary = Join-Path $binaryDir ($benchmark.Name + '-cpp.exe')
 
-    Expand-Template -TemplatePath $benchmark.ApolloTemplate -DestinationPath $apolloSource -Limit $WorkloadSize
-    Expand-Template -TemplatePath $benchmark.CppTemplate -DestinationPath $cppSource -Limit $WorkloadSize
+    Expand-Template -TemplatePath $benchmark.ApolloTemplate -DestinationPath $apolloSource -Limit $effectiveWorkload
+    Expand-Template -TemplatePath $benchmark.CppTemplate -DestinationPath $cppSource -Limit $effectiveWorkload
 
     $apolloCompileMs = $null
     $cppCompileMs = $null
@@ -229,7 +280,9 @@ foreach ($benchmark in $benchmarks) {
     $speedRatio = if ($cppTiming.MeanMs -eq 0) { [double]::NaN } else { [math]::Round($apolloTiming.MeanMs / $cppTiming.MeanMs, 3) }
     $results.Add([pscustomobject]@{
         Benchmark = $benchmark.Name
-        Workload = $WorkloadSize
+        Description = $benchmark.Description
+        RequestedWorkload = $WorkloadSize
+        EffectiveWorkload = $effectiveWorkload
         RepeatCount = $RepeatCount
         ApolloCompileMs = $apolloCompileMs
         CppCompileMs = $cppCompileMs
@@ -245,7 +298,7 @@ foreach ($benchmark in $benchmarks) {
 }
 
 $results | Export-Csv -Path $reportPath -NoTypeInformation
-$results | Format-Table Benchmark, Workload, RepeatCount, ApolloCompileMs, CppCompileMs, ApolloMeanMs, CppMeanMs, ApolloVsCppRatio -AutoSize
+$results | Format-Table Benchmark, EffectiveWorkload, RepeatCount, ApolloCompileMs, CppCompileMs, ApolloMeanMs, CppMeanMs, ApolloVsCppRatio -AutoSize
 
 Write-Host ""
 Write-Host "CSV report: $reportPath"

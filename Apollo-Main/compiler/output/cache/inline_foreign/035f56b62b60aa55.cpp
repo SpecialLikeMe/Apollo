@@ -1,0 +1,384 @@
+
+        #include "apo_stdlib_runtime.hpp"
+        #include "apo_std_object_runtime.hpp"
+
+extern int sys__native_div_floor(int left, int right);
+extern int sys__native_mod_euc(int left, int right);
+extern int sys__native_saturating_add(int left, int right);
+extern int sys__native_saturating_sub(int left, int right);
+extern int sys__native_saturating_mul(int left, int right);
+extern int sys__native_wrapping_add(int left, int right);
+extern int sys__native_wrapping_sub(int left, int right);
+extern int sys__overflowing_add_value(int left, int right);
+extern int sys__overflowing_add_overflow(int left, int right);
+extern int sys__native_lcm(int left, int right);
+extern int sys__native_signum(int value);
+extern double sys__native_abs_f64(double value);
+extern double sys__native_ceil(double value);
+extern double sys__native_floor(double value);
+extern double sys__native_round(double value);
+extern double sys__native_trunc(double value);
+extern double sys__native_sqrt(double value);
+extern double sys__native_cbrt(double value);
+extern double sys__native_hypot(double left, double right);
+extern double sys__native_sin(double value);
+extern double sys__native_cos(double value);
+extern double sys__native_tan(double value);
+extern double sys__native_asin(double value);
+extern double sys__native_acos(double value);
+extern double sys__native_atan(double value);
+extern double sys__native_atan2(double left, double right);
+extern double sys__native_sinh(double value);
+extern double sys__native_cosh(double value);
+extern double sys__native_tanh(double value);
+extern double sys__native_asinh(double value);
+extern double sys__native_acosh(double value);
+extern double sys__native_atanh(double value);
+extern double sys__native_exp(double value);
+extern double sys__native_exp2(double value);
+extern double sys__native_expm1(double value);
+extern double sys__native_log(double value);
+extern double sys__native_log2(double value);
+extern double sys__native_log10(double value);
+extern double sys__native_log1p(double value);
+extern double sys__native_pow(double left, double right);
+extern double sys__native_fma(double x, double y, double z);
+extern double sys__native_copysign(double x, double y);
+extern double sys__native_nextafter(double x, double y);
+extern double sys__native_ldexp(double value, int exponent);
+extern double sys__frexp_fraction(double value);
+extern int sys__frexp_exponent(double value);
+extern double sys__modf_fraction(double value);
+extern double sys__modf_integral(double value);
+extern int sys__native_isnan(double value);
+extern int sys__native_isinf(double value);
+extern int sys__native_isfinite(double value);
+extern int sys__native_isnormal(double value);
+extern double sys__native_signum_f64(double value);
+extern int sys__native_clz(int value);
+extern int sys__native_ctz(int value);
+extern int sys__native_popcount(int value);
+extern int sys__native_ffs(int value);
+extern int sys__native_rotate_left(int value, int amount);
+extern int sys__native_rotate_right(int value, int amount);
+extern int sys__native_bswap(int value);
+extern int sys__native_str_len(const char* value);
+extern const char* sys__native_str_concat(const char* left, const char* right);
+extern const char* sys__native_str_trim(const char* value);
+extern const char* sys__native_str_trim_start(const char* value);
+extern const char* sys__native_str_trim_end(const char* value);
+extern const char* sys__native_str_lowercase(const char* value);
+extern const char* sys__native_str_uppercase(const char* value);
+extern const char* sys__native_str_titlecase(const char* value);
+extern int sys__native_str_contains(const char* value, const char* sub);
+extern int sys__native_str_starts_with(const char* value, const char* prefix);
+extern int sys__native_str_ends_with(const char* value, const char* suffix);
+extern int sys__native_str_find(const char* value, const char* sub);
+extern int sys__native_str_rfind(const char* value, const char* sub);
+extern const char* sys__native_str_replace(const char* value, const char* old_text, const char* new_text);
+extern const char* sys__native_str_replace_n(const char* value, const char* old_text, const char* new_text, int count);
+extern const char* sys__native_str_reverse(const char* value);
+extern const char* sys__native_str_repeat(const char* value, int count);
+extern const char* sys__native_str_pad_left(const char* value, int target_len, const char* fill);
+extern const char* sys__native_str_pad_right(const char* value, int target_len, const char* fill);
+extern const char* sys__native_str_substring(const char* value, int start, int len);
+extern int sys__native_str_cmp(const char* left, const char* right);
+extern int sys__native_str_casecmp(const char* left, const char* right);
+extern void* sys__native_str_split(const char* value, const char* delimiter);
+extern void* sys__native_str_split_n(const char* value, const char* delimiter, int max_parts);
+extern void* sys__native_str_split_lines(const char* value);
+extern long sys__native_parse_int(const char* value, int base);
+extern int sys__native_parse_bool(const char* value);
+extern double sys__native_parse_float(const char* value);
+extern int sys__native_is_alpha(const char* value);
+extern int sys__native_is_digit(const char* value);
+extern int sys__native_is_alnum(const char* value);
+extern int sys__native_is_whitespace(const char* value);
+extern int sys__native_is_control(const char* value);
+extern int sys__native_is_punctuation(const char* value);
+extern int sys__native_is_graph(const char* value);
+extern int sys__native_is_print(const char* value);
+extern int sys__native_is_hex_digit(const char* value);
+extern int sys__native_is_ascii(const char* value);
+extern const char* sys__native_term_read_line();
+extern int sys__native_term_is_tty();
+extern int sys__native_term_columns();
+extern int sys__native_term_rows();
+extern void* sys__native_vec_new();
+extern void* sys__native_vec_with_capacity(int capacity);
+extern int sys__native_vec_len(void* value);
+extern const char* sys__native_vec_pop(void* value);
+extern const char* sys__native_vec_get(void* value, int index);
+extern const char* sys__native_vec_remove(void* value, int index);
+extern const char* sys__native_vec_swap_remove(void* value, int index);
+extern const char* sys__native_vec_join(void* value, const char* delimiter);
+extern int sys__native_vec_contains(void* value, const char* item);
+extern void* sys__native_map_new();
+extern void* sys__native_map_with_capacity(int capacity);
+extern int sys__native_map_len(void* value);
+extern const char* sys__native_map_get(void* value, const char* key);
+extern const char* sys__native_map_get_mut(void* value, const char* key);
+extern const char* sys__native_map_remove(void* value, const char* key);
+extern int sys__native_map_contains_key(void* value, const char* key);
+extern const char* sys__native_map_entry_or_insert(void* value, const char* key, const char* default_value);
+extern const char* sys__native_map_keys(void* value, const char* delimiter);
+extern const char* sys__native_map_values(void* value, const char* delimiter);
+extern const char* sys__native_map_entries(void* value, const char* delimiter);
+extern void* sys__native_tmap_new();
+extern int sys__native_tmap_len(void* value);
+extern const char* sys__native_tmap_get(void* value, const char* key);
+extern int sys__native_tmap_contains_key(void* value, const char* key);
+extern const char* sys__native_tmap_remove(void* value, const char* key);
+extern const char* sys__native_tmap_first_key(void* value);
+extern const char* sys__native_tmap_last_key(void* value);
+extern const char* sys__native_tmap_floor_key(void* value, const char* key);
+extern const char* sys__native_tmap_ceiling_key(void* value, const char* key);
+extern void* sys__native_tmap_pop_first(void* value);
+extern void* sys__native_tmap_pop_last(void* value);
+extern void* sys__native_tmap_iter(void* value);
+extern void* sys__native_tmap_range_iter(void* value, const char* start_key, const char* end_key);
+extern const char* sys__native_entry_key(void* value);
+extern const char* sys__native_entry_value(void* value);
+extern int sys__native_entry_iter_has_next(void* value);
+extern void* sys__native_entry_iter_next(void* value);
+extern void* sys__native_set_new();
+extern int sys__native_set_insert(void* value, const char* item);
+extern int sys__native_set_remove(void* value, const char* item);
+extern int sys__native_set_contains(void* value, const char* item);
+extern int sys__native_set_len(void* value);
+extern const char* sys__native_set_values(void* value, const char* delimiter);
+extern void* sys__native_set_union(void* left, void* right);
+extern void* sys__native_set_intersection(void* left, void* right);
+extern void* sys__native_set_difference(void* left, void* right);
+extern void* sys__native_set_symmetric_difference(void* left, void* right);
+extern int sys__native_set_is_subset(void* left, void* right);
+extern int sys__native_set_is_superset(void* left, void* right);
+extern void* sys__native_queue_new();
+extern const char* sys__native_queue_dequeue(void* value);
+extern int sys__native_queue_len(void* value);
+extern void* sys__native_deque_new();
+extern const char* sys__native_deque_pop_front(void* value);
+extern const char* sys__native_deque_pop_back(void* value);
+extern int sys__native_deque_len(void* value);
+extern void* sys__native_heap_new_max();
+extern void* sys__native_heap_new_min();
+extern int sys__native_heap_pop(void* value);
+extern int sys__native_heap_peek(void* value);
+extern int sys__native_heap_len(void* value);
+extern void* sys__native_list_new();
+extern const char* sys__native_list_pop_front(void* value);
+extern const char* sys__native_list_pop_back(void* value);
+extern const char* sys__native_list_front(void* value);
+extern const char* sys__native_list_back(void* value);
+extern int sys__native_list_len(void* value);
+extern const char* sys__native_list_values(void* value, const char* delimiter);
+extern void* sys__native_ring_buffer_new(int capacity);
+extern const char* sys__native_ring_buffer_pop_front(void* value);
+extern const char* sys__native_ring_buffer_pop_back(void* value);
+extern const char* sys__native_ring_buffer_front(void* value);
+extern const char* sys__native_ring_buffer_back(void* value);
+extern int sys__native_ring_buffer_len(void* value);
+extern int sys__native_ring_buffer_capacity(void* value);
+extern const char* sys__native_ring_buffer_values(void* value, const char* delimiter);
+extern void* sys__native_bitvec_new();
+extern int sys__native_bitvec_get(void* value, int index);
+extern int sys__native_bitvec_len(void* value);
+extern int sys__native_bitvec_count_ones(void* value);
+extern const char* sys__native_bitvec_text(void* value);
+extern void* sys__native_multimap_new();
+extern void* sys__native_multimap_get_all(void* value, const char* key);
+extern int sys__native_multimap_remove_all(void* value, const char* key);
+extern int sys__native_multimap_contains_key(void* value, const char* key);
+extern int sys__native_multimap_len(void* value);
+extern const char* sys__native_multimap_entries(void* value, const char* delimiter);
+extern void* sys__native_weak_map_new();
+extern const char* sys__native_weak_map_get(void* value, const char* key);
+extern const char* sys__native_weak_map_remove(void* value, const char* key);
+extern int sys__native_weak_map_contains_key(void* value, const char* key);
+extern int sys__native_weak_map_len(void* value);
+extern void* sys__native_lru_cache_new(int capacity);
+extern const char* sys__native_lru_cache_get(void* value, const char* key);
+extern int sys__native_lru_cache_contains_key(void* value, const char* key);
+extern int sys__native_lru_cache_len(void* value);
+extern const char* sys__native_lru_cache_keys(void* value, const char* delimiter);
+extern void* sys__native_enum_set_new();
+extern int sys__native_enum_set_insert(void* value, const char* item);
+extern int sys__native_enum_set_remove(void* value, const char* item);
+extern int sys__native_enum_set_contains(void* value, const char* item);
+extern int sys__native_enum_set_len(void* value);
+extern const char* sys__native_enum_set_values(void* value, const char* delimiter);
+extern void* sys__native_grid2d_new(int rows, int cols, const char* fill_value);
+extern int sys__native_grid2d_rows(void* value);
+extern int sys__native_grid2d_cols(void* value);
+extern const char* sys__native_grid2d_get(void* value, int row, int col);
+extern const char* sys__native_grid2d_row_text(void* value, int row, const char* delimiter);
+extern void* sys__native_buffer();
+extern const char* sys__native_buffer_text(void* value);
+extern void* sys__native_file_open(const char* path, const char* mode);
+extern void* sys__native_file_create(const char* path);
+extern int sys__native_file_write(void* value, const char* text);
+extern const char* sys__native_file_read_all(void* value);
+extern int sys__native_file_close(void* value);
+extern const char* sys__native_file_path(void* value);
+extern int sys__native_file_sync_all(void* value);
+extern int sys__native_file_sync_data(void* value);
+extern int sys__native_file_set_len(void* value, long size);
+extern void* sys__native_file_metadata(void* value);
+extern long sys__native_meta_size(void* value);
+extern const char* sys__native_meta_modified(void* value);
+extern const char* sys__native_meta_accessed(void* value);
+extern const char* sys__native_meta_created(void* value);
+extern int sys__native_meta_is_dir(void* value);
+extern int sys__native_meta_is_file(void* value);
+extern int sys__native_perm_readonly(void* value);
+extern int sys__native_fs_create_dir(const char* path);
+extern int sys__native_fs_create_dir_all(const char* path);
+extern int sys__native_fs_remove_file(const char* path);
+extern int sys__native_fs_remove_dir(const char* path);
+extern int sys__native_fs_remove_dir_all(const char* path);
+extern int sys__native_fs_rename(const char* from, const char* to);
+extern int sys__native_fs_copy(const char* from, const char* to);
+extern const char* sys__native_fs_read_dir(const char* path, const char* delimiter);
+extern int sys__native_fs_hard_link(const char* source, const char* destination);
+extern int sys__native_fs_symlink(const char* source, const char* destination);
+extern const char* sys__native_fs_read_link(const char* path);
+extern int sys__native_fs_exists(const char* path);
+extern const char* sys__native_path_parent(const char* path);
+extern const char* sys__native_path_file_name(const char* path);
+extern const char* sys__native_path_extension(const char* path);
+extern const char* sys__native_path_file_stem(const char* path);
+extern int sys__native_path_is_absolute(const char* path);
+extern int sys__native_path_is_relative(const char* path);
+extern const char* sys__native_path_to_absolute(const char* path);
+extern const char* sys__native_path_canonicalize(const char* path);
+extern const char* sys__native_path_components(const char* path, const char* delimiter);
+extern void* sys__native_process_spawn(const char* command);
+extern int sys__native_process_wait(void* value);
+extern int sys__native_process_try_wait(void* value);
+extern int sys__native_process_exit_code(void* value);
+extern int sys__native_process_completed(void* value);
+extern int sys__native_process_kill(void* value);
+extern const char* sys__native_process_command(void* value);
+extern void* sys__native_task_ready_i32(int value);
+extern void* sys__native_task_ready_str(const char* value);
+extern void* sys__native_task_ready_bool(int value);
+extern void* sys__native_task_ready_f64(double value);
+extern int sys__native_task_done(void* value);
+extern int sys__native_task_await_i32(void* value);
+extern const char* sys__native_task_await_str(void* value);
+extern int sys__native_task_await_bool(void* value);
+extern double sys__native_task_await_f64(void* value);
+extern int sys__native_task_is_i32(void* value);
+extern int sys__native_task_is_str(void* value);
+extern int sys__native_task_is_bool(void* value);
+extern int sys__native_task_is_f64(void* value);
+extern int sys__native_host_is_windows();
+extern const char* sys__native_path_separator();
+extern const char* sys__native_exe_suffix();
+extern const char* sys__native_env_get(const char* key);
+extern int sys__native_env_set(const char* key, const char* value);
+extern int sys__native_env_remove(const char* key);
+extern const char* sys__native_current_dir();
+extern int sys__native_set_current_dir(const char* path);
+extern const char* sys__native_executable_path();
+extern int sys__native_process_id();
+extern int sys__native_cpu_count();
+extern const char* sys__native_host_name();
+extern const char* sys__native_temp_dir();
+extern const char* sys__native_path_join(const char* left, const char* right);
+extern int sys__native_ascii_validate(const char* value);
+extern int sys__native_utf8_validate(const char* value);
+extern int sys__native_utf8_char_count(const char* value);
+extern const char* sys__native_hex_encode(const char* value);
+extern const char* sys__native_hex_decode(const char* value);
+extern const char* sys__native_url_encode(const char* value);
+extern const char* sys__native_url_decode(const char* value);
+extern const char* sys__native_base64_encode(const char* value);
+extern const char* sys__native_base64_decode(const char* value);
+extern void* sys__native_regex_compile(const char* pattern);
+extern int sys__native_regex_is_match(void* value, const char* text);
+extern const char* sys__native_regex_find(void* value, const char* text);
+extern const char* sys__native_regex_replace(void* value, const char* text, const char* replacement);
+extern const char* sys__native_regex_error(void* value);
+extern void* sys__native_rand_new();
+extern int sys__native_rand_i32(void* value);
+extern int sys__native_rand_range_i32(void* value, int low, int high);
+extern double sys__native_rand_f64(void* value);
+extern int sys__native_rand_bool(void* value);
+extern const char* sys__native_datetime_now_utc();
+extern const char* sys__native_datetime_now_local();
+extern int sys__native_datetime_year_local();
+extern int sys__native_datetime_month_local();
+extern int sys__native_datetime_day_local();
+extern int sys__native_datetime_hour_local();
+extern int sys__native_datetime_minute_local();
+extern int sys__native_datetime_second_local();
+extern int sys__native_monotonic_millis();
+extern void* sys__native_mutex_new();
+extern int sys__native_mutex_lock(void* value);
+extern int sys__native_mutex_try_lock(void* value);
+extern int sys__native_mutex_unlock(void* value);
+extern void* sys__native_condvar_new();
+extern int sys__native_condvar_wait_ms(void* value, int timeout_ms);
+extern void* sys__native_channel_bounded(int capacity);
+extern void* sys__native_channel_unbounded();
+extern int sys__native_channel_send_i32(void* value, int item);
+extern int sys__native_channel_send_str(void* value, const char* item);
+extern int sys__native_channel_send_bool(void* value, int item);
+extern int sys__native_channel_send_f64(void* value, double item);
+extern int sys__native_channel_try_send_i32(void* value, int item);
+extern int sys__native_channel_try_send_str(void* value, const char* item);
+extern int sys__native_channel_try_send_bool(void* value, int item);
+extern int sys__native_channel_try_send_f64(void* value, double item);
+extern int sys__native_channel_recv_i32(void* value);
+extern const char* sys__native_channel_recv_str(void* value);
+extern int sys__native_channel_recv_bool(void* value);
+extern double sys__native_channel_recv_f64(void* value);
+extern int sys__native_channel_try_recv_i32(void* value, int fallback);
+extern const char* sys__native_channel_try_recv_str(void* value);
+extern int sys__native_channel_try_recv_bool(void* value, int fallback);
+extern double sys__native_channel_try_recv_f64(void* value, double fallback);
+extern int sys__native_channel_len(void* value);
+extern int sys__native_channel_close(void* value);
+extern int sys__native_channel_is_closed(void* value);
+extern int sys__native_thread_get_raw_id();
+extern int sys__native_hash_fnv1a_32(const char* value);
+extern long sys__native_hash_fnv1a_64(const char* value);
+extern int sys__native_hash_adler32(const char* value);
+extern int sys__native_hash_crc32(const char* value);
+extern int sys__native_hash_murmur3_32(const char* value);
+namespace __apollo_inline_inline_3615_5_18 {
+        int sys__native_json_parse_bool(const char* value) { return __apo_stdlib::json_parse_bool(__apo_stdlib::view_or_empty(value)); }
+        long sys__native_json_parse_int(const char* value) { return static_cast<long>(__apo_stdlib::json_parse_int(__apo_stdlib::view_or_empty(value))); }
+        double sys__native_json_parse_float(const char* value) { return __apo_stdlib::json_parse_float(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_json_parse_str(const char* value) { return __apo_stdlib::json_parse_str(__apo_stdlib::view_or_empty(value)); }
+        void* sys__native_json_parse_array(const char* value) { return __apo_stdlib::json_parse_array_handle(__apo_stdlib::view_or_empty(value)); }
+        void* sys__native_json_parse_object(const char* value) { return __apo_stdlib::json_parse_object_handle(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_json_write_bool(int value) { return __apo_stdlib::json_write_bool(value); }
+        const char* sys__native_json_write_int(long value) { return __apo_stdlib::json_write_int(value); }
+        const char* sys__native_json_write_float(double value) { return __apo_stdlib::json_write_float(value); }
+        const char* sys__native_json_write_str(const char* value) { return __apo_stdlib::json_write_str(__apo_stdlib::view_or_empty(value)); }
+        const char* sys__native_json_write_array(void* value) { return __apo_stdlib::json_write_array_from_vector(value); }
+        const char* sys__native_json_write_object(void* value) { return __apo_stdlib::json_write_object_from_map(value); }
+        const char* sys__native_json_write_array_start() { return __apo_stdlib::json_write_array_start(); }
+        const char* sys__native_json_write_array_end() { return __apo_stdlib::json_write_array_end(); }
+        const char* sys__native_json_write_object_start() { return __apo_stdlib::json_write_object_start(); }
+        const char* sys__native_json_write_object_end() { return __apo_stdlib::json_write_object_end(); }
+    
+}
+extern "C" int sys__native_json_parse_bool(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_parse_bool(value); }
+extern "C" long sys__native_json_parse_int(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_parse_int(value); }
+extern "C" double sys__native_json_parse_float(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_parse_float(value); }
+extern "C" const char* sys__native_json_parse_str(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_parse_str(value); }
+extern "C" void* sys__native_json_parse_array(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_parse_array(value); }
+extern "C" void* sys__native_json_parse_object(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_parse_object(value); }
+extern "C" const char* sys__native_json_write_bool(int value) { return __apollo_inline_inline_3615_5_18::sys__native_json_write_bool(value); }
+extern "C" const char* sys__native_json_write_int(long value) { return __apollo_inline_inline_3615_5_18::sys__native_json_write_int(value); }
+extern "C" const char* sys__native_json_write_float(double value) { return __apollo_inline_inline_3615_5_18::sys__native_json_write_float(value); }
+extern "C" const char* sys__native_json_write_str(const char* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_write_str(value); }
+extern "C" const char* sys__native_json_write_array(void* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_write_array(value); }
+extern "C" const char* sys__native_json_write_object(void* value) { return __apollo_inline_inline_3615_5_18::sys__native_json_write_object(value); }
+extern "C" const char* sys__native_json_write_array_start() { return __apollo_inline_inline_3615_5_18::sys__native_json_write_array_start(); }
+extern "C" const char* sys__native_json_write_array_end() { return __apollo_inline_inline_3615_5_18::sys__native_json_write_array_end(); }
+extern "C" const char* sys__native_json_write_object_start() { return __apollo_inline_inline_3615_5_18::sys__native_json_write_object_start(); }
+extern "C" const char* sys__native_json_write_object_end() { return __apollo_inline_inline_3615_5_18::sys__native_json_write_object_end(); }

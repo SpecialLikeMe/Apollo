@@ -1,0 +1,348 @@
+extern std prelude;
+
+global str g_error = "";
+global i32 g_in_block_comment = 0;
+
+void set_error(nconst str& path, i32 line, nconst str& message) {
+    if (sys.str_len(g_error) != 0) {
+        return;
+    }
+    g_error = "${path}:${line}: ${message}";
+}
+
+str env_or_default(nconst str& key, nconst str& fallback) {
+    str value = sys.env_get(key);
+    if (sys.str_len(value) == 0) {
+        return fallback;
+    }
+    return value;
+}
+
+str char_at(nconst str& source, i32 index) {
+    if (index < 0) {
+        return "";
+    }
+    if (index >= sys.str_len(source)) {
+        return "";
+    }
+    return sys.str_substring(source, index, 1);
+}
+
+str slice_range(nconst str& source, i32 start, i32 end_index) {
+    if (end_index <= start) {
+        return "";
+    }
+    return sys.str_substring(source, start, end_index - start);
+}
+
+i32 is_ident_part(nconst str& ch) {
+    if (ch == "_") {
+        return 1;
+    }
+    return sys.is_alnum(ch);
+}
+
+i32 matches_word_at(nconst str& line, i32 index, nconst str& word) {
+    i32 word_len = sys.str_len(word);
+    if (slice_range(line, index, index + word_len) != word) {
+        return 0;
+    }
+    if (index > 0) {
+        str before = char_at(line, index - 1);
+        if (is_ident_part(before)) {
+            return 0;
+        }
+    }
+    if (index + word_len < sys.str_len(line)) {
+        str after = char_at(line, index + word_len);
+        if (is_ident_part(after)) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+i32 has_word(nconst str& line, nconst str& word) {
+    nconst i32 index = 0;
+    while (index < sys.str_len(line)) {
+        if (matches_word_at(line, index, word)) {
+            return 1;
+        }
+        index = index + 1;
+    }
+    return 0;
+}
+
+i32 starts_with_word(nconst str& line, nconst str& word) {
+    str trimmed = sys.str_trim_start(line);
+    return matches_word_at(trimmed, 0, word);
+}
+
+str strip_comments_from_line(nconst str& raw_line) {
+    str visible = "";
+    nconst i32 index = 0;
+    while (index < sys.str_len(raw_line)) {
+        str two = slice_range(raw_line, index, index + 2);
+        if (g_in_block_comment != 0) {
+            if (two == "*/") {
+                g_in_block_comment = 0;
+                index = index + 2;
+            } else {
+                index = index + 1;
+            }
+        } else {
+            if (two == "//") {
+                return visible;
+            }
+            if (two == "/*") {
+                g_in_block_comment = 1;
+                index = index + 2;
+            } else {
+                visible = sys.str_concat(visible, char_at(raw_line, index));
+                index = index + 1;
+            }
+        }
+    }
+    return visible;
+}
+
+str rewrite_int_tokens(nconst str& line) {
+    return sys.str_replace(line, "int ", "i32 ");
+}
+
+str replace_word(nconst str& line, nconst str& old_word, nconst str& new_word) {
+    str rewritten = "";
+    nconst i32 index = 0;
+    while (index < sys.str_len(line)) {
+        if (matches_word_at(line, index, old_word)) {
+            rewritten = sys.str_concat(rewritten, new_word);
+            index = index + sys.str_len(old_word);
+        } else {
+            rewritten = sys.str_concat(rewritten, char_at(line, index));
+            index = index + 1;
+        }
+    }
+    return rewritten;
+}
+
+i32 count_brace_delta(nconst str& line) {
+    return count_char_from(line, "{", 0) - count_char_from(line, "}", 0);
+}
+
+i32 count_char_from(nconst str& line, nconst str& needle, i32 index) {
+    if (index >= sys.str_len(line)) {
+        return 0;
+    }
+    if (char_at(line, index) == needle) {
+        return 1 + count_char_from(line, needle, index + 1);
+    }
+    return count_char_from(line, needle, index + 1);
+}
+
+i32 line_has_unsupported_construct(nconst str& trimmed) {
+    if (sys.str_contains(trimmed, "#")) {
+        return 1;
+    }
+    if (sys.str_contains(trimmed, "[") || sys.str_contains(trimmed, "]")) {
+        return 1;
+    }
+    if (sys.str_contains(trimmed, "++") || sys.str_contains(trimmed, "--")) {
+        return 1;
+    }
+    if (has_word(trimmed, "for") || has_word(trimmed, "switch") || has_word(trimmed, "case") || has_word(trimmed, "default")) {
+        return 1;
+    }
+    if (has_word(trimmed, "break") || has_word(trimmed, "continue") || has_word(trimmed, "goto") || has_word(trimmed, "do")) {
+        return 1;
+    }
+    if (has_word(trimmed, "char") || has_word(trimmed, "float") || has_word(trimmed, "double") || has_word(trimmed, "struct")) {
+        return 1;
+    }
+    if (has_word(trimmed, "typedef") || has_word(trimmed, "enum") || has_word(trimmed, "union")) {
+        return 1;
+    }
+    return 0;
+}
+
+i32 is_function_header(nconst str& trimmed) {
+    if (sys.str_ends_with(trimmed, "{") == 0) {
+        return 0;
+    }
+    if (sys.str_contains(trimmed, "(") == 0 || sys.str_contains(trimmed, ")") == 0) {
+        return 0;
+    }
+    if (starts_with_word(trimmed, "i32") || starts_with_word(trimmed, "void")) {
+        return 1;
+    }
+    return 0;
+}
+
+i32 statement_needs_semicolon(nconst str& trimmed) {
+    if (sys.str_len(trimmed) == 0) {
+        return 0;
+    }
+    if (trimmed == "{" || trimmed == "}") {
+        return 0;
+    }
+    if (sys.str_ends_with(trimmed, "{") != 0) {
+        return 0;
+    }
+    if (starts_with_word(trimmed, "if") || starts_with_word(trimmed, "while") || starts_with_word(trimmed, "else")) {
+        return 0;
+    }
+    return 1;
+}
+
+str lower_local_i32_initializer(nconst str& line) {
+    str trimmed = sys.str_trim(line);
+    if (sys.str_starts_with(trimmed, "i32 ") == 0) {
+        return line;
+    }
+    if (sys.str_contains(trimmed, "=") == 0 || sys.str_ends_with(trimmed, ";") == 0) {
+        return line;
+    }
+
+    i32 eq_index = sys.str_find(line, "=");
+    if (eq_index < 0) {
+        return line;
+    }
+
+    i32 prefix_len = sys.str_len(line) - sys.str_len(sys.str_trim_start(line));
+    str prefix = slice_range(line, 0, prefix_len);
+    str left = sys.str_trim(slice_range(line, 0, eq_index));
+    str right = sys.str_trim(slice_range(line, eq_index + 1, sys.str_len(line) - 1));
+    str name = sys.str_trim(sys.str_substring(left, 4, sys.str_len(left) - 4));
+    return "${prefix}i32 ${name};\n${prefix}${name} = ${right};";
+}
+
+void validate_line(nconst str& path, i32 line, nconst str& trimmed, i32 brace_depth_before) {
+    if (sys.str_len(trimmed) == 0) {
+        return;
+    }
+    if (line_has_unsupported_construct(trimmed)) {
+        set_error(path, line, "unsupported construct in tiny C subset");
+        return;
+    }
+    if (starts_with_word(trimmed, "if") || starts_with_word(trimmed, "while")) {
+        if (sys.str_ends_with(trimmed, "{") == 0) {
+            set_error(path, line, "control-flow statements must use brace-delimited bodies on the same line");
+            return;
+        }
+    }
+    if (starts_with_word(trimmed, "else")) {
+        if (sys.str_ends_with(trimmed, "{") == 0) {
+            set_error(path, line, "`else` must be written as `else {` in this subset");
+            return;
+        }
+    }
+    if (brace_depth_before > 0 && statement_needs_semicolon(trimmed) != 0 && sys.str_ends_with(trimmed, ";") == 0) {
+        set_error(path, line, "statements inside blocks must end with `;`");
+        return;
+    }
+}
+
+str read_text_file(nconst str& path) {
+    file input = sys.file_open(path, "r");
+    if (input == null) {
+        return "";
+    }
+    str contents = sys.file_read_all(input);
+    sys.file_close(input);
+    sys.handle_destroy(input);
+    return contents;
+}
+
+i32 write_text_file(nconst str& path, nconst str& text) {
+    str parent = sys.path_parent(path);
+    if (sys.str_len(parent) != 0) {
+        sys.fs_create_dir_all(parent);
+    }
+    file out = sys.file_create(path);
+    if (out == null) {
+        return 0;
+    }
+    i32 wrote = sys.file_write(out, text);
+    sys.file_close(out);
+    sys.handle_destroy(out);
+    return wrote;
+}
+
+i32 translate_source_to_file(nconst str& path, nconst str& source, nconst str& output_path) {
+    vector lines = sys.str_split_lines(source);
+    str generated = "extern std prelude;\n\n";
+    nconst i32 brace_depth = 0;
+
+    g_error = "";
+    g_in_block_comment = 0;
+
+    nconst i32 index = 0;
+    while (index < sys.vec_len(lines)) {
+        i32 line_no = index + 1;
+        str raw_line = sys.vec_get(lines, index);
+        str visible = strip_comments_from_line(raw_line);
+        str trimmed_visible = sys.str_trim(visible);
+        if (sys.str_len(trimmed_visible) == 0) {
+        } else {
+            str rewritten = rewrite_int_tokens(visible);
+            rewritten = sys.str_replace(rewritten, " next ", " cc_next ");
+            rewritten = sys.str_replace(rewritten, " next;", " cc_next;");
+            rewritten = sys.str_replace(rewritten, " next)", " cc_next)");
+            rewritten = sys.str_replace(rewritten, "= next", "= cc_next");
+            rewritten = lower_local_i32_initializer(rewritten);
+            str trimmed = sys.str_trim(rewritten);
+            validate_line(path, line_no, trimmed, brace_depth);
+            if (sys.str_len(g_error) != 0) {
+                return 0;
+            }
+
+            brace_depth = brace_depth + count_brace_delta(trimmed);
+            if (brace_depth < 0) {
+                set_error(path, line_no, "encountered `}` without a matching `{`");
+                return 0;
+            }
+
+            generated = sys.str_concat(generated, rewritten);
+            generated = sys.str_concat(generated, "\n");
+        }
+        index = index + 1;
+    }
+
+    if (g_in_block_comment != 0) {
+        set_error(path, sys.vec_len(lines), "unterminated block comment");
+        return 0;
+    }
+    if (brace_depth != 0) {
+        set_error(path, sys.vec_len(lines), "unbalanced braces in input source");
+        return 0;
+    }
+    if (sys.str_len(generated) == 0) {
+        set_error(path, 1, "translation produced no output");
+        return 0;
+    }
+    if (write_text_file(output_path, generated) == 0) {
+        set_error(output_path, 1, "unable to write generated Apollo source");
+        return 0;
+    }
+    return 1;
+}
+
+i32 main() {
+    str default_source = sys.path_join(sys.path_join(sys.current_dir(), "examples"), "sum_to.c");
+    str default_output = sys.path_join(sys.path_join(sys.current_dir(), "output"), "sum_to.apollo");
+    str source_path = env_or_default("APOLLO_CC_INPUT", default_source);
+    str output_path = env_or_default("APOLLO_CC_OUTPUT", default_output);
+
+    str source = read_text_file(source_path);
+    if (sys.str_len(source) == 0) {
+        sys.println("${source_path}: unable to read input source");
+        return 1;
+    }
+
+    if (translate_source_to_file(source_path, source, output_path) == 0) {
+        sys.println(g_error);
+        return 2;
+    }
+
+    sys.println("apollo-cc wrote ${output_path}");
+    return 0;
+}

@@ -1,0 +1,19 @@
+extern iostream;
+
+int main() {
+    nconst i32 total = 1;
+    nconst i32 phase = 0;
+    for (nconst i32 index = 1; index < 20000; index = index + 1) {
+        if (phase < 2) {
+            total = total + phase + 3;
+        } else {
+            total = total - phase;
+        }
+        phase = phase + 1;
+        if (phase == 4) {
+            phase = 0;
+        }
+    }
+    sys.stdout(total);
+    return 0;
+}

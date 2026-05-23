@@ -1,0 +1,11 @@
+extern std prelude;
+
+i32 main() {
+    global unordered_map<i32, i32> mymap;
+    global vector<i32> myvec;
+    mymap[90] = 1;
+    myvec.append(7);
+    myvec[0] = 9;
+    sys.printf("%i %i\n", mymap[90], myvec[0]);
+    return 0;
+}

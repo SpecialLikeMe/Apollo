@@ -1,0 +1,19 @@
+extern std prelude;
+
+i32 sum_to(i32 limit) {
+    i32 total;
+    total = 0;
+    while (limit > 0) {
+        total = total + limit;
+        limit = limit - 1;
+    }
+    return total;
+}
+i32 main() {
+    i32 answer;
+    answer = sum_to(10);
+    if (answer == 55) {
+        return 0;
+    }
+    return 1;
+}

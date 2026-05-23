@@ -19,8 +19,7 @@ entry:
   %1 = load ptr, ptr %heap, align 8
   call void @free(ptr %1)
   store ptr null, ptr %heap, align 8
-  %2 = load i32, ptr %base, align 4
-  ret i32 %2
+  ret i32 0
 }
 
 declare ptr @malloc(i64)
@@ -37,40 +36,44 @@ attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memor
 !apollo.backend = !{!0}
 !apollo.runtime.features = !{!1}
 !apollo.soa.mode = !{!2}
-!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18}
-!llvm.dbg.cu = !{!19}
-!llvm.ident = !{!21}
-!llvm.errno.tbaa = !{!22}
-!llvm.module.flags = !{!26, !27, !28, !29, !30}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21, !22}
+!llvm.dbg.cu = !{!23}
+!llvm.ident = !{!25}
+!llvm.errno.tbaa = !{!26}
+!llvm.module.flags = !{!30, !31, !32, !33, !34}
 
 !0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"bypass_surface"}
 !1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
 !2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
-!3 = !{!"double", !"double"}
-!4 = !{!"float", !"float"}
-!5 = !{!"long", !"i64"}
-!6 = !{!"short", !"i16"}
-!7 = !{!"u32", !"i32"}
-!8 = !{!"f64", !"double"}
-!9 = !{!"i32", !"i32"}
-!10 = !{!"u8", !"i8"}
-!11 = !{!"u64", !"i64"}
-!12 = !{!"bool", !"i1"}
-!13 = !{!"int", !"i32"}
-!14 = !{!"void", !"void"}
-!15 = !{!"u16", !"i16"}
-!16 = !{!"i16", !"i16"}
-!17 = !{!"i8", !"i8"}
-!18 = !{!"i64", !"i64"}
-!19 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus_14, file: !20, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
-!20 = !DIFile(filename: "C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cache\\inline_foreign/e32c8bc3b3dd194b.cpp", directory: "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass")
-!21 = !{!"clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)"}
-!22 = !{!23, !23, i64 0}
-!23 = !{!"int", !24, i64 0}
-!24 = !{!"omnipotent char", !25, i64 0}
-!25 = !{!"Simple C++ TBAA"}
-!26 = !{i32 2, !"Debug Info Version", i32 3}
-!27 = !{i32 1, !"wchar_size", i32 2}
-!28 = !{i32 8, !"PIC Level", i32 2}
-!29 = !{i32 7, !"uwtable", i32 2}
-!30 = !{i32 1, !"MaxTLSAlign", i32 65536}
+!3 = !{!"float", !"float"}
+!4 = !{!"long", !"i64"}
+!5 = !{!"isize", !"i64"}
+!6 = !{!"i64", !"i64"}
+!7 = !{!"short", !"i16"}
+!8 = !{!"u32", !"i32"}
+!9 = !{!"bool", !"i1"}
+!10 = !{!"int", !"i32"}
+!11 = !{!"void", !"void"}
+!12 = !{!"u16", !"i16"}
+!13 = !{!"i16", !"i16"}
+!14 = !{!"u64", !"i64"}
+!15 = !{!"u8", !"i8"}
+!16 = !{!"f64", !"double"}
+!17 = !{!"i32", !"i32"}
+!18 = !{!"double", !"double"}
+!19 = !{!"usize", !"i64"}
+!20 = !{!"byte", !"i8"}
+!21 = !{!"i8", !"i8"}
+!22 = !{!"char", !"i32"}
+!23 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus_14, file: !24, producer: "clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, splitDebugInlining: false, nameTableKind: None)
+!24 = !DIFile(filename: "C:\\Users\\devon\\Apollo\\Apollo-Main\\compiler\\cache\\inline_foreign/d667a85fd742ba2c.cpp", directory: "C:/Users/devon/Apollo/Apollo-Main/compiler/tests/grammar/pass")
+!25 = !{!"clang version 22.1.4 (https://github.com/msys2/MINGW-packages e97dcec28087f0155bb8cb6808ee2ab95f551f1b)"}
+!26 = !{!27, !27, i64 0}
+!27 = !{!"int", !28, i64 0}
+!28 = !{!"omnipotent char", !29, i64 0}
+!29 = !{!"Simple C++ TBAA"}
+!30 = !{i32 2, !"Debug Info Version", i32 3}
+!31 = !{i32 1, !"wchar_size", i32 2}
+!32 = !{i32 8, !"PIC Level", i32 2}
+!33 = !{i32 7, !"uwtable", i32 2}
+!34 = !{i32 1, !"MaxTLSAlign", i32 65536}

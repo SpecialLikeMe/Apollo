@@ -1,0 +1,22 @@
+extern std allocators;
+
+memstruct Buffer {
+    i32 size;
+}
+
+int main() {
+    DefaultAllocator default_alloc = sys.alloc_default();
+    GeneralPurposeAllocator gpa = sys.alloc_gpa();
+    ArenaAllocator arena = sys.alloc_arena();
+    BumpAllocator bump = sys.alloc_bump();
+    PoolAllocator pool = sys.alloc_pool();
+    SlabAllocator slab = sys.alloc_slab();
+    StackAllocator stack = sys.alloc_stack();
+    ScratchAllocator scratch = sys.alloc_scratch();
+    PageAllocator page = sys.alloc_page();
+    TlsfAllocator tlsf = sys.alloc_tlsf();
+
+    Buffer primary = Buffer{}.uses(arena);
+    Buffer secondary = Buffer{}.uses(gpa);
+    return 0;
+}

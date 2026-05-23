@@ -2,6 +2,79 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $false
 
 $compilerDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+function Import-BatchEnvironment {
+    param(
+        [string]$BatchPath
+    )
+
+    if (-not (Test-Path $BatchPath)) {
+        return
+    }
+
+    $cmdExe = if ($env:ComSpec -and (Test-Path $env:ComSpec)) {
+        $env:ComSpec
+    }
+    else {
+        Join-Path $env:SystemRoot 'System32\cmd.exe'
+    }
+
+    $captured = & $cmdExe /d /c "call `"$BatchPath`" >nul && set"
+    foreach ($line in $captured) {
+        $separator = $line.IndexOf('=')
+        if ($separator -lt 1) {
+            continue
+        }
+
+        $name = $line.Substring(0, $separator)
+        $value = $line.Substring($separator + 1)
+        Set-Item -Path ("Env:{0}" -f $name) -Value $value
+    }
+}
+
+function Initialize-NativeToolchainEnvironment {
+    $toolchainEnv = Join-Path $compilerDir 'toolchain-env.bat'
+    Import-BatchEnvironment -BatchPath $toolchainEnv
+
+    if (-not $env:APOLLO_MSYS64_ROOT -and (Test-Path 'C:\msys64')) {
+        $env:APOLLO_MSYS64_ROOT = 'C:\msys64'
+    }
+
+    if (-not $env:APOLLO_MINGW_BIN -and $env:APOLLO_MSYS64_ROOT) {
+        $defaultMingwBin = Join-Path $env:APOLLO_MSYS64_ROOT 'clang64\bin'
+        if (Test-Path $defaultMingwBin) {
+            $env:APOLLO_MINGW_BIN = $defaultMingwBin
+        }
+    }
+
+    if (-not $env:APOLLO_NATIVE_GENERATOR -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        $env:APOLLO_NATIVE_GENERATOR = 'MinGW Makefiles'
+    }
+    if (-not $env:APOLLO_NATIVE_C_COMPILER -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'clang.exe'))) {
+        $env:APOLLO_NATIVE_C_COMPILER = Join-Path $env:APOLLO_MINGW_BIN 'clang.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_CXX_COMPILER -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'clang++.exe'))) {
+        $env:APOLLO_NATIVE_CXX_COMPILER = Join-Path $env:APOLLO_MINGW_BIN 'clang++.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_MAKE_PROGRAM -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        $env:APOLLO_NATIVE_MAKE_PROGRAM = Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_CMAKE_PREFIX -and $env:APOLLO_MSYS64_ROOT) {
+        $defaultCmakePrefix = Join-Path $env:APOLLO_MSYS64_ROOT 'clang64'
+        if (Test-Path (Join-Path $defaultCmakePrefix 'lib\cmake\antlr4-runtime')) {
+            $env:APOLLO_NATIVE_CMAKE_PREFIX = $defaultCmakePrefix
+        }
+    }
+
+    if ($env:APOLLO_MINGW_BIN) {
+        $pathEntries = @($env:PATH -split ';')
+        if ($pathEntries -notcontains $env:APOLLO_MINGW_BIN) {
+            $env:PATH = "$($env:APOLLO_MINGW_BIN);$($env:PATH)"
+        }
+    }
+}
+
+Initialize-NativeToolchainEnvironment
 Set-Location $compilerDir
 
 $nativeSourceDir = Join-Path $compilerDir 'cpp'
@@ -159,8 +232,9 @@ function Resolve-NativeExecutable {
 }
 
 function Build-NativeTooling {
-    Ensure-NativeBuild -Targets @('apollo_frontend_native', 'apollo_runtime_tests', 'apollo_driver_tests')
+    Ensure-NativeBuild -Targets @('apollo_frontend_native', 'apollo_build_driver_native', 'apollo_runtime_tests', 'apollo_driver_tests')
     $script:apolloFrontendExe = Resolve-NativeExecutable -Name 'apollo_frontend_native'
+    $script:apolloBuildDriverExe = Resolve-NativeExecutable -Name 'apollo_build_driver_native'
     $script:apolloRuntimeTestsExe = Resolve-NativeExecutable -Name 'apollo_runtime_tests'
     $script:apolloDriverTestsExe = Resolve-NativeExecutable -Name 'apollo_driver_tests'
 }
@@ -181,7 +255,19 @@ $tests = @(
         Name = 'language-surface'
         Path = 'tests\grammar\pass\language_surface.apollo'
         ShouldPass = $true
-        Covers = 'globals, templates, interfaces, structs, classes, lambdas, fn types, instances, member access, stdin, blocks, if, while, indexed access, composite literals'
+        Covers = 'globals, templates, interfaces, structs, classes, indent closures, immediate lambdas, fn types, instances, member access, stdin, blocks, if, while, indexed access, composite literals'
+    },
+    [pscustomobject]@{
+        Name = 'top-level-closure-surface'
+        Path = 'tests\grammar\pass\top_level_closure_surface.apollo'
+        ShouldPass = $true
+        Covers = 'module-scope typed closures lower to callable module symbols that main can invoke'
+    },
+    [pscustomobject]@{
+        Name = 'top-level-auto-closure-surface'
+        Path = 'tests\grammar\pass\top_level_auto_closure_surface.apollo'
+        ShouldPass = $true
+        Covers = 'module-scope auto closures infer a callable signature from closure params and a simple return expression'
     },
     [pscustomobject]@{
         Name = 'syntax-surface'
@@ -288,6 +374,34 @@ $tests = @(
         OutputMustContainAll = @(
             'return this->value;',
             'return this->fetch();'
+        )
+    },
+    [pscustomobject]@{
+        Name = 'constructor-member-assignment-surface'
+        Path = 'tests\grammar\pass\constructor_member_assignment_surface.apollo'
+        ShouldPass = $true
+        Covers = 'constructors accept indef.field assignment statements and lower them through aggregate field stores'
+        OutputMustContainAll = @(
+            'this->id = 0;',
+            'std::printf("%i", item.id);'
+        )
+    },
+    [pscustomobject]@{
+        Name = 'constructor-parameters-surface'
+        Path = 'tests\grammar\pass\constructor_parameters_surface.apollo'
+        ShouldPass = $true
+        Covers = 'aggregate instance values pass constructor arguments, and prefixed constructor declarations allow brace overrides'
+    },
+    [pscustomobject]@{
+        Name = 'if-global-variadic-printf-surface'
+        Path = 'tests\grammar\pass\if_global_variadic_printf_surface.apollo'
+        ShouldPass = $true
+        Covers = 'global containers declared in a taken if-branch remain visible afterward, and variadic sys.printf lowers indexed and member-access arguments'
+        OutputMustContainAll = @(
+            'call i32 @apollo_hash_i32_i32_get(ptr',
+            'call i32 @apollo_vector_i32_get(ptr',
+            'call i32 (ptr, ...) @sys__printf(ptr @apollo.str.literal.',
+            'load i32, ptr %'
         )
     },
     [pscustomobject]@{
@@ -491,6 +605,16 @@ $tests = @(
         )
     },
     [pscustomobject]@{
+        Name = 'typedef-opstruct-recursive-matcher'
+        Path = 'tests\grammar\pass\typedef_opstruct_recursive_matcher.apollo'
+        ShouldPass = $true
+        Covers = 'typedef opstruct src matchers accept recursive delimiter pairs in the declared pattern and validate captured source phrases against them'
+        OutputMustContainAll = @(
+            'apo_cool mycool{};',
+            'sys.println(std::string("") + "matched");'
+        )
+    },
+    [pscustomobject]@{
         Name = 'quoted-string-member-interpolation-surface'
         Path = 'tests\grammar\pass\quoted_string_member_interpolation_surface.apollo'
         ShouldPass = $true
@@ -511,6 +635,24 @@ $tests = @(
             'struct __apo_allocator_traits<apo_Buffer> {',
             '__apo_memstruct_runtime::instance().register_memstruct("Buffer", {{"size", "std::int32_t"}});',
             '__apo_memstruct_runtime::instance().materialize<apo_Buffer>(apo_Buffer{}, arena, "Buffer", "arena")'
+        )
+    },
+    [pscustomobject]@{
+        Name = 'stdlib-allocator-surface'
+        Path = 'tests\grammar\pass\stdlib_allocator_surface.apollo'
+        ShouldPass = $true
+        Covers = 'stdlib allocators expose real stateful alloc/resize/remap/free methods and `.uses(...)` now drives those hooks on allocator memstruct values such as default, gpa, arena, bump, pool, slab, stack, scratch, page, and tlsf'
+        OutputMustContainAll = @(
+            'struct apo_DefaultAllocator {',
+            'struct apo_GeneralPurposeAllocator {',
+            'struct apo_ArenaAllocator {',
+            'struct apo_TlsfAllocator {',
+            'std::int32_t alloc(std::string type_name, std::int32_t requested_bytes) {',
+            'std::int32_t resize(std::string type_name, std::int32_t previous_bytes, std::int32_t requested_bytes) {',
+            'apo_DefaultAllocator alloc_default() {',
+            'apo_ArenaAllocator alloc_arena() {',
+            '__apo_memstruct_runtime::instance().materialize<apo_Buffer>(apo_Buffer{}, arena, "Buffer", "arena")',
+            '__apo_memstruct_runtime::instance().materialize<apo_Buffer>(apo_Buffer{}, gpa, "Buffer", "gpa")'
         )
     },
     [pscustomobject]@{
@@ -656,6 +798,32 @@ $tests = @(
         Path = 'tests\grammar\pass\all_pillars_surface.apollo'
         ShouldPass = $true
         Covers = 'nominal and cerr result values, opaque-handle stdlib objects, portability helpers, and the expanded sys prelude lower through the native frontend'
+    },
+    [pscustomobject]@{
+        Name = 'sys-memberaccess-statement-surface'
+        Path = 'tests\grammar\pass\sys_memberaccess_statement_surface.apollo'
+        ShouldPass = $true
+        Covers = 'raw parser paths accept sys-qualified member access statements like sys.printf and still parse global init statements when global appears in the supported leading position'
+        OutputMustContainAll = @(
+            'sys__printf("Hello, world\n");',
+            'int value = 7;',
+            'sys__printf("%i\n", value);'
+        )
+    },
+    [pscustomobject]@{
+        Name = 'unordered-map-i32-statement-surface'
+        Path = 'tests\grammar\pass\unordered_map_i32_statement_surface.apollo'
+        ShouldPass = $true
+        Covers = 'statement-position global unordered_map<i32,i32> and vector<i32> values lower indexed set/get operations through direct LLVM helper calls'
+        OutputMustContainAll = @(
+            'apollo_hash_i32_i32_create',
+            'apollo_hash_i32_i32_set',
+            'apollo_hash_i32_i32_get',
+            'apollo_vector_i32_create',
+            'apollo_vector_i32_push',
+            'apollo_vector_i32_set',
+            'apollo_vector_i32_get'
+        )
     },
     [pscustomobject]@{
         Name = 'stdlib-growth-surface'
@@ -937,6 +1105,13 @@ $tests = @(
         Covers = 'bridgeInit placement rule'
     },
     [pscustomobject]@{
+        Name = 'autoreleasepool-unbridged-use'
+        Path = 'tests\grammar\fail\autoreleasepool_unbridged_use.apollo'
+        ShouldPass = $false
+        Expected = 'cannot use `i` after leaving `@autoreleasepool` because it was not declared with `@bridge`'
+        Covers = 'autoreleasepool locals must be bridged before use after scope'
+    },
+    [pscustomobject]@{
         Name = 'raw-pointer-global'
         Path = 'tests\grammar\fail\raw_pointer_global.apollo'
         ShouldPass = $false
@@ -963,6 +1138,27 @@ $tests = @(
         ShouldPass = $false
         Expected = 'typedef opstruct target `Missing` is not declared'
         Covers = 'typedef opstruct aliases require a declared opstruct target'
+    },
+    [pscustomobject]@{
+        Name = 'top-level-closure-signature-mismatch'
+        Path = 'tests\grammar\fail\top_level_closure_signature_mismatch.apollo'
+        ShouldPass = $false
+        Expected = 'closure `xyz` parameter count mismatch: declared 0 but closure defines 1'
+        Covers = 'module-scope closures report declared fn signature mismatches directly instead of surfacing placeholder backend errors'
+    },
+    [pscustomobject]@{
+        Name = 'typedef-opstruct-invalid-recursive-pattern'
+        Path = 'tests\grammar\fail\typedef_opstruct_invalid_recursive_pattern.apollo'
+        ShouldPass = $false
+        Expected = 'recursive matcher id `0` closes with `]` but expected `)`'
+        Covers = 'typedef opstruct matcher declarations reject malformed recursive delimiter pairs'
+    },
+    [pscustomobject]@{
+        Name = 'typedef-opstruct-unmatched-phrase'
+        Path = 'tests\grammar\fail\typedef_opstruct_unmatched_phrase.apollo'
+        ShouldPass = $false
+        Expected = 'typedef opstruct phrase `please do 1` does not match any declared `src(...)` pattern'
+        Covers = 'typedef opstruct phrase statements are rejected when they do not match any declared src pattern'
     },
     [pscustomobject]@{
         Name = 'unknown-runtime-directive'

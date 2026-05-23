@@ -87,14 +87,15 @@ int main() {
     nconst i32 local = plusOne(globalCounter);
     i32 narrowed = (i32)local;
     str templ = `hello template`;
-    fn<i32(i32, i32)> add = lmd-> (i32 left, i32 right) {
+    fn<i32(i32, i32)> add = clr-> [](i32 left, i32 right) in let main::() =
         return left + right;
-    }
-    fn<i32(i32)> promote = lmd-> i32 named(i32 input) {
+    fn<i32(i32)> promote = clr-> [](i32 input) in let main::() =
         return input;
-    }
     i32 sum = add(1, 2);
     i32 promoted = promote(sum);
+    i32 eager = lmd-> () {
+        return promoted;
+    }
     nconst vector<str> names;
     names[apnd] = templ;
     nconst hsh<str, i32> scores;
@@ -128,5 +129,5 @@ int main() {
     str borrowed = keep(templ);
     announce(borrowed);
     sys.stdout(scores["dog"]);
-    return plainGlobal + narrowed;
+    return eager + narrowed;
 }

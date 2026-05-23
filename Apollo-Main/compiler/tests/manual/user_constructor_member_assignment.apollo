@@ -1,0 +1,26 @@
+extern std io
+
+typedef struct test {
+    int id;
+
+    __construct() {
+        indef.id = 0;
+    }
+}
+
+int main() {
+    sys.printf("Hello, world");
+    if (true) {
+        global nconst unordered_map<i32, i32> mymap;
+        global nconst vector<i32> myvec;
+    }
+    mymap[90] = 1;
+    myvec[apnd] = 1;
+    sys.printf("%i %i", mymap[90], myvec[0]);
+
+    test t = {
+        .id = 42
+    };
+    sys.printf("%i", t.id);
+    return 0;
+}

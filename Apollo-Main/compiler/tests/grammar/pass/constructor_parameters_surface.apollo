@@ -1,0 +1,17 @@
+class Counter {
+    public i32 value;
+
+    public __construct(i32 seed) {
+        indef.value = seed;
+    }
+}
+
+int main() {
+    stat direct = Counter{42};
+    Counter{7} named = {.value = 9};
+    sys.printf("%i %i", direct.value, named.value);
+    if (direct.value == 42 && named.value == 9) {
+        return 0;
+    }
+    return 1;
+}

@@ -27,6 +27,15 @@ struct CompileCacheEntry {
     std::string outputHash;
     std::filesystem::path cachedOutputPath;
     std::vector<std::string> dependencies;
+    std::string sourceSize;
+    std::string sourceWriteTime;
+    std::string outputSize;
+    std::string outputWriteTime;
+};
+
+struct FileFingerprint {
+    std::string size;
+    std::string writeTime;
 };
 
 bool envEnabled(const char* name) {
@@ -165,13 +174,40 @@ std::vector<std::string> readLines(const std::filesystem::path& path) {
     return lines;
 }
 
-std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path& sourcePath, const std::filesystem::path& outputPath) {
-    if (!incrementalCacheEnabled()) {
+std::optional<FileFingerprint> captureFileFingerprint(const std::filesystem::path& path) {
+    std::error_code error;
+    const auto size = std::filesystem::file_size(path, error);
+    if (error) {
         return std::nullopt;
     }
 
-    const auto normalizedOutput = std::filesystem::absolute(outputPath).lexically_normal();
-    if (!std::filesystem::exists(normalizedOutput)) {
+    error.clear();
+    const auto writeTime = std::filesystem::last_write_time(path, error);
+    if (error) {
+        return std::nullopt;
+    }
+
+    return FileFingerprint{
+        std::to_string(size),
+        std::to_string(static_cast<long long>(writeTime.time_since_epoch().count()))
+    };
+}
+
+bool matchesFileFingerprint(const std::filesystem::path& path,
+    std::string_view expectedSize,
+    std::string_view expectedWriteTime) {
+    if (expectedSize.empty() || expectedWriteTime.empty()) {
+        return false;
+    }
+
+    const auto fingerprint = captureFileFingerprint(path);
+    return fingerprint.has_value()
+        && fingerprint->size == expectedSize
+        && fingerprint->writeTime == expectedWriteTime;
+}
+
+std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path& sourcePath, const std::filesystem::path& outputPath) {
+    if (!incrementalCacheEnabled()) {
         return std::nullopt;
     }
 
@@ -184,6 +220,10 @@ std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path
     std::string compilerSignature;
     std::string sourceHash;
     std::string outputHash;
+    std::string sourceSize;
+    std::string sourceWriteTime;
+    std::string outputSize;
+    std::string outputWriteTime;
     std::vector<std::string> dependencies;
     for (const auto& line : readLines(metadataPath)) {
         if (line.rfind("version=", 0) == 0) {
@@ -194,6 +234,14 @@ std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path
             sourceHash = line.substr(11);
         } else if (line.rfind("outputHash=", 0) == 0) {
             outputHash = line.substr(11);
+        } else if (line.rfind("sourceSize=", 0) == 0) {
+            sourceSize = line.substr(11);
+        } else if (line.rfind("sourceWriteTime=", 0) == 0) {
+            sourceWriteTime = line.substr(16);
+        } else if (line.rfind("outputSize=", 0) == 0) {
+            outputSize = line.substr(11);
+        } else if (line.rfind("outputWriteTime=", 0) == 0) {
+            outputWriteTime = line.substr(16);
         } else if (line.rfind("dependency=", 0) == 0) {
             dependencies.push_back(line.substr(11));
         }
@@ -205,7 +253,11 @@ std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path
     if (compilerSignature.empty() || compilerSignature != ApolloDriver::currentCompilerSignature()) {
         return std::nullopt;
     }
-    if (sourceHash.empty() || sourceHash != stableHashHex(ApolloDriver::preprocessSourceFromFile(sourcePath))) {
+    if (sourceHash.empty()) {
+        return std::nullopt;
+    }
+    if (!matchesFileFingerprint(sourcePath, sourceSize, sourceWriteTime)
+        && sourceHash != stableHashHex(ApolloDriver::preprocessSourceFromFile(sourcePath))) {
         return std::nullopt;
     }
 
@@ -214,13 +266,14 @@ std::optional<CompileCacheEntry> tryLoadCompileCache(const std::filesystem::path
         return std::nullopt;
     }
 
-    return CompileCacheEntry{ compilerSignature, sourceHash, outputHash, artifactPath, dependencies };
+    return CompileCacheEntry{ compilerSignature, sourceHash, outputHash, artifactPath, dependencies, sourceSize, sourceWriteTime, outputSize, outputWriteTime };
 }
 
 void restoreCachedOutputIfNeeded(const CompileCacheEntry& cacheEntry, const std::filesystem::path& outputPath) {
     const auto normalizedOutput = std::filesystem::absolute(outputPath).lexically_normal();
     if (std::filesystem::exists(normalizedOutput)) {
-        if (stableHashHex(readTextFile(normalizedOutput)) == cacheEntry.outputHash) {
+        if (matchesFileFingerprint(normalizedOutput, cacheEntry.outputSize, cacheEntry.outputWriteTime)
+            || stableHashHex(readTextFile(normalizedOutput)) == cacheEntry.outputHash) {
             return;
         }
     }
@@ -232,7 +285,8 @@ void restoreCachedOutputIfNeeded(const CompileCacheEntry& cacheEntry, const std:
 }
 
 void writeCompileCache(const std::filesystem::path& sourcePath, const std::filesystem::path& outputPath,
-    const std::vector<std::string>& dependencies) {
+    const std::vector<std::string>& dependencies,
+    std::string_view sourceHash) {
     if (!incrementalCacheEnabled()) {
         return;
     }
@@ -248,10 +302,20 @@ void writeCompileCache(const std::filesystem::path& sourcePath, const std::files
     if (!output) {
         throw std::runtime_error("failed to write cache metadata: " + metadataPath.string());
     }
+    const auto sourceFingerprint = captureFileFingerprint(sourcePath);
+    const auto outputFingerprint = captureFileFingerprint(outputPath);
     output << "version=" << kCompilerCacheVersion << '\n';
     output << "compilerSignature=" << ApolloDriver::currentCompilerSignature() << '\n';
-    output << "sourceHash=" << stableHashHex(ApolloDriver::preprocessSourceFromFile(sourcePath)) << '\n';
+    output << "sourceHash=" << sourceHash << '\n';
     output << "outputHash=" << stableHashHex(readTextFile(outputPath)) << '\n';
+    if (sourceFingerprint.has_value()) {
+        output << "sourceSize=" << sourceFingerprint->size << '\n';
+        output << "sourceWriteTime=" << sourceFingerprint->writeTime << '\n';
+    }
+    if (outputFingerprint.has_value()) {
+        output << "outputSize=" << outputFingerprint->size << '\n';
+        output << "outputWriteTime=" << outputFingerprint->writeTime << '\n';
+    }
     for (const auto& dependency : dependencies) {
         output << "dependency=" << dependency << '\n';
     }
@@ -383,7 +447,7 @@ void compileApolloRecursive(const std::filesystem::path& sourcePath,
             layoutPlan,
             false);
 
-        writeCompileCache(normalizedSource, normalizedOutput, dependencies);
+        writeCompileCache(normalizedSource, normalizedOutput, dependencies, stableHashHex(program));
         generatedFiles.insert(normalizedOutput.string());
         releaseActive();
     } catch (...) {
@@ -478,34 +542,38 @@ std::filesystem::path ApolloDriver::cacheArtifactPath(const std::filesystem::pat
 }
 
 std::string ApolloDriver::currentCompilerSignature() {
-    const auto cppRoot = std::filesystem::path(__FILE__).lexically_normal().parent_path().parent_path();
-    const auto compilerRoot = cppRoot.parent_path();
-    const std::vector<std::filesystem::path> inputs = {
-        cppRoot / "src" / "apollo_driver.cpp",
-        cppRoot / "src" / "apollo_driver.h",
-        cppRoot / "src" / "apollo_inline_foreign.cpp",
-        cppRoot / "src" / "apollo_inline_foreign.h",
-        cppRoot / "src" / "visitor.cpp",
-        cppRoot / "src" / "visitor.h",
-        cppRoot / "src" / "apollo_ir_layout_plan.cpp",
-        cppRoot / "src" / "apollo_ir_layout_plan.h",
-        cppRoot / "src" / "apollo_runtime.cpp",
-        cppRoot / "src" / "apollo_runtime.h",
-        cppRoot / "src" / "apollo_source_preprocessor.cpp",
-        cppRoot / "src" / "apollo_source_preprocessor.h",
-        cppRoot / "src" / "apollo_codegen_optimization_plan.cpp",
-        cppRoot / "src" / "apollo_codegen_optimization_plan.h",
-        compilerRoot / "compilerv1.g4"
-    };
+    static const std::string signature = []() {
+        const auto cppRoot = std::filesystem::path(__FILE__).lexically_normal().parent_path().parent_path();
+        const auto compilerRoot = cppRoot.parent_path();
+        const std::vector<std::filesystem::path> inputs = {
+            cppRoot / "src" / "apollo_driver.cpp",
+            cppRoot / "src" / "apollo_driver.h",
+            cppRoot / "src" / "apollo_inline_foreign.cpp",
+            cppRoot / "src" / "apollo_inline_foreign.h",
+            cppRoot / "src" / "visitor.cpp",
+            cppRoot / "src" / "visitor.h",
+            cppRoot / "src" / "apollo_ir_layout_plan.cpp",
+            cppRoot / "src" / "apollo_ir_layout_plan.h",
+            cppRoot / "src" / "apollo_runtime.cpp",
+            cppRoot / "src" / "apollo_runtime.h",
+            cppRoot / "src" / "apollo_source_preprocessor.cpp",
+            cppRoot / "src" / "apollo_source_preprocessor.h",
+            cppRoot / "src" / "apollo_codegen_optimization_plan.cpp",
+            cppRoot / "src" / "apollo_codegen_optimization_plan.h",
+            compilerRoot / "compilerv1.g4"
+        };
 
-    std::string combined(kCompilerCacheVersion);
-    for (const auto& input : inputs) {
-        if (!std::filesystem::exists(input)) {
-            continue;
+        std::string combined(kCompilerCacheVersion);
+        for (const auto& input : inputs) {
+            if (!std::filesystem::exists(input)) {
+                continue;
+            }
+            combined += "|" + input.filename().string() + "|" + stableHashHex(readTextFile(input));
         }
-        combined += "|" + input.filename().string() + "|" + stableHashHex(readTextFile(input));
-    }
-    return stableHashHex(combined);
+        return stableHashHex(combined);
+    }();
+
+    return signature;
 }
 
 void ApolloDriver::writeCleanupManifest(const std::set<std::string>& generatedFiles) {

@@ -105,17 +105,61 @@ bool verifyLeakWarningsAreNonFatal() {
     return true;
 }
 
+bool verifySyntaxDiagnosticsAvoidDuplicateExpectations() {
+    const std::string sourcePath = "tests/manual/syntax_dedup.apollo";
+    const std::string program = "class A {\n"
+        "    public i32 x;\n"
+        "}\n"
+        "\n"
+        "int main() {\n"
+        "    A{1} value = {.x = 2\n"
+        "    return 0;\n"
+        "}\n";
+
+    ApolloCompilerRuntimeCycle cycle = ApolloCompilerRuntimeCycle::create(sourcePath, program);
+
+    try {
+        cycle.runPreCodegenPhases();
+        std::cerr << "syntax diagnostics should fail on malformed input\n";
+        return false;
+    } catch (const ApolloCompilationFailure& ex) {
+        const std::string message = ex.what();
+        if (message.find("mismatched input 'return' expecting {',', '}'}") == std::string::npos) {
+            std::cerr << "syntax diagnostic lost the parser expectation context\n";
+            std::cerr << "actual: " << message << '\n';
+            return false;
+        }
+        if (message.find("expected one of: {',', '}'}") != std::string::npos) {
+            std::cerr << "syntax diagnostic duplicated the expectation set\n";
+            std::cerr << "actual: " << message << '\n';
+            return false;
+        }
+        return true;
+    }
+}
+
 } // namespace
 
 int main() {
-    if (!verifyPhaseOrder()) {
+    try {
+        if (!verifyPhaseOrder()) {
+            return 1;
+        }
+        if (!verifyFailureWrapping()) {
+            return 1;
+        }
+        if (!verifyLeakWarningsAreNonFatal()) {
+            return 1;
+        }
+        if (!verifySyntaxDiagnosticsAvoidDuplicateExpectations()) {
+            return 1;
+        }
+        return 0;
+    } catch (const std::exception& ex) {
+        std::cerr << "unhandled runtime test failure: " << ex.what() << '\n';
+        return 1;
+    } catch (...) {
+        std::cerr << "unhandled runtime test failure: unknown exception\n";
         return 1;
     }
-    if (!verifyFailureWrapping()) {
-        return 1;
-    }
-    if (!verifyLeakWarningsAreNonFatal()) {
-        return 1;
-    }
-    return 0;
 }

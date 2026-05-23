@@ -2,12 +2,17 @@
 #include <iostream>
 
 int main() {
-    std::int64_t total = 1;
-    for (std::int64_t index = 1; index < __LIMIT__; ++index) {
-        if ((index % 2) == 0) {
-            total += index / 2;
+    std::int32_t total = 1;
+    std::int32_t phase = 0;
+    for (std::int32_t index = 1; index < __LIMIT__; ++index) {
+        if (phase < 2) {
+            total += phase + 3;
         } else {
-            total -= index / 3;
+            total -= phase;
+        }
+        phase += 1;
+        if (phase == 4) {
+            phase = 0;
         }
     }
     std::cout << total;

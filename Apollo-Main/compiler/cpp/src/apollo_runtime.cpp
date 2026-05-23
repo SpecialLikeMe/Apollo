@@ -2,6 +2,7 @@
 
 #include "brc/borrow_checker.h"
 
+#include <cctype>
 #include <algorithm>
 #include <any>
 #include <filesystem>
@@ -64,6 +65,319 @@ std::unordered_set<std::string> loadUnsafeFallbackBlockedSymbols() {
         cursor = itemEnd + 1;
     }
     return blocked;
+}
+
+struct TypedefOpstructPatternToken {
+    enum class Kind {
+        Literal,
+        Placeholder,
+        RecursiveOpen,
+        RecursiveClose
+    };
+
+    Kind kind = Kind::Literal;
+    std::string text;
+    int recursiveId = -1;
+    char delimiter = '\0';
+    size_t partnerIndex = 0;
+};
+
+struct ParsedTypedefOpstructPattern {
+    std::string rawText;
+    std::vector<TypedefOpstructPatternToken> tokens;
+    bool valid = true;
+    std::string error;
+};
+
+char matchingCloseDelimiter(char openDelimiter) {
+    switch (openDelimiter) {
+    case '(':
+        return ')';
+    case '[':
+        return ']';
+    case '{':
+        return '}';
+    case '<':
+        return '>';
+    default:
+        return '\0';
+    }
+}
+
+bool isUpperPlaceholderIdentifier(std::string_view text) {
+    if (text.empty()) {
+        return false;
+    }
+    bool sawLetter = false;
+    for (const char ch : text) {
+        if (std::isalpha(static_cast<unsigned char>(ch))) {
+            sawLetter = true;
+            if (!std::isupper(static_cast<unsigned char>(ch))) {
+                return false;
+            }
+            continue;
+        }
+        if (!std::isdigit(static_cast<unsigned char>(ch)) && ch != '_') {
+            return false;
+        }
+    }
+    return sawLetter;
+}
+
+std::string collapseWhitespaceCopy(std::string_view text) {
+    std::string collapsed;
+    collapsed.reserve(text.size());
+    bool inWhitespace = false;
+    for (const char ch : text) {
+        if (std::isspace(static_cast<unsigned char>(ch))) {
+            if (!collapsed.empty()) {
+                inWhitespace = true;
+            }
+            continue;
+        }
+        if (inWhitespace && !collapsed.empty()) {
+            collapsed.push_back(' ');
+        }
+        inWhitespace = false;
+        collapsed.push_back(ch);
+    }
+    return collapsed;
+}
+
+std::string unquoteStringTokenRaw(const std::string& text) {
+    if (text.size() >= 2 && ((text.front() == '"' && text.back() == '"') || (text.front() == '\'' && text.back() == '\''))) {
+        return text.substr(1, text.size() - 2);
+    }
+    return text;
+}
+
+ParsedTypedefOpstructPattern parseTypedefOpstructPattern(const std::string& rawPattern) {
+    ParsedTypedefOpstructPattern parsed;
+    parsed.rawText = collapseWhitespaceCopy(rawPattern);
+
+    std::string literal;
+    std::unordered_map<int, std::vector<size_t>> recursiveTokenIndices;
+    const auto flushLiteral = [&]() {
+        if (literal.empty()) {
+            return;
+        }
+        TypedefOpstructPatternToken token;
+        token.kind = TypedefOpstructPatternToken::Kind::Literal;
+        token.text = literal;
+        parsed.tokens.push_back(std::move(token));
+        literal.clear();
+    };
+
+    for (size_t index = 0; index < parsed.rawText.size();) {
+        if (parsed.rawText.compare(index, 2, "${") == 0) {
+            const size_t close = parsed.rawText.find('}', index + 2);
+            if (close == std::string::npos) {
+                parsed.valid = false;
+                parsed.error = "unterminated `${...}` placeholder in typedef opstruct matcher";
+                return parsed;
+            }
+            flushLiteral();
+            TypedefOpstructPatternToken token;
+            token.kind = TypedefOpstructPatternToken::Kind::Placeholder;
+            token.text = parsed.rawText.substr(index + 2, close - (index + 2));
+            parsed.tokens.push_back(std::move(token));
+            index = close + 1;
+            continue;
+        }
+        if (parsed.rawText.compare(index, 2, "\\r") == 0) {
+            size_t digitStart = index + 2;
+            size_t digitEnd = digitStart;
+            while (digitEnd < parsed.rawText.size() && std::isdigit(static_cast<unsigned char>(parsed.rawText[digitEnd]))) {
+                ++digitEnd;
+            }
+            if (digitEnd == digitStart || digitEnd >= parsed.rawText.size()) {
+                parsed.valid = false;
+                parsed.error = "invalid `\\rMATCHID` marker in typedef opstruct matcher";
+                return parsed;
+            }
+            flushLiteral();
+            TypedefOpstructPatternToken token;
+            token.recursiveId = std::stoi(parsed.rawText.substr(digitStart, digitEnd - digitStart));
+            token.delimiter = parsed.rawText[digitEnd];
+            parsed.tokens.push_back(std::move(token));
+            recursiveTokenIndices[token.recursiveId].push_back(parsed.tokens.size() - 1);
+            index = digitEnd + 1;
+            continue;
+        }
+        if (std::isalpha(static_cast<unsigned char>(parsed.rawText[index])) || parsed.rawText[index] == '_') {
+            size_t wordEnd = index + 1;
+            while (wordEnd < parsed.rawText.size()) {
+                const char ch = parsed.rawText[wordEnd];
+                if (!std::isalnum(static_cast<unsigned char>(ch)) && ch != '_') {
+                    break;
+                }
+                ++wordEnd;
+            }
+            const std::string_view word(parsed.rawText.data() + index, wordEnd - index);
+            if (isUpperPlaceholderIdentifier(word)) {
+                flushLiteral();
+                TypedefOpstructPatternToken token;
+                token.kind = TypedefOpstructPatternToken::Kind::Placeholder;
+                token.text.assign(word.begin(), word.end());
+                parsed.tokens.push_back(std::move(token));
+                index = wordEnd;
+                continue;
+            }
+        }
+        literal.push_back(parsed.rawText[index]);
+        ++index;
+    }
+    flushLiteral();
+
+    for (const auto& [recursiveId, indices] : recursiveTokenIndices) {
+        if (indices.size() != 2) {
+            parsed.valid = false;
+            parsed.error = "recursive matcher id `" + std::to_string(recursiveId) + "` must appear exactly twice";
+            return parsed;
+        }
+        auto& openToken = parsed.tokens[indices[0]];
+        auto& closeToken = parsed.tokens[indices[1]];
+        const char expectedClose = matchingCloseDelimiter(openToken.delimiter);
+        if (expectedClose != '\0') {
+            if (closeToken.delimiter != expectedClose) {
+                parsed.valid = false;
+                parsed.error = "recursive matcher id `" + std::to_string(recursiveId)
+                    + "` closes with `" + std::string(1, closeToken.delimiter)
+                    + "` but expected `" + std::string(1, expectedClose) + "`";
+                return parsed;
+            }
+        }
+        openToken.kind = TypedefOpstructPatternToken::Kind::RecursiveOpen;
+        closeToken.kind = TypedefOpstructPatternToken::Kind::RecursiveClose;
+        openToken.partnerIndex = indices[1];
+        closeToken.partnerIndex = indices[0];
+    }
+
+    return parsed;
+}
+
+size_t findRecursiveClose(std::string_view text, size_t openIndex, size_t endIndex, char openDelimiter, char closeDelimiter) {
+    if (openIndex >= endIndex || text[openIndex] != openDelimiter) {
+        return std::string::npos;
+    }
+
+    bool inString = false;
+    bool escaping = false;
+    int depth = 0;
+    for (size_t index = openIndex; index < endIndex; ++index) {
+        const char ch = text[index];
+        if (inString) {
+            if (escaping) {
+                escaping = false;
+            } else if (ch == '\\') {
+                escaping = true;
+            } else if (ch == '"') {
+                inString = false;
+            }
+            continue;
+        }
+        if (ch == '"') {
+            inString = true;
+            continue;
+        }
+        if (ch == openDelimiter) {
+            ++depth;
+            continue;
+        }
+        if (ch == closeDelimiter) {
+            --depth;
+            if (depth == 0) {
+                return index;
+            }
+        }
+    }
+    return std::string::npos;
+}
+
+bool matchTypedefOpstructPatternRange(const ParsedTypedefOpstructPattern& pattern,
+    size_t tokenStart,
+    size_t tokenEnd,
+    std::string_view text,
+    size_t textStart,
+    size_t textEnd) {
+    if (tokenStart == tokenEnd) {
+        return textStart == textEnd;
+    }
+
+    const auto& token = pattern.tokens[tokenStart];
+    if (token.kind == TypedefOpstructPatternToken::Kind::Literal) {
+        if (textStart + token.text.size() > textEnd || text.substr(textStart, token.text.size()) != token.text) {
+            return false;
+        }
+        return matchTypedefOpstructPatternRange(pattern, tokenStart + 1, tokenEnd, text, textStart + token.text.size(), textEnd);
+    }
+
+    if (token.kind == TypedefOpstructPatternToken::Kind::Placeholder) {
+        if (tokenStart + 1 == tokenEnd) {
+            return true;
+        }
+        for (size_t split = textStart; split <= textEnd; ++split) {
+            if (matchTypedefOpstructPatternRange(pattern, tokenStart + 1, tokenEnd, text, split, textEnd)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    if (token.kind == TypedefOpstructPatternToken::Kind::RecursiveOpen) {
+        const auto& closeToken = pattern.tokens[token.partnerIndex];
+        const size_t closeIndex = findRecursiveClose(text, textStart, textEnd, token.delimiter, closeToken.delimiter);
+        if (closeIndex == std::string::npos) {
+            return false;
+        }
+        if (!matchTypedefOpstructPatternRange(pattern, tokenStart + 1, token.partnerIndex, text, textStart + 1, closeIndex)) {
+            return false;
+        }
+        return matchTypedefOpstructPatternRange(pattern, token.partnerIndex + 1, tokenEnd, text, closeIndex + 1, textEnd);
+    }
+
+    return false;
+}
+
+bool matchesTypedefOpstructPattern(const ParsedTypedefOpstructPattern& pattern, const std::string& phraseText) {
+    if (!pattern.valid) {
+        return false;
+    }
+    const std::string normalizedText = collapseWhitespaceCopy(phraseText);
+    return matchTypedefOpstructPatternRange(pattern, 0, pattern.tokens.size(), normalizedText, 0, normalizedText.size());
+}
+
+std::string joinTypedefOpstructWords(const std::vector<compilerv1Parser::TypedefOpstructWordContext*>& words) {
+    std::ostringstream builder;
+    for (size_t index = 0; index < words.size(); ++index) {
+        if (index > 0) {
+            builder << ' ';
+        }
+        if (words[index] != nullptr) {
+            builder << words[index]->getText();
+        }
+    }
+    return builder.str();
+}
+
+std::string buildTypedefOpstructPhraseText(const std::vector<compilerv1Parser::TypedefOpstructWordContext*>& words,
+    compilerv1Parser::TypedefOpstructCaptureContext* capture) {
+    std::ostringstream builder;
+    builder << joinTypedefOpstructWords(words);
+    if (capture != nullptr && capture->expression() != nullptr) {
+        if (!words.empty()) {
+            builder << ' ';
+        }
+        builder << capture->expression()->getText();
+    }
+    return builder.str();
+}
+
+std::string buildTypedefOpstructSessionCreateText(compilerv1Parser::TypedefOpstructSessionContext* ctx) {
+    if (ctx == nullptr || ctx->ID().size() < 2) {
+        return {};
+    }
+    return ctx->ID(0)->getText() + std::string(" ") + ctx->ID(1)->getText();
 }
 
 class RuntimeExtensionSurfacePhase final : public ApolloRuntimePhase {
@@ -157,7 +471,7 @@ public:
         throw ApolloCompilationFailure(builder.str());
     }
 
-    std::any visitStdimport(compilerv1Parser::StdimportContext* ctx) {
+    std::any visitStdimport(compilerv1Parser::StdimportContext* ctx) override {
         //TODO: add helper to import from include folder
         return visitChildren(ctx);
     }
@@ -176,6 +490,7 @@ public:
 
     std::any visitCscope(compilerv1Parser::CscopeContext* ctx) override {
         ++autoreleasepoolDepth_;
+        ++pendingAutoreleasepoolBlockScopes_;
         try {
             std::any result = visitChildren(ctx);
             --autoreleasepoolDepth_;
@@ -196,6 +511,114 @@ public:
     std::any visitBridgeInit(compilerv1Parser::BridgeInitContext* ctx) override {
         if (autoreleasepoolDepth_ == 0) {
             addDiagnostic(ctx, "@bridge is only valid inside @autoreleasepool blocks");
+        }
+        ++suppressLocalInitDeclarationDepth_;
+        try {
+            std::any result = visitChildren(ctx);
+            --suppressLocalInitDeclarationDepth_;
+            if (ctx != nullptr && ctx->init() != nullptr && ctx->init()->initCore() != nullptr && ctx->init()->initCore()->ID() != nullptr) {
+                declareLocalBinding(ctx->init()->initCore()->ID()->getText(), true, false);
+            }
+            return result;
+        } catch (...) {
+            --suppressLocalInitDeclarationDepth_;
+            throw;
+        }
+    }
+
+    std::any visitFunction(compilerv1Parser::FunctionContext* ctx) override {
+        ++callableDepth_;
+        try {
+            std::any result = visitChildren(ctx);
+            --callableDepth_;
+            return result;
+        } catch (...) {
+            --callableDepth_;
+            throw;
+        }
+    }
+
+    std::any visitMethod(compilerv1Parser::MethodContext* ctx) override {
+        ++callableDepth_;
+        try {
+            std::any result = visitChildren(ctx);
+            --callableDepth_;
+            return result;
+        } catch (...) {
+            --callableDepth_;
+            throw;
+        }
+    }
+
+    std::any visitBlock(compilerv1Parser::BlockContext* ctx) override {
+        if (callableDepth_ == 0) {
+            return visitChildren(ctx);
+        }
+
+        const bool isAutoreleasepoolScope = pendingAutoreleasepoolBlockScopes_ > 0;
+        if (isAutoreleasepoolScope) {
+            --pendingAutoreleasepoolBlockScopes_;
+        }
+
+        pushLocalScope();
+        try {
+            std::any result = visitChildren(ctx);
+            popLocalScope(isAutoreleasepoolScope);
+            return result;
+        } catch (...) {
+            popLocalScope(isAutoreleasepoolScope);
+            throw;
+        }
+    }
+
+    std::any visitInit(compilerv1Parser::InitContext* ctx) override {
+        std::any result = visitChildren(ctx);
+        if (callableDepth_ == 0 || suppressLocalInitDeclarationDepth_ > 0 || ctx == nullptr || ctx->initCore() == nullptr || ctx->initCore()->ID() == nullptr) {
+            return result;
+        }
+
+        declareLocalBinding(ctx->initCore()->ID()->getText(), false, autoreleasepoolDepth_ > 0);
+        return result;
+    }
+
+    std::any visitAssignment(compilerv1Parser::AssignmentContext* ctx) override {
+        if (ctx != nullptr && ctx->assignmentCore() != nullptr && ctx->assignmentCore()->assignTarget() != nullptr && ctx->assignmentCore()->assignTarget()->ID() != nullptr) {
+            diagnoseExpiredAutoreleaseBindingUse(ctx, ctx->assignmentCore()->assignTarget()->ID()->getText());
+        }
+        return visitChildren(ctx);
+    }
+
+    std::any visitMemberAssignment(compilerv1Parser::MemberAssignmentContext* ctx) override {
+        if (ctx != nullptr && ctx->accessBase() != nullptr && ctx->accessBase()->ID() != nullptr) {
+            diagnoseExpiredAutoreleaseBindingUse(ctx, ctx->accessBase()->ID()->getText());
+        }
+        return visitChildren(ctx);
+    }
+
+    std::any visitMemberaccess(compilerv1Parser::MemberaccessContext* ctx) override {
+        if (ctx != nullptr && ctx->accessBase() != nullptr && ctx->accessBase()->ID() != nullptr) {
+            diagnoseExpiredAutoreleaseBindingUse(ctx, ctx->accessBase()->ID()->getText());
+        }
+        return visitChildren(ctx);
+    }
+
+    std::any visitIndexedAccess(compilerv1Parser::IndexedAccessContext* ctx) override {
+        if (ctx != nullptr && ctx->ID() != nullptr) {
+            diagnoseExpiredAutoreleaseBindingUse(ctx, ctx->ID()->getText());
+        }
+        return visitChildren(ctx);
+    }
+
+    std::any visitBorrowExpr(compilerv1Parser::BorrowExprContext* ctx) override {
+        if (ctx != nullptr && ctx->ID() != nullptr) {
+            diagnoseExpiredAutoreleaseBindingUse(ctx, ctx->ID()->getText());
+        }
+        return visitChildren(ctx);
+    }
+
+    std::any visitPrimary(compilerv1Parser::PrimaryContext* ctx) override {
+        if (ctx != nullptr && ctx->ID() != nullptr) {
+            diagnoseExpiredAutoreleaseBindingUse(ctx, ctx->ID()->getText());
         }
         return visitChildren(ctx);
     }
@@ -245,6 +668,43 @@ public:
         return visitChildren(ctx);
     }
 
+    std::any visitTypedefOpstructCreateStmt(compilerv1Parser::TypedefOpstructCreateStmtContext* ctx) override {
+        validateCreatePhrase(ctx,
+            joinTypedefOpstructWords(ctx != nullptr ? ctx->typedefOpstructWord() : std::vector<compilerv1Parser::TypedefOpstructWordContext*>{}));
+        return visitChildren(ctx);
+    }
+
+    std::any visitTypedefOpstructSession(compilerv1Parser::TypedefOpstructSessionContext* ctx) override {
+        if (ctx == nullptr || ctx->ID().size() < 2) {
+            return visitChildren(ctx);
+        }
+
+        const std::string dslName = ctx->ID(0)->getText();
+        validateCreatePhrase(ctx, buildTypedefOpstructSessionCreateText(ctx), &dslName);
+        const auto definition = typedefOpstructDslDefinitions_.find(dslName);
+        if (definition == typedefOpstructDslDefinitions_.end()) {
+            addDiagnostic(ctx, "typedef opstruct session `" + buildTypedefOpstructSessionCreateText(ctx)
+                + "` refers to unknown typedef opstruct DSL `" + dslName + "`");
+            return visitChildren(ctx);
+        }
+
+        for (auto* command : ctx->typedefOpstructCommand()) {
+            if (command == nullptr) {
+                continue;
+            }
+            validateSourcePhrase(command, buildTypedefOpstructPhraseText(command->typedefOpstructWord(), command->typedefOpstructCapture()), &dslName);
+        }
+        return visitChildren(ctx);
+    }
+
+    std::any visitTypedefOpstructPhraseStmt(compilerv1Parser::TypedefOpstructPhraseStmtContext* ctx) override {
+        validateSourcePhrase(ctx,
+            buildTypedefOpstructPhraseText(ctx != nullptr ? ctx->typedefOpstructWord() : std::vector<compilerv1Parser::TypedefOpstructWordContext*>{},
+                ctx != nullptr ? ctx->typedefOpstructCapture() : nullptr),
+            nullptr);
+        return visitChildren(ctx);
+    }
+
     std::any visitSettingDirective(compilerv1Parser::SettingDirectiveContext* ctx) override {
         if (ctx != nullptr && ctx->ID() != nullptr && ctx->settingValue() != nullptr) {
             const std::string key = ctx->ID()->getText();
@@ -278,7 +738,22 @@ public:
         return visitChildren(ctx);
     }
 
+    std::any visitClosure(compilerv1Parser::ClosureContext* ctx) override {
+        validateClosureSignature(ctx);
+        return visitChildren(ctx);
+    }
+
 private:
+    struct TypedefOpstructDslPattern {
+        std::string rawText;
+        ParsedTypedefOpstructPattern parsed;
+    };
+
+    struct TypedefOpstructDslDefinition {
+        std::vector<TypedefOpstructDslPattern> createPatterns;
+        std::vector<TypedefOpstructDslPattern> sourcePatterns;
+    };
+
     void collectProgramSurface(compilerv1Parser::ProgramContext* tree) {
         for (auto* child : tree->children) {
             if (auto* functionCtx = dynamic_cast<compilerv1Parser::FunctionContext*>(child)) {
@@ -308,6 +783,8 @@ private:
             if (auto* typedefOpstructCtx = dynamic_cast<compilerv1Parser::TypedefOpstructContext*>(child)) {
                 if (typedefOpstructCtx->ID().size() > 1) {
                     typedefOpstructAliases_.emplace(typedefOpstructCtx->ID(1)->getText(), typedefOpstructCtx->ID(0)->getText());
+                } else {
+                    collectTypedefOpstructDslDefinition(typedefOpstructCtx);
                 }
                 continue;
             }
@@ -333,6 +810,93 @@ private:
         }
     }
 
+    void collectTypedefOpstructDslDefinition(compilerv1Parser::TypedefOpstructContext* ctx) {
+        if (ctx == nullptr || ctx->ID().size() != 1 || ctx->typedefOpstructDslBody() == nullptr) {
+            return;
+        }
+
+        auto& definition = typedefOpstructDslDefinitions_[ctx->ID(0)->getText()];
+        for (auto* entry : ctx->typedefOpstructDslBody()->typedefOpstructDslEntry()) {
+            if (entry == nullptr) {
+                continue;
+            }
+            if (auto* asgEntry = entry->typedefOpstructAsgEntry()) {
+                addTypedefOpstructPattern(definition.createPatterns, asgEntry->STRING() != nullptr ? asgEntry->STRING()->getText() : std::string(), asgEntry);
+                continue;
+            }
+            if (auto* srcEntry = entry->typedefOpstructSrcEntry()) {
+                addTypedefOpstructPattern(definition.sourcePatterns, srcEntry->STRING() != nullptr ? srcEntry->STRING()->getText() : std::string(), srcEntry);
+            }
+        }
+    }
+
+    void addTypedefOpstructPattern(std::vector<TypedefOpstructDslPattern>& destination,
+        const std::string& stringTokenText,
+        antlr4::ParserRuleContext* ctx) {
+        TypedefOpstructDslPattern pattern;
+        pattern.rawText = unquoteStringTokenRaw(stringTokenText);
+        pattern.parsed = parseTypedefOpstructPattern(pattern.rawText);
+        if (!pattern.parsed.valid) {
+            addDiagnostic(ctx, pattern.parsed.error + " in pattern `" + pattern.rawText + "`");
+            return;
+        }
+        destination.push_back(std::move(pattern));
+    }
+
+    void validateCreatePhrase(antlr4::ParserRuleContext* ctx, const std::string& phraseText, const std::string* preferredDslName = nullptr) {
+        if (phraseText.empty()) {
+            return;
+        }
+
+        std::vector<std::string> matchedDefinitions;
+        if (preferredDslName != nullptr) {
+            const auto definition = typedefOpstructDslDefinitions_.find(*preferredDslName);
+            if (definition != typedefOpstructDslDefinitions_.end() && matchesAnyPattern(definition->second.createPatterns, phraseText)) {
+                matchedDefinitions.push_back(*preferredDslName);
+            }
+        } else {
+            for (const auto& [name, definition] : typedefOpstructDslDefinitions_) {
+                if (matchesAnyPattern(definition.createPatterns, phraseText)) {
+                    matchedDefinitions.push_back(name);
+                }
+            }
+        }
+
+        if (matchedDefinitions.empty()) {
+            addDiagnostic(ctx, "typedef opstruct create phrase `" + phraseText + "` does not match any declared `asg(...)` pattern");
+        }
+    }
+
+    void validateSourcePhrase(antlr4::ParserRuleContext* ctx, const std::string& phraseText, const std::string* preferredDslName) {
+        if (phraseText.empty()) {
+            return;
+        }
+
+        std::vector<std::string> matchedDefinitions;
+        if (preferredDslName != nullptr) {
+            const auto definition = typedefOpstructDslDefinitions_.find(*preferredDslName);
+            if (definition != typedefOpstructDslDefinitions_.end() && matchesAnyPattern(definition->second.sourcePatterns, phraseText)) {
+                matchedDefinitions.push_back(*preferredDslName);
+            }
+        } else {
+            for (const auto& [name, definition] : typedefOpstructDslDefinitions_) {
+                if (matchesAnyPattern(definition.sourcePatterns, phraseText)) {
+                    matchedDefinitions.push_back(name);
+                }
+            }
+        }
+
+        if (matchedDefinitions.empty()) {
+            addDiagnostic(ctx, "typedef opstruct phrase `" + phraseText + "` does not match any declared `src(...)` pattern");
+        }
+    }
+
+    static bool matchesAnyPattern(const std::vector<TypedefOpstructDslPattern>& patterns, const std::string& phraseText) {
+        return std::any_of(patterns.begin(), patterns.end(), [&](const TypedefOpstructDslPattern& pattern) {
+            return matchesTypedefOpstructPattern(pattern.parsed, phraseText);
+        });
+    }
+
     static bool isAcceptedRuntimePolicyValue(const std::string& key, const std::string& value) {
         if (key == "fallback") {
             return value == "allow";
@@ -350,6 +914,50 @@ private:
             return value == "off" || value == "none";
         }
         return false;
+    }
+
+    void validateClosureSignature(compilerv1Parser::ClosureContext* ctx) {
+        if (ctx == nullptr || ctx->ID() == nullptr || ctx->typeRef() == nullptr || ctx->typeRef()->typeAtom() == nullptr) {
+            return;
+        }
+
+        auto* typeAtom = ctx->typeRef()->typeAtom();
+        auto* functionType = typeAtom->functionType();
+        if (functionType == nullptr) {
+            if (typeAtom->getText() != "auto") {
+                addDiagnostic(ctx, "closure `" + ctx->ID()->getText() + "` requires a `fn<...>` or `auto` binding type");
+            }
+            return;
+        }
+
+        const auto& declaredArgs = functionType->functionTypeArgs() != nullptr
+            ? functionType->functionTypeArgs()->typeRef()
+            : std::vector<compilerv1Parser::TypeRefContext*>{};
+        const std::size_t actualCount = ctx->params() != nullptr ? ctx->params()->param().size() : 0;
+        if (declaredArgs.size() != actualCount) {
+            std::ostringstream builder;
+            builder << "closure `" << ctx->ID()->getText() << "` parameter count mismatch: declared "
+                    << declaredArgs.size() << " but closure defines " << actualCount;
+            addDiagnostic(ctx, builder.str());
+            return;
+        }
+
+        for (std::size_t index = 0; index < actualCount; ++index) {
+            auto* declaredType = declaredArgs[index];
+            auto* actualParam = ctx->params()->param(index);
+            if (declaredType == nullptr || actualParam == nullptr || actualParam->typeRef() == nullptr) {
+                addDiagnostic(ctx, "closure `" + ctx->ID()->getText() + "` has unsupported parameter shape");
+                return;
+            }
+            if (declaredType->getText() != actualParam->typeRef()->getText()) {
+                std::ostringstream builder;
+                builder << "closure `" << ctx->ID()->getText() << "` parameter " << index
+                        << " type mismatch: declared `" << declaredType->getText()
+                        << "` but closure defines `" << actualParam->typeRef()->getText() << "`";
+                addDiagnostic(ctx, builder.str());
+                return;
+            }
+        }
     }
 
     bool resolvesDeclaredOpstructTarget(const std::string& targetName) const {
@@ -372,6 +980,67 @@ private:
         return false;
     }
 
+    struct LocalBinding {
+        std::string name;
+        bool expiresWithAutoreleasepool = false;
+    };
+
+    struct LocalScope {
+        std::vector<LocalBinding> bindings;
+    };
+
+    void pushLocalScope() {
+        localScopes_.push_back(LocalScope{});
+    }
+
+    void popLocalScope(bool isAutoreleasepoolScope) {
+        if (localScopes_.empty()) {
+            return;
+        }
+
+        LocalScope scope = std::move(localScopes_.back());
+        localScopes_.pop_back();
+        for (auto it = scope.bindings.rbegin(); it != scope.bindings.rend(); ++it) {
+            auto activeIt = activeLocalBindings_.find(it->name);
+            if (activeIt != activeLocalBindings_.end()) {
+                activeIt->second -= 1;
+                if (activeIt->second <= 0) {
+                    activeLocalBindings_.erase(activeIt);
+                }
+            }
+
+            if (isAutoreleasepoolScope && it->expiresWithAutoreleasepool && !activeLocalBindings_.contains(it->name)) {
+                expiredAutoreleaseBindings_.insert(it->name);
+            }
+        }
+    }
+
+    void declareLocalBinding(const std::string& name, bool bridgedOut, bool expiresWithAutoreleasepool) {
+        if (name.empty() || callableDepth_ == 0 || localScopes_.empty()) {
+            return;
+        }
+
+        const std::size_t targetIndex = bridgedOut && localScopes_.size() > 1
+            ? localScopes_.size() - 2
+            : localScopes_.size() - 1;
+        localScopes_[targetIndex].bindings.push_back(LocalBinding{name, expiresWithAutoreleasepool && !bridgedOut});
+        activeLocalBindings_[name] += 1;
+        expiredAutoreleaseBindings_.erase(name);
+    }
+
+    void diagnoseExpiredAutoreleaseBindingUse(antlr4::ParserRuleContext* ctx, const std::string& name) {
+        if (name.empty() || activeLocalBindings_.contains(name) || !expiredAutoreleaseBindings_.contains(name)) {
+            return;
+        }
+        if (!reportedExpiredAutoreleaseBindings_.insert(name).second) {
+            return;
+        }
+
+        addDiagnostic(ctx,
+            "cannot use `" + name + "` after leaving `@autoreleasepool` because it was not declared with `@bridge`\n"
+            "suggested fix: move `" + name + "` outside the pool or declare it with `@bridge`");
+    }
+
     void addDiagnostic(antlr4::ParserRuleContext* ctx, const std::string& message) {
         diagnostics_.push_back(cycle_.recordRuleDiagnosticPreview("runtime-surface", ctx, message));
     }
@@ -382,11 +1051,19 @@ private:
     std::unordered_set<std::string> declaredMemstructs_;
     std::unordered_set<std::string> declaredOpstructs_;
     std::unordered_map<std::string, std::string> typedefOpstructAliases_;
+    std::unordered_map<std::string, TypedefOpstructDslDefinition> typedefOpstructDslDefinitions_;
     std::unordered_set<std::string> blockedFallbackSymbols_;
     const std::unordered_set<std::string> knownRuntimePolicies_ = {"fallback", "scheduler", "macro_mode", "gc", "gcmode", "borrow_checker", "borrow_check"};
     int autofmtDepth_ = 0;
     int autoreleasepoolDepth_ = 0;
+    int pendingAutoreleasepoolBlockScopes_ = 0;
+    int callableDepth_ = 0;
+    int suppressLocalInitDeclarationDepth_ = 0;
     bool fallbackAllowed_ = false;
+    std::vector<LocalScope> localScopes_;
+    std::unordered_map<std::string, int> activeLocalBindings_;
+    std::unordered_set<std::string> expiredAutoreleaseBindings_;
+    std::unordered_set<std::string> reportedExpiredAutoreleaseBindings_;
 };
 
 class FrontendSurfacePhase final : public ApolloRuntimePhase {
@@ -897,6 +1574,38 @@ private:
     ApolloCompilerRuntimeCycle* owner_;
 };
 
+std::string trimDiagnosticText(std::string text) {
+    const auto first = text.find_first_not_of(" \t\r\n");
+    if (first == std::string::npos) {
+        return {};
+    }
+    const auto last = text.find_last_not_of(" \t\r\n");
+    return text.substr(first, last - first + 1);
+}
+
+std::string summarizeExpectedTokenSet(std::string expected) {
+    expected = trimDiagnosticText(std::move(expected));
+    constexpr std::size_t kMaxExpectedLength = 160;
+    if (expected.size() <= kMaxExpectedLength) {
+        return expected;
+    }
+    return expected.substr(0, kMaxExpectedLength - 15) + "... (truncated)";
+}
+
+bool syntaxMessageAlreadyIncludesExpected(const std::string& message, const std::string& expected) {
+    if (expected.empty()) {
+        return true;
+    }
+
+    const std::string trimmedExpected = trimDiagnosticText(expected);
+    if (trimmedExpected.empty()) {
+        return true;
+    }
+
+    return message.find("expecting " + trimmedExpected) != std::string::npos
+        || message.find("expected one of: " + trimmedExpected) != std::string::npos;
+}
+
 } // namespace
 
 ApolloCompilationFailure::ApolloCompilationFailure(const std::string& message)
@@ -1160,8 +1869,8 @@ void FormattingErrorListener::syntaxError(antlr4::Recognizer* recognizer, antlr4
         offendingText = offendingSymbol->getText();
         auto* parser = dynamic_cast<antlr4::Parser*>(recognizer);
         if (parser != nullptr) {
-            const std::string expected = parser->getExpectedTokens().toString(parser->getVocabulary());
-            if (!expected.empty()) {
+            const std::string expected = summarizeExpectedTokenSet(parser->getExpectedTokens().toString(parser->getVocabulary()));
+            if (!expected.empty() && !syntaxMessageAlreadyIncludesExpected(finalMessage, expected)) {
                 finalMessage += "\nexpected one of: " + expected;
             }
         }

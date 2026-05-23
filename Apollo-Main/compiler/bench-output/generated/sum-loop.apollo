@@ -1,0 +1,15 @@
+extern iostream;
+
+int main() {
+    nconst i32 total = 0;
+    nconst i32 delta = 1;
+    for (nconst i32 index = 0; index < 20000; index = index + 1) {
+        total = total + delta;
+        delta = delta + 1;
+        if (delta > 9) {
+            delta = 1;
+        }
+    }
+    sys.stdout(total);
+    return 0;
+}

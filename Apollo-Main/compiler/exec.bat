@@ -132,6 +132,12 @@ if not defined APOLLO_NATIVE_CMAKE_PREFIX if defined APOLLO_MSYS64_ROOT if exist
 if defined APOLLO_NATIVE_C_COMPILER set "APOLLO_NATIVE_C_COMPILER_SLASH=%APOLLO_NATIVE_C_COMPILER:\=/%"
 if defined APOLLO_NATIVE_CXX_COMPILER set "APOLLO_NATIVE_CXX_COMPILER_SLASH=%APOLLO_NATIVE_CXX_COMPILER:\=/%"
 
+if /I "%COMMAND%"=="ctall" if "%BIN_MODE%"=="1" if /I "%BIN_OUTPUT_MODE%"=="windows" (
+    call :try_fast_windows_bin "%PRESET_RAW_INPUT%" "%PRESET_RAW_OUTPUT%"
+    set "FAST_PATH_STATUS=!errorlevel!"
+    if not "!FAST_PATH_STATUS!"=="2" exit /b !FAST_PATH_STATUS!
+)
+
 if not defined APOLLO_CXX_STD set "APOLLO_CXX_STD=c++20"
 if not defined APOLLO_OPT_LEVEL set "APOLLO_OPT_LEVEL=3"
 if not defined APOLLO_LLC_OPT_LEVEL set "APOLLO_LLC_OPT_LEVEL=%APOLLO_OPT_LEVEL%"
@@ -230,39 +236,9 @@ echo        apollo --update
 echo        apollo -m uninstall
 exit /b 1
 
-:manage_version
-if not exist "%MANAGE_SCRIPT%" (
-    echo Apollo management script not found: %MANAGE_SCRIPT%
-    exit /b 1
-)
-powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action version -InstallDir "%MANAGE_INSTALL_DIR%"
-exit /b %errorlevel%
-
-:manage_update
-if not exist "%MANAGE_SCRIPT%" (
-    echo Apollo management script not found: %MANAGE_SCRIPT%
-    exit /b 1
-)
-powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action update -InstallDir "%MANAGE_INSTALL_DIR%"
-exit /b %errorlevel%
-
-:manage_uninstall
-if not "%RAW_OUTPUT%"=="" (
-    echo Unexpected extra argument. Usage: apollo -m uninstall
-    exit /b 1
-)
-if not exist "%MANAGE_SCRIPT%" (
-    echo Apollo management script not found: %MANAGE_SCRIPT%
-    exit /b 1
-)
-powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action uninstall -InstallDir "%MANAGE_INSTALL_DIR%"
-exit /b %errorlevel%
-
 :ctall
 if "%BIN_MODE%"=="1" (
-    set "NORMALIZED_OUTPUT=!RAW_OUTPUT!"
-    if "!RAW_OUTPUT:~1,1!"==":" if not "!RAW_OUTPUT:~2,1!"=="\" if not "!RAW_OUTPUT:~2,1!"=="/" set "NORMALIZED_OUTPUT=!RAW_OUTPUT:~0,2!\!RAW_OUTPUT:~2!"
-    for %%I in ("!NORMALIZED_OUTPUT!") do set "BIN_OUTPUT=%%~fI"
+    for %%I in ("%RAW_OUTPUT%") do set "BIN_OUTPUT=%%~fI"
     if /I "!BIN_OUTPUT_MODE!"=="host" for %%I in ("!BIN_OUTPUT!") do if "%%~xI"=="" set "BIN_OUTPUT=!BIN_OUTPUT!.exe"
     if /I "!BIN_OUTPUT_MODE!"=="windows" for %%I in ("!BIN_OUTPUT!") do if "%%~xI"=="" set "BIN_OUTPUT=!BIN_OUTPUT!.exe"
     for %%I in ("!BIN_OUTPUT!") do if not "%%~dpI"=="" if not exist "%%~dpI" mkdir "%%~dpI"
@@ -337,6 +313,86 @@ popd
 call :cleanup_generated
 popd
 exit /b %EXIT_CODE%
+
+:try_fast_windows_bin
+if "%~1"=="" (
+    if defined APOLLO_FASTPATH_TRACE echo missing-input>"%APOLLO_FASTPATH_TRACE%"
+    exit /b 2
+)
+if "%~2"=="" (
+    if defined APOLLO_FASTPATH_TRACE echo missing-output>"%APOLLO_FASTPATH_TRACE%"
+    exit /b 2
+)
+if not exist "%NATIVE_BUILD_DIR%\CMakeCache.txt" (
+    if defined APOLLO_FASTPATH_TRACE echo missing-build-cache>"%APOLLO_FASTPATH_TRACE%"
+    exit /b 2
+)
+if defined APOLLO_FASTPATH_TRACE echo entered>"%APOLLO_FASTPATH_TRACE%"
+if /I "%APOLLO_SHOW_FILE_DETAILS%"=="1" echo Using fast Windows binary path
+
+call :resolve_cmake
+if errorlevel 1 (
+    if defined APOLLO_FASTPATH_TRACE echo missing-cmake>>"%APOLLO_FASTPATH_TRACE%"
+    exit /b 2
+)
+
+setlocal EnableDelayedExpansion
+set "FAST_DRIVER="
+for %%I in ("%NATIVE_BUILD_DIR%\%NATIVE_BUILD_CONFIG%\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\Debug\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\Release\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\RelWithDebInfo\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\MinSizeRel\apollo_build_driver_native.exe") do (
+    if not defined FAST_DRIVER if exist "%%~fI" set "FAST_DRIVER=%%~fI"
+)
+if not defined FAST_DRIVER endlocal & exit /b 2
+
+for %%I in ("%~1") do set "FAST_INPUT=%%~fI"
+for %%I in ("%~2") do set "FAST_OUTPUT=%%~fI"
+set "APOLLO_TARGET_TRIPLE=%CLI_TARGET_TRIPLE%"
+
+pushd "%SCRIPT_DIR%"
+call :run_quiet_command "%CMAKE_EXE%" --build "%NATIVE_BUILD_DIR%" --config "%NATIVE_BUILD_CONFIG%" --target apollo_build_driver_native
+set "FAST_BUILD_STATUS=!errorlevel!"
+if not "!FAST_BUILD_STATUS!"=="0" (
+    popd
+    endlocal & exit /b !FAST_BUILD_STATUS!
+)
+
+"!FAST_DRIVER!" build-aot "!FAST_INPUT!" "!FAST_OUTPUT!"
+set "FAST_DRIVER_STATUS=!errorlevel!"
+if not "!FAST_DRIVER_STATUS!"=="0" (
+    popd
+    endlocal & exit /b !FAST_DRIVER_STATUS!
+)
+
+call :cleanup_generated "!FAST_OUTPUT!"
+if /I "%APOLLO_SHOW_FILE_DETAILS%"=="1" echo Wrote binary to !FAST_OUTPUT!
+popd
+endlocal & exit /b 0
+
+:manage_version
+if exist "%CLEANUP_SCRIPT%" (
+    if "%~1"=="" (
+        powershell -NoProfile -ExecutionPolicy Bypass -File "%CLEANUP_SCRIPT%" -ManifestPath "%MANIFEST_PATH%" -OutputDir "%SCRIPT_DIR%output" >nul 2>nul
+    ) else (
+        powershell -NoProfile -ExecutionPolicy Bypass -File "%CLEANUP_SCRIPT%" -ManifestPath "%MANIFEST_PATH%" -OutputDir "%SCRIPT_DIR%output" -PreservePath "%~1" >nul 2>nul
+    )
+)
+call :invoke_manage_script version
+exit /b %errorlevel%
+
+:manage_update
+call :invoke_manage_script update
+exit /b %errorlevel%
+
+:manage_uninstall
+call :invoke_manage_script uninstall
+exit /b %errorlevel%
+
+:invoke_manage_script
+if not exist "%MANAGE_SCRIPT%" (
+    echo Apollo management script not found: %MANAGE_SCRIPT%
+    exit /b 1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "%MANAGE_SCRIPT%" -Action "%~1" -InstallDir "%MANAGE_INSTALL_DIR%"
+exit /b %errorlevel%
 
 :analyze
 call :prepare_codegen
@@ -423,16 +479,14 @@ set "NEED_NATIVE_BUILD=0"
 if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="1" set "NEED_NATIVE_BUILD=1"
 if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="true" set "NEED_NATIVE_BUILD=1"
 if /I "%APOLLO_FORCE_NATIVE_REBUILD%"=="yes" set "NEED_NATIVE_BUILD=1"
-if "%NEED_NATIVE_BUILD%"=="0" (
-    for %%T in (%*) do (
-        call :resolve_native_executable %%T RESOLVED_NATIVE_TARGET
-        if errorlevel 1 (
-            set "NEED_NATIVE_BUILD=1"
-        ) else (
-            call :native_target_stale "!RESOLVED_NATIVE_TARGET!"
-            if not errorlevel 1 set "NEED_NATIVE_BUILD=1"
-            if /I "%%T"=="apollo_build_driver_native" set "APOLLO_BUILD_DRIVER_EXE=!RESOLVED_NATIVE_TARGET!"
-        )
+for %%T in (%*) do (
+    call :resolve_native_executable %%T RESOLVED_NATIVE_TARGET
+    if errorlevel 1 (
+        set "NEED_NATIVE_BUILD=1"
+    ) else (
+        call :native_target_stale "!RESOLVED_NATIVE_TARGET!"
+        if not errorlevel 1 set "NEED_NATIVE_BUILD=1"
+        if /I "%%T"=="apollo_build_driver_native" set "APOLLO_BUILD_DRIVER_EXE=!RESOLVED_NATIVE_TARGET!"
     )
 )
 
@@ -444,6 +498,20 @@ if "%NEED_NATIVE_BUILD%"=="1" (
 call :resolve_native_executable apollo_build_driver_native APOLLO_BUILD_DRIVER_EXE
 if errorlevel 1 exit /b !errorlevel!
 exit /b 0
+
+:native_target_stale
+setlocal
+set "TARGET_PATH=%~1"
+if not exist "%TARGET_PATH%" endlocal & exit /b 0
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+    "$target = Get-Item -LiteralPath '%TARGET_PATH%';" ^
+    "$dependencies = @('%NATIVE_SOURCE_DIR%\CMakeLists.txt', '%SCRIPT_DIR%compilerv1.g4');" ^
+    "foreach ($dependency in $dependencies) { if (-not (Test-Path -LiteralPath $dependency)) { exit 0 }; if ((Get-Item -LiteralPath $dependency).LastWriteTimeUtc -gt $target.LastWriteTimeUtc) { exit 0 } }" ^
+    "$sourceDirs = @('%NATIVE_SOURCE_DIR%\src', '%NATIVE_SOURCE_DIR%\generated');" ^
+    "foreach ($sourceDir in $sourceDirs) { if (-not (Test-Path -LiteralPath $sourceDir)) { continue }; $stale = Get-ChildItem -LiteralPath $sourceDir -Recurse -File | Where-Object { $_.Extension -in '.cpp', '.h' -and $_.LastWriteTimeUtc -gt $target.LastWriteTimeUtc } | Select-Object -First 1; if ($null -ne $stale) { exit 0 } }" ^
+    "exit 1"
+set "STATUS=%errorlevel%"
+endlocal & exit /b %STATUS%
 
 :native_build_cache_valid
 if not exist "%NATIVE_BUILD_DIR%\CMakeFiles" exit /b 1
@@ -514,19 +582,6 @@ if defined APOLLO_NATIVE_GENERATOR (
     )
 )
 exit /b !errorlevel!
-
-:native_target_stale
-if not exist "%~1" exit /b 0
-powershell -NoProfile -Command ^
-    "$target = Get-Item -LiteralPath '%~1' -ErrorAction Stop;" ^
-    "$deps = @();" ^
-    "$deps += Get-Item -LiteralPath '%NATIVE_SOURCE_DIR%\CMakeLists.txt', '%SCRIPT_DIR%compilerv1.g4' -ErrorAction SilentlyContinue;" ^
-    "$deps += Get-ChildItem -LiteralPath '%NATIVE_SOURCE_DIR%\src', '%NATIVE_SOURCE_DIR%\generated' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -in '.cpp', '.h' };" ^
-    "$latest = $deps | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1;" ^
-    "if ($null -eq $latest) { exit 1 }" ^
-    "if ($latest.LastWriteTimeUtc -gt $target.LastWriteTimeUtc) { exit 0 }" ^
-    "exit 1"
-exit /b %errorlevel%
 
 :resolve_cmake
 if defined CMAKE_EXE if exist "%CMAKE_EXE%" exit /b 0
@@ -605,14 +660,38 @@ popd
 exit /b %EXIT_CODE%
 
 :cleanup_generated
-if exist "%CLEANUP_SCRIPT%" (
-    if "%~1"=="" (
-        powershell -NoProfile -ExecutionPolicy Bypass -File "%CLEANUP_SCRIPT%" -ManifestPath "%MANIFEST_PATH%" -OutputDir "%SCRIPT_DIR%output" >nul 2>nul
-    ) else (
-        powershell -NoProfile -ExecutionPolicy Bypass -File "%CLEANUP_SCRIPT%" -ManifestPath "%MANIFEST_PATH%" -OutputDir "%SCRIPT_DIR%output" -PreservePath "%~1" >nul 2>nul
+setlocal EnableDelayedExpansion
+set "PRESERVE_PATH="
+if not "%~1"=="" for %%I in ("%~1") do set "PRESERVE_PATH=%%~fI"
+if exist "%MANIFEST_PATH%" (
+    for /f "usebackq delims=" %%I in ("%MANIFEST_PATH%") do (
+        if not "%%~I"=="" call :cleanup_target "%%~I" "!PRESERVE_PATH!"
     )
 )
+if exist "%SCRIPT_DIR%output" (
+    for /f "delims=" %%I in ('dir /b /a "%SCRIPT_DIR%output" 2^>nul') do (
+        call :cleanup_target "%SCRIPT_DIR%output\%%I" "!PRESERVE_PATH!"
+    )
+)
+endlocal
 exit /b 0
+
+:cleanup_target
+setlocal EnableDelayedExpansion
+for %%I in ("%~1") do set "TARGET_PATH=%%~fI"
+set "PRESERVE_PATH=%~2"
+set "SKIP_DELETE=0"
+if defined PRESERVE_PATH if /I "!TARGET_PATH!"=="!PRESERVE_PATH!" set "SKIP_DELETE=1"
+if /I "!TARGET_PATH!"=="%SCRIPT_DIR_NO_SLASH%\output\classes" set "SKIP_DELETE=1"
+if /I "!TARGET_PATH!"=="%SCRIPT_DIR_NO_SLASH%\output\cache" set "SKIP_DELETE=1"
+for %%I in ("!TARGET_PATH!") do if /I "%%~xI"==".pch" set "SKIP_DELETE=1"
+if "!SKIP_DELETE!"=="1" endlocal & exit /b 0
+if exist "!TARGET_PATH!\*" (
+    rmdir /s /q "!TARGET_PATH!" >nul 2>nul
+) else if exist "!TARGET_PATH!" (
+    del /f /q "!TARGET_PATH!" >nul 2>nul
+)
+endlocal & exit /b 0
 
 :configure_gc_support
 set "GC_COMPILE_FLAGS="

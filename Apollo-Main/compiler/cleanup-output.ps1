@@ -50,11 +50,18 @@ function Should-PreserveOutputChild {
 
     $outputClasses = Join-Path $NormalizedOutputDir 'classes'
     $outputCache = Join-Path $NormalizedOutputDir 'cache'
-    if ($normalizedChild -ieq $outputClasses -or $normalizedChild -ieq $outputCache) {
+    $outputDeps = Join-Path $NormalizedOutputDir 'deps'
+    $outputLl = Join-Path $NormalizedOutputDir 'output.ll'
+    if ($normalizedChild -ieq $outputClasses -or $normalizedChild -ieq $outputCache -or $normalizedChild -ieq $outputDeps -or $normalizedChild -ieq $outputLl) {
         return $true
     }
 
     if ([System.IO.Path]::GetExtension($normalizedChild) -ieq '.pch') {
+        return $true
+    }
+
+    $fileName = [System.IO.Path]::GetFileName($normalizedChild)
+    if ($fileName -like 'apollo_direct_ir_runtime_support.*') {
         return $true
     }
 

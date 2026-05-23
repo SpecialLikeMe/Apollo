@@ -113,7 +113,19 @@ namespace sys {
 
 @unsafe {
     inline::cpp {
+        #include <cstdarg>
+
         #include "apo_std_object_runtime.hpp"
+
+        extern "C" int sys__printf(const char* format, ...) {
+            std::string format_text = std::string(__apo_stdlib::view_or_empty(format));
+            std::va_list args;
+            va_start(args, format);
+            const int written = std::vprintf(format_text.c_str(), args);
+            va_end(args);
+            std::fflush(stdout);
+            return written;
+        }
 
         void sys__native_term_print_raw(const char* value) { __apo_stdlib::term_print_raw(__apo_stdlib::view_or_empty(value)); }
         void sys__native_term_println_raw(const char* value) { __apo_stdlib::term_println_raw(__apo_stdlib::view_or_empty(value)); }

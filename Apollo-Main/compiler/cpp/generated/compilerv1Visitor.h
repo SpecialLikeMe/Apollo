@@ -145,6 +145,18 @@ public:
 
     virtual std::any visitLambda(compilerv1Parser::LambdaContext *context) = 0;
 
+    virtual std::any visitClosure(compilerv1Parser::ClosureContext *context) = 0;
+
+    virtual std::any visitClosureCaptureList(compilerv1Parser::ClosureCaptureListContext *context) = 0;
+
+    virtual std::any visitClosureCaptureSpec(compilerv1Parser::ClosureCaptureSpecContext *context) = 0;
+
+    virtual std::any visitClosureEntryPoint(compilerv1Parser::ClosureEntryPointContext *context) = 0;
+
+    virtual std::any visitClosureBody(compilerv1Parser::ClosureBodyContext *context) = 0;
+
+    virtual std::any visitClosureBodyItem(compilerv1Parser::ClosureBodyItemContext *context) = 0;
+
     virtual std::any visitLambdaDefinition(compilerv1Parser::LambdaDefinitionContext *context) = 0;
 
     virtual std::any visitLambdaLiteral(compilerv1Parser::LambdaLiteralContext *context) = 0;
@@ -222,6 +234,8 @@ public:
     virtual std::any visitAutocatchStatement(compilerv1Parser::AutocatchStatementContext *context) = 0;
 
     virtual std::any visitAssignment(compilerv1Parser::AssignmentContext *context) = 0;
+
+    virtual std::any visitMemberAssignment(compilerv1Parser::MemberAssignmentContext *context) = 0;
 
     virtual std::any visitAssignmentCore(compilerv1Parser::AssignmentCoreContext *context) = 0;
 

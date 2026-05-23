@@ -267,6 +267,30 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitClosure(compilerv1Parser::ClosureContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitClosureCaptureList(compilerv1Parser::ClosureCaptureListContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitClosureCaptureSpec(compilerv1Parser::ClosureCaptureSpecContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitClosureEntryPoint(compilerv1Parser::ClosureEntryPointContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitClosureBody(compilerv1Parser::ClosureBodyContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitClosureBodyItem(compilerv1Parser::ClosureBodyItemContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitLambdaDefinition(compilerv1Parser::LambdaDefinitionContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -420,6 +444,10 @@ public:
   }
 
   virtual std::any visitAssignment(compilerv1Parser::AssignmentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitMemberAssignment(compilerv1Parser::MemberAssignmentContext *ctx) override {
     return visitChildren(ctx);
   }
 

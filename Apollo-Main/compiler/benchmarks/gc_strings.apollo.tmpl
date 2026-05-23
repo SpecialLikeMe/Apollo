@@ -1,0 +1,45 @@
+#[gcmode(total)]
+extern std prelude;
+
+struct GcState {
+    public str rolling;
+    public i32 checksum;
+}
+
+int main() {
+    str rolling = "apollo";
+    i32 checksum = 0;
+    i32 phase = 0;
+
+    for (i32 index = 0; index < __LIMIT__; index = index + 1) {
+        str chunk = "beta";
+        if (phase == 0) {
+            chunk = "alpha";
+        } else {
+            if (phase == 1) {
+                chunk = "gamma";
+            }
+        }
+
+        rolling = sys.str_concat(rolling, chunk);
+        if (sys.str_len(rolling) > 48) {
+            rolling = sys.str_substring(rolling, sys.str_len(rolling) - 48, 48);
+        }
+        checksum = checksum + sys.str_len(rolling) + sys.str_contains(rolling, "ta");
+
+        GcState snapshot = {
+            .rolling = rolling,
+            .checksum = checksum
+        };
+        rolling = snapshot.rolling;
+        checksum = snapshot.checksum;
+
+        phase = phase + 1;
+        if (phase == 3) {
+            phase = 0;
+        }
+    }
+
+    sys.stdout(checksum);
+    return 0;
+}

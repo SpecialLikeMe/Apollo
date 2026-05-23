@@ -944,6 +944,56 @@ private:
         localScopes.pop_back();
     }
 
+    void collectLambdaManagedCaptures(compilerv1Parser::ClosureBodyContext* closureBody, State& state,
+        std::vector<std::unordered_set<std::string>>& localScopes,
+        std::string& capturedName) {
+        if (closureBody == nullptr || !capturedName.empty()) {
+            return;
+        }
+        localScopes.emplace_back();
+        for (auto* bodyItem : closureBody->closureBodyItem()) {
+            if (bodyItem == nullptr) {
+                continue;
+            }
+            if (auto* statement = bodyItem->statement()) {
+                if (statement->init() != nullptr && statement->init()->initCore() != nullptr) {
+                    collectLambdaManagedCaptures(statement->init()->initCore()->expression(), state, localScopes, capturedName);
+                    localScopes.back().insert(statement->init()->initCore()->ID()->getText());
+                    continue;
+                }
+                if (statement->easyInit() != nullptr) {
+                    collectLambdaManagedCaptures(statement->easyInit()->expression(), state, localScopes, capturedName);
+                    localScopes.back().insert(statement->easyInit()->ID()->getText());
+                    continue;
+                }
+                if (statement->assignment() != nullptr) {
+                    collectLambdaManagedCaptures(statement->assignment()->assignmentCore()->expression(), state, localScopes, capturedName);
+                    continue;
+                }
+                if (statement->functionCall() != nullptr) {
+                    collectLambdaManagedCaptures(statement->functionCall(), state, localScopes, capturedName);
+                    continue;
+                }
+                if (statement->memberaccess() != nullptr) {
+                    collectLambdaManagedCaptures(statement->memberaccess(), state, localScopes, capturedName);
+                    continue;
+                }
+                if (statement->unsafeBlock() != nullptr) {
+                    collectLambdaManagedCaptures(statement->unsafeBlock()->block(), state, localScopes, capturedName);
+                    continue;
+                }
+                if (statement->autofmtdeclareScope() != nullptr) {
+                    collectLambdaManagedCaptures(statement->autofmtdeclareScope()->block(), state, localScopes, capturedName);
+                    continue;
+                }
+            }
+            if (auto* returnStmt = bodyItem->returnStmt()) {
+                collectLambdaManagedCaptures(returnStmt->expression(), state, localScopes, capturedName);
+            }
+        }
+        localScopes.pop_back();
+    }
+
     void analyzeLambdaCapture(compilerv1Parser::LambdaContext* ctx, State& state) {
         if (ctx == nullptr || ctx->lambdaDefinition() == nullptr) {
             return;
@@ -966,6 +1016,26 @@ private:
         }
         std::string capturedName;
         collectLambdaManagedCaptures(block, state, localScopes, capturedName);
+        if (!capturedName.empty()) {
+            addDiagnostic(ctx, "lambda `" + ctx->ID()->getText() + "` cannot capture owner-managed binding `" + capturedName + "` without `@release " + capturedName + ";`");
+        }
+    }
+
+    void analyzeClosureCapture(compilerv1Parser::ClosureContext* ctx, State& state) {
+        if (ctx == nullptr || ctx->closureBody() == nullptr) {
+            return;
+        }
+
+        std::vector<std::unordered_set<std::string>> localScopes;
+        localScopes.emplace_back();
+        if (ctx->params() != nullptr) {
+            for (auto* param : ctx->params()->param()) {
+                localScopes.back().insert(param->ID()->getText());
+            }
+        }
+
+        std::string capturedName;
+        collectLambdaManagedCaptures(ctx->closureBody(), state, localScopes, capturedName);
         if (!capturedName.empty()) {
             addDiagnostic(ctx, "lambda `" + ctx->ID()->getText() + "` cannot capture owner-managed binding `" + capturedName + "` without `@release " + capturedName + ";`");
         }
@@ -1195,6 +1265,10 @@ private:
         }
         if (ctx->lambda() != nullptr) {
             analyzeLambdaCapture(ctx->lambda(), state);
+            return;
+        }
+        if (ctx->closure() != nullptr) {
+            analyzeClosureCapture(ctx->closure(), state);
             return;
         }
         if (ctx->asyncCall() != nullptr) {

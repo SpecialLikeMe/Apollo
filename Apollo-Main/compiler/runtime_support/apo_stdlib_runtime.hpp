@@ -32,6 +32,10 @@ inline std::string_view view_or_empty(const char* value) {
     return value == nullptr ? std::string_view() : std::string_view(value);
 }
 
+inline const char* cstr_or_empty(const char* value) {
+    return value == nullptr ? "" : value;
+}
+
 inline std::int32_t clamp_i64_to_i32(std::int64_t value) {
     if (value < static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::min())) {
         return std::numeric_limits<std::int32_t>::min();

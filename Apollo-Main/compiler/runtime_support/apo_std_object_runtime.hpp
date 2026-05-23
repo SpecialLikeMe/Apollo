@@ -2758,6 +2758,14 @@ inline void term_println_raw(std::string_view text) {
     std::cout.flush();
 }
 
+template <typename... Args>
+inline std::int32_t term_printf(std::string_view format, Args&&... args) {
+    std::string format_text(format);
+    const int written = std::printf(format_text.c_str(), std::forward<Args>(args)...);
+    std::fflush(stdout);
+    return written;
+}
+
 inline const char* term_read_line() {
     std::string line;
     std::getline(std::cin, line);

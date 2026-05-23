@@ -1,5 +1,9 @@
 version=apollo-native-cache-v1
-compilerSignature=a35233a623fd1b33
+compilerSignature=ef695db6fb39c15e
 sourceHash=2af0cf99f4e83eb1
-outputHash=2b4321b1798f8ac0
+outputHash=f3f959568561187a
+sourceSize=481
+sourceWriteTime=1778701776398445600
+outputSize=3022
+outputWriteTime=1779552500513183100
 dependency=iostream

@@ -1,0 +1,13 @@
+typedef struct test {
+    i32 id;
+
+    __construct() {
+        indef.id = 0;
+    }
+}
+
+int main() {
+    stat item = test{};
+    sys.printf("%i", item.id);
+    return 0;
+}

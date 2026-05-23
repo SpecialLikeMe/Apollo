@@ -1,0 +1,10 @@
+extern iostream;
+
+auto zyx = clr-> [](i32 input) in let main::() =
+    return 5;
+
+int main() {
+    i32 value = zyx(0);
+    sys.println("${value}");
+    return 0;
+}

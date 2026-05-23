@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "apollo_driver.h"
+#include "apollo_runtime.h"
 
 namespace {
 
@@ -213,6 +214,7 @@ std::optional<std::pair<std::filesystem::path, std::filesystem::path>> resolveSd
 
 std::string directIrRuntimeSupportSource() {
     return R"APOLLO(#include <cctype>
+#include <cstdint>
 #include <cstddef>
 #include <iostream>
 #include <string>
@@ -651,6 +653,133 @@ extern "C" int apollo_execute_apollo_payload(const char* code) {
     }
     return 0;
 }
+
+struct ApolloVectorI32Handle {
+    std::vector<std::int32_t> items;
+};
+
+struct ApolloHashStrI32Handle {
+    std::unordered_map<std::string, std::int32_t> items;
+};
+
+struct ApolloHashI32I32Handle {
+    std::unordered_map<std::int32_t, std::int32_t> items;
+};
+
+struct ApolloNestedHashHandle {
+    std::unordered_map<std::int32_t, std::unordered_map<std::string, std::unordered_map<std::string, std::int32_t>>> items;
+};
+
+extern "C" void* apollo_vector_i32_create() {
+    return new ApolloVectorI32Handle();
+}
+
+extern "C" void apollo_vector_i32_push(void* rawHandle, std::int32_t value) {
+    auto* handle = static_cast<ApolloVectorI32Handle*>(rawHandle);
+    if (handle == nullptr) {
+        return;
+    }
+    handle->items.push_back(value);
+}
+
+extern "C" void apollo_vector_i32_set(void* rawHandle, std::int32_t index, std::int32_t value) {
+    auto* handle = static_cast<ApolloVectorI32Handle*>(rawHandle);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->items.size()) {
+        return;
+    }
+    handle->items[static_cast<std::size_t>(index)] = value;
+}
+
+extern "C" std::int32_t apollo_vector_i32_get(void* rawHandle, std::int32_t index) {
+    auto* handle = static_cast<ApolloVectorI32Handle*>(rawHandle);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->items.size()) {
+        return 0;
+    }
+    return handle->items[static_cast<std::size_t>(index)];
+}
+
+extern "C" std::int32_t apollo_vector_i32_size(void* rawHandle) {
+    auto* handle = static_cast<ApolloVectorI32Handle*>(rawHandle);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
+}
+
+extern "C" void* apollo_hash_str_i32_create() {
+    return new ApolloHashStrI32Handle();
+}
+
+extern "C" void apollo_hash_str_i32_set(void* rawHandle, const char* key, std::int32_t value) {
+    auto* handle = static_cast<ApolloHashStrI32Handle*>(rawHandle);
+    if (handle == nullptr || key == nullptr) {
+        return;
+    }
+    handle->items[std::string(key)] = value;
+}
+
+extern "C" std::int32_t apollo_hash_str_i32_get(void* rawHandle, const char* key) {
+    auto* handle = static_cast<ApolloHashStrI32Handle*>(rawHandle);
+    if (handle == nullptr || key == nullptr) {
+        return 0;
+    }
+    const auto found = handle->items.find(std::string(key));
+    return found != handle->items.end() ? found->second : 0;
+}
+
+extern "C" void* apollo_hash_i32_i32_create() {
+    return new ApolloHashI32I32Handle();
+}
+
+extern "C" void apollo_hash_i32_i32_set(void* rawHandle, std::int32_t key, std::int32_t value) {
+    auto* handle = static_cast<ApolloHashI32I32Handle*>(rawHandle);
+    if (handle == nullptr) {
+        return;
+    }
+    handle->items[key] = value;
+}
+
+extern "C" std::int32_t apollo_hash_i32_i32_get(void* rawHandle, std::int32_t key) {
+    auto* handle = static_cast<ApolloHashI32I32Handle*>(rawHandle);
+    if (handle == nullptr) {
+        return 0;
+    }
+    const auto found = handle->items.find(key);
+    return found != handle->items.end() ? found->second : 0;
+}
+
+extern "C" void* apollo_nested_hash_create() {
+    return new ApolloNestedHashHandle();
+}
+
+extern "C" void apollo_nested_hash_set(void* rawHandle,
+    std::int32_t firstKey,
+    const char* secondKey,
+    const char* nestedKey,
+    std::int32_t value) {
+    auto* handle = static_cast<ApolloNestedHashHandle*>(rawHandle);
+    if (handle == nullptr || secondKey == nullptr || nestedKey == nullptr) {
+        return;
+    }
+    handle->items[firstKey][std::string(secondKey)][std::string(nestedKey)] = value;
+}
+
+extern "C" std::int32_t apollo_nested_hash_get(void* rawHandle,
+    std::int32_t firstKey,
+    const char* secondKey,
+    const char* nestedKey) {
+    auto* handle = static_cast<ApolloNestedHashHandle*>(rawHandle);
+    if (handle == nullptr || secondKey == nullptr || nestedKey == nullptr) {
+        return 0;
+    }
+    const auto outer = handle->items.find(firstKey);
+    if (outer == handle->items.end()) {
+        return 0;
+    }
+    const auto middle = outer->second.find(std::string(secondKey));
+    if (middle == outer->second.end()) {
+        return 0;
+    }
+    const auto inner = middle->second.find(std::string(nestedKey));
+    return inner != middle->second.end() ? inner->second : 0;
+}
 )APOLLO";
 }
 
@@ -784,9 +913,7 @@ RuntimeRequirements directRuntimeRequirements(const BuildEnvironment& env, const
         appendUnique(requirements.linkFlags, "-lSDL2_image");
     }
 
-    if (totalProgramGc || usesIrRuntime || usesApolloPayloadRuntime) {
-        appendUnique(requirements.linkFlags, buildDirectIrRuntimeSupportObject(env).string());
-    }
+    appendUnique(requirements.linkFlags, buildDirectIrRuntimeSupportObject(env).string());
 
     requirements.fingerprint = fingerprint.str();
     return requirements;
@@ -1260,6 +1387,9 @@ int ApolloBuildDriver::run(int argc, char** argv) {
         }
         throw BuildDriverException("Unknown ApolloBuildDriver command: " + command);
     } catch (const BuildDriverException& ex) {
+        std::cerr << ex.what() << '\n';
+        return 1;
+    } catch (const ApolloCompilationFailure& ex) {
         std::cerr << ex.what() << '\n';
         return 1;
     } catch (const std::exception& ex) {

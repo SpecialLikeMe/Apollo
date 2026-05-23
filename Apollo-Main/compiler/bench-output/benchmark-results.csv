@@ -1,0 +1,7 @@
+"Benchmark","Description","RequestedWorkload","EffectiveWorkload","RepeatCount","ApolloCompileMs","CppCompileMs","ApolloMeanMs","ApolloMinMs","ApolloMaxMs","CppMeanMs","CppMinMs","CppMaxMs","ApolloVsCppRatio","Output"
+"sum-loop","Numeric accumulation baseline without string-heavy runtime features","20000","20000","1","1772.081","1446.297","7.927","7.927","7.927","8.698","8.698","8.698","0.911","99993"
+"branch-mix","Branch-heavy integer workload baseline","20000","20000","1","1638.803","305.869","7.676","7.676","7.676","9.122","9.122","9.122","0.841","10004"
+"string-runtime","Plain Apollo runtime string operations against direct C++ std::string code","20000","100","1","32272.559","343.576","6.979","6.979","6.979","8.75","8.75","8.75","0.798","4733"
+"typedef-opstruct-strings","typedef opstruct phrase surface driving the same runtime string kernel","20000","100","1","31774.181","323.192","7.088","7.088","7.088","8.436","8.436","8.436","0.84","4733"
+"gc-strings","Whole-program GC benchmark over managed string-bearing state","20000","80","1","31966.878","341.245","7.304","7.304","7.304","8.312","8.312","8.312","0.879","3753"
+"gc-typedef-opstruct-strings","Whole-program GC plus typedef opstruct runtime-string workload","20000","80","1","32125.277","385.334","7.888","7.888","7.888","8.263","8.263","8.263","0.955","3753"

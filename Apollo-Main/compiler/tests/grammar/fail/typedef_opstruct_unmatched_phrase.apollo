@@ -1,0 +1,12 @@
+typedef opstruct cool {
+    asg("cool ${name}") -> {
+    }
+    src("please do sys.stdin\r0(\r0)") -> {
+    }
+}
+
+int main() {
+    cool mycool;
+    please do [1];
+    return 0;
+}

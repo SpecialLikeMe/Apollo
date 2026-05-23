@@ -19,6 +19,7 @@
 #include <utility>
 #include <vector>
 
+#include "compilerv1Lexer.h"
 #include "compilerv1BaseVisitor.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Intrinsics.h"
@@ -117,6 +118,27 @@ std::string optLevelFromEnvironment() {
     return defaulted(std::getenv("APOLLO_OPT_LEVEL"), "3");
 }
 
+std::filesystem::path findRuntimeSupportRoot(const std::filesystem::path& outputPath) {
+    std::filesystem::path cursor = outputPath.has_parent_path()
+        ? std::filesystem::absolute(outputPath.parent_path()).lexically_normal()
+        : std::filesystem::current_path();
+
+    while (!cursor.empty()) {
+        const auto runtimeSupportDir = (cursor / "runtime_support").lexically_normal();
+        if (std::filesystem::exists(runtimeSupportDir)) {
+            return cursor;
+        }
+
+        const auto parent = cursor.parent_path();
+        if (parent == cursor) {
+            break;
+        }
+        cursor = parent;
+    }
+
+    return {};
+}
+
 std::vector<std::filesystem::path> inlineForeignIncludeDirs(const std::filesystem::path& sourcePath,
     const std::filesystem::path& outputPath) {
     std::vector<std::filesystem::path> dirs;
@@ -124,9 +146,7 @@ std::vector<std::filesystem::path> inlineForeignIncludeDirs(const std::filesyste
         dirs.push_back(std::filesystem::absolute(sourcePath.parent_path()).lexically_normal());
     }
 
-    std::filesystem::path compilerDir = outputPath.has_parent_path()
-        ? outputPath.parent_path().parent_path()
-        : std::filesystem::current_path();
+    std::filesystem::path compilerDir = findRuntimeSupportRoot(outputPath);
     if (compilerDir.empty()) {
         compilerDir = std::filesystem::current_path();
     }
@@ -378,6 +398,253 @@ std::string replaceRuntimeCaptureReferences(std::string text,
     }
 
     return text;
+}
+
+struct ApolloInlineForeignAggregateMethodBridge {
+    std::string name;
+    std::string returnType;
+    std::vector<ApolloInlineForeignParameter> parameters;
+    bool isStatic = false;
+};
+
+struct ApolloInlineForeignAggregateBridge {
+    std::string keyword;
+    std::string name;
+    std::string baseName;
+    std::vector<ApolloInlineForeignAggregateMethodBridge> methods;
+};
+
+std::string trimAggregateTypeName(std::string text) {
+    text = trimCopy(std::move(text));
+    while (!text.empty() && (text.back() == '*' || text.back() == '&')) {
+        text.pop_back();
+    }
+    const auto generic = text.find('<');
+    if (generic != std::string::npos) {
+        text.resize(generic);
+    }
+    return trimCopy(std::move(text));
+}
+
+std::string apolloTypeToCppBridge(std::string typeText) {
+    typeText = trimCopy(std::move(typeText));
+    if (typeText.empty()) {
+        return "void";
+    }
+
+    std::string suffix;
+    while (!typeText.empty()) {
+        const char tail = typeText.back();
+        if (tail != '*' && tail != '&') {
+            break;
+        }
+        suffix.insert(suffix.begin(), tail);
+        typeText.pop_back();
+        typeText = trimCopy(std::move(typeText));
+    }
+
+    const std::string baseType = trimAggregateTypeName(typeText);
+    std::string cppType;
+    if (baseType == "void") {
+        cppType = "void";
+    } else if (baseType == "indef") {
+        cppType = "void*";
+        suffix.clear();
+    } else if (baseType == "str") {
+        cppType = "const char*";
+        suffix.clear();
+    } else if (baseType == "bool") {
+        cppType = "bool";
+    } else if (baseType == "short" || baseType == "i16" || baseType == "u16") {
+        cppType = "short";
+    } else if (baseType == "int" || baseType == "i32" || baseType == "u32") {
+        cppType = "int";
+    } else if (baseType == "long" || baseType == "i64" || baseType == "u64" || baseType == "usize" || baseType == "isize") {
+        cppType = "long";
+    } else if (baseType == "float" || baseType == "f32") {
+        cppType = "float";
+    } else if (baseType == "double" || baseType == "f64") {
+        cppType = "double";
+    } else {
+        cppType = baseType;
+    }
+
+    return cppType + suffix;
+}
+
+std::string aggregateMethodSourceName(compilerv1Parser::MethodContext* method) {
+    if (method == nullptr) {
+        return {};
+    }
+    if (method->ID() != nullptr) {
+        return method->ID()->getText();
+    }
+    const std::string text = method->getText();
+    if (text.find("__construct(") != std::string::npos) {
+        return "__construct";
+    }
+    if (text.find("__destruct(") != std::string::npos) {
+        return "__destruct";
+    }
+    return {};
+}
+
+std::vector<ApolloInlineForeignAggregateMethodBridge> collectAggregateMethodBridges(const std::vector<compilerv1Parser::MethodContext*>& methods) {
+    std::vector<ApolloInlineForeignAggregateMethodBridge> bridges;
+    for (auto* method : methods) {
+        const std::string methodName = aggregateMethodSourceName(method);
+        if (methodName.empty()) {
+            continue;
+        }
+
+        ApolloInlineForeignAggregateMethodBridge bridge;
+        bridge.name = methodName;
+        bridge.returnType = method != nullptr && method->returnType() != nullptr
+            ? apolloTypeToCppBridge(method->returnType()->getText())
+            : "void";
+        bridge.isStatic = method != nullptr && method->STATIC() != nullptr;
+
+        if (method != nullptr && method->params() != nullptr) {
+            std::size_t ordinal = 0;
+            for (auto* param : method->params()->param()) {
+                if (param == nullptr || param->typeRef() == nullptr) {
+                    continue;
+                }
+                ApolloInlineForeignParameter parameter;
+                parameter.name = param->ID() != nullptr ? param->ID()->getText() : ("arg" + std::to_string(ordinal));
+                parameter.foreignType = apolloTypeToCppBridge(param->typeRef()->getText());
+                bridge.parameters.push_back(std::move(parameter));
+                ++ordinal;
+            }
+        }
+
+        bridges.push_back(std::move(bridge));
+    }
+    return bridges;
+}
+
+void appendAggregateBridge(std::vector<ApolloInlineForeignAggregateBridge>& bridges,
+    std::string keyword,
+    std::string name,
+    std::string baseName,
+    const std::vector<compilerv1Parser::MethodContext*>& methods) {
+    ApolloInlineForeignAggregateBridge bridge;
+    bridge.keyword = std::move(keyword);
+    bridge.name = std::move(name);
+    bridge.baseName = trimAggregateTypeName(std::move(baseName));
+    bridge.methods = collectAggregateMethodBridges(methods);
+    bridges.push_back(std::move(bridge));
+}
+
+std::vector<ApolloInlineForeignAggregateBridge> collectApolloAggregateBridges(const std::filesystem::path& sourcePath) {
+    if (sourcePath.empty()) {
+        return {};
+    }
+
+    std::ifstream input(sourcePath);
+    if (!input) {
+        return {};
+    }
+
+    std::ostringstream source;
+    source << input.rdbuf();
+
+    antlr4::ANTLRInputStream antlrInput(source.str());
+    compilerv1Lexer lexer(&antlrInput);
+    antlr4::CommonTokenStream tokens(&lexer);
+    compilerv1Parser parser(&tokens);
+    parser.removeErrorListeners();
+    lexer.removeErrorListeners();
+
+    auto* tree = parser.program();
+    if (tree == nullptr || parser.getNumberOfSyntaxErrors() > 0) {
+        return {};
+    }
+
+    std::vector<ApolloInlineForeignAggregateBridge> bridges;
+    for (auto* child : tree->children) {
+        if (auto* classCtx = dynamic_cast<compilerv1Parser::ClassContext*>(child)) {
+            std::vector<compilerv1Parser::MethodContext*> methods;
+            if (classCtx->classBody() != nullptr) {
+                for (auto* member : classCtx->classBody()->classMember()) {
+                    if (member != nullptr && member->method() != nullptr) {
+                        methods.push_back(member->method());
+                    }
+                }
+            }
+            appendAggregateBridge(bridges,
+                "class",
+                classCtx->ID() != nullptr ? classCtx->ID()->getText() : std::string(),
+                classCtx->inheritanceClause() != nullptr && !classCtx->inheritanceClause()->inheritedType().empty()
+                    && classCtx->inheritanceClause()->inheritedType(0) != nullptr
+                    && classCtx->inheritanceClause()->inheritedType(0)->typeRef() != nullptr
+                    ? classCtx->inheritanceClause()->inheritedType(0)->typeRef()->getText()
+                    : std::string(),
+                methods);
+            continue;
+        }
+
+        if (auto* structCtx = dynamic_cast<compilerv1Parser::StructContext*>(child)) {
+            std::vector<compilerv1Parser::MethodContext*> methods;
+            if (structCtx->structBody() != nullptr) {
+                for (auto* member : structCtx->structBody()->structMember()) {
+                    if (member != nullptr && member->method() != nullptr) {
+                        methods.push_back(member->method());
+                    }
+                }
+            }
+            appendAggregateBridge(bridges,
+                "struct",
+                structCtx->ID() != nullptr ? structCtx->ID()->getText() : std::string(),
+                structCtx->inheritanceClause() != nullptr && !structCtx->inheritanceClause()->inheritedType().empty()
+                    && structCtx->inheritanceClause()->inheritedType(0) != nullptr
+                    && structCtx->inheritanceClause()->inheritedType(0)->typeRef() != nullptr
+                    ? structCtx->inheritanceClause()->inheritedType(0)->typeRef()->getText()
+                    : std::string(),
+                methods);
+        }
+    }
+
+    bridges.erase(std::remove_if(bridges.begin(), bridges.end(), [](const auto& bridge) {
+        return bridge.name.empty();
+    }), bridges.end());
+    return bridges;
+}
+
+std::string renderApolloAggregateBridgeDeclarations(const std::filesystem::path& sourcePath,
+    std::string_view payload) {
+    std::ostringstream builder;
+    for (const auto& bridge : collectApolloAggregateBridges(sourcePath)) {
+        if (!bridge.name.empty()
+            && !std::regex_search(std::string(payload), std::regex("\\b" + regexEscape(bridge.name) + "\\b")) ) {
+            continue;
+        }
+        if (std::regex_search(std::string(payload), std::regex("\\b(?:class|struct)\\s+" + regexEscape(bridge.name) + "\\b"))) {
+            continue;
+        }
+
+        builder << bridge.keyword << ' ' << bridge.name;
+        if (!bridge.baseName.empty()) {
+            builder << " : public " << bridge.baseName;
+        }
+        builder << " {\npublic:\n";
+        for (const auto& method : bridge.methods) {
+            builder << "    ";
+            if (method.isStatic) {
+                builder << "static ";
+            }
+            builder << method.returnType << ' ' << method.name << '(';
+            for (std::size_t index = 0; index < method.parameters.size(); ++index) {
+                if (index > 0) {
+                    builder << ", ";
+                }
+                builder << method.parameters[index].foreignType << ' ' << method.parameters[index].name;
+            }
+            builder << ");\n";
+        }
+        builder << "};\n";
+    }
+    return builder.str();
 }
 
 std::string privateInlineFunctionName(const ApolloInlineForeignBlock& block, std::string_view name) {
@@ -1189,6 +1456,19 @@ std::vector<ApolloInlineForeignSymbol> collectClikeGlobals(std::string_view payl
     return globals;
 }
 
+std::pair<std::string, std::string> partitionClikeRuntimeChunks(std::string_view payload) {
+    std::ostringstream definitions;
+    std::ostringstream statements;
+    for (const auto& chunk : splitTopLevelChunks(payload)) {
+        if (!collectClikeFunctions(chunk).empty()) {
+            definitions << chunk << "\n";
+            continue;
+        }
+        statements << chunk << "\n";
+    }
+    return {definitions.str(), statements.str()};
+}
+
 std::vector<ApolloInlineForeignSymbol> collectRustFunctions(std::string_view payload) {
     static const std::regex kFunctionPattern(R"(^((?:pub\s+)?fn)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)\s*(?:->\s*([^\{]+))?\s*\{)", std::regex::optimize);
 
@@ -1721,6 +2001,17 @@ std::string renderImportedClikeDefinitionAliases(const ApolloInlineForeignBlock&
     return builder.str();
 }
 
+std::string renderImportedClikeDefinitionAliasUndefs(const ApolloInlineForeignBlock& block,
+    const std::vector<ApolloInlineForeignBlock>& allBlocks) {
+    std::ostringstream builder;
+    for (const ApolloInlineForeignBlock* imported : importedBlocksFor(block, allBlocks)) {
+        for (const auto& global : imported->globals) {
+            builder << "#undef " << global.name << "\n";
+        }
+    }
+    return builder.str();
+}
+
 std::string renderImportedClikeRunnerAliases(const ApolloInlineForeignBlock& block,
     const std::vector<ApolloInlineForeignBlock>& allBlocks) {
     std::ostringstream builder;
@@ -1910,9 +2201,15 @@ std::string buildCSource(const ApolloInlineForeignBlock& block,
     builder << preamble;
     builder << renderImportedClikeDeclarations(block, allBlocks);
     if (block.executesAtRuntime) {
+        const auto [definitions, statements] = partitionClikeRuntimeChunks(body);
+        if (!trimCopy(definitions).empty()) {
+            builder << renderImportedClikeDefinitionAliases(block, allBlocks);
+            builder << definitions;
+            builder << renderImportedClikeDefinitionAliasUndefs(block, allBlocks);
+        }
         builder << "extern void " << block.runnerName << "(void) {\n";
         builder << renderImportedClikeRunnerAliases(block, allBlocks);
-        builder << body;
+        builder << statements;
         builder << renderImportedClikeRunnerWritebacks(block, allBlocks);
         builder << "}\n";
         return builder.str();
@@ -1929,7 +2226,8 @@ std::string buildCSource(const ApolloInlineForeignBlock& block,
     return builder.str();
 }
 
-std::string buildCppSource(const ApolloInlineForeignBlock& block,
+std::string buildCppSource(const std::filesystem::path& sourcePath,
+    const ApolloInlineForeignBlock& block,
     const std::vector<ApolloInlineForeignBlock>& allBlocks) {
     const auto [preamble, body] = splitCppPreamble(block.payload);
     const std::string namespaceName = "__apollo_inline_" + block.stableId;
@@ -1937,17 +2235,27 @@ std::string buildCppSource(const ApolloInlineForeignBlock& block,
     std::ostringstream builder;
     builder << preamble;
     builder << renderImportedClikeDeclarations(block, allBlocks);
+    builder << renderApolloAggregateBridgeDeclarations(sourcePath, body);
     if (block.executesAtRuntime) {
+        const auto [definitions, statements] = partitionClikeRuntimeChunks(body);
+        if (!trimCopy(definitions).empty()) {
+            builder << renderImportedClikeDefinitionAliases(block, allBlocks);
+            builder << "extern \"C\" {\n";
+            builder << definitions;
+            builder << "}\n";
+            builder << renderImportedClikeDefinitionAliasUndefs(block, allBlocks);
+        }
         builder << "extern \"C\" void " << block.runnerName << "() {\n";
         builder << renderImportedClikeRunnerAliases(block, allBlocks);
-        builder << body;
+        builder << statements;
         builder << renderImportedClikeRunnerWritebacks(block, allBlocks);
         builder << "}\n";
         return builder.str();
     }
     builder << renderImportedClikeDefinitionAliases(block, allBlocks);
-    if (block.functions.empty() && block.globals.empty()
-        && (body.find("sys__native_") != std::string::npos || body.find("sys__") != std::string::npos)) {
+    if ((block.functions.empty() && block.globals.empty()
+            && (body.find("sys__native_") != std::string::npos || body.find("sys__") != std::string::npos))
+        || body.find("sys__printf") != std::string::npos) {
         builder << "extern \"C\" {\n";
         builder << body;
         builder << "}\n";
@@ -2048,9 +2356,10 @@ std::string buildObjectiveCSource(const ApolloInlineForeignBlock& block,
     return buildCSource(block, allBlocks);
 }
 
-std::string buildObjectiveCppSource(const ApolloInlineForeignBlock& block,
+std::string buildObjectiveCppSource(const std::filesystem::path& sourcePath,
+    const ApolloInlineForeignBlock& block,
     const std::vector<ApolloInlineForeignBlock>& allBlocks) {
-    return buildCppSource(block, allBlocks);
+    return buildCppSource(sourcePath, block, allBlocks);
 }
 
 std::string renderSwiftParameters(const std::vector<ApolloInlineForeignParameter>& parameters,
@@ -2698,18 +3007,19 @@ std::string buildTypeScriptSource(const ApolloInlineForeignBlock& block,
     return builder.str();
 }
 
-std::string buildInlineForeignSource(const ApolloInlineForeignBlock& block,
+std::string buildInlineForeignSource(const std::filesystem::path& sourcePath,
+    const ApolloInlineForeignBlock& block,
     const std::vector<ApolloInlineForeignBlock>& allBlocks,
     const std::vector<ApolloInlineForeignCapture>& captures) {
     switch (block.language) {
     case ApolloInlineForeignLanguage::C:
         return buildCSource(block, allBlocks);
     case ApolloInlineForeignLanguage::Cpp:
-        return buildCppSource(block, allBlocks);
+        return buildCppSource(sourcePath, block, allBlocks);
     case ApolloInlineForeignLanguage::ObjectiveC:
         return buildObjectiveCSource(block, allBlocks);
     case ApolloInlineForeignLanguage::ObjectiveCpp:
-        return buildObjectiveCppSource(block, allBlocks);
+        return buildObjectiveCppSource(sourcePath, block, allBlocks);
     case ApolloInlineForeignLanguage::Rust:
         return buildRustSource(block, allBlocks, captures);
     case ApolloInlineForeignLanguage::Swift:
@@ -2843,7 +3153,7 @@ std::filesystem::path compileInlineForeignToIr(const std::filesystem::path& sour
     const bool useManagedSurfaceFallback = useGoFallback || useTypeScriptFallback;
     const std::string renderedSource = useManagedSurfaceFallback
         ? buildManagedSurfaceFallbackSource(block, allBlocks)
-        : buildInlineForeignSource(block, allBlocks, captures);
+        : buildInlineForeignSource(sourcePath, block, allBlocks, captures);
     std::string compileSignature;
     switch (block.language) {
     case ApolloInlineForeignLanguage::C:

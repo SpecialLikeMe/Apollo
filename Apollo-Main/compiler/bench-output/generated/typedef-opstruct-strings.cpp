@@ -1,0 +1,42 @@
+#include <cstdint>
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string rolling = "apollo";
+    std::int32_t checksum = 0;
+    std::int32_t phase = 0;
+    std::string_view alphaCode = "noop-alpha";
+    std::string_view gammaCode = "noop-gamma";
+    std::string_view betaCode = "noop-beta";
+    auto invokeDsl = [&](std::string_view code) {
+        (void)code;
+    };
+
+    for (std::int32_t index = 0; index < 100; ++index) {
+        std::string_view chunk = "beta";
+        std::string_view code = betaCode;
+        if (phase == 0) {
+            chunk = "alpha";
+            code = alphaCode;
+        } else if (phase == 1) {
+            chunk = "gamma";
+            code = gammaCode;
+        }
+
+        invokeDsl(code);
+        rolling += chunk;
+        if (rolling.size() > 48) {
+            rolling = rolling.substr(rolling.size() - 48);
+        }
+        checksum += static_cast<std::int32_t>(rolling.size());
+        checksum += rolling.find("ta") == std::string::npos ? 0 : 1;
+        phase += 1;
+        if (phase == 3) {
+            phase = 0;
+        }
+    }
+
+    std::cout << checksum;
+    return 0;
+}

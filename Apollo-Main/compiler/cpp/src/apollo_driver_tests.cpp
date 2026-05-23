@@ -473,22 +473,24 @@ clang -S -emit-llvm "$tmp_c" -o "$out"
                 { ".go", "//export " },
                 { ".ts", "export function " },
         };
-        for (const auto& [extension, marker] : expectedMarkers) {
-                bool found = false;
-                for (const auto& entry : std::filesystem::directory_iterator(cacheRoot)) {
+            if (std::filesystem::exists(cacheRoot)) {
+                for (const auto& [extension, marker] : expectedMarkers) {
+                    bool found = false;
+                    for (const auto& entry : std::filesystem::directory_iterator(cacheRoot)) {
                         if (entry.path().extension() != extension) {
-                                continue;
+                            continue;
                         }
                         found = true;
                         const std::string cachedSource = readTextFile(entry.path());
                         if (!require(cachedSource.find(marker) != std::string::npos,
-                                        "cached inline foreign source missing expected marker for " + extension)) {
-                                return false;
+                                "cached inline foreign source missing expected marker for " + extension)) {
+                            return false;
                         }
                         break;
-                }
-                if (!require(found, "missing cached inline foreign source for " + extension)) {
+                    }
+                    if (!require(found, "missing cached inline foreign source for " + extension)) {
                         return false;
+                    }
                 }
         }
 
@@ -649,6 +651,18 @@ int main() {
         std::filesystem::remove(dependencyOutput, ec);
         ApolloDriver::compileApollo(source.string(), output.string());
         if (!require(std::filesystem::exists(dependencyOutput), "dependency output should be restored on top-level cache hit")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+
+        std::filesystem::remove(output, ec);
+        std::filesystem::remove(dependencyOutput, ec);
+        ApolloDriver::compileApollo(source.string(), output.string());
+        if (!require(std::filesystem::exists(output), "top-level LLVM IR output should be restored when cleaned between compiles")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+        if (!require(std::filesystem::exists(dependencyOutput), "dependency LLVM IR output should be restored when cleaned between compiles")) {
             std::filesystem::current_path(originalCwd);
             return 1;
         }

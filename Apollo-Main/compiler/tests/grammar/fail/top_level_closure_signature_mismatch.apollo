@@ -1,0 +1,6 @@
+fn<int()> xyz = clr-> [&](str &i) in let main::() =
+    return 4;
+
+int main() {
+    return 0;
+}

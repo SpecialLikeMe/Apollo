@@ -1,0 +1,29 @@
+struct Pair {
+    nconst i32 left;
+    nconst i32 right;
+}
+
+int main() {
+    nconst vector<Pair> pairs;
+    Pair first = {
+        .left = 1,
+        .right = 2
+    };
+    Pair second = {
+        .left = 3,
+        .right = 4
+    };
+
+    pairs[apnd] = first;
+    pairs[apnd] = second;
+
+    Pair loaded = pairs[0];
+    i32 total = loaded.left + loaded.right;
+
+    for (const Pair entry in pairs) {
+        total = total + entry.left;
+    }
+
+    pairs[1] = loaded;
+    return total;
+}

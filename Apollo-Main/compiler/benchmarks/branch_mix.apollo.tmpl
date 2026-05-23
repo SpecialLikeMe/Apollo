@@ -1,12 +1,17 @@
 extern iostream;
 
 int main() {
-    nconst i64 total = 1;
-    for (nconst i64 index = 1; index < __LIMIT__; index = index + 1) {
-        if ((index % 2) == 0) {
-            total = total + (index / 2);
+    nconst i32 total = 1;
+    nconst i32 phase = 0;
+    for (nconst i32 index = 1; index < __LIMIT__; index = index + 1) {
+        if (phase < 2) {
+            total = total + phase + 3;
         } else {
-            total = total - (index / 3);
+            total = total - phase;
+        }
+        phase = phase + 1;
+        if (phase == 4) {
+            phase = 0;
         }
     }
     sys.stdout(total);

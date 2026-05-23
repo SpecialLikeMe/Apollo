@@ -26,7 +26,29 @@ grammar compilerv1;
     }
 }
 
-program      : (stdimport | directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | srcDecl | instance | instancepush | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
+@parser::members {
+    std::vector<int> closureIndentStack;
+
+    void pushClosureIndent(antlr4::Token* anchor) {
+      closureIndentStack.push_back(anchor != nullptr ? anchor->getCharPositionInLine() : -1);
+    }
+
+    void popClosureIndent() {
+      if (!closureIndentStack.empty()) {
+        closureIndentStack.pop_back();
+      }
+    }
+
+    bool isIndentedRelativeToCurrentClosure() {
+      antlr4::Token* next = _input->LT(1);
+      return !closureIndentStack.empty()
+        && next != nullptr
+        && next->getType() != antlr4::Token::EOF
+        && next->getCharPositionInLine() > closureIndentStack.back();
+    }
+}
+
+program      : (stdimport | directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | closure | srcDecl | instance | instancepush | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
 stdimport    : 'extern' 'std' ID ';'? ;
 directive    : gcDirective | borrowCheckerDirective | runtimeDirective | settingDirective ;
 gcDirective  : '#[' (GC_NAME | GCMODE_NAME) '(' ID ')' ']' ;
@@ -35,10 +57,10 @@ runtimeDirective : '#[' ID '(' ID ')' ']' ;
 settingDirective : '#[' 'setting' '(' ID ',' settingValue ')' ']' ;
 settingValue : ID | INT | STRING ;
 importStmt   : 'extern' (STRING | headerPath | importPath) ('-cpp')* ';'? ;
-instance     : ((INSTANCE_MODE 'instance') | INS | STAT) ID ('=' instanceValue)? ';' ;
+instance     : ((INSTANCE_MODE 'instance') | INS | STAT) ID ('='? instanceValue)? ';' ;
 instancepush : ID '.' 'push' '(' instanceValue ')' ';' ;
 memberaccess : accessBase '.' (functionCall|ID) ;
-accessBase   : ID | INDEF ;
+accessBase   : ID | INDEF | 'sys' ;
 instanceValue: ID LBRACE args? RBRACE allocatorUseSuffix? ;
 allocatorUseSuffix : '.' 'uses' '(' expression ')' ;
 importPath   : (ID | '*') ('.' (ID | '*'))* ;
@@ -96,7 +118,20 @@ macro        : macroQualifier ID '(' params? ')' block ;
 macroQualifier : 'extern [&macro]' | '__preprocess [&macro]' | 'extern [&dynamic_macro]' | '__preprocess [&dynamic_macro]' ;
 stdinStmt    : 'sys' '.' 'stdin(' ID ')' ';' ;
 stdinValue   : 'sys' '.' 'stdin(' ')' ;
-lambda       : typeRef ID '=' 'lmd->' lambdaDefinition ;
+lambda       : typeRef ID '=' 'lmd' '->' lambdaDefinition ;
+closure      : typeRef ID '=' 'clr' '->' closureCaptureList '(' params? ')' 'in' 'let' closureEntryPoint '::' '(' ')' '=' { pushClosureIndent(_localctx->start); } closureBody { popClosureIndent(); } ;
+closureCaptureList : '[]' | '[' closureCaptureSpec? ']' ;
+closureCaptureSpec : '&' | ID (',' ID)* ;
+closureEntryPoint
+             : {_input->LT(1)->getText() == "main"}? ID
+             ;
+closureBody
+             : closureBodyItem+
+             ;
+closureBodyItem
+             : {isIndentedRelativeToCurrentClosure()}? statement
+             | {isIndentedRelativeToCurrentClosure()}? returnStmt
+             ;
 lambdaDefinition : function | lambdaLiteral ;
 lambdaLiteral : returnType? '(' params? ')' block ;
 srcDecl      : (CONST | NCONST)? SRC ID ('(' params? ')')? ('->' returnType)? '=' block ;
@@ -144,7 +179,9 @@ statement    : pointer
              | cscope
              | plcnew
              | assignment
+             | memberAssignment
              | lambda
+             | closure
              | functionCall ';'
              | memberaccess ';'
              | ifStatement
@@ -201,6 +238,7 @@ switchDefault  : DEFAULT ':' block ;
 tryCatchStatement : TRY block CATCH '(' TERMINALEXCEPTION '(' ID ')' ')' block ;
 autocatchStatement : AUTOCATCH '(' ID ')' block ;
 assignment     : assignmentCore ';' ;
+memberAssignment : accessBase '.' ID '=' expression ';' ;
 assignmentCore : assignTarget '=' expression ;
 assignTarget   : ID ('[' accessKey ']')* ;
 accessKey      : expression
@@ -211,7 +249,10 @@ ltoTypesetStmt : ID '.' 'typeset' '(' typeRef ')' ('.' 'cast' '(' ')')? ';' ;
 easyInit       : (((CONST | NCONST)? ATO ID '=' expression)
                | ((CONST | NCONST)? ID ':=' expression)) ';'
                ;
-initCore       : (CONST | NCONST)? typeRef ID ( '=' expression )? | LET (CONST | NCONST)? ID ':' typeRef ( '=' expression )?  ;
+initCore       : (CONST | NCONST)? typeRef ID ( '=' expression )?
+               | (CONST | NCONST)? instanceValue ID ( '=' braceInitializer )?
+               | LET (CONST | NCONST)? ID ':' typeRef ( '=' expression )?
+               ;
 forInit        : initCore
                | assignmentCore
                | expression ;

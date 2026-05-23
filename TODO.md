@@ -1,7 +1,5 @@
--STDLIB
--LOC issues
--Cleanup
--PKG manager
+-MLIR
+-NEW PARSER
 
 Some things to work on:
 Performance: Mature the LLVM backends and AOT/JIT pipelines (PGO/LTO), add SIMD/vectorization intrinsics, tune the runtime allocator, and run continuous microbenchmarks with regression tracking.

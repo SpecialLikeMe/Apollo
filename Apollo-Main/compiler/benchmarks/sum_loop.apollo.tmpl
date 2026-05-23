@@ -1,9 +1,14 @@
 extern iostream;
 
 int main() {
-    nconst i64 total = 0;
-    for (nconst i64 index = 0; index < __LIMIT__; index = index + 1) {
-        total = total + ((index % 7) * 3) - (index % 5);
+    nconst i32 total = 0;
+    nconst i32 delta = 1;
+    for (nconst i32 index = 0; index < __LIMIT__; index = index + 1) {
+        total = total + delta;
+        delta = delta + 1;
+        if (delta > 9) {
+            delta = 1;
+        }
     }
     sys.stdout(total);
     return 0;

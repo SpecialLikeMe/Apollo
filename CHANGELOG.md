@@ -1,5 +1,4 @@
-This changelog has been started somewhat after the language passed it's most infant stages (the language works),
-yet at this time there is still much to do and many new ideas I will try.
+This changelog has been started somewhat after the language passed it's most infant stages (the language works), yet at this time there is still much to do and many new ideas I will try.
 
 ARCHITECTURE::LLVM IR CONVERION
   At this point I am beginning the implementation to move away from a transpiler and just use the LLVM C++ API (compile times have gotten slow, and IR is more professional and will likely be easier to work with in the future)  
@@ -10,3 +9,10 @@ ARCHITECTURE::IR CONVERSION FINISHED
 
 FEATURES::FFI LAYER ADDED
   I implemented a simple but effective linker type piece of software to link together LLVM output from my compiler and that of others to improve inline FFI.
+
+FEATURES::MISC
+  I have implemented a few random features, none as gravatational as the ones above. The only fairly major one was lambda closures, after I used it in another random project, and realised that recursing closure inits can produce functions which work very well for each context and scenario, saving you from passing 400 params. The new syntax for it is very abnormal, taking inspiration from ocaml, as that is my favourite functional language (I was almost tempted to do some Haskell type things but then I remembered currying every single function decl, and decided Int->Int->Int has no place in Apollo).
+  An example of a lambda closure:
+  auto x = clr-> [&]() in let main::() =
+    return 12;
+  This differs from the normal braced syntax, but I felt it was a trait of most functional languages, so I decided to have it like this.

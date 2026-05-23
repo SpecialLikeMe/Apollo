@@ -8,6 +8,7 @@ extern std ranges;
 extern std collections;
 extern std assertions;
 extern std buffer;
+extern std allocators;
 extern std fs;
 extern std process;
 extern std task;

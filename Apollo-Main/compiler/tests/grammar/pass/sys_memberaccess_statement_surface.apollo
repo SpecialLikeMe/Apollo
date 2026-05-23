@@ -1,0 +1,12 @@
+extern std prelude;
+
+int main() {
+    sys.printf("Hello, world\n");
+
+    if (true) {
+        global i32 value = 7;
+    }
+
+    sys.printf("%i\n", value);
+    return 0;
+}
