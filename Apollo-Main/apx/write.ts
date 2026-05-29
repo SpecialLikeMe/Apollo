@@ -1,131 +1,269 @@
 import { spawnSync } from 'node:child_process';
-import * as fs from 'fs';
-import * as path from 'path';
-
-const curl: string = "";
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 type int = number;
 type str = string;
-type bool = boolean;
 
-export class cmd {
-  private isWindows: boolean;
-  private shellPath: string;
-  private shellArgs: string[];
-  private cwd: string;
-
-  constructor() {
-    this.isWindows = process.platform === 'win32';
-    this.shellPath = this.isWindows ? 'cmd.exe' : 'bash';
-    this.shellArgs = this.isWindows ? ['/k'] : ['-i']; 
-
-    // Track a working directory per `cmd` instance so consecutive calls
-    // to `system` behave as if running in the same shell (persistency).
-    this.cwd = process.cwd();
-  }
-
-  // Run a command and return its output synchronously as a string.
-  // `cd` is handled specially to update the instance cwd so subsequent
-  // commands run in the new directory (persistent behavior).
-  public system(command: string): string {
-    const trimmed = command.trim();
-
-    // Handle builtin 'cd' to update cwd without spawning a new shell.
-    if (trimmed === 'cd' || trimmed.startsWith('cd ')) {
-      const parts = trimmed.split(/\s+/);
-      const target = parts.length > 1 ? parts.slice(1).join(' ') : process.env.HOME || process.cwd();
-
-      try {
-        // Resolve relative paths against current cwd.
-        const path = require('path');
-        const resolved = require('path').resolve(this.cwd, target);
-        const fs = require('fs');
-        if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
-          this.cwd = resolved;
-          return '';
-        } else {
-          return `cd: no such file or directory: ${target}`;
-        }
-      } catch (e: any) {
-        return `cd: ${e && e.message ? e.message : String(e)}`;
-      }
-    }
-
-    // For other commands, run synchronously in the tracked cwd and return combined stdout/stderr.
-    const res = spawnSync(command, {
-      shell: this.shellPath,
-      cwd: this.cwd,
-      encoding: 'utf8',
-      windowsHide: true,
-    });
-
-    if (res.error) {
-      return String(res.error.message);
-    }
-
-    const out = (res.stdout || '') + (res.stderr || '');
-    return out;
-  }
-
-  public close(): void {
-    // Nothing to do for synchronous implementation; kept for API compatibility.
-    return;
-  }
-}
+const MODULES_DIR_NAME = 'apx_modules';
+const MANIFEST_NAME = 'manifest.json';
+const BUNDLER_SOURCE = 'bundle.rs';
+const BUNDLER_CACHE_DIR = '.cache';
 
 export interface metadata {
-    name: str;
-    version: str;
-    src_exports: str[];
-    bin_exports: str[];
+  name: str;
+  version: str;
+  src_exports: str[];
+  bin_exports: str[];
+  url?: str;
 }
 
-export function install(pkg: str, url: str): int {
-  // Prefer direct filesystem operations to avoid shell-specific behaviour.
-  const apxRoot = process.cwd();
-  const modulesDir = path.join(apxRoot, 'apx_modules');
+type manifest = Record<string, metadata>;
 
-  if (!fs.existsSync(modulesDir)) {
-    return 1; // apx_modules doesn't exist — ask user to run `init`
+function projectRoot(): string {
+  return process.cwd();
+}
+
+function apxRoot(): string {
+  return path.dirname(fileURLToPath(import.meta.url));
+}
+
+function modulesDir(root: string = projectRoot()): string {
+  return path.join(root, MODULES_DIR_NAME);
+}
+
+function manifestPath(root: string = projectRoot()): string {
+  return path.join(modulesDir(root), MANIFEST_NAME);
+}
+
+function readJsonFile<T>(filePath: string, fallback: T): T {
+  if (!fs.existsSync(filePath)) {
+    return fallback;
+  }
+  return JSON.parse(fs.readFileSync(filePath, 'utf8')) as T;
+}
+
+function writeJsonFile(filePath: string, value: unknown): void {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(value, null, 2) + '\n', 'utf8');
+}
+
+function readManifest(root: string = projectRoot()): manifest {
+  return readJsonFile<manifest>(manifestPath(root), {});
+}
+
+function writeManifestFile(root: string, data: manifest): void {
+  writeJsonFile(manifestPath(root), data);
+}
+
+function ensureStarterMain(root: string): void {
+  const mainPath = path.join(root, 'main.apollo');
+  if (fs.existsSync(mainPath)) {
+    return;
+  }
+  fs.writeFileSync(mainPath, 'int main() {\n  return 0;\n}\n', 'utf8');
+}
+
+function normalizeStringArray(rawValue: unknown, fieldName: string): string[] {
+  if (!Array.isArray(rawValue)) {
+    throw new Error(`Invalid apx.json: ${fieldName} must be an array`);
   }
 
-  const mpath = path.join(modulesDir, 'manifest.json');
-  let manifestc: { [k: string]: metadata } = {};
-  if (fs.existsSync(mpath)) {
-    manifestc = JSON.parse(fs.readFileSync(mpath, 'utf8')) || {};
+  const values: string[] = [];
+  for (const item of rawValue) {
+    if (typeof item !== 'string' || item.trim().length === 0) {
+      throw new Error(`Invalid apx.json: ${fieldName} entries must be non-empty strings`);
+    }
+    values.push(item);
+  }
+  return values;
+}
+
+function normalizeMetadata(rawValue: unknown, url?: string): metadata {
+  if (rawValue === null || typeof rawValue !== 'object') {
+    throw new Error('Invalid apx.json: expected an object');
   }
 
-  const pkgPath = path.join(modulesDir, pkg);
-  // Ensure package directory exists
-  if (!fs.existsSync(pkgPath)) fs.mkdirSync(pkgPath, { recursive: true });
+  const raw = rawValue as Record<string, unknown>;
+  const name = typeof raw.name === 'string' && raw.name.trim().length > 0 ? raw.name : null;
+  const version = typeof raw.version === 'string' && raw.version.trim().length > 0 ? raw.version : null;
+  if (name === null) {
+    throw new Error('Invalid apx.json: name must be a non-empty string');
+  }
+  if (version === null) {
+    throw new Error('Invalid apx.json: version must be a non-empty string');
+  }
 
-  // Clone into the package directory
-  const cloneRes = spawnSync('git', ['clone', url, pkgPath], {
+  const normalized: metadata = {
+    name,
+    version,
+    src_exports: normalizeStringArray(raw.src_exports ?? [], 'src_exports'),
+    bin_exports: normalizeStringArray(raw.bin_exports ?? [], 'bin_exports'),
+  };
+  if (url) {
+    normalized.url = url;
+  }
+  return normalized;
+}
+
+function helperPath(): string {
+  const suffix = process.platform === 'win32' ? '.exe' : '';
+  return path.join(apxRoot(), BUNDLER_CACHE_DIR, `apx-rust-bundler${suffix}`);
+}
+
+function helperSourcePath(): string {
+  return path.join(apxRoot(), BUNDLER_SOURCE);
+}
+
+function ensureRustBundler(): string {
+  const outputPath = helperPath();
+  const sourcePath = helperSourcePath();
+  const needsBuild = !fs.existsSync(outputPath)
+    || fs.statSync(sourcePath).mtimeMs > fs.statSync(outputPath).mtimeMs;
+  if (!needsBuild) {
+    return outputPath;
+  }
+
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+  const result = spawnSync('rustc', [sourcePath, '-O', '-o', outputPath], {
+    cwd: apxRoot(),
     encoding: 'utf8',
     windowsHide: true,
-    shell: false,
   });
-  if (cloneRes.error || cloneRes.status !== 0) {
-    // clone failed — return generic error code
+  if (result.status !== 0 || result.error) {
+    const detail = result.error?.message ?? result.stderr ?? 'failed to compile Rust helper';
+    throw new Error(detail.trim());
+  }
+  return outputPath;
+}
+
+function runRustBundler(outputPath: string, inputFiles: string[]): void {
+  const helper = ensureRustBundler();
+  const result = spawnSync(helper, ['bundle', outputPath, ...inputFiles], {
+    cwd: projectRoot(),
+    encoding: 'utf8',
+    windowsHide: true,
+  });
+  if (result.status !== 0 || result.error) {
+    const detail = result.error?.message ?? result.stderr ?? 'Rust bundle helper failed';
+    throw new Error(detail.trim());
+  }
+}
+
+function collectBundleInputs(root: string, entryFile: string): string[] {
+  const manifestData = readManifest(root);
+  const files: string[] = [];
+  const seen = new Set<string>();
+
+  for (const packageName of Object.keys(manifestData).sort()) {
+    const packageDir = path.join(modulesDir(root), packageName);
+    const packageMetadata = manifestData[packageName];
+    for (const exportedSource of packageMetadata.src_exports) {
+      const sourcePath = path.resolve(packageDir, exportedSource);
+      if (!fs.existsSync(sourcePath)) {
+        throw new Error(`Missing src export for ${packageName}: ${exportedSource}`);
+      }
+      if (!seen.has(sourcePath)) {
+        seen.add(sourcePath);
+        files.push(sourcePath);
+      }
+    }
+  }
+
+  const normalizedEntry = path.resolve(root, entryFile);
+  if (!seen.has(normalizedEntry)) {
+    files.push(normalizedEntry);
+  }
+  return files;
+}
+
+export function initProject(root: string = projectRoot()): int {
+  fs.mkdirSync(modulesDir(root), { recursive: true });
+  fs.mkdirSync(path.join(root, 'build'), { recursive: true });
+  if (!fs.existsSync(manifestPath(root))) {
+    writeManifestFile(root, {});
+  }
+  ensureStarterMain(root);
+  console.log(`Initialized apx in ${modulesDir(root)}`);
+  return 0;
+}
+
+export function deinitProject(root: string = projectRoot()): int {
+  fs.rmSync(modulesDir(root), { recursive: true, force: true });
+  console.log(`Removed apx state from ${modulesDir(root)}`);
+  return 0;
+}
+
+export function installPackage(pkg: str, url: str, root: string = projectRoot()): int {
+  initProject(root);
+  const destination = path.join(modulesDir(root), pkg);
+  if (fs.existsSync(destination)) {
+    console.error(`Package already installed: ${pkg}`);
+    return 4;
+  }
+
+  const cloneResult = spawnSync('git', ['clone', '--depth', '1', url, destination], {
+    cwd: root,
+    encoding: 'utf8',
+    windowsHide: true,
+  });
+  if (cloneResult.status !== 0 || cloneResult.error) {
+    console.error((cloneResult.stderr || cloneResult.error?.message || 'git clone failed').trim());
+    fs.rmSync(destination, { recursive: true, force: true });
     return 3;
   }
 
-  const apxJsonPath = path.join(pkgPath, 'apx.json');
-  if (!fs.existsSync(apxJsonPath)) {
-    return 2; // apx.json not found
+  const packageConfigPath = path.join(destination, 'apx.json');
+  if (!fs.existsSync(packageConfigPath)) {
+    console.error('Error: apx.json not found in the repository.');
+    fs.rmSync(destination, { recursive: true, force: true });
+    return 2;
   }
 
-  const apxm = JSON.parse(fs.readFileSync(apxJsonPath, 'utf8'));
-  const data: metadata = {
-    name: apxm.name,
-    version: apxm.version,
-    src_exports: apxm.src_exports,
-    bin_exports: apxm.bin_exports,
-  };
+  try {
+    const manifestData = readManifest(root);
+    manifestData[pkg] = normalizeMetadata(readJsonFile(packageConfigPath, {}), url);
+    writeManifestFile(root, manifestData);
+    console.log(`Installed ${pkg} from ${url}`);
+    return 0;
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    fs.rmSync(destination, { recursive: true, force: true });
+    return 5;
+  }
+}
 
-  manifestc[pkg] = data;
-  fs.writeFileSync(mpath, JSON.stringify(manifestc, null, 2), 'utf8');
+export function uninstallPackage(pkg: str, root: string = projectRoot()): int {
+  const manifestData = readManifest(root);
+  if (!(pkg in manifestData)) {
+    console.error(`Package not installed: ${pkg}`);
+    return 4;
+  }
 
+  delete manifestData[pkg];
+  writeManifestFile(root, manifestData);
+  fs.rmSync(path.join(modulesDir(root), pkg), { recursive: true, force: true });
+  console.log(`Uninstalled ${pkg}`);
   return 0;
 }
-//fs.writeFileSync('manifest.json', JSON.stringify(data, null, 2), 'utf8');
+
+export function bundleProject(entryFile: str, outputFile: str, root: string = projectRoot()): int {
+  try {
+    const entryPath = path.resolve(root, entryFile);
+    if (!fs.existsSync(entryPath)) {
+      console.error(`Entry file not found: ${entryPath}`);
+      return 1;
+    }
+
+    const outputPath = path.resolve(root, outputFile);
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    const inputs = collectBundleInputs(root, entryFile);
+    runRustBundler(outputPath, inputs);
+    console.log(`Bundled ${inputs.length} source file(s) into ${outputPath}`);
+    return 0;
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    return 6;
+  }
+}

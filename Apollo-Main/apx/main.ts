@@ -1,33 +1,42 @@
-import * as write from './write';
-import * as include from './include';
-import {argv} from 'process';
-import * as fs from 'fs';
+import {
+    bundleProject,
+    deinitProject,
+    initProject,
+    installPackage,
+    uninstallPackage,
+} from './write.ts';
 
 type int = number;
 type str = string;
-type bool = boolean;
 
-function init(): int {
-    fs.mkdirSync('apx_modules', { recursive: true });
-    const manifest = {};
-    fs.writeFileSync('apx_modules/manifest.json', JSON.stringify(manifest, null, 2), 'utf8');
-    return 0;
+function usage(): int {
+    console.error('Usage: apollo apx init');
+    console.error('       apollo apx install <packagename> <url>');
+    console.error('       apollo apx uninstall <packagename>');
+    console.error('       apollo apx deinit');
+    return 1;
 }
 
-function main(str: str[], argc: int): int {
-    if (argc == 0) return 1;
-    const idt: str = str[0];
-    if (idt === 'ins') { 
-        const scs: int = write.install(str[1], str[2]); 
-        if (scs === 2) {
-            console.error('Error: apx.json not found in the repository.');
-            return 2;
-        }
+function main(args: str[]): int {
+    if (args.length === 0) {
+        return usage();
     }
-    else if (idt === 'init') init();
-    else return 1;
-    return 0;
+
+    const [command, ...rest] = args;
+    switch (command) {
+        case 'init':
+            return rest.length === 0 ? initProject() : usage();
+        case 'install':
+            return rest.length === 2 ? installPackage(rest[0], rest[1]) : usage();
+        case 'uninstall':
+            return rest.length === 1 ? uninstallPackage(rest[0]) : usage();
+        case 'deinit':
+            return rest.length === 0 ? deinitProject() : usage();
+        case 'bundle':
+            return rest.length === 2 ? bundleProject(rest[0], rest[1]) : usage();
+        default:
+            return usage();
+    }
 }
 
-const exit = main(process.argv.slice(2), process.argv.length - 2);
-process.exit(exit); 
+process.exit(main(process.argv.slice(2)));

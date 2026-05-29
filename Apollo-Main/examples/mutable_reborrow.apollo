@@ -1,0 +1,10 @@
+int read_value(nconst int& slot) {
+    return *slot;
+}
+
+int main() {
+    nconst int counter = 42;
+    nconst int& alias = &nconst counter;
+    sys.println(read_value(alias));
+    return 0;
+}

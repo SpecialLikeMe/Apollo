@@ -1,0 +1,16 @@
+// Workstream C smoke test: `loop {}` and range-based for-in.
+int main() {
+    int sum = 0;
+    for (int i in 0 .. 5) {
+        sum = sum + i;
+    }
+    /* Expected sum: 0+1+2+3+4 = 10 */
+    int n = 0;
+    loop {
+        n = n + 1;
+        if (n >= 3) {
+            return sum + n;
+        }
+    }
+    return sum;
+}

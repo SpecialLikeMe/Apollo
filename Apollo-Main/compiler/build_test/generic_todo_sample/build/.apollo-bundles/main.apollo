@@ -1,0 +1,15 @@
+// apx bundle: C:/Users/devon/Apollo/Apollo-Main/compiler/build_test/generic_todo_sample/main.apollo
+template nominal<<T>> myfunc(<T>&stt x) {
+    T val = x;
+    return nominal(val);
+}
+
+int main() {
+    auto x = myfunc<int>(4);
+    str y = myfunc("a");
+    nrc T = int;
+    T z = 42;
+    return 0;
+}
+
+

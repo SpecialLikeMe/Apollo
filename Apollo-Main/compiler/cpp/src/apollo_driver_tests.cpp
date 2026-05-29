@@ -13,6 +13,8 @@
 #include "apollo_driver.h"
 #include "apollo_inline_foreign.h"
 #include "apollo_runtime.h"
+#include "codegen/optimizer.h"
+#include "visitor.h"
 
 namespace {
 
@@ -559,6 +561,46 @@ clang -S -emit-llvm "$tmp_c" -o "$out"
         return true;
     }
 
+    bool verifyInlineForeignCppHeaderImportSurface() {
+        const auto workspace = std::filesystem::temp_directory_path() / std::filesystem::path("apollo-inline-foreign-cpp-header-native");
+        std::error_code ec;
+        std::filesystem::remove_all(workspace, ec);
+        std::filesystem::create_directories(workspace);
+
+        const auto source = workspace / "cpp_header_import.apollo";
+        const auto output = workspace / "cpp_header_import.ll";
+
+        const std::string program =
+            "@unsafe {\n"
+            "    inl::cxx {\n"
+            "        #include <cstdio>\n"
+            "    }\n"
+            "}\n"
+            "int main() {\n"
+            "    puts(\"hello from inline header\");\n"
+            "    printf(\"%s %i\\n\", \"value\", 7);\n"
+            "    return 0;\n"
+            "}\n";
+
+        writeTextFile(source, program);
+
+        ApolloDriver::compileApollo(source.string(), output.string());
+        if (!require(std::filesystem::exists(output), "header-backed inline foreign compile should emit LLVM IR")) {
+            return false;
+        }
+
+        const std::string ir = readTextFile(output);
+        if (!require(ir.find("@puts(") != std::string::npos,
+            "header-backed inline foreign compile should declare puts in the final LLVM IR")) {
+            return false;
+        }
+        if (!require(ir.find("@printf(") != std::string::npos,
+            "header-backed inline foreign compile should declare variadic printf in the final LLVM IR")) {
+            return false;
+        }
+        return true;
+    }
+
 } // namespace
 
 int main() {
@@ -569,6 +611,9 @@ int main() {
                 return 1;
         }
         if (!verifyInlineForeignManagedFallbackSurface()) {
+            return 1;
+        }
+        if (!verifyInlineForeignCppHeaderImportSurface()) {
             return 1;
         }
 
@@ -669,6 +714,82 @@ int main() {
     } catch (const std::exception& ex) {
         std::filesystem::current_path(originalCwd);
         std::cerr << ex.what() << '\n';
+        return 1;
+    }
+
+    // Workstream B: smoke tests for optimizer pipeline + bitcode + LTO.
+    try {
+        const auto optSource = workspace / "opt.apollo";
+        const auto optOutO0  = workspace / "opt_O0.ll";
+        const auto optOutO2  = workspace / "opt_O2.ll";
+        const auto optOutBc  = workspace / "opt_O2.bc";
+        const auto optOutLto = workspace / "opt_lto.ll";
+
+        {
+            std::ofstream file(optSource, std::ios::binary | std::ios::trunc);
+            file << "int main() { return 0; }\n";
+        }
+
+        // Baseline: O0, no PGO, no LTO, no bitcode.
+        ApolloIrCodegen::setOptConfig({});
+        ApolloIrCodegen::setBitcodeOutputPath({});
+        std::filesystem::remove(ApolloDriver::cacheEntryPath(optSource, optOutO0));
+        ApolloDriver::compileApollo(optSource.string(), optOutO0.string());
+        if (!require(std::filesystem::exists(optOutO0), "O0 emit should succeed")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+
+        // O2 + bitcode sidecar.
+        apollo::codegen::OptConfig o2{};
+        o2.level = 2;
+        ApolloIrCodegen::setOptConfig(o2);
+        ApolloIrCodegen::setBitcodeOutputPath(optOutBc.string());
+        std::filesystem::remove(ApolloDriver::cacheEntryPath(optSource, optOutO2));
+        ApolloDriver::compileApollo(optSource.string(), optOutO2.string());
+        if (!require(std::filesystem::exists(optOutO2), "-O2 emit should succeed")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+        if (!require(std::filesystem::exists(optOutBc) && std::filesystem::file_size(optOutBc) > 0,
+                "-O2 bitcode sidecar should be written")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+
+        // ThinLTO pre-link pipeline + summary bitcode.
+        apollo::codegen::OptConfig lto{};
+        lto.level = 2;
+        lto.lto = true;
+        ApolloIrCodegen::setOptConfig(lto);
+        ApolloIrCodegen::setBitcodeOutputPath((workspace / "opt_lto.bc").string());
+        std::filesystem::remove(ApolloDriver::cacheEntryPath(optSource, optOutLto));
+        ApolloDriver::compileApollo(optSource.string(), optOutLto.string());
+        if (!require(std::filesystem::exists(optOutLto), "ThinLTO pre-link emit should succeed")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+
+        // PGO-instrument pipeline.
+        apollo::codegen::OptConfig pgo{};
+        pgo.level = 2;
+        pgo.pgo_instrument = true;
+        ApolloIrCodegen::setOptConfig(pgo);
+        ApolloIrCodegen::setBitcodeOutputPath({});
+        const auto optOutPgo = workspace / "opt_pgo.ll";
+        std::filesystem::remove(ApolloDriver::cacheEntryPath(optSource, optOutPgo));
+        ApolloDriver::compileApollo(optSource.string(), optOutPgo.string());
+        if (!require(std::filesystem::exists(optOutPgo), "PGO-instrument emit should succeed")) {
+            std::filesystem::current_path(originalCwd);
+            return 1;
+        }
+
+        // Reset for any subsequent tests.
+        ApolloIrCodegen::setOptConfig({});
+        ApolloIrCodegen::setBitcodeOutputPath({});
+    } catch (const std::exception& ex) {
+        std::filesystem::current_path(originalCwd);
+        std::cerr << "optimizer pipeline test failed: " << ex.what() << '\n';
         return 1;
     }
 

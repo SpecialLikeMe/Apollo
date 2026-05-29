@@ -1,0 +1,9 @@
+// This should compile: borrowing the root again should chain through the current
+// mutable holder instead of reporting a second mutable borrow of the root.
+
+int main() {
+    nconst int value = 1;
+    nconst int &nconst alias = value;
+    nconst int &nconst alias2 = value;
+    return 0;
+}

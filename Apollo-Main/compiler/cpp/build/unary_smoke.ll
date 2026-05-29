@@ -1,0 +1,52 @@
+; ModuleID = 'unary_smoke'
+source_filename = "unary_smoke.apollo"
+
+define i32 @main() {
+entry:
+  %e = alloca i32, align 4
+  %d = alloca i1, align 1
+  %c = alloca i32, align 4
+  %b = alloca i32, align 4
+  %a = alloca i32, align 4
+  store i32 5, ptr %a, align 4
+  %0 = load i32, ptr %a, align 4
+  %1 = sub i32 0, %0
+  store i32 %1, ptr %b, align 4
+  %2 = load i32, ptr %a, align 4
+  store i32 %2, ptr %c, align 4
+  store i1 false, ptr %d, align 1
+  %3 = load i32, ptr %a, align 4
+  %4 = sub i32 0, %3
+  %5 = sub i32 0, %4
+  store i32 %5, ptr %e, align 4
+  ret i32 0
+}
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.primitive.types = !{!3, !4, !5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21, !22}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"unary_smoke"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"float", !"float"}
+!4 = !{!"long", !"i64"}
+!5 = !{!"isize", !"i64"}
+!6 = !{!"i64", !"i64"}
+!7 = !{!"short", !"i16"}
+!8 = !{!"u32", !"i32"}
+!9 = !{!"bool", !"i1"}
+!10 = !{!"int", !"i32"}
+!11 = !{!"void", !"void"}
+!12 = !{!"u16", !"i16"}
+!13 = !{!"i16", !"i16"}
+!14 = !{!"u64", !"i64"}
+!15 = !{!"u8", !"i8"}
+!16 = !{!"f64", !"double"}
+!17 = !{!"i32", !"i32"}
+!18 = !{!"double", !"double"}
+!19 = !{!"usize", !"i64"}
+!20 = !{!"byte", !"i8"}
+!21 = !{!"i8", !"i8"}
+!22 = !{!"char", !"i32"}

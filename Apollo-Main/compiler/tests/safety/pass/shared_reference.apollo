@@ -6,7 +6,7 @@ void inspect(const str& value) {
 int main() {
     str message = "ok";
     const str& alias = &message;
-    inspect(&message);
-    sys.println(message);
+    inspect(alias);
+    sys.println(alias);
     return 0;
 }

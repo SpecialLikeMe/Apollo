@@ -1085,4 +1085,5 @@ CMakeFiles/apollo_frontend_native.dir/src/apollo_driver.cpp.obj: \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_runtime.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.h \
-  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/visitor.h
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/visitor.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/codegen/optimizer.h

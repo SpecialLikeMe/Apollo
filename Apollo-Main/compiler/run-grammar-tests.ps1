@@ -78,7 +78,7 @@ Initialize-NativeToolchainEnvironment
 Set-Location $compilerDir
 
 $nativeSourceDir = Join-Path $compilerDir 'cpp'
-$nativeBuildDir = Join-Path $nativeSourceDir 'build'
+$nativeBuildDir = if ($env:APOLLO_NATIVE_BUILD_DIR) { $env:APOLLO_NATIVE_BUILD_DIR } else { Join-Path (Split-Path $compilerDir -Parent) 'build' }
 $nativeBuildConfig = if ($env:APOLLO_NATIVE_BUILD_CONFIG) { $env:APOLLO_NATIVE_BUILD_CONFIG } else { 'Release' }
 $expectLegacyCppOutput = $env:APOLLO_EXPECT_CPP_OUTPUT -in @('1', 'true', 'TRUE', 'yes', 'YES', 'on', 'ON')
 
@@ -292,6 +292,12 @@ $tests = @(
             '__apo_queuePayload("cpp\n',
             '__apo_executePayload("cpp\n'
         )
+    },
+    [pscustomobject]@{
+        Name = 'pointer-expression-surface'
+        Path = 'tests\grammar\pass\pointer_expression_surface.apollo'
+        ShouldPass = $true
+        Covers = 'expression-form raw address-of and dereference assignments lower through the existing pointer/reference model'
     },
     [pscustomobject]@{
         Name = 'nconst-surface'
@@ -776,6 +782,22 @@ $tests = @(
         Covers = 'tuple<T, ...> lowers as an explicit structural multi-value type and option<T>/option<T, cerr> lower through the tagged result path'
     },
     [pscustomobject]@{
+        Name = 'enum-surface'
+        Path = 'tests\grammar\pass\enum_surface.apollo'
+        ShouldPass = $true
+        Covers = 'unit, tuple, and struct-like enums plus unwrap_enum lower through the tagged aggregate path'
+    },
+    [pscustomobject]@{
+        Name = 'generic-function-surface'
+        Path = 'tests\grammar\pass\generic_function_surface.apollo'
+        ShouldPass = $true
+        Covers = 'template functions with explicit and inferred type arguments plus nrc local type aliases lower through on-demand specialization'
+        OutputMustContainAll = @(
+            '@identity$i32',
+            '@identity$str'
+        )
+    },
+    [pscustomobject]@{
         Name = 'host-portability-surface'
         Path = 'tests\grammar\pass\host_portability_surface.apollo'
         ShouldPass = $true
@@ -854,6 +876,13 @@ $tests = @(
         Path = 'tests\grammar\pass\url_surface.apollo'
         ShouldPass = $true
         Covers = 'URL parsing and URL component helpers lower through the std prelude'
+    },
+    [pscustomobject]@{
+        Name = 'unknown-function-call'
+        Path = 'tests\grammar\fail\unknown_function_call.apollo'
+        ShouldPass = $false
+        Expected = 'unknown function `missing_fn`'
+        Covers = 'undefined functions fail during lowering even when they appear inside an initializer expression'
     },
     [pscustomobject]@{
         Name = 'unsafe-required'

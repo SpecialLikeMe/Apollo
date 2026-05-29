@@ -1,26 +1,29 @@
+# Apollo build entrypoint.
+#
+# The build is fully native: grammar regeneration uses the system
+# `antlr4` driver (which itself wraps a JRE if needed, but Apollo no
+# longer ships an in-tree ANTLR jar). All build outputs go through
+# CMake. The legacy Java/IntelliJ project metadata was removed in the
+# 2026 cleanup -- ANTLR_JAR/LOCAL_ANTLR_JAR variables are intentionally
+# absent.
+
 GRAMMAR := compilerv1.g4
 CPP_OUT := cpp/generated
 LEGACY_CPP_OUT := generated
-LEGACY_JAVA_OUT := compiler-master
+LEGACY_JAVA_OUT := compiler-master   # historical dir kept only so `make clean` removes it if present
 ifeq ($(OS),Windows_NT)
 POWERSHELL := pwsh -NoProfile -Command
-CMAKE_BUILD_DIR := cpp/build
+CMAKE_BUILD_DIR := ../build
 else
-CMAKE_BUILD_DIR := cpp/build-posix
+CMAKE_BUILD_DIR := ../build
 endif
 CMAKE_CONFIG ?= Release
-NATIVE_TARGETS := apollo_frontend_native apollo_build_driver_native apollo_runtime_tests apollo_driver_tests
+NATIVE_TARGETS := apollo_frontend_native apollo_build_driver_native apollo_runtime_tests apollo_driver_tests apollo_mir_tests apollo_gc_concurrent_tests
 CORE_TARGETS := apollo_frontend_native apollo_build_driver_native
+ANTLR_TOOL_VERSION ?= 4.13.2
 
-LOCAL_ANTLR_JAR := antlr-4.13.2-complete.jar
 ANTLR_CMD ?= antlr4
-ANTLR_JAR ?= $(LOCAL_ANTLR_JAR)
-
-ifneq ($(wildcard $(ANTLR_JAR)),)
-ANTLR := java -jar "$(ANTLR_JAR)"
-else
 ANTLR := $(ANTLR_CMD)
-endif
 
 .PHONY: all core regen regen-cpp compile compile-core compile-native \
 	clean clean-generated clean-build run ctall analyze grammar-tests test cmprun runopt info
@@ -37,12 +40,12 @@ ifeq ($(OS),Windows_NT)
 regen: regen-cpp
 
 regen-cpp:
-	@$(POWERSHELL) "$$ErrorActionPreference = 'Stop'; if (-not (Test-Path '$(GRAMMAR)')) { throw 'Missing native grammar: $(GRAMMAR)' }; New-Item -ItemType Directory -Force -Path '$(CPP_OUT)' | Out-Null; Remove-Item '$(CPP_OUT)/compilerv1*.cpp', '$(CPP_OUT)/compilerv1*.h', '$(CPP_OUT)/compilerv1*.tokens', '$(CPP_OUT)/compilerv1*.interp' -Force -ErrorAction SilentlyContinue; Remove-Item '$(LEGACY_CPP_OUT)', '$(LEGACY_JAVA_OUT)', 'output/classes' -Recurse -Force -ErrorAction SilentlyContinue; $$antlrArgs = @('-Dlanguage=Cpp', '-visitor', '-no-listener', '-Xexact-output-dir', '-o', '$(CPP_OUT)', '$(GRAMMAR)'); $$antlrJar = '$(ANTLR_JAR)'; $$antlrCmd = '$(ANTLR_CMD)'; if ($$antlrJar -and (Test-Path $$antlrJar)) { & java -jar $$antlrJar $$antlrArgs } else { & $$antlrCmd $$antlrArgs }; if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }"
+	@$(POWERSHELL) "$$ErrorActionPreference = 'Stop'; if (-not (Test-Path '$(GRAMMAR)')) { throw 'Missing native grammar: $(GRAMMAR)' }; New-Item -ItemType Directory -Force -Path '$(CPP_OUT)' | Out-Null; if (-not $$env:ANTLR4_TOOLS_ANTLR_VERSION) { $$env:ANTLR4_TOOLS_ANTLR_VERSION = '$(ANTLR_TOOL_VERSION)' }; $$antlrCommand = '$(ANTLR_CMD)'; if (-not (Get-Command $$antlrCommand -ErrorAction SilentlyContinue)) { $$pythonLauncher = Get-Command py -ErrorAction SilentlyContinue; if ($$pythonLauncher) { $$scriptsDir = & py -3 -c \"import sysconfig; print(sysconfig.get_path('scripts'))\"; if ($$LASTEXITCODE -eq 0 -and $$scriptsDir) { $$antlrExe = Join-Path $$scriptsDir 'antlr4.exe'; if (Test-Path $$antlrExe) { $$antlrCommand = $$antlrExe } } } }; if (-not (Get-Command $$antlrCommand -ErrorAction SilentlyContinue) -and -not (Test-Path $$antlrCommand)) { throw ('ANTLR tool not found: ' + $$antlrCommand) }; $$stagingDir = Join-Path ([System.IO.Path]::GetTempPath()) ('apollo-antlr-' + [Guid]::NewGuid().ToString('N')); New-Item -ItemType Directory -Force -Path $$stagingDir | Out-Null; try { & $$antlrCommand -Dlanguage=Cpp -visitor -no-listener -Xexact-output-dir -o $$stagingDir '$(GRAMMAR)'; if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }; Remove-Item '$(CPP_OUT)/compilerv1*.cpp', '$(CPP_OUT)/compilerv1*.h', '$(CPP_OUT)/compilerv1*.tokens', '$(CPP_OUT)/compilerv1*.interp' -Force -ErrorAction SilentlyContinue; Get-ChildItem $$stagingDir -File | Move-Item -Destination '$(CPP_OUT)' -Force; Remove-Item '$(LEGACY_CPP_OUT)', '$(LEGACY_JAVA_OUT)', 'output/classes' -Recurse -Force -ErrorAction SilentlyContinue } finally { Remove-Item $$stagingDir -Recurse -Force -ErrorAction SilentlyContinue }"
 
-compile-core: regen-cpp
-	@$(POWERSHELL) "$$ErrorActionPreference = 'Stop'; $$configureArgs = @('-S', 'cpp', '-B', '$(CMAKE_BUILD_DIR)'); if ($$env:APOLLO_NATIVE_GENERATOR) { $$configureArgs += @('-G', $$env:APOLLO_NATIVE_GENERATOR) }; if ($$env:CMAKE_TOOLCHAIN_FILE) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$env:CMAKE_TOOLCHAIN_FILE } elseif ($$env:VCPKG_ROOT) { $$vcpkgToolchain = Join-Path $$env:VCPKG_ROOT 'scripts\buildsystems\vcpkg.cmake'; if (Test-Path $$vcpkgToolchain) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$vcpkgToolchain } } elseif ($$env:USERPROFILE) { $$defaultVcpkgToolchain = Join-Path $$env:USERPROFILE 'vcpkg\scripts\buildsystems\vcpkg.cmake'; if (Test-Path $$defaultVcpkgToolchain) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$defaultVcpkgToolchain } }; if (-not (Test-Path '$(CMAKE_BUILD_DIR)/CMakeCache.txt')) { & cmake $$configureArgs; if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE } }; & cmake --build '$(CMAKE_BUILD_DIR)' --config '$(CMAKE_CONFIG)' --target $(CORE_TARGETS); if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }"
+compile-core:
+	@$(POWERSHELL) "$$ErrorActionPreference = 'Stop'; $$configureArgs = @('-S', 'cpp', '-B', '$(CMAKE_BUILD_DIR)'); if ($$env:APOLLO_NATIVE_GENERATOR) { $$configureArgs += @('-G', $$env:APOLLO_NATIVE_GENERATOR) }; if ($$env:CMAKE_TOOLCHAIN_FILE) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$env:CMAKE_TOOLCHAIN_FILE } elseif ($$env:VCPKG_ROOT) { $$vcpkgToolchain = Join-Path $$env:VCPKG_ROOT 'scripts\buildsystems\vcpkg.cmake'; if (Test-Path $$vcpkgToolchain) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$vcpkgToolchain } } elseif ($$env:USERPROFILE) { $$defaultVcpkgToolchain = Join-Path $$env:USERPROFILE 'vcpkg\scripts\buildsystems\vcpkg.cmake'; if (Test-Path $$defaultVcpkgToolchain) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$defaultVcpkgToolchain } }; & cmake $$configureArgs; if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }; & cmake --build '$(CMAKE_BUILD_DIR)' --config '$(CMAKE_CONFIG)' --target $(CORE_TARGETS); if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }"
 
-compile-native: regen-cpp
+compile-native:
 	@$(POWERSHELL) "$$ErrorActionPreference = 'Stop'; Remove-Item '$(CMAKE_BUILD_DIR)' -Recurse -Force -ErrorAction SilentlyContinue; $$configureArgs = @('-S', 'cpp', '-B', '$(CMAKE_BUILD_DIR)'); if ($$env:APOLLO_NATIVE_GENERATOR) { $$configureArgs += @('-G', $$env:APOLLO_NATIVE_GENERATOR) }; if ($$env:CMAKE_TOOLCHAIN_FILE) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$env:CMAKE_TOOLCHAIN_FILE } elseif ($$env:VCPKG_ROOT) { $$vcpkgToolchain = Join-Path $$env:VCPKG_ROOT 'scripts\buildsystems\vcpkg.cmake'; if (Test-Path $$vcpkgToolchain) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$vcpkgToolchain } } elseif ($$env:USERPROFILE) { $$defaultVcpkgToolchain = Join-Path $$env:USERPROFILE 'vcpkg\scripts\buildsystems\vcpkg.cmake'; if (Test-Path $$defaultVcpkgToolchain) { $$configureArgs += '-DCMAKE_TOOLCHAIN_FILE=' + $$defaultVcpkgToolchain } }; & cmake $$configureArgs; if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }; & cmake --build '$(CMAKE_BUILD_DIR)' --config '$(CMAKE_CONFIG)' --target $(NATIVE_TARGETS); if ($$LASTEXITCODE -ne 0) { exit $$LASTEXITCODE }"
 
 clean-generated:
@@ -64,31 +67,41 @@ regen: regen-cpp
 regen-cpp:
 	@test -f '$(GRAMMAR)' || { printf 'Missing native grammar: %s\n' '$(GRAMMAR)' >&2; exit 1; }
 	@mkdir -p '$(CPP_OUT)'
-	@rm -f '$(CPP_OUT)'/compilerv1*.cpp '$(CPP_OUT)'/compilerv1*.h '$(CPP_OUT)'/compilerv1*.tokens '$(CPP_OUT)'/compilerv1*.interp
-	@rm -rf '$(LEGACY_CPP_OUT)' '$(LEGACY_JAVA_OUT)' output/classes
-	@if [ -n "$(ANTLR_JAR)" ] && [ -f "$(ANTLR_JAR)" ]; then \
-		java -jar "$(ANTLR_JAR)" -Dlanguage=Cpp -visitor -no-listener -Xexact-output-dir -o '$(CPP_OUT)' '$(GRAMMAR)'; \
-	else \
-		'$(ANTLR_CMD)' -Dlanguage=Cpp -visitor -no-listener -Xexact-output-dir -o '$(CPP_OUT)' '$(GRAMMAR)'; \
-	fi
+	@stage_dir="$$(mktemp -d)"; \
+	antlr_cmd='$(ANTLR_CMD)'; \
+	if [ -z "$${ANTLR4_TOOLS_ANTLR_VERSION:-}" ]; then export ANTLR4_TOOLS_ANTLR_VERSION='$(ANTLR_TOOL_VERSION)'; fi; \
+	if ! command -v "$$antlr_cmd" >/dev/null 2>&1; then \
+		if command -v python3 >/dev/null 2>&1; then \
+			scripts_dir="$$(python3 -c "import sysconfig; print(sysconfig.get_path('scripts'))")"; \
+			if [ -x "$$scripts_dir/antlr4" ]; then antlr_cmd="$$scripts_dir/antlr4"; \
+			elif [ -x "$$scripts_dir/antlr4.exe" ]; then antlr_cmd="$$scripts_dir/antlr4.exe"; fi; \
+		fi; \
+	fi; \
+	if ! command -v "$$antlr_cmd" >/dev/null 2>&1 && [ ! -x "$$antlr_cmd" ]; then \
+		printf 'ANTLR tool not found: %s\n' "$$antlr_cmd" >&2; \
+		rm -rf "$$stage_dir"; \
+		exit 1; \
+	fi; \
+	"$$antlr_cmd" -Dlanguage=Cpp -visitor -no-listener -Xexact-output-dir -o "$$stage_dir" '$(GRAMMAR)' || { status=$$?; rm -rf "$$stage_dir"; exit $$status; }; \
+	rm -f '$(CPP_OUT)'/compilerv1*.cpp '$(CPP_OUT)'/compilerv1*.h '$(CPP_OUT)'/compilerv1*.tokens '$(CPP_OUT)'/compilerv1*.interp; \
+	mv "$$stage_dir"/compilerv1* '$(CPP_OUT)'/; \
+	rm -rf "$$stage_dir" '$(LEGACY_CPP_OUT)' '$(LEGACY_JAVA_OUT)' output/classes
 
 compile: compile-native
 
-compile-core: regen-cpp
+compile-core:
 	@mkdir -p '$(CMAKE_BUILD_DIR)'
-	@if [ ! -f '$(CMAKE_BUILD_DIR)/CMakeCache.txt' ]; then \
-		set -- -S cpp -B '$(CMAKE_BUILD_DIR)'; \
-		if [ -n "$${APOLLO_NATIVE_GENERATOR:-}" ]; then set -- "$$@" -G "$${APOLLO_NATIVE_GENERATOR}"; fi; \
-		if [ -n "$${CMAKE_TOOLCHAIN_FILE:-}" ]; then \
-			set -- "$$@" "-DCMAKE_TOOLCHAIN_FILE=$${CMAKE_TOOLCHAIN_FILE}"; \
-		elif [ -n "$${VCPKG_ROOT:-}" ] && [ -f "$${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" ]; then \
-			set -- "$$@" "-DCMAKE_TOOLCHAIN_FILE=$${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"; \
-		fi; \
-		cmake "$$@"; \
-	fi
+	@set -- -S cpp -B '$(CMAKE_BUILD_DIR)'; \
+	if [ -n "$${APOLLO_NATIVE_GENERATOR:-}" ]; then set -- "$$@" -G "$${APOLLO_NATIVE_GENERATOR}"; fi; \
+	if [ -n "$${CMAKE_TOOLCHAIN_FILE:-}" ]; then \
+		set -- "$$@" "-DCMAKE_TOOLCHAIN_FILE=$${CMAKE_TOOLCHAIN_FILE}"; \
+	elif [ -n "$${VCPKG_ROOT:-}" ] && [ -f "$${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" ]; then \
+		set -- "$$@" "-DCMAKE_TOOLCHAIN_FILE=$${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"; \
+	fi; \
+	cmake "$$@"
 	@cmake --build '$(CMAKE_BUILD_DIR)' --config '$(CMAKE_CONFIG)' --target $(CORE_TARGETS)
 
-compile-native: regen-cpp
+compile-native:
 	@rm -rf '$(CMAKE_BUILD_DIR)'
 	@set -- -S cpp -B '$(CMAKE_BUILD_DIR)'; \
 	if [ -n "$${APOLLO_NATIVE_GENERATOR:-}" ]; then set -- "$$@" -G "$${APOLLO_NATIVE_GENERATOR}"; fi; \

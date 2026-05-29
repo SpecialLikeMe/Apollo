@@ -731,6 +731,48 @@ inline __apo_total_gc_runtime& __apo_global_total_gc_runtime() {
     return runtime;
 }
 
+// GC implementation seam.
+// -----------------------------------------------------------------------------
+//
+// `__apollo_gc_*_impl` are the canonical hooks every part of the
+// runtime (and the codegen) calls. Define `APOLLO_GC_CONCURRENT` to
+// route them to the production concurrent tri-color collector defined
+// in `apollo_gc_concurrent.hpp`. Without the macro, calls go to the
+// original synchronous stop-the-world collector implemented in this
+// header — the legacy fallback used by single-threaded probes and a
+// few bring-up tests. New runtime builds (driven by CMake) should
+// always define `APOLLO_GC_CONCURRENT`.
+//
+// The concurrent collector's `alloc` ABI takes
+// `(mutator, bytes, trace_fn, type_id)`. Legacy callers pass just
+// `bytes`, so the adapter lazily attaches a thread-local mutator and
+// supplies a no-op trace function. Once codegen learns to thread
+// trace functions per type, this adapter retires.
+
+#ifdef APOLLO_GC_CONCURRENT
+extern "C" void  apollo_gc_concurrent_init();
+extern "C" void* apollo_gc_concurrent_attach();
+extern "C" void* apollo_gc_concurrent_alloc(void* mutator, std::size_t bytes,
+                                            void (*trace_fn)(void*, void*),
+                                            std::uint16_t type_id);
+extern "C" void  apollo_gc_concurrent_collect();
+
+inline void __apollo_gc_init_impl() {
+    apollo_gc_concurrent_init();
+}
+
+inline void* __apollo_gc_alloc_impl(std::size_t size) {
+    // Each call attaches lazily; the runtime is idempotent so this is
+    // fine on the slow path. Hot-path allocators inside generated code
+    // should cache the mutator via `apollo_gc_concurrent_attach()`.
+    void* m = apollo_gc_concurrent_attach();
+    return apollo_gc_concurrent_alloc(m, size, /*trace_fn=*/nullptr, /*type_id=*/0);
+}
+
+inline void __apollo_gc_collect_impl() {
+    apollo_gc_concurrent_collect();
+}
+#else  // legacy synchronous mark-and-sweep
 inline void __apollo_gc_init_impl() {
     __apo_global_total_gc_runtime().init();
 }
@@ -742,6 +784,7 @@ inline void* __apollo_gc_alloc_impl(std::size_t size) {
 inline void __apollo_gc_collect_impl() {
     __apo_global_total_gc_runtime().collect();
 }
+#endif
 
 inline void GC_INIT() {
     __apollo_gc_init_impl();

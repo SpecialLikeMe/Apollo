@@ -8,7 +8,29 @@
 #include <iostream>
 #include <optional>
 #ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <process.h>
+#include <windows.h>
+#ifdef ERROR
+#undef ERROR
+#endif
+#ifdef TRUE
+#undef TRUE
+#endif
+#ifdef FALSE
+#undef FALSE
+#endif
+#ifdef CONST
+#undef CONST
+#endif
+#ifdef IN
+#undef IN
+#endif
 #endif
 #include <sstream>
 #include <stdexcept>
@@ -18,8 +40,34 @@
 
 #include "apollo_driver.h"
 #include "apollo_runtime.h"
+#include "codegen/optimizer.h"
+#include "visitor.h"
 
 namespace {
+
+void initializeConsoleStyling() {
+#ifdef _WIN32
+    auto enable = [](DWORD handleId) {
+        HANDLE handle = GetStdHandle(handleId);
+        if (handle == INVALID_HANDLE_VALUE || handle == nullptr) {
+            return;
+        }
+        DWORD mode = 0;
+        if (!GetConsoleMode(handle, &mode)) {
+            return;
+        }
+        if ((mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) == 0) {
+            SetConsoleMode(handle, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+        }
+    };
+    enable(STD_OUTPUT_HANDLE);
+    enable(STD_ERROR_HANDLE);
+#endif
+}
+
+void printErrorLine(const std::string& message) {
+    std::cerr << "\x1b[31m" << message << "\x1b[0m\n";
+}
 
 class BuildDriverException final : public std::runtime_error {
 public:
@@ -47,6 +95,7 @@ struct BuildEnvironment {
     std::filesystem::path pchOutput;
     std::string clangExe;
     std::string clangxxExe;
+    std::string zigExe;
     std::string llcExe;
     std::string cxxStd;
     std::string optLevel;
@@ -67,6 +116,8 @@ std::vector<std::string> linkFlags(const BuildEnvironment& env);
 std::vector<std::string> standaloneLinkFlags(const BuildEnvironment& env);
 std::vector<std::string> pgoFlags(bool compilePhase);
 void runCommand(const std::vector<std::string>& command, const std::filesystem::path& workingDirectory);
+bool useZigCrossToolchain(const BuildEnvironment& env);
+std::vector<std::string> cxxCommandPrefix(const BuildEnvironment& env);
 
 std::string readTextFile(const std::filesystem::path& path) {
     std::ifstream input(path, std::ios::binary);
@@ -113,6 +164,44 @@ std::string firstDefined(const char* primary, const char* secondary, const char*
         return secondary;
     }
     return fallback;
+}
+
+bool supportsZigCrossTarget(std::string_view targetTriple) {
+    return targetTriple == "x86_64-unknown-linux-gnu"
+        || targetTriple == "x86_64-apple-darwin";
+}
+
+std::string zigTargetTriple(std::string_view targetTriple) {
+    if (targetTriple == "x86_64-unknown-linux-gnu") {
+        return "x86_64-linux-gnu";
+    }
+    if (targetTriple == "x86_64-apple-darwin") {
+        return "x86_64-macos-none";
+    }
+    return std::string(targetTriple);
+}
+
+bool useZigCrossToolchain(const BuildEnvironment& env) {
+    return !isBlank(env.zigExe) && supportsZigCrossTarget(env.targetTriple);
+}
+
+void ensureTargetToolchainConfigured(const BuildEnvironment& env) {
+    if (isBlank(env.targetTriple)) {
+        return;
+    }
+    if (supportsZigCrossTarget(env.targetTriple) && !useZigCrossToolchain(env)) {
+        throw BuildDriverException(
+            "Apollo cross-target '" + env.targetTriple
+            + "' requires APOLLO_ZIG_EXE to point at a working zig executable. "
+              "Apollo uses `zig c++` for -L and -M builds on Windows.");
+    }
+}
+
+std::vector<std::string> cxxCommandPrefix(const BuildEnvironment& env) {
+    if (useZigCrossToolchain(env)) {
+        return {env.zigExe, "c++"};
+    }
+    return {env.clangxxExe};
 }
 
 bool envEnabled(const char* name, bool defaultValue) {
@@ -833,7 +922,7 @@ std::filesystem::path buildDirectIrRuntimeSupportObject(const BuildEnvironment& 
         return objectPath;
     }
 
-    std::vector<std::string> command = {env.clangxxExe};
+    std::vector<std::string> command = cxxCommandPrefix(env);
     auto flags = targetFlags(env);
     command.insert(command.end(), flags.begin(), flags.end());
     command.push_back("-x");
@@ -1009,10 +1098,20 @@ std::vector<std::string> splitFlags(const char* raw) {
 std::vector<std::string> targetFlags(const BuildEnvironment& env) {
     std::vector<std::string> flags;
     if (!isBlank(env.targetTriple)) {
-        flags.push_back("--target=" + env.targetTriple);
+        if (useZigCrossToolchain(env)) {
+            flags.push_back("-target");
+            flags.push_back(zigTargetTriple(env.targetTriple));
+        } else {
+            flags.push_back("--target=" + env.targetTriple);
+        }
     }
     if (!isBlank(env.sysroot)) {
-        flags.push_back("--sysroot=" + env.sysroot);
+        if (useZigCrossToolchain(env) && env.targetTriple.find("apple") != std::string::npos) {
+            flags.push_back("-isysroot");
+            flags.push_back(env.sysroot);
+        } else {
+            flags.push_back("--sysroot=" + env.sysroot);
+        }
     }
     return flags;
 }
@@ -1056,6 +1155,9 @@ std::vector<std::string> frontendFlags(const BuildEnvironment& env) {
 
 std::vector<std::string> llcFlags(const BuildEnvironment& env) {
     std::vector<std::string> flags = {"-O" + env.llcOptLevel, "-filetype=obj"};
+    if (!isBlank(env.targetTriple)) {
+        flags.push_back("-mtriple=" + env.targetTriple);
+    }
     auto extra = splitFlags(std::getenv("APOLLO_LLC_EXTRA_FLAGS"));
     flags.insert(flags.end(), extra.begin(), extra.end());
     return flags;
@@ -1099,6 +1201,9 @@ std::vector<std::string> standaloneLinkFlags(const BuildEnvironment& env) {
         const std::string triple = env.targetTriple;
         if (triple.find("linux") != std::string::npos) {
             return {"-no-pie", "-static-libstdc++", "-static-libgcc"};
+        }
+        if (triple.find("apple") != std::string::npos || triple.find("darwin") != std::string::npos) {
+            return {};
         }
         if (triple.find("windows") != std::string::npos || triple.find("mingw") != std::string::npos) {
             return windowsFlags();
@@ -1195,7 +1300,7 @@ void preparePch(const BuildEnvironment& env, bool analyzeMode) {
         std::filesystem::create_directories(outputPath.parent_path());
     }
 
-    std::vector<std::string> command = {env.clangxxExe};
+    std::vector<std::string> command = cxxCommandPrefix(env);
     auto flags = targetFlags(env);
     command.insert(command.end(), flags.begin(), flags.end());
     command.push_back("-x");
@@ -1225,6 +1330,30 @@ void emitLl(const BuildEnvironment& env, const std::filesystem::path& outputPath
     if (!outputPath.parent_path().empty()) {
         std::filesystem::create_directories(outputPath.parent_path());
     }
+
+    // Workstream B: configure in-process optimizer from env + build env.
+    apollo::codegen::OptConfig optCfg;
+    if (!env.optLevel.empty() && env.optLevel != "0") {
+        optCfg.level = std::min(3, std::max(0, env.optLevel[0] - '0'));
+    }
+    optCfg.lto = envEnabled("APOLLO_LTO", false);
+    const char* pgoMode = std::getenv("APOLLO_PGO_MODE");
+    if (pgoMode != nullptr) {
+        const std::string mode = pgoMode;
+        if (mode == "generate") {
+            optCfg.pgo_instrument = true;
+        } else if (mode == "use") {
+            const char* prof = std::getenv("APOLLO_PGO_PROFILE");
+            if (prof != nullptr) optCfg.pgo_use_path = prof;
+        }
+    }
+    if (!env.targetTriple.empty()) {
+        optCfg.target_triple = env.targetTriple;
+    }
+    ApolloIrCodegen::setOptConfig(optCfg);
+    const char* bcOut = std::getenv("APOLLO_EMIT_BITCODE");
+    ApolloIrCodegen::setBitcodeOutputPath(bcOut ? std::string(bcOut) : std::string{});
+
     ApolloDriver::compileApollo(env.inputFile.string(), outputPath.string());
 }
 
@@ -1249,11 +1378,17 @@ void linkStandaloneObject(const BuildEnvironment& env,
     const std::filesystem::path& objectInput,
     const std::filesystem::path& linkOutput,
     const RuntimeRequirements& requirements) {
-    std::vector<std::string> linkCommand = {env.clangxxExe, objectInput.string(), "-o", linkOutput.string()};
+    std::vector<std::string> linkCommand = cxxCommandPrefix(env);
+    linkCommand.push_back(objectInput.string());
+    linkCommand.push_back("-o");
+    linkCommand.push_back(linkOutput.string());
     auto standaloneFlags = standaloneLinkFlags(env);
     linkCommand.insert(linkCommand.end(), standaloneFlags.begin(), standaloneFlags.end());
     auto pgoLinkFlags = pgoFlags(false);
     linkCommand.insert(linkCommand.end(), pgoLinkFlags.begin(), pgoLinkFlags.end());
+    if (envEnabled("APOLLO_LTO", false)) {
+        linkCommand.push_back("-flto=thin");
+    }
     auto flags = linkFlags(env);
     linkCommand.insert(linkCommand.end(), flags.begin(), flags.end());
     linkCommand.insert(linkCommand.end(), requirements.linkFlags.begin(), requirements.linkFlags.end());
@@ -1340,19 +1475,22 @@ BuildEnvironment BuildEnvironment::load(const std::filesystem::path& rawInputFil
     env.pchOutput = (outputDir / "apollo.pch").lexically_normal();
     env.clangExe = firstDefined(std::getenv("CLANG_EXE"), std::getenv("APOLLO_CLANG_EXE"), "clang");
     env.clangxxExe = firstDefined(std::getenv("CLANGXX_EXE"), std::getenv("APOLLO_CLANGXX_EXE"), "clang++");
+    env.zigExe = defaulted(std::getenv("APOLLO_ZIG_EXE"), "");
     env.llcExe = firstDefined(std::getenv("LLC_EXE"), std::getenv("APOLLO_LLC_EXE"), "llc");
     env.cxxStd = defaulted(std::getenv("APOLLO_CXX_STD"), "c++20");
     env.optLevel = defaulted(std::getenv("APOLLO_OPT_LEVEL"), "3");
     env.llcOptLevel = defaulted(std::getenv("APOLLO_LLC_OPT_LEVEL"), env.optLevel.c_str());
     env.targetTriple = defaulted(std::getenv("APOLLO_TARGET_TRIPLE"), "");
     env.sysroot = defaulted(std::getenv("APOLLO_SYSROOT"), "");
-    env.usePch = envEnabled("APOLLO_USE_PCH", true);
+    ensureTargetToolchainConfigured(env);
+    env.usePch = envEnabled("APOLLO_USE_PCH", true) && !useZigCrossToolchain(env);
     return env;
 }
 
 } // namespace
 
 int ApolloBuildDriver::run(int argc, char** argv) {
+    initializeConsoleStyling();
     try {
         if (argc < 3) {
             throw BuildDriverException("Usage: apollo_build_driver_native <emit-ll|emit-direct-ir-prototype|build-aot|build-aot-direct-prototype|analyze> <input-file> [output-file]");
@@ -1387,13 +1525,13 @@ int ApolloBuildDriver::run(int argc, char** argv) {
         }
         throw BuildDriverException("Unknown ApolloBuildDriver command: " + command);
     } catch (const BuildDriverException& ex) {
-        std::cerr << ex.what() << '\n';
+        printErrorLine(ex.what());
         return 1;
     } catch (const ApolloCompilationFailure& ex) {
-        std::cerr << ex.what() << '\n';
+        printErrorLine(ex.what());
         return 1;
     } catch (const std::exception& ex) {
-        std::cerr << "Apollo backend driver crashed: " << ex.what() << '\n';
+        printErrorLine("Apollo backend driver crashed: " + std::string(ex.what()));
         return 1;
     }
 }

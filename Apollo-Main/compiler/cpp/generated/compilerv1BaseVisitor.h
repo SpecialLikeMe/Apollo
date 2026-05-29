@@ -95,6 +95,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitTemplateFunction(compilerv1Parser::TemplateFunctionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitMethod(compilerv1Parser::MethodContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -136,6 +140,18 @@ public:
   }
 
   virtual std::any visitStructBody(compilerv1Parser::StructBodyContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitEnumDecl(compilerv1Parser::EnumDeclContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitEnumVariant(compilerv1Parser::EnumVariantContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitEnumVariantName(compilerv1Parser::EnumVariantNameContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -199,6 +215,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitNrcDecl(compilerv1Parser::NrcDeclContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitPlcnewType(compilerv1Parser::PlcnewTypeContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -224,6 +244,14 @@ public:
   }
 
   virtual std::any visitTypeAtom(compilerv1Parser::TypeAtomContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitQualifiedType(compilerv1Parser::QualifiedTypeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitTypePlaceholder(compilerv1Parser::TypePlaceholderContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -415,11 +443,19 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitLoopStatement(compilerv1Parser::LoopStatementContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitForStatement(compilerv1Parser::ForStatementContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual std::any visitForInStatement(compilerv1Parser::ForInStatementContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitForInIterable(compilerv1Parser::ForInIterableContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -543,6 +579,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitUnaryExpr(compilerv1Parser::UnaryExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitPrimary(compilerv1Parser::PrimaryContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -563,6 +603,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitEnumConstructor(compilerv1Parser::EnumConstructorContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitIndexedAccess(compilerv1Parser::IndexedAccessContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -580,6 +624,10 @@ public:
   }
 
   virtual std::any visitFunctionCall(compilerv1Parser::FunctionCallContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitExplicitTypeArgs(compilerv1Parser::ExplicitTypeArgsContext *ctx) override {
     return visitChildren(ctx);
   }
 

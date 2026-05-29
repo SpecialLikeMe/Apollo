@@ -15,6 +15,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -118,10 +119,15 @@ std::string optLevelFromEnvironment() {
     return defaulted(std::getenv("APOLLO_OPT_LEVEL"), "3");
 }
 
-std::filesystem::path findRuntimeSupportRoot(const std::filesystem::path& outputPath) {
-    std::filesystem::path cursor = outputPath.has_parent_path()
-        ? std::filesystem::absolute(outputPath.parent_path()).lexically_normal()
-        : std::filesystem::current_path();
+std::filesystem::path findRuntimeSupportRoot(const std::filesystem::path& anchorPath) {
+    std::filesystem::path cursor;
+    if (anchorPath.empty()) {
+        cursor = std::filesystem::current_path();
+    } else if (anchorPath.has_parent_path()) {
+        cursor = std::filesystem::absolute(anchorPath.parent_path()).lexically_normal();
+    } else {
+        cursor = std::filesystem::absolute(anchorPath).lexically_normal();
+    }
 
     while (!cursor.empty()) {
         const auto runtimeSupportDir = (cursor / "runtime_support").lexically_normal();
@@ -146,9 +152,12 @@ std::vector<std::filesystem::path> inlineForeignIncludeDirs(const std::filesyste
         dirs.push_back(std::filesystem::absolute(sourcePath.parent_path()).lexically_normal());
     }
 
-    std::filesystem::path compilerDir = findRuntimeSupportRoot(outputPath);
+    std::filesystem::path compilerDir = findRuntimeSupportRoot(sourcePath);
     if (compilerDir.empty()) {
-        compilerDir = std::filesystem::current_path();
+        compilerDir = findRuntimeSupportRoot(outputPath);
+    }
+    if (compilerDir.empty()) {
+        compilerDir = findRuntimeSupportRoot(std::filesystem::current_path());
     }
     const auto runtimeSupportDir = (compilerDir / "runtime_support").lexically_normal();
     if (std::filesystem::exists(runtimeSupportDir)) {
@@ -932,6 +941,9 @@ ApolloInlineForeignLanguage normalizeLanguage(std::string_view language) {
 std::optional<std::string> mapClikeTypeToApollo(std::string_view typeText) {
     std::string normalized = sanitizeClikeExportType(std::string(typeText));
     normalized = collapseSpaces(std::move(normalized));
+    if (normalized == "void") {
+        return "void";
+    }
     if (normalized == "char*" || normalized == "char *" || normalized == "const char*" || normalized == "const char *"
         || normalized == "char const*" || normalized == "char const *") {
         return "str";
@@ -945,11 +957,41 @@ std::optional<std::string> mapClikeTypeToApollo(std::string_view typeText) {
     if (normalized == "short") {
         return "short";
     }
+    if (normalized == "int8_t" || normalized == "std::int8_t") {
+        return "i8";
+    }
+    if (normalized == "uint8_t" || normalized == "std::uint8_t") {
+        return "u8";
+    }
+    if (normalized == "int16_t" || normalized == "std::int16_t") {
+        return "i16";
+    }
+    if (normalized == "uint16_t" || normalized == "std::uint16_t") {
+        return "u16";
+    }
     if (normalized == "int") {
         return "int";
     }
+    if (normalized == "int32_t" || normalized == "std::int32_t") {
+        return "i32";
+    }
+    if (normalized == "uint32_t" || normalized == "std::uint32_t") {
+        return "u32";
+    }
     if (normalized == "long") {
         return "long";
+    }
+    if (normalized == "int64_t" || normalized == "std::int64_t") {
+        return "i64";
+    }
+    if (normalized == "uint64_t" || normalized == "std::uint64_t") {
+        return "u64";
+    }
+    if (normalized == "size_t" || normalized == "std::size_t") {
+        return "usize";
+    }
+    if (normalized == "ptrdiff_t" || normalized == "std::ptrdiff_t") {
+        return "isize";
     }
     if (normalized == "float") {
         return "float";
@@ -1392,6 +1434,163 @@ std::optional<ApolloInlineForeignParameter> parseRustParameter(std::string_view 
     return parameter;
 }
 
+ApolloInlineForeignSymbol makeClikeFunctionSymbol(std::string name,
+    std::string foreignType,
+    std::string apolloType,
+    std::vector<ApolloInlineForeignParameter> parameters,
+    bool variadic,
+    bool declarationOnly) {
+    ApolloInlineForeignSymbol symbol;
+    symbol.kind = ApolloInlineForeignSymbolKind::Function;
+    symbol.name = std::move(name);
+    symbol.foreignType = sanitizeClikeExportType(std::move(foreignType));
+    symbol.apolloType = std::move(apolloType);
+    symbol.parameters = std::move(parameters);
+    symbol.variadic = variadic;
+    symbol.declarationOnly = declarationOnly;
+    return symbol;
+}
+
+void appendClikeFunctionSymbol(std::vector<ApolloInlineForeignSymbol>& symbols,
+    ApolloInlineForeignSymbol symbol) {
+    auto existing = std::find_if(symbols.begin(), symbols.end(), [&](const ApolloInlineForeignSymbol& candidate) {
+        return candidate.kind == ApolloInlineForeignSymbolKind::Function && candidate.name == symbol.name;
+    });
+    if (existing == symbols.end()) {
+        symbols.push_back(std::move(symbol));
+        return;
+    }
+    if (existing->declarationOnly && !symbol.declarationOnly) {
+        *existing = std::move(symbol);
+    }
+}
+
+std::vector<std::string> collectClikeIncludedHeaders(std::string_view preamble) {
+    static const std::regex kIncludePattern(R"(^\s*#\s*include\s*[<\"]([^>\"]+)[>\"])", std::regex::optimize);
+
+    std::vector<std::string> headers;
+    std::istringstream lines{std::string(preamble)};
+    std::string line;
+    while (std::getline(lines, line)) {
+        std::smatch match;
+        if (!std::regex_search(line, match, kIncludePattern)) {
+            continue;
+        }
+        std::string header = trimCopy(match[1].str());
+        std::replace(header.begin(), header.end(), '\\', '/');
+        const auto slash = header.find_last_of('/');
+        if (slash != std::string::npos) {
+            header = header.substr(slash + 1);
+        }
+        std::transform(header.begin(), header.end(), header.begin(), [](unsigned char ch) {
+            return static_cast<char>(std::tolower(ch));
+        });
+        if (!header.empty() && std::find(headers.begin(), headers.end(), header) == headers.end()) {
+            headers.push_back(std::move(header));
+        }
+    }
+    return headers;
+}
+
+std::vector<ApolloInlineForeignSymbol> collectKnownClikeHeaderFunctions(std::string_view preamble) {
+    static const std::unordered_map<std::string, std::vector<ApolloInlineForeignSymbol>> kHeaderFunctions = {
+        {"cstdio", {
+            makeClikeFunctionSymbol("puts", "int", "int", {ApolloInlineForeignParameter{"s", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("printf", "int", "int", {ApolloInlineForeignParameter{"format", "const char*", "str"}}, true, true),
+            makeClikeFunctionSymbol("putchar", "int", "int", {ApolloInlineForeignParameter{"ch", "int", "int"}}, false, true),
+        }},
+        {"stdio.h", {
+            makeClikeFunctionSymbol("puts", "int", "int", {ApolloInlineForeignParameter{"s", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("printf", "int", "int", {ApolloInlineForeignParameter{"format", "const char*", "str"}}, true, true),
+            makeClikeFunctionSymbol("putchar", "int", "int", {ApolloInlineForeignParameter{"ch", "int", "int"}}, false, true),
+        }},
+        {"cstdlib", {
+            makeClikeFunctionSymbol("atoi", "int", "int", {ApolloInlineForeignParameter{"text", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("atol", "long", "long", {ApolloInlineForeignParameter{"text", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("atof", "double", "double", {ApolloInlineForeignParameter{"text", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("rand", "int", "int", {}, false, true),
+            makeClikeFunctionSymbol("srand", "void", "void", {ApolloInlineForeignParameter{"seed", "int", "int"}}, false, true),
+            makeClikeFunctionSymbol("exit", "void", "void", {ApolloInlineForeignParameter{"code", "int", "int"}}, false, true),
+        }},
+        {"stdlib.h", {
+            makeClikeFunctionSymbol("atoi", "int", "int", {ApolloInlineForeignParameter{"text", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("atol", "long", "long", {ApolloInlineForeignParameter{"text", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("atof", "double", "double", {ApolloInlineForeignParameter{"text", "const char*", "str"}}, false, true),
+            makeClikeFunctionSymbol("rand", "int", "int", {}, false, true),
+            makeClikeFunctionSymbol("srand", "void", "void", {ApolloInlineForeignParameter{"seed", "int", "int"}}, false, true),
+            makeClikeFunctionSymbol("exit", "void", "void", {ApolloInlineForeignParameter{"code", "int", "int"}}, false, true),
+        }},
+        {"cmath", {
+            makeClikeFunctionSymbol("sin", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("cos", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("tan", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("sqrt", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("pow", "double", "double", {ApolloInlineForeignParameter{"lhs", "double", "double"}, ApolloInlineForeignParameter{"rhs", "double", "double"}}, false, true),
+        }},
+        {"math.h", {
+            makeClikeFunctionSymbol("sin", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("cos", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("tan", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("sqrt", "double", "double", {ApolloInlineForeignParameter{"value", "double", "double"}}, false, true),
+            makeClikeFunctionSymbol("pow", "double", "double", {ApolloInlineForeignParameter{"lhs", "double", "double"}, ApolloInlineForeignParameter{"rhs", "double", "double"}}, false, true),
+        }},
+    };
+
+    std::vector<ApolloInlineForeignSymbol> functions;
+    for (const auto& header : collectClikeIncludedHeaders(preamble)) {
+        const auto it = kHeaderFunctions.find(header);
+        if (it == kHeaderFunctions.end()) {
+            continue;
+        }
+        for (const auto& symbol : it->second) {
+            appendClikeFunctionSymbol(functions, symbol);
+        }
+    }
+    return functions;
+}
+
+std::vector<ApolloInlineForeignSymbol> collectClikeFunctionDeclarations(std::string_view payload) {
+    static const std::regex kFunctionPattern(R"(^\s*((?:extern\s+"C"\s+)?(?:extern\s+)?(?:static\s+)?(?:const\s+)?[A-Za-z_][A-Za-z0-9_:]*(?:\s+const)?(?:\s*[*&]+)?)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)\s*;)", std::regex::optimize);
+
+    std::vector<ApolloInlineForeignSymbol> functions;
+    for (const auto& chunk : splitTopLevelChunks(payload)) {
+        if (chunk.find('{') != std::string::npos) {
+            continue;
+        }
+        std::smatch match;
+        if (!std::regex_search(chunk, match, kFunctionPattern)) {
+            continue;
+        }
+        const auto apolloType = mapClikeTypeToApollo(match[1].str());
+        if (!apolloType.has_value()) {
+            continue;
+        }
+        std::vector<ApolloInlineForeignParameter> parameters;
+        bool variadic = false;
+        bool unsupportedParameter = false;
+        for (const auto& rawParameter : splitCommaSeparated(match[3].str())) {
+            if (rawParameter == "void") {
+                continue;
+            }
+            if (rawParameter == "...") {
+                variadic = true;
+                continue;
+            }
+            const auto parameter = parseClikeParameter(rawParameter);
+            if (!parameter.has_value()) {
+                unsupportedParameter = true;
+                break;
+            }
+            parameters.push_back(*parameter);
+        }
+        if (!unsupportedParameter) {
+            appendClikeFunctionSymbol(functions,
+                makeClikeFunctionSymbol(match[2].str(), match[1].str(), *apolloType, std::move(parameters), variadic, true));
+        }
+    }
+    return functions;
+}
+
 std::vector<ApolloInlineForeignSymbol> collectClikeFunctions(std::string_view payload) {
     static const std::regex kFunctionPattern(R"(^\s*((?:extern\s+"C"\s+)?(?:static\s+)?(?:const\s+)?[A-Za-z_][A-Za-z0-9_:]*(?:\s+const)?(?:\s*[*&]+)?)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)\s*\{)", std::regex::optimize);
 
@@ -1410,9 +1609,14 @@ std::vector<ApolloInlineForeignSymbol> collectClikeFunctions(std::string_view pa
         symbol.name = match[2].str();
         symbol.foreignType = sanitizeClikeExportType(match[1].str());
         symbol.apolloType = *apolloType;
+        symbol.declarationOnly = false;
         bool unsupportedParameter = false;
         for (const auto& rawParameter : splitCommaSeparated(match[3].str())) {
             if (rawParameter == "void") {
+                continue;
+            }
+            if (rawParameter == "...") {
+                symbol.variadic = true;
                 continue;
             }
             const auto parameter = parseClikeParameter(rawParameter);
@@ -1863,8 +2067,16 @@ ApolloInlineForeignBlock buildInlineForeignBlock(compilerv1Parser::InlineForeign
     case ApolloInlineForeignLanguage::ObjectiveC:
     case ApolloInlineForeignLanguage::ObjectiveCpp:
         {
-            const auto [ignoredPreamble, clikeBody] = splitCppPreamble(block.payload);
-            block.functions = collectClikeFunctions(clikeBody);
+            const auto [clikePreamble, clikeBody] = splitCppPreamble(block.payload);
+            for (auto symbol : collectClikeFunctions(clikeBody)) {
+                appendClikeFunctionSymbol(block.functions, std::move(symbol));
+            }
+            for (auto symbol : collectClikeFunctionDeclarations(clikeBody)) {
+                appendClikeFunctionSymbol(block.functions, std::move(symbol));
+            }
+            for (auto symbol : collectKnownClikeHeaderFunctions(clikePreamble)) {
+                appendClikeFunctionSymbol(block.functions, std::move(symbol));
+            }
             block.globals = collectClikeGlobals(clikeBody);
         }
         break;
@@ -1923,13 +2135,20 @@ void collectInlineForeignBlocksFromTree(antlr4::tree::ParseTree* node,
     }
 }
 
-std::string renderClikeParameters(const std::vector<ApolloInlineForeignParameter>& parameters) {
+std::string renderClikeParameters(const std::vector<ApolloInlineForeignParameter>& parameters,
+    bool variadic = false) {
     std::ostringstream builder;
     for (std::size_t index = 0; index < parameters.size(); ++index) {
         if (index > 0) {
             builder << ", ";
         }
         builder << parameters[index].foreignType << ' ' << parameters[index].name;
+    }
+    if (variadic) {
+        if (!parameters.empty()) {
+            builder << ", ";
+        }
+        builder << "...";
     }
     return builder.str();
 }
@@ -1966,14 +2185,7 @@ std::string renderImportedClikeDeclarations(const ApolloInlineForeignBlock& bloc
         for (const auto& function : imported->functions) {
             builder << "extern ";
             builder << apolloTypeToClikeAbi(function.apolloType);
-            builder << ' ' << function.name << '(';
-            for (std::size_t index = 0; index < function.parameters.size(); ++index) {
-                if (index > 0) {
-                    builder << ", ";
-                }
-                builder << apolloTypeToClikeAbi(function.parameters[index].apolloType) << ' ' << function.parameters[index].name;
-            }
-            builder << ");\n";
+            builder << ' ' << function.name << '(' << renderClikeParameters(function.parameters, function.variadic) << ");\n";
         }
         for (const auto& global : imported->globals) {
             if (isStringApolloType(global.apolloType)) {
@@ -2057,6 +2269,12 @@ std::string renderImportedRustDeclarations(const ApolloInlineForeignBlock& block
                     builder << ", ";
                 }
                 builder << function.parameters[index].name << ": " << apolloTypeToRustAbi(function.parameters[index].apolloType);
+            }
+            if (function.variadic) {
+                if (!function.parameters.empty()) {
+                    builder << ", ";
+                }
+                builder << "...";
             }
             builder << ')';
             if (function.apolloType != "void") {
@@ -2215,6 +2433,12 @@ std::string buildCSource(const ApolloInlineForeignBlock& block,
         return builder.str();
     }
     builder << renderImportedClikeDefinitionAliases(block, allBlocks);
+    for (const auto& function : block.functions) {
+        if (!function.declarationOnly) {
+            continue;
+        }
+        builder << "extern " << function.foreignType << ' ' << function.name << '(' << renderClikeParameters(function.parameters, function.variadic) << ");\n";
+    }
     builder << body << "\n";
     for (const auto& global : block.globals) {
         if (isStringApolloType(global.apolloType)) {
@@ -2266,7 +2490,11 @@ std::string buildCppSource(const std::filesystem::path& sourcePath,
     builder << "}\n";
 
     for (const auto& function : block.functions) {
-        builder << "extern \"C\" " << function.foreignType << ' ' << function.name << '(' << renderClikeParameters(function.parameters) << ") { ";
+        if (function.declarationOnly) {
+            builder << "extern \"C\" " << function.foreignType << ' ' << function.name << '(' << renderClikeParameters(function.parameters, function.variadic) << ");\n";
+            continue;
+        }
+        builder << "extern \"C\" " << function.foreignType << ' ' << function.name << '(' << renderClikeParameters(function.parameters, function.variadic) << ") { ";
         if (function.apolloType != "void") {
             builder << "return ";
         }
@@ -3528,6 +3756,9 @@ void linkInlineForeignModule(llvm::Module& module,
     }
 
     for (const auto& function : block.functions) {
+        if (function.declarationOnly) {
+            continue;
+        }
         if (module.getFunction(function.name) == nullptr) {
             throw std::runtime_error("linked inline foreign block did not export expected function `" + function.name + "`");
         }
@@ -3539,6 +3770,69 @@ void linkInlineForeignModule(llvm::Module& module,
     }
     if (block.executesAtRuntime && module.getFunction(block.runnerName) == nullptr) {
         throw std::runtime_error("linked inline foreign block did not export expected runner `" + block.runnerName + "`");
+    }
+}
+
+llvm::Type* llvmTypeForInlineForeignApolloType(llvm::LLVMContext& context, std::string_view apolloType) {
+    if (apolloType == "void") {
+        return llvm::Type::getVoidTy(context);
+    }
+    if (apolloType == "bool") {
+        return llvm::Type::getInt1Ty(context);
+    }
+    if (apolloType == "i8" || apolloType == "u8" || apolloType == "byte") {
+        return llvm::Type::getInt8Ty(context);
+    }
+    if (apolloType == "short" || apolloType == "i16" || apolloType == "u16") {
+        return llvm::Type::getInt16Ty(context);
+    }
+    if (apolloType == "char") {
+        return llvm::Type::getInt32Ty(context);
+    }
+    if (apolloType == "int" || apolloType == "i32" || apolloType == "u32") {
+        return llvm::Type::getInt32Ty(context);
+    }
+    if (apolloType == "long" || apolloType == "i64" || apolloType == "u64" || apolloType == "usize" || apolloType == "isize") {
+        return llvm::Type::getInt64Ty(context);
+    }
+    if (apolloType == "float") {
+        return llvm::Type::getFloatTy(context);
+    }
+    if (apolloType == "double" || apolloType == "f64") {
+        return llvm::Type::getDoubleTy(context);
+    }
+    if (apolloType == "str" || apolloType == "indef") {
+        return llvm::PointerType::getUnqual(context);
+    }
+    return nullptr;
+}
+
+void declareInlineForeignFunctionImports(llvm::Module& module, const ApolloInlineForeignBlock& block) {
+    for (const auto& function : block.functions) {
+        if (!function.declarationOnly || module.getFunction(function.name) != nullptr) {
+            continue;
+        }
+
+        llvm::Type* returnType = llvmTypeForInlineForeignApolloType(module.getContext(), function.apolloType);
+        if (returnType == nullptr) {
+            continue;
+        }
+        std::vector<llvm::Type*> argTypes;
+        argTypes.reserve(function.parameters.size());
+        bool supported = true;
+        for (const auto& parameter : function.parameters) {
+            llvm::Type* argType = llvmTypeForInlineForeignApolloType(module.getContext(), parameter.apolloType);
+            if (argType == nullptr) {
+                supported = false;
+                break;
+            }
+            argTypes.push_back(argType);
+        }
+        if (!supported) {
+            continue;
+        }
+
+        module.getOrInsertFunction(function.name, llvm::FunctionType::get(returnType, argTypes, function.variadic));
     }
 }
 
@@ -3570,7 +3864,16 @@ void linkInlineForeignModules(llvm::Module& module,
         if (block.executesAtRuntime) {
             continue;
         }
+        const bool declarationOnlyFunctions = !block.functions.empty()
+            && std::all_of(block.functions.begin(), block.functions.end(), [](const ApolloInlineForeignSymbol& function) {
+                return function.declarationOnly;
+            });
+        if (declarationOnlyFunctions && block.globals.empty()) {
+            declareInlineForeignFunctionImports(module, block);
+            continue;
+        }
         linkInlineForeignModule(module, sourcePath, outputPath, block, blocks, {});
+        declareInlineForeignFunctionImports(module, block);
     }
 }
 

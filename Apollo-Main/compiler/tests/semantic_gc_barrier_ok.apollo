@@ -1,0 +1,7 @@
+#[gcmode(total)]
+
+int main() {
+    %mnt i32 a = 4;
+    %mnt i32* b = &a;
+    return 0;
+}

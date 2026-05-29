@@ -110,8 +110,13 @@ namespace {
             return false;
         }
 
+        const std::filesystem::path apolloRoot = payloadRoot(installDir);
+        const std::filesystem::path compilerDir = apolloRoot / "compiler";
         wrapper << "@echo off\r\n";
-        wrapper << "call \"" << (payloadRoot(installDir) / "compiler" / "exec.bat").string() << "\" %*\r\n";
+        wrapper << "setlocal\r\n";
+        wrapper << "set \"APOLLO_DIR=" << apolloRoot.string() << "\"\r\n";
+        wrapper << "set \"APOLLO_COMPILER_DIR=" << compilerDir.string() << "\"\r\n";
+        wrapper << "\"%APOLLO_DIR%\\apollo.exe\" %*\r\n";
         wrapper << "exit /b %ERRORLEVEL%\r\n";
         return wrapper.good();
     }

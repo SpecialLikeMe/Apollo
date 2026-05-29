@@ -5,7 +5,7 @@ $compilerDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $compilerDir
 
 $nativeSourceDir = Join-Path $compilerDir 'cpp'
-$nativeBuildDir = Join-Path $nativeSourceDir 'build'
+$nativeBuildDir = if ($env:APOLLO_NATIVE_BUILD_DIR) { $env:APOLLO_NATIVE_BUILD_DIR } else { Join-Path (Split-Path $compilerDir -Parent) 'build' }
 $nativeBuildConfig = if ($env:APOLLO_NATIVE_BUILD_CONFIG) { $env:APOLLO_NATIVE_BUILD_CONFIG } else { 'Release' }
 
 function Resolve-CommandPath {

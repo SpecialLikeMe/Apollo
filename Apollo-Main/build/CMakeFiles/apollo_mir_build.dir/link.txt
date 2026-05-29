@@ -1,0 +1,2 @@
+C:\msys64\clang64\bin\llvm-ar.exe qc libapollo_mir_build.a CMakeFiles/apollo_mir_build.dir/src/mir/build/builder.cpp.obj CMakeFiles/apollo_mir_build.dir/src/mir/build/build_expr.cpp.obj
+C:\msys64\clang64\bin\llvm-ranlib.exe libapollo_mir_build.a

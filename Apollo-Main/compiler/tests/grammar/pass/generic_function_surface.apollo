@@ -1,0 +1,18 @@
+template <T> identity(<T> x) {
+    T value = x;
+    return value;
+}
+
+int main() {
+    int a = identity<int>(4);
+    str b = identity("hello");
+    nrc T = int;
+    T c = 42;
+
+    if (a == 4) {
+        if (c == 42) {
+            return 0;
+        }
+    }
+    return 1;
+}

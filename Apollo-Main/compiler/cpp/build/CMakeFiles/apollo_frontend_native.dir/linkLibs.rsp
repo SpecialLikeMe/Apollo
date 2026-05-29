@@ -1,1 +1,1 @@
- "C:/msys64/clang64/lib/libantlr4-runtime.dll.a" -lLLVM-22 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
+ -lLLVM-22 libapollo_gc_concurrent.a libapollo_borrowck.a libapollo_hir_lowering.a libapollo_mir_build.a libapollo_mir_opt.a libapollo_diag.a libapollo_codegen_barriers.a -lpthread libapollo_borrowck.a libapollo_hir_lowering.a "C:/msys64/clang64/lib/libantlr4-runtime.dll.a" libapollo_mir.a -lLLVM-22 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

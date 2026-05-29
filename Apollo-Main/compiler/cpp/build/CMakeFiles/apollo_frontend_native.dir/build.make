@@ -146,11 +146,26 @@ CMakeFiles/apollo_frontend_native.dir/src/visitor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/apollo_frontend_native.dir/src/visitor.cpp.s"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\visitor.cpp -o CMakeFiles\apollo_frontend_native.dir\src\visitor.cpp.s
 
+CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj: CMakeFiles/apollo_frontend_native.dir/flags.make
+CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
+CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/codegen/optimizer.cpp
+CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\src\codegen\optimizer.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\src\codegen\optimizer.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\codegen\optimizer.cpp
+
+CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.i"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\codegen\optimizer.cpp > CMakeFiles\apollo_frontend_native.dir\src\codegen\optimizer.cpp.i
+
+CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.s"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\codegen\optimizer.cpp -o CMakeFiles\apollo_frontend_native.dir\src\codegen\optimizer.cpp.s
+
 CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj: CMakeFiles/apollo_frontend_native.dir/flags.make
 CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.cpp
 CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\src\apollo_ir_layout_plan.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\src\apollo_ir_layout_plan.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_ir_layout_plan.cpp
 
 CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.i: cmake_force
@@ -165,7 +180,7 @@ CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj: CMakeFiles/apo
 CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_runtime.cpp
 CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\src\apollo_runtime.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\src\apollo_runtime.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_runtime.cpp
 
 CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.i: cmake_force
@@ -180,7 +195,7 @@ CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj: CM
 CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp
 CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\src\apollo_source_preprocessor.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\src\apollo_source_preprocessor.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_source_preprocessor.cpp
 
 CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.i: cmake_force
@@ -191,26 +206,41 @@ CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.s: cmak
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.s"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\apollo_source_preprocessor.cpp -o CMakeFiles\apollo_frontend_native.dir\src\apollo_source_preprocessor.cpp.s
 
-CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj: CMakeFiles/apollo_frontend_native.dir/flags.make
-CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
-CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp
-CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj"
-	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\C_\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\C_\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj: CMakeFiles/apollo_frontend_native.dir/flags.make
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/borrowck/legacy/borrow_checker.cpp
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\src\borrowck\legacy\borrow_checker.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\src\borrowck\legacy\borrow_checker.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\borrowck\legacy\borrow_checker.cpp
 
-CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i"
-	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp > CMakeFiles\apollo_frontend_native.dir\C_\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp.i
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.i"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\borrowck\legacy\borrow_checker.cpp > CMakeFiles\apollo_frontend_native.dir\src\borrowck\legacy\borrow_checker.cpp.i
 
-CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s"
-	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp -o CMakeFiles\apollo_frontend_native.dir\C_\Users\devon\Apollo\Apollo-Main\brc\borrow_checker.cpp.s
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.s"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\borrowck\legacy\borrow_checker.cpp -o CMakeFiles\apollo_frontend_native.dir\src\borrowck\legacy\borrow_checker.cpp.s
+
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj: CMakeFiles/apollo_frontend_native.dir/flags.make
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/borrowck/mir_pipeline.cpp
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\src\borrowck\mir_pipeline.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\src\borrowck\mir_pipeline.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\borrowck\mir_pipeline.cpp
+
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.i"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\borrowck\mir_pipeline.cpp > CMakeFiles\apollo_frontend_native.dir\src\borrowck\mir_pipeline.cpp.i
+
+CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.s"
+	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\src\borrowck\mir_pipeline.cpp -o CMakeFiles\apollo_frontend_native.dir\src\borrowck\mir_pipeline.cpp.s
 
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/flags.make
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.cpp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\generated\compilerv1BaseVisitor.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\generated\compilerv1BaseVisitor.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1BaseVisitor.cpp
 
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.i: cmake_force
@@ -225,7 +255,7 @@ CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj: CMakeFi
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.cpp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\generated\compilerv1Lexer.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\generated\compilerv1Lexer.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1Lexer.cpp
 
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.i: cmake_force
@@ -240,7 +270,7 @@ CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj: CMakeF
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\generated\compilerv1Parser.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\generated\compilerv1Parser.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1Parser.cpp
 
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.i: cmake_force
@@ -255,7 +285,7 @@ CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj: CMake
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj: C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.cpp
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj: CMakeFiles/apollo_frontend_native.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj"
 	C:\msys64\clang64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj -MF CMakeFiles\apollo_frontend_native.dir\generated\compilerv1Visitor.cpp.obj.d -o CMakeFiles\apollo_frontend_native.dir\generated\compilerv1Visitor.cpp.obj -c C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\generated\compilerv1Visitor.cpp
 
 CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.i: cmake_force
@@ -273,10 +303,12 @@ apollo_frontend_native_OBJECTS = \
 "CMakeFiles/apollo_frontend_native.dir/src/apollo_codegen_optimization_plan.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/src/apollo_inline_foreign.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/src/visitor.cpp.obj" \
+"CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj" \
-"CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj" \
+"CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj" \
+"CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj" \
 "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj" \
@@ -290,20 +322,32 @@ apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/apollo_dri
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/apollo_codegen_optimization_plan.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/apollo_inline_foreign.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/visitor.cpp.obj
+apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj
-apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj
+apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/build.make
+apollo_frontend_native.exe: libapollo_gc_concurrent.a
+apollo_frontend_native.exe: libapollo_borrowck.a
+apollo_frontend_native.exe: libapollo_hir_lowering.a
+apollo_frontend_native.exe: libapollo_mir_build.a
+apollo_frontend_native.exe: libapollo_mir_opt.a
+apollo_frontend_native.exe: libapollo_diag.a
+apollo_frontend_native.exe: libapollo_codegen_barriers.a
+apollo_frontend_native.exe: libapollo_borrowck.a
+apollo_frontend_native.exe: libapollo_hir_lowering.a
 apollo_frontend_native.exe: C:/msys64/clang64/lib/libantlr4-runtime.dll.a
+apollo_frontend_native.exe: libapollo_mir.a
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/linkLibs.rsp
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/objects1.rsp
 apollo_frontend_native.exe: CMakeFiles/apollo_frontend_native.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable apollo_frontend_native.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable apollo_frontend_native.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\apollo_frontend_native.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

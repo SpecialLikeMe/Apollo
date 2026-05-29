@@ -1,0 +1,11 @@
+extern iostream;
+
+int main() {
+    int x = 0;
+    @unsafe {
+        int* p = .&x;
+        *p = 90;
+    }
+    sys.printf("%s", "hi");
+    return x;
+}

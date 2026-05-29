@@ -78,7 +78,11 @@ set "CLEANUP_SCRIPT=%SCRIPT_DIR%cleanup-output.ps1"
 set "MANIFEST_PATH=%SCRIPT_DIR%output\cleanup-manifest.txt"
 set "ASAN_REPORT_SCRIPT=%SCRIPT_DIR%asan-report.ps1"
 set "NATIVE_SOURCE_DIR=%SCRIPT_DIR%cpp"
-set "NATIVE_BUILD_DIR=%NATIVE_SOURCE_DIR%\build"
+if defined APOLLO_NATIVE_BUILD_DIR (
+    set "NATIVE_BUILD_DIR=%APOLLO_NATIVE_BUILD_DIR%"
+) else (
+    set "NATIVE_BUILD_DIR=%APOLLO_DIR%\build"
+)
 set "NATIVE_SOURCE_DIR_SLASH=%NATIVE_SOURCE_DIR:\=/%"
 set "NATIVE_BUILD_DIR_SLASH=%NATIVE_BUILD_DIR:\=/%"
 set "NATIVE_BUILD_CONFIG=Release"
@@ -218,6 +222,10 @@ if "%ANALYZE_MODE%"=="0" if "%BIN_MODE%"=="0" if not "%RAW_OUTPUT%"=="" (
 if /I "%COMMAND%"=="run" goto :ctall
 if /I "%COMMAND%"=="ctall" goto :ctall
 if /I "%COMMAND%"=="analyze" goto :analyze
+if /I "%COMMAND%"=="help" goto :help
+if /I "%COMMAND%"=="--help" goto :help
+if /I "%COMMAND%"=="-h" goto :help
+if /I "%COMMAND%"=="clean" goto :clean
 
 echo Unknown command. Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
 echo                       apollo -analyze [filename]
@@ -229,12 +237,48 @@ exit /b 1
 
 :usage
 echo Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
-echo        apollo -analyze [filename]
-echo        apollo [filename.apollo] -[^L^|^W^|^M^] outputname
-echo        apollo --version
-echo        apollo --update
-echo        apollo -m uninstall
+echo                       apollo -analyze [filename]
+echo                       apollo [filename.apollo] -[^L^|^W^|^M^] outputname
+echo                       apollo --version
+echo                       apollo --update
+echo                       apollo -m uninstall
 exit /b 1
+
+:help
+echo Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
+echo                       apollo -analyze [filename]
+echo                       apollo [filename.apollo] -[^L^|^W^|^M^] outputname
+echo                       apollo --version
+echo                       apollo --update
+echo                       apollo -m uninstall
+exit /b 0
+
+:clean
+if not "%RAW_OUTPUT%"=="" (
+    echo Unexpected extra argument. Usage: apollo clean [project-root]
+    exit /b 1
+)
+set "CLEAN_ROOT=%RAW_INPUT%"
+if not defined CLEAN_ROOT set "CLEAN_ROOT=%CALLER_DIR%"
+for %%I in ("%CLEAN_ROOT%") do set "CLEAN_ROOT=%%~fI"
+set /a REMOVED_COUNT=0
+for %%I in (
+    "%CLEAN_ROOT%\build\.apollo-bundles"
+    "%CLEAN_ROOT%\build\cache"
+    "%CLEAN_ROOT%\output\cache"
+    "%APOLLO_DIR%\output\cache"
+    "%SCRIPT_DIR%cache"
+    "%SCRIPT_DIR%output\cache"
+    "%APOLLO_DIR%\build\output\cache"
+    "%SCRIPT_DIR%cpp\build\output\cache"
+) do (
+    if exist "%%~fI" (
+        rmdir /s /q "%%~fI" >nul 2>nul
+        if not exist "%%~fI" set /a REMOVED_COUNT+=1
+    )
+)
+echo Removed %REMOVED_COUNT% Apollo cache path(s).
+exit /b 0
 
 :ctall
 if "%BIN_MODE%"=="1" (
@@ -330,12 +374,6 @@ if not exist "%NATIVE_BUILD_DIR%\CMakeCache.txt" (
 if defined APOLLO_FASTPATH_TRACE echo entered>"%APOLLO_FASTPATH_TRACE%"
 if /I "%APOLLO_SHOW_FILE_DETAILS%"=="1" echo Using fast Windows binary path
 
-call :resolve_cmake
-if errorlevel 1 (
-    if defined APOLLO_FASTPATH_TRACE echo missing-cmake>>"%APOLLO_FASTPATH_TRACE%"
-    exit /b 2
-)
-
 setlocal EnableDelayedExpansion
 set "FAST_DRIVER="
 for %%I in ("%NATIVE_BUILD_DIR%\%NATIVE_BUILD_CONFIG%\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\Debug\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\Release\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\RelWithDebInfo\apollo_build_driver_native.exe" "%NATIVE_BUILD_DIR%\MinSizeRel\apollo_build_driver_native.exe") do (
@@ -348,11 +386,17 @@ for %%I in ("%~2") do set "FAST_OUTPUT=%%~fI"
 set "APOLLO_TARGET_TRIPLE=%CLI_TARGET_TRIPLE%"
 
 pushd "%SCRIPT_DIR%"
-call :run_quiet_command "%CMAKE_EXE%" --build "%NATIVE_BUILD_DIR%" --config "%NATIVE_BUILD_CONFIG%" --target apollo_build_driver_native
+call :ensure_native_targets apollo_build_driver_native
 set "FAST_BUILD_STATUS=!errorlevel!"
 if not "!FAST_BUILD_STATUS!"=="0" (
     popd
     endlocal & exit /b !FAST_BUILD_STATUS!
+)
+
+if defined APOLLO_BUILD_DRIVER_EXE set "FAST_DRIVER=!APOLLO_BUILD_DRIVER_EXE!"
+if not defined FAST_DRIVER (
+    popd
+    endlocal & exit /b 2
 )
 
 "!FAST_DRIVER!" build-aot "!FAST_INPUT!" "!FAST_OUTPUT!"

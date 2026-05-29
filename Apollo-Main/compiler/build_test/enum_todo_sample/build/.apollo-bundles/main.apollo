@@ -1,0 +1,28 @@
+// apx bundle: C:/Users/devon/Apollo/Apollo-Main/compiler/build_test/enum_todo_sample/main.apollo
+enum myenum {
+    success,
+    failure(str),
+    retry {
+        str msg;
+        bool ok() {
+            return true;
+        }
+    }
+}
+
+int main() {
+    myenum a = myenum::success;
+    myenum b = myenum::failure("oops");
+    myenum c = myenum::retry { .msg = "again" };
+
+    str msg = unwrap_enum(b);
+    myenum::retry retry_payload = unwrap_enum(c);
+
+    if (retry_payload.ok()) {
+        return 0;
+    }
+
+    return 1;
+}
+
+

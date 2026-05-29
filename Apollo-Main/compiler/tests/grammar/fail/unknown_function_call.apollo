@@ -1,0 +1,4 @@
+int main() {
+    int value = missing_fn();
+    return value;
+}

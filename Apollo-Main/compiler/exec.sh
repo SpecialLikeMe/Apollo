@@ -24,13 +24,7 @@ default_native_build_dir() {
         return 0
     fi
 
-    cache_root=${XDG_CACHE_HOME:-$HOME/.cache}
-    build_key=apollo-native
-    if command -v cksum >/dev/null 2>&1; then
-        set -- $(printf '%s\n' "$SCRIPT_DIR" | cksum)
-        build_key=$1
-    fi
-    printf '%s/apollo/native-build/%s\n' "$cache_root" "$build_key"
+    printf '%s/build\n' "$APOLLO_DIR"
 }
 
 NATIVE_SOURCE_DIR="$SCRIPT_DIR/cpp"
@@ -50,6 +44,16 @@ fi
 
 if [ "${1-}" = "--update" ]; then
     exec "$MANAGE_SH" update "$RESOLVED_APOLLO_DIR"
+fi
+
+if [ "${1-}" = "help" ] || [ "${1-}" = "--help" ] || [ "${1-}" = "-h" ]; then
+    printf 'Usage: apollo [-bin] <run|ctall> [filename] [outputname]\n'
+    printf '                      apollo -analyze [filename]\n'
+    printf '                      apollo [filename.apollo] -[L|W|M] outputname\n'
+    printf '                      apollo --version\n'
+    printf '                      apollo --update\n'
+    printf '                      apollo -m uninstall\n'
+    exit 0
 fi
 
 if [ "${1-}" = "-m" ]; then
@@ -100,6 +104,14 @@ cleanup_generated() {
         fi
         rm -f "$generated_path" 2>/dev/null || true
     done < "$manifest_path"
+}
+
+remove_cache_path() {
+    target=$1
+    if [ ! -e "$target" ]; then
+        return 0
+    fi
+    rm -rf -- "$target"
 }
 
 touch_stamp() {
@@ -500,7 +512,38 @@ if [ "$BIN_MODE" -eq 1 ] && [ -z "$RAW_OUTPUT" ]; then
     exit 1
 fi
 
+if [ "$COMMAND" = "clean" ] && [ -n "$RAW_OUTPUT" ]; then
+    printf 'Unexpected extra argument. Usage: apollo clean [project-root]\n' >&2
+    exit 1
+fi
+
 case "$COMMAND" in
+    clean)
+        CLEAN_ROOT=${RAW_INPUT:-$CALLER_DIR}
+        CLEAN_ROOT=$(abspath "$CLEAN_ROOT")
+        removed_count=0
+        for target in \
+            "$CLEAN_ROOT/build/.apollo-bundles" \
+            "$CLEAN_ROOT/build/cache" \
+            "$CLEAN_ROOT/output/cache" \
+            "$APOLLO_DIR/output/cache" \
+            "$SCRIPT_DIR/cache" \
+            "$SCRIPT_DIR/output/cache" \
+            "$APOLLO_DIR/build/output/cache" \
+            "$SCRIPT_DIR/cpp/build/output/cache"
+        do
+            if [ -e "$target" ]; then
+                remove_cache_path "$target"
+                removed_count=$((removed_count + 1))
+            fi
+        done
+        printf 'Removed %s Apollo cache path' "$removed_count"
+        if [ "$removed_count" -ne 1 ]; then
+            printf 's'
+        fi
+        printf '.\n'
+        exit 0
+        ;;
     run|ctall)
         if [ "$BIN_MODE" -eq 1 ]; then
             LINK_OUTPUT=$(abspath "$RAW_OUTPUT")
@@ -577,8 +620,8 @@ case "$COMMAND" in
         ;;
     *)
         printf 'Unknown command. Usage: apollo [-bin] <run|ctall> [filename] [outputname]\n' >&2
-        printf '                      apollo [filename.apollo] -[L|W|M] outputname\n' >&2
         printf '                      apollo -analyze [filename]\n' >&2
+        printf '                      apollo [filename.apollo] -[L|W|M] outputname\n' >&2
         printf '                      apollo --version\n' >&2
         printf '                      apollo --update\n' >&2
         printf '                      apollo -m uninstall\n' >&2

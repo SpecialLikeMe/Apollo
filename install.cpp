@@ -116,7 +116,7 @@ namespace {
         wrapper << "setlocal\r\n";
         wrapper << "set \"APOLLO_DIR=" << apolloRoot.string() << "\"\r\n";
         wrapper << "set \"APOLLO_COMPILER_DIR=" << compilerDir.string() << "\"\r\n";
-        wrapper << "call \"%APOLLO_COMPILER_DIR%\\exec.bat\" %*\r\n";
+        wrapper << "\"%APOLLO_DIR%\\apollo.exe\" %*\r\n";
         wrapper << "exit /b %ERRORLEVEL%\r\n";
         return wrapper.good();
     }
@@ -252,7 +252,7 @@ int main() {
     std::error_code cleanupError;
     std::filesystem::remove(installDirPath / "config.exe", cleanupError);
 
-    std::cout << "Installation complete, Welcome to Apollo!" << std::endl;
     std::cout << "The apollo command now runs through the WindowsApps shim at " << windowsApps << std::endl;
+    std::cout << "Installation complete, Welcome to Apollo!" << std::endl;
     return 0;
 }

@@ -1,0 +1,2 @@
+C:\msys64\clang64\bin\llvm-ar.exe qc libapollo_hir_lowering.a CMakeFiles/apollo_hir_lowering.dir/src/hir/lowering.cpp.obj
+C:\msys64\clang64\bin\llvm-ranlib.exe libapollo_hir_lowering.a

@@ -1,0 +1,7 @@
+// apx bundle: C:/Users/devon/Apollo/Apollo-Main/compiler/build_test/strictness_missing_call/main.apollo
+int main() {
+    missing_fn();
+    return 0;
+}
+
+

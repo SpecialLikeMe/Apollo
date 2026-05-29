@@ -66,6 +66,19 @@ all: CMakeFiles/apollo_frontend_native.dir/all
 all: CMakeFiles/apollo_build_driver_native.dir/all
 all: CMakeFiles/apollo_runtime_tests.dir/all
 all: CMakeFiles/apollo_driver_tests.dir/all
+all: CMakeFiles/apollo_mir.dir/all
+all: CMakeFiles/apollo_mir_build.dir/all
+all: CMakeFiles/apollo_mir_opt.dir/all
+all: CMakeFiles/apollo_mir_tests.dir/all
+all: CMakeFiles/apollo_gc_concurrent.dir/all
+all: CMakeFiles/apollo_gc_concurrent_tests.dir/all
+all: CMakeFiles/apollo_gc_extensions_tests.dir/all
+all: CMakeFiles/apollo_gc_nursery_tests.dir/all
+all: CMakeFiles/apollo_borrowck.dir/all
+all: CMakeFiles/apollo_borrowck_tests.dir/all
+all: CMakeFiles/apollo_codegen_barriers.dir/all
+all: CMakeFiles/apollo_hir_lowering.dir/all
+all: CMakeFiles/apollo_diag.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
@@ -73,6 +86,19 @@ codegen: CMakeFiles/apollo_frontend_native.dir/codegen
 codegen: CMakeFiles/apollo_build_driver_native.dir/codegen
 codegen: CMakeFiles/apollo_runtime_tests.dir/codegen
 codegen: CMakeFiles/apollo_driver_tests.dir/codegen
+codegen: CMakeFiles/apollo_mir.dir/codegen
+codegen: CMakeFiles/apollo_mir_build.dir/codegen
+codegen: CMakeFiles/apollo_mir_opt.dir/codegen
+codegen: CMakeFiles/apollo_mir_tests.dir/codegen
+codegen: CMakeFiles/apollo_gc_concurrent.dir/codegen
+codegen: CMakeFiles/apollo_gc_concurrent_tests.dir/codegen
+codegen: CMakeFiles/apollo_gc_extensions_tests.dir/codegen
+codegen: CMakeFiles/apollo_gc_nursery_tests.dir/codegen
+codegen: CMakeFiles/apollo_borrowck.dir/codegen
+codegen: CMakeFiles/apollo_borrowck_tests.dir/codegen
+codegen: CMakeFiles/apollo_codegen_barriers.dir/codegen
+codegen: CMakeFiles/apollo_hir_lowering.dir/codegen
+codegen: CMakeFiles/apollo_diag.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -89,6 +115,19 @@ clean: CMakeFiles/apollo_frontend_native.dir/clean
 clean: CMakeFiles/apollo_build_driver_native.dir/clean
 clean: CMakeFiles/apollo_runtime_tests.dir/clean
 clean: CMakeFiles/apollo_driver_tests.dir/clean
+clean: CMakeFiles/apollo_mir.dir/clean
+clean: CMakeFiles/apollo_mir_build.dir/clean
+clean: CMakeFiles/apollo_mir_opt.dir/clean
+clean: CMakeFiles/apollo_mir_tests.dir/clean
+clean: CMakeFiles/apollo_gc_concurrent.dir/clean
+clean: CMakeFiles/apollo_gc_concurrent_tests.dir/clean
+clean: CMakeFiles/apollo_gc_extensions_tests.dir/clean
+clean: CMakeFiles/apollo_gc_nursery_tests.dir/clean
+clean: CMakeFiles/apollo_borrowck.dir/clean
+clean: CMakeFiles/apollo_borrowck_tests.dir/clean
+clean: CMakeFiles/apollo_codegen_barriers.dir/clean
+clean: CMakeFiles/apollo_hir_lowering.dir/clean
+clean: CMakeFiles/apollo_diag.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -255,15 +294,22 @@ CMakeFiles/target_parser_gen.dir/clean:
 # Target rules for target CMakeFiles/apollo_frontend_native.dir
 
 # All Build rule for target.
-CMakeFiles/apollo_frontend_native.dir/all:
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_mir_build.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_mir_opt.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_mir.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_borrowck.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_codegen_barriers.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_hir_lowering.dir/all
+CMakeFiles/apollo_frontend_native.dir/all: CMakeFiles/apollo_diag.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=30,31,32,33,34,35,36,37,38,39,40,41,42,43 "Built target apollo_frontend_native"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58 "Built target apollo_frontend_native"
 .PHONY : CMakeFiles/apollo_frontend_native.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/apollo_frontend_native.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 43
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_frontend_native.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
 .PHONY : CMakeFiles/apollo_frontend_native.dir/rule
@@ -275,7 +321,7 @@ apollo_frontend_native: CMakeFiles/apollo_frontend_native.dir/rule
 # codegen rule for target.
 CMakeFiles/apollo_frontend_native.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=30,31,32,33,34,35,36,37,38,39,40,41,42,43 "Finished codegen for target apollo_frontend_native"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58 "Finished codegen for target apollo_frontend_native"
 .PHONY : CMakeFiles/apollo_frontend_native.dir/codegen
 
 # clean rule for target.
@@ -287,15 +333,22 @@ CMakeFiles/apollo_frontend_native.dir/clean:
 # Target rules for target CMakeFiles/apollo_build_driver_native.dir
 
 # All Build rule for target.
-CMakeFiles/apollo_build_driver_native.dir/all:
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_mir_build.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_mir_opt.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_mir.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_borrowck.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_codegen_barriers.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_hir_lowering.dir/all
+CMakeFiles/apollo_build_driver_native.dir/all: CMakeFiles/apollo_diag.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 "Built target apollo_build_driver_native"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 "Built target apollo_build_driver_native"
 .PHONY : CMakeFiles/apollo_build_driver_native.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/apollo_build_driver_native.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 15
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 44
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_build_driver_native.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
 .PHONY : CMakeFiles/apollo_build_driver_native.dir/rule
@@ -307,7 +360,7 @@ apollo_build_driver_native: CMakeFiles/apollo_build_driver_native.dir/rule
 # codegen rule for target.
 CMakeFiles/apollo_build_driver_native.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 "Finished codegen for target apollo_build_driver_native"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 "Finished codegen for target apollo_build_driver_native"
 .PHONY : CMakeFiles/apollo_build_driver_native.dir/codegen
 
 # clean rule for target.
@@ -319,15 +372,22 @@ CMakeFiles/apollo_build_driver_native.dir/clean:
 # Target rules for target CMakeFiles/apollo_runtime_tests.dir
 
 # All Build rule for target.
-CMakeFiles/apollo_runtime_tests.dir/all:
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_mir_build.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_mir_opt.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_mir.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_borrowck.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_codegen_barriers.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_hir_lowering.dir/all
+CMakeFiles/apollo_runtime_tests.dir/all: CMakeFiles/apollo_diag.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=44,45,46,47,48,49,50,51,52,53,54,55,56,57 "Built target apollo_runtime_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 "Built target apollo_runtime_tests"
 .PHONY : CMakeFiles/apollo_runtime_tests.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/apollo_runtime_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 43
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_runtime_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
 .PHONY : CMakeFiles/apollo_runtime_tests.dir/rule
@@ -339,7 +399,7 @@ apollo_runtime_tests: CMakeFiles/apollo_runtime_tests.dir/rule
 # codegen rule for target.
 CMakeFiles/apollo_runtime_tests.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=44,45,46,47,48,49,50,51,52,53,54,55,56,57 "Finished codegen for target apollo_runtime_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 "Finished codegen for target apollo_runtime_tests"
 .PHONY : CMakeFiles/apollo_runtime_tests.dir/codegen
 
 # clean rule for target.
@@ -351,15 +411,22 @@ CMakeFiles/apollo_runtime_tests.dir/clean:
 # Target rules for target CMakeFiles/apollo_driver_tests.dir
 
 # All Build rule for target.
-CMakeFiles/apollo_driver_tests.dir/all:
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_mir_build.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_mir_opt.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_mir.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_borrowck.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_codegen_barriers.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_hir_lowering.dir/all
+CMakeFiles/apollo_driver_tests.dir/all: CMakeFiles/apollo_diag.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29 "Built target apollo_driver_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=28,29,30,31,32,33,34,35,36,37,38,39,40,41,42 "Built target apollo_driver_tests"
 .PHONY : CMakeFiles/apollo_driver_tests.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/apollo_driver_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 42
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_driver_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
 .PHONY : CMakeFiles/apollo_driver_tests.dir/rule
@@ -371,13 +438,434 @@ apollo_driver_tests: CMakeFiles/apollo_driver_tests.dir/rule
 # codegen rule for target.
 CMakeFiles/apollo_driver_tests.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29 "Finished codegen for target apollo_driver_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=28,29,30,31,32,33,34,35,36,37,38,39,40,41,42 "Finished codegen for target apollo_driver_tests"
 .PHONY : CMakeFiles/apollo_driver_tests.dir/codegen
 
 # clean rule for target.
 CMakeFiles/apollo_driver_tests.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/clean
 .PHONY : CMakeFiles/apollo_driver_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_mir.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_mir.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=72,73,74,75,76,77 "Built target apollo_mir"
+.PHONY : CMakeFiles/apollo_mir.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_mir.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_mir.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_mir.dir/rule
+
+# Convenience name for target.
+apollo_mir: CMakeFiles/apollo_mir.dir/rule
+.PHONY : apollo_mir
+
+# codegen rule for target.
+CMakeFiles/apollo_mir.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=72,73,74,75,76,77 "Finished codegen for target apollo_mir"
+.PHONY : CMakeFiles/apollo_mir.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_mir.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/clean
+.PHONY : CMakeFiles/apollo_mir.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_mir_build.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_mir_build.dir/all: CMakeFiles/apollo_mir.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=78,79,80 "Built target apollo_mir_build"
+.PHONY : CMakeFiles/apollo_mir_build.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_mir_build.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_mir_build.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_mir_build.dir/rule
+
+# Convenience name for target.
+apollo_mir_build: CMakeFiles/apollo_mir_build.dir/rule
+.PHONY : apollo_mir_build
+
+# codegen rule for target.
+CMakeFiles/apollo_mir_build.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=78,79,80 "Finished codegen for target apollo_mir_build"
+.PHONY : CMakeFiles/apollo_mir_build.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_mir_build.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/clean
+.PHONY : CMakeFiles/apollo_mir_build.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_mir_opt.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_mir_opt.dir/all: CMakeFiles/apollo_mir.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=81,82 "Built target apollo_mir_opt"
+.PHONY : CMakeFiles/apollo_mir_opt.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_mir_opt.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_mir_opt.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_mir_opt.dir/rule
+
+# Convenience name for target.
+apollo_mir_opt: CMakeFiles/apollo_mir_opt.dir/rule
+.PHONY : apollo_mir_opt
+
+# codegen rule for target.
+CMakeFiles/apollo_mir_opt.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=81,82 "Finished codegen for target apollo_mir_opt"
+.PHONY : CMakeFiles/apollo_mir_opt.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_mir_opt.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/clean
+.PHONY : CMakeFiles/apollo_mir_opt.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_mir_tests.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_mir_tests.dir/all: CMakeFiles/apollo_mir_build.dir/all
+CMakeFiles/apollo_mir_tests.dir/all: CMakeFiles/apollo_mir_opt.dir/all
+CMakeFiles/apollo_mir_tests.dir/all: CMakeFiles/apollo_mir.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=83,84 "Built target apollo_mir_tests"
+.PHONY : CMakeFiles/apollo_mir_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_mir_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 13
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_mir_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_mir_tests.dir/rule
+
+# Convenience name for target.
+apollo_mir_tests: CMakeFiles/apollo_mir_tests.dir/rule
+.PHONY : apollo_mir_tests
+
+# codegen rule for target.
+CMakeFiles/apollo_mir_tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=83,84 "Finished codegen for target apollo_mir_tests"
+.PHONY : CMakeFiles/apollo_mir_tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_mir_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/clean
+.PHONY : CMakeFiles/apollo_mir_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_gc_concurrent.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_gc_concurrent.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=59,60,61,62,63,64 "Built target apollo_gc_concurrent"
+.PHONY : CMakeFiles/apollo_gc_concurrent.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_gc_concurrent.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_gc_concurrent.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_gc_concurrent.dir/rule
+
+# Convenience name for target.
+apollo_gc_concurrent: CMakeFiles/apollo_gc_concurrent.dir/rule
+.PHONY : apollo_gc_concurrent
+
+# codegen rule for target.
+CMakeFiles/apollo_gc_concurrent.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=59,60,61,62,63,64 "Finished codegen for target apollo_gc_concurrent"
+.PHONY : CMakeFiles/apollo_gc_concurrent.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_gc_concurrent.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/clean
+.PHONY : CMakeFiles/apollo_gc_concurrent.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_gc_concurrent_tests.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_gc_concurrent_tests.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=65,66 "Built target apollo_gc_concurrent_tests"
+.PHONY : CMakeFiles/apollo_gc_concurrent_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_gc_concurrent_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_gc_concurrent_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_gc_concurrent_tests.dir/rule
+
+# Convenience name for target.
+apollo_gc_concurrent_tests: CMakeFiles/apollo_gc_concurrent_tests.dir/rule
+.PHONY : apollo_gc_concurrent_tests
+
+# codegen rule for target.
+CMakeFiles/apollo_gc_concurrent_tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=65,66 "Finished codegen for target apollo_gc_concurrent_tests"
+.PHONY : CMakeFiles/apollo_gc_concurrent_tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_gc_concurrent_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/clean
+.PHONY : CMakeFiles/apollo_gc_concurrent_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_gc_extensions_tests.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_gc_extensions_tests.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=67 "Built target apollo_gc_extensions_tests"
+.PHONY : CMakeFiles/apollo_gc_extensions_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_gc_extensions_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 7
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_gc_extensions_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_gc_extensions_tests.dir/rule
+
+# Convenience name for target.
+apollo_gc_extensions_tests: CMakeFiles/apollo_gc_extensions_tests.dir/rule
+.PHONY : apollo_gc_extensions_tests
+
+# codegen rule for target.
+CMakeFiles/apollo_gc_extensions_tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=67 "Finished codegen for target apollo_gc_extensions_tests"
+.PHONY : CMakeFiles/apollo_gc_extensions_tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_gc_extensions_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/clean
+.PHONY : CMakeFiles/apollo_gc_extensions_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_gc_nursery_tests.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_gc_nursery_tests.dir/all: CMakeFiles/apollo_gc_concurrent.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=68,69 "Built target apollo_gc_nursery_tests"
+.PHONY : CMakeFiles/apollo_gc_nursery_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_gc_nursery_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_gc_nursery_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_gc_nursery_tests.dir/rule
+
+# Convenience name for target.
+apollo_gc_nursery_tests: CMakeFiles/apollo_gc_nursery_tests.dir/rule
+.PHONY : apollo_gc_nursery_tests
+
+# codegen rule for target.
+CMakeFiles/apollo_gc_nursery_tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=68,69 "Finished codegen for target apollo_gc_nursery_tests"
+.PHONY : CMakeFiles/apollo_gc_nursery_tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_gc_nursery_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/clean
+.PHONY : CMakeFiles/apollo_gc_nursery_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_borrowck.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_borrowck.dir/all: CMakeFiles/apollo_mir.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=1,2,3,4 "Built target apollo_borrowck"
+.PHONY : CMakeFiles/apollo_borrowck.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_borrowck.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 10
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_borrowck.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_borrowck.dir/rule
+
+# Convenience name for target.
+apollo_borrowck: CMakeFiles/apollo_borrowck.dir/rule
+.PHONY : apollo_borrowck
+
+# codegen rule for target.
+CMakeFiles/apollo_borrowck.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=1,2,3,4 "Finished codegen for target apollo_borrowck"
+.PHONY : CMakeFiles/apollo_borrowck.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_borrowck.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/clean
+.PHONY : CMakeFiles/apollo_borrowck.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_borrowck_tests.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_borrowck_tests.dir/all: CMakeFiles/apollo_mir.dir/all
+CMakeFiles/apollo_borrowck_tests.dir/all: CMakeFiles/apollo_borrowck.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=5,6 "Built target apollo_borrowck_tests"
+.PHONY : CMakeFiles/apollo_borrowck_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_borrowck_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 12
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_borrowck_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_borrowck_tests.dir/rule
+
+# Convenience name for target.
+apollo_borrowck_tests: CMakeFiles/apollo_borrowck_tests.dir/rule
+.PHONY : apollo_borrowck_tests
+
+# codegen rule for target.
+CMakeFiles/apollo_borrowck_tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=5,6 "Finished codegen for target apollo_borrowck_tests"
+.PHONY : CMakeFiles/apollo_borrowck_tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_borrowck_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/clean
+.PHONY : CMakeFiles/apollo_borrowck_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_codegen_barriers.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_codegen_barriers.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=24,25 "Built target apollo_codegen_barriers"
+.PHONY : CMakeFiles/apollo_codegen_barriers.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_codegen_barriers.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_codegen_barriers.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_codegen_barriers.dir/rule
+
+# Convenience name for target.
+apollo_codegen_barriers: CMakeFiles/apollo_codegen_barriers.dir/rule
+.PHONY : apollo_codegen_barriers
+
+# codegen rule for target.
+CMakeFiles/apollo_codegen_barriers.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=24,25 "Finished codegen for target apollo_codegen_barriers"
+.PHONY : CMakeFiles/apollo_codegen_barriers.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_codegen_barriers.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/clean
+.PHONY : CMakeFiles/apollo_codegen_barriers.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_hir_lowering.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_hir_lowering.dir/all: CMakeFiles/apollo_mir.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=70,71 "Built target apollo_hir_lowering"
+.PHONY : CMakeFiles/apollo_hir_lowering.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_hir_lowering.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_hir_lowering.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_hir_lowering.dir/rule
+
+# Convenience name for target.
+apollo_hir_lowering: CMakeFiles/apollo_hir_lowering.dir/rule
+.PHONY : apollo_hir_lowering
+
+# codegen rule for target.
+CMakeFiles/apollo_hir_lowering.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=70,71 "Finished codegen for target apollo_hir_lowering"
+.PHONY : CMakeFiles/apollo_hir_lowering.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_hir_lowering.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/clean
+.PHONY : CMakeFiles/apollo_hir_lowering.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/apollo_diag.dir
+
+# All Build rule for target.
+CMakeFiles/apollo_diag.dir/all: CMakeFiles/apollo_mir.dir/all
+CMakeFiles/apollo_diag.dir/all: CMakeFiles/apollo_borrowck.dir/all
+CMakeFiles/apollo_diag.dir/all: CMakeFiles/apollo_hir_lowering.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=26,27 "Built target apollo_diag"
+.PHONY : CMakeFiles/apollo_diag.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/apollo_diag.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 14
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/apollo_diag.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles 0
+.PHONY : CMakeFiles/apollo_diag.dir/rule
+
+# Convenience name for target.
+apollo_diag: CMakeFiles/apollo_diag.dir/rule
+.PHONY : apollo_diag
+
+# codegen rule for target.
+CMakeFiles/apollo_diag.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\devon\Apollo\Apollo-Main\compiler\cpp\build\CMakeFiles --progress-num=26,27 "Finished codegen for target apollo_diag"
+.PHONY : CMakeFiles/apollo_diag.dir/codegen
+
+# clean rule for target.
+CMakeFiles/apollo_diag.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/clean
+.PHONY : CMakeFiles/apollo_diag.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -39,6 +39,8 @@ struct ApolloInlineForeignSymbol {
     std::string apolloType;
     std::vector<ApolloInlineForeignParameter> parameters;
     bool mutableStorage = false;
+    bool variadic = false;
+    bool declarationOnly = false;
     std::string getterName;
 };
 

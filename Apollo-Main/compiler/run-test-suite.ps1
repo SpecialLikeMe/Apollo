@@ -4,7 +4,18 @@ $compilerDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $compilerDir
 
 function Resolve-NativeBuildDriver {
+    $nativeBuildDir = if ($env:APOLLO_NATIVE_BUILD_DIR) {
+        $env:APOLLO_NATIVE_BUILD_DIR
+    }
+    else {
+        Join-Path (Split-Path $compilerDir -Parent) 'build'
+    }
     $candidates = @(
+        (Join-Path $nativeBuildDir 'apollo_build_driver_native.exe'),
+        (Join-Path $nativeBuildDir 'Release\apollo_build_driver_native.exe'),
+        (Join-Path $nativeBuildDir 'Debug\apollo_build_driver_native.exe'),
+        (Join-Path $nativeBuildDir 'RelWithDebInfo\apollo_build_driver_native.exe'),
+        (Join-Path $nativeBuildDir 'MinSizeRel\apollo_build_driver_native.exe'),
         (Join-Path $compilerDir 'cpp\build\Release\apollo_build_driver_native.exe'),
         (Join-Path $compilerDir 'cpp\build\Debug\apollo_build_driver_native.exe'),
         (Join-Path $compilerDir 'cpp\build\RelWithDebInfo\apollo_build_driver_native.exe'),

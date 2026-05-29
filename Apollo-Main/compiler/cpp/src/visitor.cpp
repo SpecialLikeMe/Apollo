@@ -29,6 +29,10 @@
 #include "llvm/TargetParser/Triple.h"
 #include "llvm/Support/raw_ostream.h"
 
+#ifdef APOLLO_CODEGEN_BARRIERS
+#include "codegen/barriers.h"
+#endif
+
 namespace {
 
 const std::unordered_map<std::string, std::string> kPrimitiveIrTypes = {
@@ -82,6 +86,196 @@ struct LoweredValue {
 };
 
 using LoweredValueMap = std::unordered_map<std::string, LoweredValue>;
+
+// ----------------------------------------------------------------------------
+// GC write-barrier seam.
+//
+// Mirrors Go's `runtime.gcWriteBarrier` strategy: every store of a
+// possibly-heap-pointer value into a GC-managed slot must shade the new
+// value grey so the concurrent marker preserves the tri-color invariant.
+// `emitGcManagedStore` is the single funnel the legacy direct-IR backend
+// uses for stores into slots we know live on the GC heap (currently the
+// initializer store inside `lowerMntStatement` and the per-element init
+// stores in `lowerMallocStatement`). Stores into stack allocas do NOT go
+// through this helper because allocas are scanned conservatively at the
+// safepoint root walk; barriers there would be pure overhead.
+//
+// Read barriers: not emitted. The major collector is non-moving (only the
+// nursery copies, and nursery slots are never observed by mutator load
+// after promotion because the forwarding pointer is installed inside the
+// stop-the-world copy phase), so Go-style "load barrier optional" semantics
+// apply. If/when we move to a moving major collector this is the seam to
+// add `emit_read_barrier`.
+//
+// When `APOLLO_CODEGEN_BARRIERS` is not defined (e.g. unit-test builds
+// that don't link the barriers static lib) we fall back to a plain store
+// so the legacy single-threaded mark-and-sweep path keeps building.
+inline llvm::StoreInst* emitGcManagedStore(llvm::IRBuilder<>& builder,
+                                           llvm::Value* value,
+                                           llvm::Value* slot,
+                                           bool barriersOn) {
+#ifdef APOLLO_CODEGEN_BARRIERS
+    if (barriersOn && value != nullptr && value->getType() != nullptr && value->getType()->isPointerTy()) {
+        auto* mod = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+        if (mod != nullptr) {
+            apollo::codegen::declareGcRuntimeIntrinsics(mod);
+            apollo::codegen::emit_write_barrier(&builder, nullptr, slot, value);
+        }
+    }
+#else
+    (void)barriersOn;
+#endif
+    return builder.CreateStore(value, slot);
+}
+
+// ----------------------------------------------------------------------------
+// Semantic-error surface.
+//
+// The legacy direct-IR backend reports failures by returning `false` from
+// lowering helpers and propagating a string `unsupportedReason` up to
+// `lowerSupportedFunctionBodies`, which finally throws a `runtime_error`.
+// Helpers that do not receive the reason by reference instead write into
+// the thread-local `gApolloLastSemanticError` slot below; the dispatcher
+// (`lowerStatement`) consults it after a failure so that real semantic
+// diagnostics (`redeclaration`, `deref-of-reference`) appear in the final
+// error message instead of the generic "init-lowering-failed:<source>" tag.
+// ----------------------------------------------------------------------------
+thread_local std::string gApolloLastSemanticError;
+using TypeAliasMap = std::unordered_map<std::string, std::string>;
+thread_local TypeAliasMap* gActiveTypeAliases = nullptr;
+
+void setSemanticError(std::string message) {
+    gApolloLastSemanticError = std::move(message);
+}
+
+std::string takeSemanticError() {
+    std::string out;
+    out.swap(gApolloLastSemanticError);
+    return out;
+}
+
+void setUnknownBindingError(std::string_view name) {
+    setSemanticError("unknown or out-of-scope binding `" + std::string(name) + "`");
+}
+
+class TypeAliasScope final {
+public:
+    explicit TypeAliasScope(TypeAliasMap* aliases)
+        : previous_(gActiveTypeAliases) {
+        gActiveTypeAliases = aliases;
+    }
+
+    ~TypeAliasScope() {
+        gActiveTypeAliases = previous_;
+    }
+
+private:
+    TypeAliasMap* previous_;
+};
+
+std::string trimCopy(std::string text);
+
+std::string normalizeTypeAliasKey(std::string_view text) {
+    std::string normalized = trimCopy(std::string(text));
+    if (normalized.size() >= 2 && normalized.front() == '<' && normalized.back() == '>') {
+        normalized = trimCopy(normalized.substr(1, normalized.size() - 2));
+    }
+    return normalized;
+}
+
+TypeAliasMap snapshotActiveTypeAliases() {
+    return gActiveTypeAliases != nullptr ? *gActiveTypeAliases : TypeAliasMap{};
+}
+
+std::string resolveActiveTypeAliases(std::string_view text) {
+    std::string resolved = trimCopy(std::string(text));
+    if (gActiveTypeAliases == nullptr || gActiveTypeAliases->empty() || resolved.empty()) {
+        return resolved;
+    }
+
+    bool changed = true;
+    while (changed) {
+        changed = false;
+        std::string next;
+        next.reserve(resolved.size());
+
+        for (std::size_t index = 0; index < resolved.size();) {
+            if (resolved[index] == '<') {
+                const std::size_t close = resolved.find('>', index + 1);
+                if (close != std::string::npos) {
+                    const std::string placeholderKey = normalizeTypeAliasKey(resolved.substr(index, close - index + 1));
+                    const auto placeholderIt = gActiveTypeAliases->find(placeholderKey);
+                    if (placeholderIt != gActiveTypeAliases->end()) {
+                        next += placeholderIt->second;
+                        index = close + 1;
+                        changed = true;
+                        continue;
+                    }
+                }
+            }
+
+            const unsigned char ch = static_cast<unsigned char>(resolved[index]);
+            if (std::isalpha(ch) != 0 || ch == '_') {
+                std::size_t end = index + 1;
+                while (end < resolved.size()) {
+                    const unsigned char ident = static_cast<unsigned char>(resolved[end]);
+                    if (std::isalnum(ident) == 0 && ident != '_') {
+                        break;
+                    }
+                    ++end;
+                }
+
+                const std::string key = resolved.substr(index, end - index);
+                const auto it = gActiveTypeAliases->find(key);
+                if (it != gActiveTypeAliases->end()) {
+                    next += it->second;
+                    changed = true;
+                } else {
+                    next += key;
+                }
+                index = end;
+                continue;
+            }
+
+            next.push_back(resolved[index++]);
+        }
+
+        resolved.swap(next);
+    }
+
+    return resolved;
+}
+
+// True when `typeText` is a reference type (ends in `&`). Apollo references
+// are auto-derefencing aliases, so unary `*` on a reference is invalid:
+// the user wrote `int& y = x; *y = 4;` expecting C semantics, but Apollo's
+// `&` is a borrow, not a pointer.
+std::string stripTrailingReferenceQualifierText(std::string text) {
+    text = trimCopy(std::move(text));
+    constexpr std::string_view kQualifiers[] = { "const", "nconst", "nst", "stt" };
+    bool removed = true;
+    while (removed) {
+        removed = false;
+        for (const auto qualifier : kQualifiers) {
+            if (text.size() >= qualifier.size()
+                && text.compare(text.size() - qualifier.size(), qualifier.size(), qualifier) == 0) {
+                text.erase(text.size() - qualifier.size());
+                text = trimCopy(std::move(text));
+                removed = true;
+                break;
+            }
+        }
+    }
+    return text;
+}
+
+bool isReferenceTypeText(const std::string& typeText) {
+    const std::string stripped = stripTrailingReferenceQualifierText(typeText);
+    if (stripped.empty()) {
+        return false;
+    }
+    return stripped.back() == '&';
+}
 
 std::string toPackageSourcePath(const std::string& importPath) {
     std::string path = importPath;
@@ -206,7 +400,7 @@ bool isTemplateStringLiteral(const std::string& text) {
 }
 
 std::string canonicalApolloTypeText(std::string_view text) {
-    std::string trimmed = trimCopy(std::string(text));
+    std::string trimmed = resolveActiveTypeAliases(text);
     trimmed.erase(std::remove(trimmed.begin(), trimmed.end(), '&'), trimmed.end());
     trimmed = trimCopy(std::move(trimmed));
     if (trimmed == "bool") {
@@ -549,26 +743,53 @@ void appendNamedMetadataNode(llvm::Module& module, llvm::StringRef name, llvm::A
 
 llvm::Type* lowerTypeRef(llvm::LLVMContext& context, compilerv1Parser::TypeRefContext* typeRef);
 llvm::Type* lowerSourceTypeText(llvm::LLVMContext& context, std::string_view typeText);
+llvm::Type* lowerPointeeSourceType(llvm::LLVMContext& context, std::string_view typeText);
 llvm::Value* lowerExpressionValue(llvm::IRBuilder<>& builder,
     antlr4::ParserRuleContext* expression,
     const LoweredValueMap& values,
     bool loadReferences);
+llvm::Value* loadIfAddressable(llvm::IRBuilder<>& builder, const LoweredValue& lowered);
 llvm::Value* castToCommonInteger(llvm::IRBuilder<>& builder, llvm::Value* value, llvm::Type* targetType);
 compilerv1Parser::PrimaryContext* extractPrimaryContext(antlr4::ParserRuleContext* current);
 llvm::Value* lowerFunctionCallForExpectedType(llvm::IRBuilder<>& builder,
     compilerv1Parser::FunctionCallContext* functionCall,
     llvm::Type* expectedType,
     const LoweredValueMap& values);
+llvm::Function* instantiateTemplateFunctionForCall(llvm::Module& module,
+    compilerv1Parser::FunctionCallContext* functionCall,
+    const LoweredValueMap& values);
 bool lowerGlobalVariable(llvm::Module& module,
     compilerv1Parser::TypeRefContext* typeRef,
     antlr4::tree::TerminalNode* identifier,
     compilerv1Parser::ExpressionContext* expression);
 
+llvm::Value* lowerConditionValue(llvm::IRBuilder<>& builder,
+    antlr4::ParserRuleContext* expression,
+    const LoweredValueMap& values) {
+    if (expression == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Value* condition = lowerExpressionValue(builder, expression, values, true);
+    if (condition != nullptr && condition->getType()->isIntegerTy(1)) {
+        return condition;
+    }
+
+    const std::string text = trimCopy(stripOuterParens(expression->getText()));
+    if (text == "true") {
+        return llvm::ConstantInt::getTrue(builder.getContext());
+    }
+    if (text == "false") {
+        return llvm::ConstantInt::getFalse(builder.getContext());
+    }
+    return nullptr;
+}
+
 bool isNominalGenericType(compilerv1Parser::GenericTypeContext* genericType) {
     return genericType != nullptr
         && genericType->ID() != nullptr
         && genericType->ID()->getText() == "nominal"
-        && genericType->typeRef().size() == 2;
+    && (genericType->typeRef().size() == 1 || genericType->typeRef().size() == 2);
 }
 
 bool isOptionGenericType(compilerv1Parser::GenericTypeContext* genericType) {
@@ -620,7 +841,9 @@ llvm::StructType* lowerNominalType(llvm::LLVMContext& context, compilerv1Parser:
     }
 
     llvm::Type* okType = lowerTypeRef(context, genericType->typeRef(0));
-    llvm::Type* errType = lowerTypeRef(context, genericType->typeRef(1));
+    llvm::Type* errType = genericType->typeRef().size() == 2
+        ? lowerTypeRef(context, genericType->typeRef(1))
+        : llvm::PointerType::getUnqual(context);
     if (okType == nullptr || errType == nullptr) {
         return nullptr;
     }
@@ -667,6 +890,15 @@ llvm::Value* lowerExpressionForExpectedType(llvm::IRBuilder<>& builder,
     llvm::Type* expectedType,
     const LoweredValueMap& values,
     bool loadReferences = true);
+
+llvm::Value* lowerEnumConstructorValue(llvm::IRBuilder<>& builder,
+    compilerv1Parser::EnumConstructorContext* enumConstructor,
+    const LoweredValueMap& values);
+
+llvm::Value* lowerEnumUnwrapValue(llvm::IRBuilder<>& builder,
+    compilerv1Parser::FunctionCallContext* functionCall,
+    llvm::Type* expectedType,
+    const LoweredValueMap& values);
 
 llvm::Value* buildNominalAggregateValue(llvm::IRBuilder<>& builder,
     llvm::Type* nominalType,
@@ -916,8 +1148,33 @@ llvm::Value* lowerExpressionForExpectedType(llvm::IRBuilder<>& builder,
         return nullptr;
     }
 
+    const std::string expressionText = trimCopy(stripOuterParens(expression->getText()));
+    const auto directValue = values.find(expressionText);
+    if (directValue != values.end() && isReferenceTypeText(directValue->second.typeText)) {
+        llvm::Type* pointeeType = lowerPointeeSourceType(builder.getContext(), directValue->second.typeText);
+        llvm::Value* referenceValue = loadIfAddressable(builder, directValue->second);
+        if (pointeeType != nullptr && pointeeType == expectedType
+            && referenceValue != nullptr && referenceValue->getType()->isPointerTy()) {
+            return builder.CreateLoad(expectedType, referenceValue);
+        }
+    }
+
     if (llvm::Value* nominalValue = lowerNominalBuiltinValue(builder, expectedType, expression, values, loadReferences)) {
         return nominalValue;
+    }
+
+    if (auto* primary = extractPrimaryContext(expression); primary != nullptr && primary->functionCall() != nullptr) {
+        if (llvm::Value* unwrappedEnumValue = lowerEnumUnwrapValue(builder, primary->functionCall(), expectedType, values)) {
+            if (unwrappedEnumValue->getType() == expectedType) {
+                return unwrappedEnumValue;
+            }
+            if (unwrappedEnumValue->getType()->isPointerTy() && expectedType->isPointerTy()) {
+                llvm::Value* bitcast = builder.CreateBitCast(unwrappedEnumValue, expectedType);
+                if (bitcast != nullptr && bitcast->getType() == expectedType) {
+                    return bitcast;
+                }
+            }
+        }
     }
 
     if (auto* primary = extractPrimaryContext(expression); primary != nullptr && primary->functionCall() != nullptr) {
@@ -1065,6 +1322,11 @@ llvm::Type* lowerTypeRef(llvm::LLVMContext& context, compilerv1Parser::TypeRefCo
         return nullptr;
     }
 
+    const std::string resolvedTypeText = resolveActiveTypeAliases(typeRef->getText());
+    if (resolvedTypeText != typeRef->getText()) {
+        return lowerSourceTypeText(context, resolvedTypeText);
+    }
+
     llvm::Type* lowered = nullptr;
     if (typeRef->typeAtom()->shapeType() != nullptr) {
         lowered = lowerShapeType(context, typeRef->typeAtom()->shapeType());
@@ -1082,7 +1344,9 @@ llvm::Type* lowerTypeRef(llvm::LLVMContext& context, compilerv1Parser::TypeRefCo
         if (lowered == nullptr && baseType == "str") {
             lowered = llvm::PointerType::getUnqual(context);
         }
-        if (lowered == nullptr && (typeRef->typeAtom()->genericType() != nullptr || typeRef->typeAtom()->ID() != nullptr)) {
+        if (lowered == nullptr && (typeRef->typeAtom()->genericType() != nullptr
+            || typeRef->typeAtom()->qualifiedType() != nullptr
+            || typeRef->typeAtom()->ID() != nullptr)) {
             lowered = llvm::PointerType::getUnqual(context);
         }
     }
@@ -1095,7 +1359,7 @@ llvm::Type* lowerTypeRef(llvm::LLVMContext& context, compilerv1Parser::TypeRefCo
             return nullptr;
         }
         const std::string text = modifier->getText();
-        if (text != "*" && text != "&") {
+        if (text != "*" && text.rfind("&", 0) != 0) {
             return nullptr;
         }
         lowered = llvm::PointerType::getUnqual(context);
@@ -1138,6 +1402,210 @@ std::string buildApolloOverloadName(std::string_view baseName, const std::vector
         loweredName += std::string(kFunctionOverloadSeparator) + mangleTypeName(canonicalApolloTypeText(paramType));
     }
     return loweredName;
+}
+
+struct TemplateFunctionRecord {
+    compilerv1Parser::TemplateFunctionContext* function = nullptr;
+    std::vector<std::string> typeParams;
+};
+
+using TemplateFunctionRegistry = std::unordered_map<std::string, TemplateFunctionRecord>;
+const TemplateFunctionRegistry* gActiveTemplateFunctionRegistry = nullptr;
+
+class TemplateFunctionRegistryScope final {
+public:
+    explicit TemplateFunctionRegistryScope(const TemplateFunctionRegistry* registry)
+        : previous_(gActiveTemplateFunctionRegistry) {
+        gActiveTemplateFunctionRegistry = registry;
+    }
+
+    ~TemplateFunctionRegistryScope() {
+        gActiveTemplateFunctionRegistry = previous_;
+    }
+
+private:
+    const TemplateFunctionRegistry* previous_;
+};
+
+bool isKnownTemplateConcreteType(std::string_view typeName) {
+    const std::string trimmed = trimCopy(std::string(typeName));
+    if (trimmed.empty()) {
+        return true;
+    }
+    if (trimmed == "str" || trimmed == "auto" || kPrimitiveIrTypes.contains(trimmed)) {
+        return true;
+    }
+    return false;
+}
+
+void appendTemplateTypeParam(std::vector<std::string>& typeParams, std::string name) {
+    name = normalizeTypeAliasKey(name);
+    if (name.empty()) {
+        return;
+    }
+    if (std::find(typeParams.begin(), typeParams.end(), name) == typeParams.end()) {
+        typeParams.push_back(std::move(name));
+    }
+}
+
+void collectTemplateTypeParamsFromTypeRef(compilerv1Parser::TypeRefContext* typeRef,
+    std::vector<std::string>& typeParams) {
+    if (typeRef == nullptr || typeRef->typeAtom() == nullptr) {
+        return;
+    }
+
+    if (auto* placeholder = typeRef->typeAtom()->typePlaceholder(); placeholder != nullptr && placeholder->ID() != nullptr) {
+        appendTemplateTypeParam(typeParams, placeholder->ID()->getText());
+        return;
+    }
+
+    if (auto* genericType = typeRef->typeAtom()->genericType(); genericType != nullptr) {
+        for (auto* nestedType : genericType->typeRef()) {
+            collectTemplateTypeParamsFromTypeRef(nestedType, typeParams);
+        }
+        return;
+    }
+
+    if (auto* shapeType = typeRef->typeAtom()->shapeType(); shapeType != nullptr) {
+        for (auto* nestedType : shapeType->typeRef()) {
+            collectTemplateTypeParamsFromTypeRef(nestedType, typeParams);
+        }
+        return;
+    }
+
+    if (auto* functionType = typeRef->typeAtom()->functionType(); functionType != nullptr) {
+        if (functionType->returnType() != nullptr && functionType->returnType()->typeRef() != nullptr) {
+            collectTemplateTypeParamsFromTypeRef(functionType->returnType()->typeRef(), typeParams);
+        }
+        if (functionType->functionTypeArgs() != nullptr) {
+            for (auto* nestedType : functionType->functionTypeArgs()->typeRef()) {
+                collectTemplateTypeParamsFromTypeRef(nestedType, typeParams);
+            }
+        }
+        return;
+    }
+
+    if (typeRef->typeAtom()->ID() != nullptr) {
+        const std::string candidate = typeRef->typeAtom()->ID()->getText();
+        if (!isKnownTemplateConcreteType(candidate)) {
+            appendTemplateTypeParam(typeParams, candidate);
+        }
+    }
+}
+
+std::vector<std::string> collectTemplateFunctionTypeParams(compilerv1Parser::TemplateFunctionContext* functionCtx) {
+    std::vector<std::string> typeParams;
+    if (functionCtx == nullptr) {
+        return typeParams;
+    }
+    if (functionCtx->returnType() != nullptr && functionCtx->returnType()->typeRef() != nullptr) {
+        collectTemplateTypeParamsFromTypeRef(functionCtx->returnType()->typeRef(), typeParams);
+    }
+    if (functionCtx->params() != nullptr) {
+        for (auto* param : functionCtx->params()->param()) {
+            if (param != nullptr && param->typeRef() != nullptr) {
+                collectTemplateTypeParamsFromTypeRef(param->typeRef(), typeParams);
+            }
+        }
+    }
+    return typeParams;
+}
+
+std::vector<std::string> collectTemplateTypeParamsFromTypeRefUnique(compilerv1Parser::TypeRefContext* typeRef) {
+    std::vector<std::string> typeParams;
+    collectTemplateTypeParamsFromTypeRef(typeRef, typeParams);
+    return typeParams;
+}
+
+TypeAliasMap buildTemplateTypeAliasMap(const TemplateFunctionRecord& record,
+    const std::vector<std::string>& concreteTypes) {
+    TypeAliasMap aliases;
+    const std::size_t count = std::min(record.typeParams.size(), concreteTypes.size());
+    for (std::size_t index = 0; index < count; ++index) {
+        aliases[record.typeParams[index]] = resolveActiveTypeAliases(concreteTypes[index]);
+    }
+    return aliases;
+}
+
+std::vector<std::string> collectTemplateFunctionConcreteParamTypes(const TemplateFunctionRecord& record,
+    const std::vector<std::string>& concreteTypes) {
+    TypeAliasMap aliases = buildTemplateTypeAliasMap(record, concreteTypes);
+    TypeAliasScope aliasScope(&aliases);
+
+    std::vector<std::string> paramTypes;
+    if (record.function == nullptr || record.function->params() == nullptr) {
+        return paramTypes;
+    }
+    for (auto* param : record.function->params()->param()) {
+        if (param == nullptr || param->typeRef() == nullptr) {
+            continue;
+        }
+        paramTypes.push_back(resolveActiveTypeAliases(param->typeRef()->getText()));
+    }
+    return paramTypes;
+}
+
+std::vector<std::string> inferTemplateFunctionTypeArgs(const TemplateFunctionRecord& record,
+    compilerv1Parser::FunctionCallContext* functionCall,
+    const LoweredValueMap& values) {
+    std::vector<std::string> inferred(record.typeParams.size());
+    if (record.function == nullptr || functionCall == nullptr) {
+        return {};
+    }
+
+    if (auto* explicitTypeArgs = functionCall->explicitTypeArgs(); explicitTypeArgs != nullptr) {
+        if (explicitTypeArgs->typeRef().size() != record.typeParams.size()) {
+            setSemanticError("template argument count mismatch for `" + functionCall->ID()->getText() + "`");
+            return {};
+        }
+        for (std::size_t index = 0; index < explicitTypeArgs->typeRef().size(); ++index) {
+            inferred[index] = resolveActiveTypeAliases(explicitTypeArgs->typeRef(index)->getText());
+        }
+        return inferred;
+    }
+
+    const auto callArgs = functionCall->args() != nullptr
+        ? functionCall->args()->expression()
+        : std::vector<compilerv1Parser::ExpressionContext*>{};
+    const auto params = record.function->params() != nullptr
+        ? record.function->params()->param()
+        : std::vector<compilerv1Parser::ParamContext*>{};
+    const std::size_t pairCount = std::min(callArgs.size(), params.size());
+    for (std::size_t index = 0; index < pairCount; ++index) {
+        auto* param = params[index];
+        if (param == nullptr || param->typeRef() == nullptr || callArgs[index] == nullptr) {
+            continue;
+        }
+
+        std::vector<std::string> paramPlaceholders = collectTemplateTypeParamsFromTypeRefUnique(param->typeRef());
+        if (paramPlaceholders.size() != 1) {
+            continue;
+        }
+
+        const std::string argumentType = inferExpressionTypeText(callArgs[index], values);
+        if (argumentType.empty()) {
+            continue;
+        }
+
+        const auto typeParamIt = std::find(record.typeParams.begin(), record.typeParams.end(), paramPlaceholders[0]);
+        if (typeParamIt == record.typeParams.end()) {
+            continue;
+        }
+        const std::size_t slot = static_cast<std::size_t>(std::distance(record.typeParams.begin(), typeParamIt));
+        if (!inferred[slot].empty() && canonicalApolloTypeText(inferred[slot]) != canonicalApolloTypeText(argumentType)) {
+            setSemanticError("conflicting inferred types for template parameter `" + paramPlaceholders[0] + "`");
+            return {};
+        }
+        inferred[slot] = argumentType;
+    }
+
+    for (std::size_t index = 0; index < inferred.size(); ++index) {
+        if (inferred[index].empty()) {
+            setSemanticError("could not infer template parameter `" + record.typeParams[index] + "` for `" + functionCall->ID()->getText() + "`");
+            return {};
+        }
+    }
+    return inferred;
 }
 
 bool functionMatchesDefinitionSignature(llvm::Module& module, llvm::Function* function, compilerv1Parser::FunctionContext* functionCtx) {
@@ -1219,6 +1687,10 @@ llvm::Function* resolveApolloFunctionCallee(llvm::Module& module,
         if (llvm::Function* overloaded = module.getFunction(buildApolloOverloadName(baseName, inferredArgTypes))) {
             return overloaded;
         }
+    }
+
+    if (llvm::Function* specialized = instantiateTemplateFunctionForCall(module, functionCall, values)) {
+        return specialized;
     }
 
     return module.getFunction(baseName);
@@ -1447,11 +1919,32 @@ struct AggregateMethodRecord {
     bool isStatic = false;
 };
 
+enum class AggregateKind {
+    Aggregate,
+    Enum,
+};
+
+enum class EnumVariantKind {
+    Unit,
+    Tuple,
+    Struct,
+};
+
+struct EnumVariantRecord {
+    std::string name;
+    EnumVariantKind kind = EnumVariantKind::Unit;
+    std::string payloadTypeText;
+    std::string storageFieldName;
+    int tagValue = 0;
+};
+
 struct AggregateRecord {
     std::string name;
     std::string baseName;
     std::vector<AggregateFieldRecord> ownFields;
     std::vector<AggregateMethodRecord> methods;
+    AggregateKind kind = AggregateKind::Aggregate;
+    std::vector<EnumVariantRecord> enumVariants;
 };
 
 struct AggregateRegistry {
@@ -1490,6 +1983,89 @@ std::string trimAggregateTypeName(std::string text) {
         text.resize(generic);
     }
     return trimCopy(std::move(text));
+}
+
+std::string qualifiedTypeText(compilerv1Parser::QualifiedTypeContext* qualifiedType) {
+    if (qualifiedType == nullptr || qualifiedType->ID() == nullptr || qualifiedType->enumVariantName() == nullptr) {
+        return {};
+    }
+    return qualifiedType->ID()->getText() + std::string("::") + qualifiedType->enumVariantName()->getText();
+}
+
+std::string enumVariantStorageFieldName(std::string_view variantName) {
+    return "__variant_" + std::string(variantName);
+}
+
+const EnumVariantRecord* findEnumVariant(const AggregateRecord& aggregate, std::string_view variantName) {
+    if (aggregate.kind != AggregateKind::Enum) {
+        return nullptr;
+    }
+    const auto it = std::find_if(aggregate.enumVariants.begin(), aggregate.enumVariants.end(), [&](const EnumVariantRecord& variant) {
+        return variant.name == variantName;
+    });
+    return it == aggregate.enumVariants.end() ? nullptr : &*it;
+}
+
+const EnumVariantRecord* inferSinglePayloadEnumVariant(const AggregateRecord& aggregate) {
+    if (aggregate.kind != AggregateKind::Enum) {
+        return nullptr;
+    }
+    const EnumVariantRecord* match = nullptr;
+    for (const auto& variant : aggregate.enumVariants) {
+        if (variant.kind == EnumVariantKind::Unit) {
+            continue;
+        }
+        if (match != nullptr) {
+            return nullptr;
+        }
+        match = &variant;
+    }
+    return match;
+}
+
+const EnumVariantRecord* findEnumVariantForExpectedType(llvm::LLVMContext& context,
+    const AggregateRecord& aggregate,
+    llvm::Type* expectedType) {
+    if (aggregate.kind != AggregateKind::Enum || expectedType == nullptr) {
+        return nullptr;
+    }
+    const EnumVariantRecord* match = nullptr;
+    for (const auto& variant : aggregate.enumVariants) {
+        if (variant.kind == EnumVariantKind::Unit || variant.payloadTypeText.empty()) {
+            continue;
+        }
+        llvm::Type* payloadType = lowerSourceTypeText(context, variant.payloadTypeText);
+        if (payloadType == nullptr || payloadType != expectedType) {
+            continue;
+        }
+        if (match != nullptr) {
+            return nullptr;
+        }
+        match = &variant;
+    }
+    return match;
+}
+
+const EnumVariantRecord* findEnumVariantForExpectedTypeText(const AggregateRecord& aggregate,
+    std::string_view expectedTypeText) {
+    if (aggregate.kind != AggregateKind::Enum || expectedTypeText.empty()) {
+        return nullptr;
+    }
+    const std::string canonicalExpected = canonicalApolloTypeText(std::string(expectedTypeText));
+    const EnumVariantRecord* match = nullptr;
+    for (const auto& variant : aggregate.enumVariants) {
+        if (variant.kind == EnumVariantKind::Unit || variant.payloadTypeText.empty()) {
+            continue;
+        }
+        if (canonicalApolloTypeText(variant.payloadTypeText) != canonicalExpected) {
+            continue;
+        }
+        if (match != nullptr) {
+            return nullptr;
+        }
+        match = &variant;
+    }
+    return match;
 }
 
 std::optional<std::string> extractGenericTypeArgument(std::string_view typeText, std::string_view genericName) {
@@ -1748,6 +2324,63 @@ AggregateRegistry buildAggregateRegistry(compilerv1Parser::ProgramContext* tree)
             continue;
         }
 
+        if (auto* enumCtx = dynamic_cast<compilerv1Parser::EnumDeclContext*>(child)) {
+            if (enumCtx->ID() == nullptr) {
+                continue;
+            }
+
+            AggregateRecord enumRecord;
+            enumRecord.name = enumCtx->ID()->getText();
+            enumRecord.kind = AggregateKind::Enum;
+            enumRecord.ownFields.push_back({"__tag", "i32"});
+
+            int tagValue = 0;
+            for (auto* variant : enumCtx->enumVariant()) {
+                if (variant == nullptr || variant->enumVariantName() == nullptr) {
+                    continue;
+                }
+
+                EnumVariantRecord variantRecord;
+                variantRecord.name = variant->enumVariantName()->getText();
+                variantRecord.tagValue = tagValue++;
+
+                if (variant->typeRef() != nullptr) {
+                    variantRecord.kind = EnumVariantKind::Tuple;
+                    variantRecord.payloadTypeText = variant->typeRef()->getText();
+                    variantRecord.storageFieldName = enumVariantStorageFieldName(variantRecord.name);
+                    enumRecord.ownFields.push_back({variantRecord.storageFieldName, variantRecord.payloadTypeText});
+                } else if (variant->structBody() != nullptr) {
+                    variantRecord.kind = EnumVariantKind::Struct;
+                    variantRecord.payloadTypeText = enumRecord.name + "::" + variantRecord.name;
+                    variantRecord.storageFieldName = enumVariantStorageFieldName(variantRecord.name);
+                    enumRecord.ownFields.push_back({variantRecord.storageFieldName, variantRecord.payloadTypeText});
+
+                    std::vector<compilerv1Parser::FieldContext*> fields;
+                    std::vector<compilerv1Parser::MethodContext*> methods;
+                    for (auto* member : variant->structBody()->structMember()) {
+                        if (member == nullptr) {
+                            continue;
+                        }
+                        if (member->field() != nullptr) {
+                            fields.push_back(member->field());
+                        }
+                        if (member->method() != nullptr) {
+                            methods.push_back(member->method());
+                        }
+                    }
+                    registry.records.emplace(variantRecord.payloadTypeText,
+                        makeAggregateRecord(variantRecord.payloadTypeText, nullptr, fields, methods));
+                } else {
+                    variantRecord.kind = EnumVariantKind::Unit;
+                }
+
+                enumRecord.enumVariants.push_back(std::move(variantRecord));
+            }
+
+            registry.records.emplace(enumRecord.name, std::move(enumRecord));
+            continue;
+        }
+
         if (auto* typedefOpstructCtx = dynamic_cast<compilerv1Parser::TypedefOpstructContext*>(child)) {
             if (typedefOpstructCtx->ID().size() > 1) {
                 AggregateRecord aliasRecord;
@@ -1799,7 +2432,8 @@ const AggregateMethodRecord* findAggregateMethod(const AggregateRegistry& regist
 }
 
 llvm::Type* lowerSourceTypeText(llvm::LLVMContext& context, std::string_view typeText) {
-    const std::string baseType = trimAggregateTypeName(std::string(typeText));
+    const std::string resolvedTypeText = resolveActiveTypeAliases(typeText);
+    const std::string baseType = trimAggregateTypeName(resolvedTypeText);
     llvm::Type* lowered = lowerPrimitiveType(context, baseType);
     if (lowered != nullptr) {
         return lowered;
@@ -1808,7 +2442,7 @@ llvm::Type* lowerSourceTypeText(llvm::LLVMContext& context, std::string_view typ
         return llvm::PointerType::getUnqual(context);
     }
 
-    antlr4::ANTLRInputStream input(baseType);
+    antlr4::ANTLRInputStream input(resolvedTypeText);
     compilerv1Lexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
     compilerv1Parser parser(&tokens);
@@ -2043,6 +2677,192 @@ llvm::Value* lowerConstructedInstanceValue(llvm::IRBuilder<>& builder,
     return aggregateValue;
 }
 
+llvm::Value* lowerEnumConstructorValue(llvm::IRBuilder<>& builder,
+    compilerv1Parser::EnumConstructorContext* enumConstructor,
+    const LoweredValueMap& values) {
+    if (enumConstructor == nullptr || enumConstructor->qualifiedType() == nullptr || gActiveAggregateRegistry == nullptr) {
+        return nullptr;
+    }
+
+    auto* qualifiedType = enumConstructor->qualifiedType();
+    if (qualifiedType->ID() == nullptr || qualifiedType->enumVariantName() == nullptr) {
+        return nullptr;
+    }
+
+    const std::string enumName = qualifiedType->ID()->getText();
+    const std::string variantName = qualifiedType->enumVariantName()->getText();
+    const AggregateRecord* enumRecord = gActiveAggregateRegistry->find(enumName);
+    if (enumRecord == nullptr || enumRecord->kind != AggregateKind::Enum) {
+        return nullptr;
+    }
+
+    const EnumVariantRecord* variant = findEnumVariant(*enumRecord, variantName);
+    if (variant == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Value* enumValue = instantiateAggregateValue(builder, enumName, *gActiveAggregateRegistry);
+    if (enumValue == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Value* tagAddress = lowerAggregateFieldAddress(builder, enumValue, enumName, "__tag", *gActiveAggregateRegistry);
+    if (tagAddress == nullptr) {
+        return nullptr;
+    }
+    builder.CreateStore(llvm::ConstantInt::get(llvm::Type::getInt32Ty(builder.getContext()), variant->tagValue), tagAddress);
+
+    if (variant->kind == EnumVariantKind::Unit) {
+        if (enumConstructor->args() != nullptr || enumConstructor->braceInitializer() != nullptr) {
+            return nullptr;
+        }
+        return enumValue;
+    }
+
+    llvm::Value* payloadAddress = lowerAggregateFieldAddress(builder, enumValue, enumName, variant->storageFieldName, *gActiveAggregateRegistry);
+    if (payloadAddress == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Type* payloadType = lowerSourceTypeText(builder.getContext(), variant->payloadTypeText);
+    if (payloadType == nullptr) {
+        return nullptr;
+    }
+
+    if (variant->kind == EnumVariantKind::Tuple) {
+        const std::size_t argCount = enumConstructor->args() != nullptr ? enumConstructor->args()->expression().size() : 0;
+        if (enumConstructor->braceInitializer() != nullptr || argCount > 1) {
+            return nullptr;
+        }
+
+        llvm::Value* payloadValue = argCount == 0
+            ? llvm::Constant::getNullValue(payloadType)
+            : lowerExpressionForExpectedType(builder, enumConstructor->args()->expression(0), payloadType, values, !payloadType->isPointerTy());
+        if (payloadValue == nullptr) {
+            return nullptr;
+        }
+        if (payloadValue->getType() != payloadType) {
+            if (payloadValue->getType()->isIntegerTy() && payloadType->isIntegerTy()) {
+                payloadValue = castToCommonInteger(builder, payloadValue, payloadType);
+            } else if (payloadValue->getType()->isPointerTy() && payloadType->isPointerTy()) {
+                payloadValue = builder.CreateBitCast(payloadValue, payloadType);
+            }
+        }
+        if (payloadValue == nullptr || payloadValue->getType() != payloadType) {
+            return nullptr;
+        }
+        builder.CreateStore(payloadValue, payloadAddress);
+        return enumValue;
+    }
+
+    llvm::Value* payloadValue = instantiateAggregateValue(builder, variant->payloadTypeText, *gActiveAggregateRegistry);
+    if (payloadValue == nullptr) {
+        return nullptr;
+    }
+    if (!lowerAggregateConstructorCall(builder, variant->payloadTypeText, payloadValue, enumConstructor->args(), values)) {
+        return nullptr;
+    }
+    if (enumConstructor->braceInitializer() != nullptr
+        && !applyAggregateBraceInitializerToValue(builder, variant->payloadTypeText, payloadValue, enumConstructor->braceInitializer(), values)) {
+        return nullptr;
+    }
+    if (payloadValue->getType() != payloadType) {
+        if (!payloadValue->getType()->isPointerTy() || !payloadType->isPointerTy()) {
+            return nullptr;
+        }
+        payloadValue = builder.CreateBitCast(payloadValue, payloadType);
+    }
+    builder.CreateStore(payloadValue, payloadAddress);
+    return enumValue;
+}
+
+const AggregateRecord* inferEnumRecordFromExpression(const LoweredValueMap& values,
+    compilerv1Parser::ExpressionContext* expression) {
+    if (gActiveAggregateRegistry == nullptr || expression == nullptr) {
+        return nullptr;
+    }
+    const std::string typeText = trimAggregateTypeName(inferExpressionTypeText(expression, values));
+    if (typeText.empty()) {
+        return nullptr;
+    }
+    const AggregateRecord* record = gActiveAggregateRegistry->find(typeText);
+    return record != nullptr && record->kind == AggregateKind::Enum ? record : nullptr;
+}
+
+std::string inferExpectedTypeTextFromEnclosingContext(compilerv1Parser::FunctionCallContext* functionCall,
+    const LoweredValueMap& values) {
+    for (antlr4::tree::ParseTree* current = functionCall != nullptr ? functionCall->parent : nullptr;
+        current != nullptr;
+        current = current->parent) {
+        if (auto* initCore = dynamic_cast<compilerv1Parser::InitCoreContext*>(current)) {
+            if (initCore->typeRef() != nullptr) {
+                return canonicalApolloTypeText(initCore->typeRef()->getText());
+            }
+            if (initCore->instanceValue() != nullptr && initCore->instanceValue()->ID() != nullptr) {
+                return canonicalApolloTypeText(initCore->instanceValue()->ID()->getText());
+            }
+        }
+        if (auto* assignmentCore = dynamic_cast<compilerv1Parser::AssignmentCoreContext*>(current)) {
+            auto* target = assignmentCore->assignTarget();
+            if (target != nullptr && target->ID() != nullptr && target->accessKey().empty()) {
+                const auto it = values.find(target->ID()->getText());
+                if (it != values.end() && !it->second.typeText.empty()) {
+                    return canonicalApolloTypeText(it->second.typeText);
+                }
+            }
+        }
+    }
+    return {};
+}
+
+llvm::Value* lowerEnumUnwrapValue(llvm::IRBuilder<>& builder,
+    compilerv1Parser::FunctionCallContext* functionCall,
+    llvm::Type* expectedType,
+    const LoweredValueMap& values) {
+    if (functionCall == nullptr || functionCall->ID() == nullptr || functionCall->ID()->getText() != "unwrap_enum") {
+        return nullptr;
+    }
+    auto* argsCtx = functionCall->args();
+    if (argsCtx == nullptr || argsCtx->expression().size() != 1) {
+        return nullptr;
+    }
+
+    const AggregateRecord* enumRecord = inferEnumRecordFromExpression(values, argsCtx->expression(0));
+    if (enumRecord == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Value* enumValue = lowerExpressionValue(builder, argsCtx->expression(0), values, true);
+    if (enumValue == nullptr) {
+        return nullptr;
+    }
+
+    const std::string expectedTypeText = inferExpectedTypeTextFromEnclosingContext(functionCall, values);
+    const EnumVariantRecord* variant = !expectedTypeText.empty()
+        ? findEnumVariantForExpectedTypeText(*enumRecord, expectedTypeText)
+        : nullptr;
+    if (variant == nullptr && expectedType != nullptr) {
+        variant = findEnumVariantForExpectedType(builder.getContext(), *enumRecord, expectedType);
+    }
+    if (variant == nullptr && expectedType == nullptr) {
+        variant = inferSinglePayloadEnumVariant(*enumRecord);
+    }
+    if (variant == nullptr || variant->kind == EnumVariantKind::Unit || variant->storageFieldName.empty()) {
+        return nullptr;
+    }
+
+    llvm::Value* payloadAddress = lowerAggregateFieldAddress(builder, enumValue, enumRecord->name, variant->storageFieldName, *gActiveAggregateRegistry);
+    if (payloadAddress == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Type* payloadType = lowerSourceTypeText(builder.getContext(), variant->payloadTypeText);
+    if (payloadType == nullptr) {
+        return nullptr;
+    }
+    return builder.CreateLoad(payloadType, payloadAddress);
+}
+
 llvm::Value* lowerAggregateFieldAddress(llvm::IRBuilder<>& builder,
     llvm::Value* baseValue,
     std::string_view aggregateName,
@@ -2107,6 +2927,11 @@ std::string resolveAggregateTypeName(const LoweredValueMap& values, std::string_
 std::string inferExpressionTypeText(compilerv1Parser::ExpressionContext* expression) {
     if (expression == nullptr) {
         return {};
+    }
+    if (auto* primary = extractPrimaryContext(expression); primary != nullptr && primary->enumConstructor() != nullptr
+        && primary->enumConstructor()->qualifiedType() != nullptr
+        && primary->enumConstructor()->qualifiedType()->ID() != nullptr) {
+        return primary->enumConstructor()->qualifiedType()->ID()->getText();
     }
     std::string text = trimCopy(stripOuterParens(expression->getText()));
     const auto brace = text.find('{');
@@ -2234,6 +3059,18 @@ std::string inferExpressionTypeText(compilerv1Parser::ExpressionContext* express
         if (primary->memberaccess() != nullptr) {
             return inferMemberAccessTypeText(primary->memberaccess(), values);
         }
+        if (primary->functionCall() != nullptr && primary->functionCall()->ID() != nullptr
+            && primary->functionCall()->ID()->getText() == "unwrap_enum") {
+            auto* argsCtx = primary->functionCall()->args();
+            if (argsCtx != nullptr && argsCtx->expression().size() == 1) {
+                const AggregateRecord* enumRecord = inferEnumRecordFromExpression(values, argsCtx->expression(0));
+                if (enumRecord != nullptr) {
+                    if (const EnumVariantRecord* variant = inferSinglePayloadEnumVariant(*enumRecord)) {
+                        return canonicalApolloTypeText(variant->payloadTypeText);
+                    }
+                }
+            }
+        }
     }
 
     return {};
@@ -2293,6 +3130,11 @@ llvm::Type* valueStorageType(llvm::Value* value) {
     return value->getType();
 }
 
+llvm::Value* lowerPrimaryValue(llvm::IRBuilder<>& builder,
+    compilerv1Parser::PrimaryContext* primary,
+    const LoweredValueMap& values,
+    bool loadReferences);
+
 llvm::Value* loadIfAddressable(llvm::IRBuilder<>& builder, const LoweredValue& lowered) {
     if (lowered.address != nullptr) {
         if (lowered.storageType == nullptr) {
@@ -2303,12 +3145,146 @@ llvm::Value* loadIfAddressable(llvm::IRBuilder<>& builder, const LoweredValue& l
     return lowered.value;
 }
 
+bool isRawAddressBorrowExpr(compilerv1Parser::BorrowExprContext* borrowExpr) {
+    return borrowExpr != nullptr && borrowExpr->getText().rfind(".&", 0) == 0;
+}
+
+bool isDerefAssignTarget(compilerv1Parser::AssignTargetContext* target) {
+    return target != nullptr && !target->getText().empty() && target->getText().front() == '*';
+}
+
+std::string pointeeTypeText(std::string_view typeText) {
+    std::string text = stripTrailingReferenceQualifierText(std::string(typeText));
+    if (text.empty()) {
+        return {};
+    }
+    const char suffix = text.back();
+    if (suffix != '*' && suffix != '&') {
+        return {};
+    }
+    text.pop_back();
+    return trimCopy(text);
+}
+
+llvm::Type* lowerPointeeSourceType(llvm::LLVMContext& context, std::string_view typeText) {
+    const std::string pointeeText = pointeeTypeText(typeText);
+    if (pointeeText.empty()) {
+        return nullptr;
+    }
+    return lowerSourceTypeText(context, pointeeText);
+}
+
+llvm::Value* lowerCppStyleAddressValue(llvm::IRBuilder<>& builder, const LoweredValue& lowered) {
+    if (lowered.typeText.find('&') != std::string::npos) {
+        return loadIfAddressable(builder, lowered);
+    }
+    if (lowered.address != nullptr) {
+        return lowered.address;
+    }
+    return lowered.value;
+}
+
+llvm::Value* lowerPointerOperandValue(llvm::IRBuilder<>& builder,
+    compilerv1Parser::PrimaryContext* primary,
+    const LoweredValueMap& values) {
+    if (primary == nullptr) {
+        return nullptr;
+    }
+    if (primary->ID() != nullptr) {
+        const auto it = values.find(primary->ID()->getText());
+        if (it == values.end()) {
+            return nullptr;
+        }
+        return loadIfAddressable(builder, it->second);
+    }
+    if (primary->borrowExpr() != nullptr && primary->borrowExpr()->ID() != nullptr) {
+        const auto it = values.find(primary->borrowExpr()->ID()->getText());
+        if (it == values.end()) {
+            setUnknownBindingError(primary->borrowExpr()->ID()->getText());
+            return nullptr;
+        }
+        if (isRawAddressBorrowExpr(primary->borrowExpr())) {
+            return lowerCppStyleAddressValue(builder, it->second);
+        }
+        if (it->second.address != nullptr) {
+            return it->second.address;
+        }
+        return it->second.value;
+    }
+    return lowerPrimaryValue(builder, primary, values, true);
+}
+
+llvm::Type* lowerDereferenceResultType(llvm::LLVMContext& context,
+    compilerv1Parser::PrimaryContext* primary,
+    const LoweredValueMap& values) {
+    if (primary == nullptr) {
+        return nullptr;
+    }
+    if (primary->ID() != nullptr) {
+        const auto it = values.find(primary->ID()->getText());
+        if (it == values.end()) {
+            setUnknownBindingError(primary->ID()->getText());
+            return nullptr;
+        }
+        return lowerPointeeSourceType(context, it->second.typeText);
+    }
+    if (primary->borrowExpr() != nullptr && primary->borrowExpr()->ID() != nullptr) {
+        const auto it = values.find(primary->borrowExpr()->ID()->getText());
+        if (it == values.end()) {
+            return nullptr;
+        }
+        return lowerSourceTypeText(context, it->second.typeText);
+    }
+    return nullptr;
+}
+
+bool lowerDerefAssignment(llvm::IRBuilder<>& builder,
+    compilerv1Parser::AssignTargetContext* target,
+    compilerv1Parser::ExpressionContext* expression,
+    const LoweredValueMap& values) {
+    if (target == nullptr || target->ID() == nullptr || expression == nullptr) {
+        return false;
+    }
+
+    const auto it = values.find(target->ID()->getText());
+    if (it == values.end()) {
+        return false;
+    }
+
+    llvm::Value* pointerValue = loadIfAddressable(builder, it->second);
+    llvm::Type* pointeeType = lowerPointeeSourceType(builder.getContext(), it->second.typeText);
+    if (pointerValue == nullptr || pointeeType == nullptr || !pointerValue->getType()->isPointerTy()) {
+        return false;
+    }
+
+    const std::string pointeeText = pointeeTypeText(it->second.typeText);
+    const bool loadReferences = pointeeText.find('&') == std::string::npos;
+    llvm::Value* newValue = lowerExpressionForExpectedType(builder, expression, pointeeType, values, loadReferences);
+    if (newValue == nullptr) {
+        return false;
+    }
+    if (newValue->getType() != pointeeType) {
+        if (newValue->getType()->isIntegerTy() && pointeeType->isIntegerTy()) {
+            newValue = castToCommonInteger(builder, newValue, pointeeType);
+        } else if (newValue->getType()->isPointerTy() && pointeeType->isPointerTy()) {
+            newValue = builder.CreateBitCast(newValue, pointeeType);
+        }
+    }
+    if (newValue == nullptr || newValue->getType() != pointeeType) {
+        return false;
+    }
+
+    const bool gcOn = gActiveRuntimeFeatures != nullptr && gActiveRuntimeFeatures->totalProgramGc();
+    emitGcManagedStore(builder, newValue, pointerValue, gcOn);
+    return true;
+}
+
 bool isReferenceType(compilerv1Parser::TypeRefContext* typeRef) {
     if (typeRef == nullptr) {
         return false;
     }
     for (auto* modifier : typeRef->typeModifier()) {
-        if (modifier != nullptr && modifier->getText() == "&") {
+        if (modifier != nullptr && modifier->getText().rfind("&", 0) == 0) {
             return true;
         }
     }
@@ -2647,6 +3623,10 @@ llvm::Value* lowerFunctionCallValue(llvm::IRBuilder<>& builder,
         return nullptr;
     }
 
+    if (llvm::Value* enumUnwrapValue = lowerEnumUnwrapValue(builder, functionCall, nullptr, values)) {
+        return enumUnwrapValue;
+    }
+
     if (llvm::Value* builtinValue = lowerResultHelperBuiltin(builder, functionCall, values)) {
         return builtinValue;
     }
@@ -2709,6 +3689,10 @@ llvm::Value* lowerIndexedAccessValue(llvm::IRBuilder<>& builder,
         callee = getKnownStdBridgeDeclaration(*module, functionCall->ID()->getText());
     }
     if (callee == nullptr) {
+        const std::string sem = takeSemanticError();
+        setSemanticError(sem.empty()
+            ? ("unknown function `" + functionCall->ID()->getText() + "`")
+            : sem);
         return nullptr;
     }
 
@@ -2782,6 +3766,14 @@ llvm::Value* lowerFunctionCallForExpectedType(llvm::IRBuilder<>& builder,
     }
 
     if (hasApolloFunctionFamily(*module, functionCall->ID()->getText())) {
+        return nullptr;
+    }
+
+    if (getKnownStdBridgeDeclaration(*module, functionCall->ID()->getText()) == nullptr) {
+        const std::string sem = takeSemanticError();
+        setSemanticError(sem.empty()
+            ? ("unknown function `" + functionCall->ID()->getText() + "`")
+            : sem);
         return nullptr;
     }
 
@@ -3325,6 +4317,43 @@ llvm::Value* lowerPrimaryValue(llvm::IRBuilder<>& builder,
     if (primary->FLOAT() != nullptr) {
         return llvm::ConstantFP::get(llvm::Type::getDoubleTy(builder.getContext()), std::stod(primary->FLOAT()->getText()));
     }
+    if (primary->unaryExpr() != nullptr) {
+        auto* un = primary->unaryExpr();
+        const std::string opText = un->children.empty() ? std::string() : un->children[0]->getText();
+        if (opText == "*") {
+            llvm::Value* pointerValue = lowerPointerOperandValue(builder, un->primary(), values);
+            llvm::Type* pointeeType = lowerDereferenceResultType(builder.getContext(), un->primary(), values);
+            if (pointerValue == nullptr || pointeeType == nullptr || !pointerValue->getType()->isPointerTy()) {
+                return nullptr;
+            }
+            return builder.CreateLoad(pointeeType, pointerValue);
+        }
+
+        llvm::Value* inner = lowerPrimaryValue(builder, un->primary(), values, true);
+        if (inner == nullptr) {
+            return nullptr;
+        }
+        if (opText == "+") {
+            return inner;
+        }
+        if (opText == "-") {
+            if (inner->getType()->isFloatingPointTy()) {
+                return builder.CreateFNeg(inner);
+            }
+            return builder.CreateNeg(inner);
+        }
+        if (opText == "!") {
+            // Boolean-style logical not: compare against zero, then negate.
+            llvm::Value* asBool = inner;
+            if (inner->getType()->isIntegerTy() && inner->getType()->getIntegerBitWidth() > 1) {
+                asBool = builder.CreateICmpNE(inner, llvm::ConstantInt::get(inner->getType(), 0));
+            } else if (inner->getType()->isFloatingPointTy()) {
+                asBool = builder.CreateFCmpONE(inner, llvm::ConstantFP::get(inner->getType(), 0.0));
+            }
+            return builder.CreateNot(asBool);
+        }
+        return nullptr;
+    }
     if (primary->TRUE() != nullptr) {
         return llvm::ConstantInt::getTrue(builder.getContext());
     }
@@ -3357,6 +4386,9 @@ llvm::Value* lowerPrimaryValue(llvm::IRBuilder<>& builder,
     if (primary->stdinValue() != nullptr) {
         return builder.CreateCall(getApolloStdinReadLineFunction(*builder.GetInsertBlock()->getModule()));
     }
+    if (primary->enumConstructor() != nullptr) {
+        return lowerEnumConstructorValue(builder, primary->enumConstructor(), values);
+    }
     if (primary->functionCall() != nullptr) {
         return lowerFunctionCallValue(builder, primary->functionCall(), values);
     }
@@ -3381,6 +4413,9 @@ llvm::Value* lowerPrimaryValue(llvm::IRBuilder<>& builder,
         const auto it = values.find(primary->borrowExpr()->ID()->getText());
         if (it == values.end()) {
             return nullptr;
+        }
+        if (isRawAddressBorrowExpr(primary->borrowExpr())) {
+            return lowerCppStyleAddressValue(builder, it->second);
         }
         if (!loadReferences) {
             if (it->second.address != nullptr) {
@@ -3688,6 +4723,9 @@ bool lowerAssignmentStatement(llvm::IRBuilder<>& builder,
         return false;
     }
     auto* target = assignment->assignmentCore()->assignTarget();
+    if (isDerefAssignTarget(target)) {
+        return lowerDerefAssignment(builder, target, assignment->assignmentCore()->expression(), values);
+    }
     const auto it = values.find(target->ID()->getText());
     if (it == values.end() || it->second.address == nullptr || it->second.storageType == nullptr) {
         return false;
@@ -3937,7 +4975,11 @@ bool lowerMemberAssignmentStatement(llvm::IRBuilder<>& builder,
         return false;
     }
 
-    builder.CreateStore(newValue, fieldAddress);
+    // Conservative: a field write may target a GC-heap-resident aggregate.
+    // We don't track per-base storage class yet, so barrier whenever the
+    // collector is on and the new value is a pointer.
+    const bool gcOn = gActiveRuntimeFeatures != nullptr && gActiveRuntimeFeatures->totalProgramGc();
+    emitGcManagedStore(builder, newValue, fieldAddress, gcOn);
     return true;
 }
 
@@ -3950,6 +4992,11 @@ bool lowerInitStatement(llvm::IRBuilder<>& builder,
         return false;
     }
     auto* initCore = init->initCore();
+    const std::string declName = initCore->ID()->getText();
+    if (values.find(declName) != values.end()) {
+        setSemanticError("redeclaration of `" + declName + "` in the same scope");
+        return false;
+    }
     const bool hasPrefixedConstructor = initCore->instanceValue() != nullptr;
     const std::string typeText = hasPrefixedConstructor
         ? initCore->instanceValue()->ID()->getText()
@@ -3987,6 +5034,11 @@ bool lowerInitStatement(llvm::IRBuilder<>& builder,
             initialValue = lowerExpressionForExpectedType(builder, initCore->expression(), type, values, loadReferences);
         }
         if (initialValue == nullptr) {
+            const std::string sem = takeSemanticError();
+            if (!sem.empty()) {
+                setSemanticError(sem);
+                return false;
+            }
             if (!type->isPointerTy()) {
                 return false;
             }
@@ -4038,6 +5090,15 @@ bool lowerLtoInitStatement(llvm::IRBuilder<>& builder,
     return true;
 }
 
+bool lowerNrcDeclStatement(compilerv1Parser::NrcDeclContext* nrcDecl) {
+    if (nrcDecl == nullptr || nrcDecl->ID() == nullptr || nrcDecl->typeRef() == nullptr || gActiveTypeAliases == nullptr) {
+        return false;
+    }
+
+    (*gActiveTypeAliases)[normalizeTypeAliasKey(nrcDecl->ID()->getText())] = resolveActiveTypeAliases(nrcDecl->typeRef()->getText());
+    return true;
+}
+
 bool lowerMntDeclStatement(llvm::IRBuilder<>& builder,
     llvm::Function* function,
     compilerv1Parser::MntDeclContext* mntDecl,
@@ -4077,7 +5138,10 @@ bool lowerMntDeclStatement(llvm::IRBuilder<>& builder,
     llvm::Value* rawAddress = builder.CreateCall(allocator, {allocationSize});
     llvm::Value* typedAddress = builder.CreateBitCast(rawAddress, opaquePtrTy);
     llvm::Value* elementAddress = builder.CreateBitCast(rawAddress, type->getPointerTo());
-    builder.CreateStore(initialValue, elementAddress);
+    const bool gcOn = gActiveRuntimeFeatures != nullptr && gActiveRuntimeFeatures->totalProgramGc();
+    // Initializer write into the GC-managed slot must shade `initialValue`
+    // if it's a pointer (concurrent marker tri-color invariant).
+    emitGcManagedStore(builder, initialValue, elementAddress, gcOn);
 
     llvm::AllocaInst* address = createEntryAlloca(function, opaquePtrTy, mntDecl->ID()->getText());
     builder.CreateStore(typedAddress, address);
@@ -4321,11 +5385,16 @@ bool lowerEasyInitStatement(llvm::IRBuilder<>& builder,
 
     llvm::Value* initialValue = lowerExpressionValue(builder, easyInit->expression(), values);
     if (initialValue == nullptr) {
+        const std::string sem = takeSemanticError();
+        if (!sem.empty()) {
+            setSemanticError(sem);
+            return false;
+        }
         llvm::Type* type = llvm::Type::getInt32Ty(builder.getContext());
         llvm::AllocaInst* address = createEntryAlloca(function, type, easyInit->ID()->getText());
         llvm::Value* zeroValue = llvm::ConstantInt::get(type, 0);
         builder.CreateStore(zeroValue, address);
-        values[easyInit->ID()->getText()] = {zeroValue, address, type, inferExpressionTypeText(easyInit->expression())};
+        values[easyInit->ID()->getText()] = {zeroValue, address, type, inferExpressionTypeText(easyInit->expression(), values)};
         return true;
     }
 
@@ -4333,7 +5402,7 @@ bool lowerEasyInitStatement(llvm::IRBuilder<>& builder,
     llvm::Type* type = initialValue->getType();
     llvm::AllocaInst* address = createEntryAlloca(function, type, name);
     builder.CreateStore(initialValue, address);
-    values[name] = {initialValue, address, type, inferExpressionTypeText(easyInit->expression())};
+    values[name] = {initialValue, address, type, inferExpressionTypeText(easyInit->expression(), values)};
     return true;
 }
 
@@ -4410,7 +5479,7 @@ bool lowerPointerStatement(llvm::IRBuilder<>& builder,
         }
         sourceValue = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(type));
     } else {
-        sourceValue = sourceIt->second.address != nullptr ? sourceIt->second.address : sourceIt->second.value;
+        sourceValue = lowerCppStyleAddressValue(builder, sourceIt->second);
         if (sourceValue == nullptr) {
             return false;
         }
@@ -4425,6 +5494,37 @@ bool lowerPointerStatement(llvm::IRBuilder<>& builder,
     llvm::AllocaInst* address = createEntryAlloca(function, type, targetName);
     builder.CreateStore(sourceValue, address);
     values[targetName] = {sourceValue, address, type, pointer->typeRef()->getText()};
+    return true;
+}
+
+bool lowerBlockStatements(llvm::Module& module,
+    llvm::Function* function,
+    llvm::IRBuilder<>& builder,
+    compilerv1Parser::BlockContext* block,
+    LoweredValueMap& values,
+    std::string& unsupportedReason);
+
+bool lowerLoopStatement(llvm::Module& module,
+    llvm::Function* function,
+    llvm::IRBuilder<>& builder,
+    compilerv1Parser::LoopStatementContext* loopStatement,
+    LoweredValueMap& values,
+    std::string& unsupportedReason) {
+    if (loopStatement == nullptr || loopStatement->block() == nullptr) {
+        unsupportedReason = "invalid-loop-shape";
+        return false;
+    }
+    llvm::BasicBlock* bodyBlock = llvm::BasicBlock::Create(module.getContext(), "loop.body", function);
+    llvm::BasicBlock* endBlock  = llvm::BasicBlock::Create(module.getContext(), "loop.end",  function);
+    builder.CreateBr(bodyBlock);
+    llvm::IRBuilder<> bodyBuilder(bodyBlock);
+    if (!lowerBlockStatements(module, function, bodyBuilder, loopStatement->block(), values, unsupportedReason)) {
+        return false;
+    }
+    if (loopStatement->block()->returnStmt().empty()) {
+        bodyBuilder.CreateBr(bodyBlock);
+    }
+    builder.SetInsertPoint(endBlock);
     return true;
 }
 
@@ -4446,12 +5546,13 @@ bool lowerWhileStatement(llvm::Module& module,
     builder.CreateBr(condBlock);
 
     llvm::IRBuilder<> condBuilder(condBlock);
-    llvm::Value* condition = lowerExpressionValue(condBuilder, whileStatement->expression(), values);
-    if (condition == nullptr || !condition->getType()->isIntegerTy(1)) {
-        const std::string text = trimCopy(stripOuterParens(whileStatement->expression()->getText()));
-        condition = text == "true"
-            ? llvm::ConstantInt::getTrue(module.getContext())
-            : llvm::ConstantInt::getFalse(module.getContext());
+    llvm::Value* condition = lowerConditionValue(condBuilder, whileStatement->expression(), values);
+    if (condition == nullptr) {
+        unsupportedReason = takeSemanticError();
+        if (unsupportedReason.empty()) {
+            unsupportedReason = "while-condition-lowering-failed:" + whileStatement->expression()->getText();
+        }
+        return false;
     }
     condBuilder.CreateCondBr(condition, bodyBlock, endBlock);
 
@@ -4541,6 +5642,9 @@ bool lowerAssignmentCoreStatement(llvm::IRBuilder<>& builder,
     }
 
     auto* target = assignmentCore->assignTarget();
+    if (isDerefAssignTarget(target)) {
+        return lowerDerefAssignment(builder, target, assignmentCore->expression(), values);
+    }
     if (target->ID() == nullptr || !target->accessKey().empty()) {
         return false;
     }
@@ -4605,18 +5709,15 @@ bool lowerForStatement(llvm::Module& module,
     builder.CreateBr(condBlock);
 
     llvm::IRBuilder<> condBuilder(condBlock);
-    llvm::Value* condition = forStatement->expression() != nullptr
-        ? lowerExpressionValue(condBuilder, forStatement->expression(), values)
-        : llvm::ConstantInt::getTrue(module.getContext());
-    if (condition == nullptr || !condition->getType()->isIntegerTy(1)) {
-        if (forStatement->expression() == nullptr) {
-            condition = llvm::ConstantInt::getTrue(module.getContext());
-        } else {
-            const std::string text = trimCopy(stripOuterParens(forStatement->expression()->getText()));
-            condition = text == "true"
-                ? llvm::ConstantInt::getTrue(module.getContext())
-                : llvm::ConstantInt::getFalse(module.getContext());
+    llvm::Value* condition = forStatement->expression() == nullptr
+        ? llvm::ConstantInt::getTrue(module.getContext())
+        : lowerConditionValue(condBuilder, forStatement->expression(), values);
+    if (condition == nullptr) {
+        unsupportedReason = takeSemanticError();
+        if (unsupportedReason.empty()) {
+            unsupportedReason = "for-condition-lowering-failed:" + forStatement->expression()->getText();
         }
+        return false;
     }
     condBuilder.CreateCondBr(condition, bodyBlock, endBlock);
 
@@ -4653,13 +5754,73 @@ bool lowerForInStatement(llvm::Module& module,
     compilerv1Parser::ForInStatementContext* forInStatement,
     LoweredValueMap& values,
     std::string& unsupportedReason) {
+    auto* forInIterable = forInStatement ? forInStatement->forInIterable() : nullptr;
+    auto iterableExprs = forInIterable ? forInIterable->expression() : std::vector<compilerv1Parser::ExpressionContext*>{};
+    auto* iterableExpr = iterableExprs.empty() ? nullptr : iterableExprs[0];
     if (function == nullptr || forInStatement == nullptr || forInStatement->typeRef() == nullptr
-        || forInStatement->ID() == nullptr || forInStatement->expression() == nullptr || forInStatement->block() == nullptr) {
+        || forInStatement->ID() == nullptr || iterableExpr == nullptr || forInStatement->block() == nullptr) {
         unsupportedReason = "invalid-for-in-shape";
         return false;
     }
+    if (iterableExprs.size() > 1) {
+        // Range-based for-in: `for T i in lo .. hi { body }` desugars
+        // to a counted loop with an explicit element variable.
+        llvm::Type* elementType = lowerTypeRef(builder.getContext(), forInStatement->typeRef());
+        if (elementType == nullptr || !elementType->isIntegerTy()) {
+            unsupportedReason = "for-in-range-non-integer-element";
+            return false;
+        }
+        llvm::Value* loValue = lowerExpressionValue(builder, iterableExprs[0], values);
+        llvm::Value* hiValue = lowerExpressionValue(builder, iterableExprs[1], values);
+        if (loValue == nullptr || hiValue == nullptr) {
+            unsupportedReason = "for-in-range-bound-lowering-failed";
+            return false;
+        }
+        if (loValue->getType() != elementType) {
+            loValue = castToCommonInteger(builder, loValue, elementType);
+        }
+        if (hiValue->getType() != elementType) {
+            hiValue = castToCommonInteger(builder, hiValue, elementType);
+        }
+        if (loValue == nullptr || hiValue == nullptr) {
+            unsupportedReason = "for-in-range-bound-cast-failed";
+            return false;
+        }
+        llvm::AllocaInst* iAddr  = createEntryAlloca(function, elementType, forInStatement->ID()->getText());
+        llvm::AllocaInst* endAddr = createEntryAlloca(function, elementType, forInStatement->ID()->getText() + ".end");
+        builder.CreateStore(loValue, iAddr);
+        builder.CreateStore(hiValue, endAddr);
+        values[forInStatement->ID()->getText()] = {nullptr, iAddr, elementType, forInStatement->typeRef()->getText()};
 
-    const auto sourceIt = values.find(forInStatement->expression()->getText());
+        llvm::BasicBlock* rcond = llvm::BasicBlock::Create(module.getContext(), "forin.range.cond", function);
+        llvm::BasicBlock* rbody = llvm::BasicBlock::Create(module.getContext(), "forin.range.body", function);
+        llvm::BasicBlock* rstep = llvm::BasicBlock::Create(module.getContext(), "forin.range.step", function);
+        llvm::BasicBlock* rend  = llvm::BasicBlock::Create(module.getContext(), "forin.range.end",  function);
+        builder.CreateBr(rcond);
+
+        llvm::IRBuilder<> cb(rcond);
+        llvm::Value* iVal = cb.CreateLoad(elementType, iAddr);
+        llvm::Value* eVal = cb.CreateLoad(elementType, endAddr);
+        cb.CreateCondBr(cb.CreateICmpSLT(iVal, eVal), rbody, rend);
+
+        llvm::IRBuilder<> bb(rbody);
+        if (!lowerBlockStatements(module, function, bb, forInStatement->block(), values, unsupportedReason)) {
+            return false;
+        }
+        if (forInStatement->block()->returnStmt().empty()) {
+            bb.CreateBr(rstep);
+        }
+
+        llvm::IRBuilder<> sb(rstep);
+        llvm::Value* curI = sb.CreateLoad(elementType, iAddr);
+        sb.CreateStore(sb.CreateAdd(curI, llvm::ConstantInt::get(elementType, 1)), iAddr);
+        sb.CreateBr(rcond);
+
+        builder.SetInsertPoint(rend);
+        return true;
+    }
+
+    const auto sourceIt = values.find(iterableExpr->getText());
     const bool isI32Vector = sourceIt != values.end() && isApolloTypeText(sourceIt->second.typeText, "vector<i32>");
     const std::string soaSymbolStem = sourceIt == values.end() ? std::string() : soaVectorSymbolStem(sourceIt->second.typeText);
     if (sourceIt == values.end() || (!isI32Vector && soaSymbolStem.empty())) {
@@ -4963,12 +6124,13 @@ bool lowerIfStatement(llvm::Module& module,
         unsupportedReason = "invalid-if-shape";
         return false;
     }
-    llvm::Value* condition = lowerExpressionValue(builder, ifStatement->expression(), values);
-    if (condition == nullptr || !condition->getType()->isIntegerTy(1)) {
-        const std::string text = trimCopy(stripOuterParens(ifStatement->expression()->getText()));
-        condition = text == "true"
-            ? llvm::ConstantInt::getTrue(module.getContext())
-            : llvm::ConstantInt::getFalse(module.getContext());
+    llvm::Value* condition = lowerConditionValue(builder, ifStatement->expression(), values);
+    if (condition == nullptr) {
+        unsupportedReason = takeSemanticError();
+        if (unsupportedReason.empty()) {
+            unsupportedReason = "if-condition-lowering-failed:" + ifStatement->expression()->getText();
+        }
+        return false;
     }
 
     llvm::BasicBlock* thenBlock = llvm::BasicBlock::Create(module.getContext(), "if.then", function);
@@ -5138,14 +6300,20 @@ bool lowerStatement(llvm::Module& module,
     }
     if (statement->init() != nullptr) {
         if (!lowerInitStatement(builder, function, statement->init(), values)) {
-            unsupportedReason = "init-lowering-failed:" + statement->init()->getText();
+            auto sem = takeSemanticError();
+            unsupportedReason = sem.empty()
+                ? ("init-lowering-failed:" + statement->init()->getText())
+                : sem;
             return false;
         }
         return true;
     }
     if (statement->globalInit() != nullptr) {
         if (!lowerGlobalInitStatement(module, builder, statement->globalInit(), values)) {
-            unsupportedReason = "global-init-lowering-failed:" + statement->globalInit()->getText();
+            auto sem = takeSemanticError();
+            unsupportedReason = sem.empty()
+                ? ("global-init-lowering-failed:" + statement->globalInit()->getText())
+                : sem;
             return false;
         }
         return true;
@@ -5156,7 +6324,8 @@ bool lowerStatement(llvm::Module& module,
             return false;
         }
         if (!lowerInitStatement(builder, function, statement->bridgeInit()->init(), values)) {
-            unsupportedReason = "bridge-init-lowering-failed";
+            auto sem = takeSemanticError();
+            unsupportedReason = sem.empty() ? "bridge-init-lowering-failed" : sem;
             return false;
         }
         return true;
@@ -5184,7 +6353,10 @@ bool lowerStatement(llvm::Module& module,
     }
     if (statement->assignment() != nullptr) {
         if (!lowerAssignmentStatement(builder, statement->assignment(), values)) {
-            unsupportedReason = "assignment-lowering-failed:" + statement->assignment()->getText();
+            auto sem = takeSemanticError();
+            unsupportedReason = sem.empty()
+                ? ("assignment-lowering-failed:" + statement->assignment()->getText())
+                : sem;
             return false;
         }
         return true;
@@ -5206,6 +6378,13 @@ bool lowerStatement(llvm::Module& module,
     if (statement->instancepush() != nullptr) {
         if (!lowerInstancePushStatement(builder, statement->instancepush(), values)) {
             unsupportedReason = "instancepush-lowering-failed:" + statement->instancepush()->getText();
+            return false;
+        }
+        return true;
+    }
+    if (statement->nrcDecl() != nullptr) {
+        if (!lowerNrcDeclStatement(statement->nrcDecl())) {
+            unsupportedReason = "nrc-lowering-failed:" + statement->nrcDecl()->getText();
             return false;
         }
         return true;
@@ -5274,9 +6453,16 @@ bool lowerStatement(llvm::Module& module,
     if (statement->whileStatement() != nullptr) {
         return lowerWhileStatement(module, function, builder, statement->whileStatement(), values, unsupportedReason);
     }
+    if (statement->loopStatement() != nullptr) {
+        return lowerLoopStatement(module, function, builder, statement->loopStatement(), values, unsupportedReason);
+    }
     if (statement->functionCall() != nullptr) {
         if (lowerFunctionCallValue(builder, statement->functionCall(), values) == nullptr) {
-            return true;
+            auto sem = takeSemanticError();
+            unsupportedReason = sem.empty()
+                ? ("function-call-lowering-failed:" + statement->functionCall()->getText())
+                : sem;
+            return false;
         }
         return true;
     }
@@ -5289,7 +6475,11 @@ bool lowerStatement(llvm::Module& module,
                 && values.at(statement->memberaccess()->accessBase()->getText()).typeText.find('<') != std::string::npos) {
                 return true;
             }
-            return true;
+            auto sem = takeSemanticError();
+            unsupportedReason = sem.empty()
+                ? ("member-access-lowering-failed:" + statement->memberaccess()->getText())
+                : sem;
+            return false;
         }
         return true;
     }
@@ -5447,25 +6637,21 @@ bool lowerBlockStatements(llvm::Module& module,
         unsupportedReason = "missing-block";
         return false;
     }
-    std::unordered_set<std::string> incomingNames;
-    incomingNames.reserve(values.size());
-    for (const auto& [name, loweredValue] : values) {
-        incomingNames.insert(name);
-    }
+    LoweredValueMap scopedValues = values;
+    TypeAliasMap scopedAliases = snapshotActiveTypeAliases();
+    TypeAliasScope aliasScope(&scopedAliases);
 
     for (auto* statement : block->statement()) {
-        if (!lowerStatement(module, function, builder, statement, values, unsupportedReason)) {
+        if (!lowerStatement(module, function, builder, statement, scopedValues, unsupportedReason)) {
             return false;
         }
     }
 
-    for (auto it = values.begin(); it != values.end();) {
-        if (!incomingNames.contains(it->first)
-            && (it->second.address == nullptr || !llvm::isa<llvm::GlobalVariable>(it->second.address))) {
-            it = values.erase(it);
-            continue;
+    for (auto& [name, loweredValue] : values) {
+        const auto it = scopedValues.find(name);
+        if (it != scopedValues.end()) {
+            loweredValue = it->second;
         }
-        ++it;
     }
 
     if (!block->returnStmt().empty()) {
@@ -5484,7 +6670,7 @@ bool lowerBlockStatements(llvm::Module& module,
             return true;
         }
 
-        llvm::Value* returnValue = lowerReturnExpression(builder, function->getReturnType(), returnStmt != nullptr ? returnStmt->expression() : nullptr, values);
+        llvm::Value* returnValue = lowerReturnExpression(builder, function->getReturnType(), returnStmt != nullptr ? returnStmt->expression() : nullptr, scopedValues);
         if (returnValue == nullptr) {
             unsupportedReason = "return-expression-lowering-failed";
             return false;
@@ -5623,6 +6809,8 @@ bool lowerCallableBody(llvm::Module& module,
     llvm::BasicBlock* entry = llvm::BasicBlock::Create(module.getContext(), "entry", function);
     llvm::IRBuilder<> builder(entry);
     LoweredValueMap values;
+    TypeAliasMap typeAliases;
+    TypeAliasScope aliasScope(&typeAliases);
     for (auto& arg : function->args()) {
         llvm::AllocaInst* address = createEntryAlloca(function, valueStorageType(&arg), arg.getName());
         builder.CreateStore(&arg, address);
@@ -5818,6 +7006,8 @@ bool lowerAggregateMethodBody(llvm::Module& module,
     llvm::BasicBlock* entry = llvm::BasicBlock::Create(module.getContext(), "entry", function);
     llvm::IRBuilder<> builder(entry);
     LoweredValueMap values;
+    TypeAliasMap typeAliases;
+    TypeAliasScope aliasScope(&typeAliases);
     for (auto& arg : function->args()) {
         llvm::AllocaInst* address = createEntryAlloca(function, valueStorageType(&arg), arg.getName());
         builder.CreateStore(&arg, address);
@@ -6479,6 +7669,189 @@ bool lowerBuiltinStatement(llvm::Module& module,
     return true;
 }
 
+TemplateFunctionRegistry buildTemplateFunctionRegistry(compilerv1Parser::ProgramContext* tree) {
+    TemplateFunctionRegistry registry;
+    if (tree == nullptr) {
+        return registry;
+    }
+
+    for (auto* functionCtx : tree->templateFunction()) {
+        if (functionCtx == nullptr || functionCtx->ID() == nullptr) {
+            continue;
+        }
+        registry.emplace(functionCtx->ID()->getText(), TemplateFunctionRecord{functionCtx, collectTemplateFunctionTypeParams(functionCtx)});
+    }
+    return registry;
+}
+
+llvm::Function* lowerTemplateFunctionPrototype(llvm::Module& module,
+    const TemplateFunctionRecord& record,
+    const std::vector<std::string>& concreteTypes,
+    std::vector<std::string>& paramNames,
+    std::string& unsupportedReason) {
+    paramNames.clear();
+    unsupportedReason.clear();
+    if (record.function == nullptr || record.function->ID() == nullptr) {
+        unsupportedReason = "missing-template-function-context";
+        return nullptr;
+    }
+
+    TypeAliasMap typeAliases = buildTemplateTypeAliasMap(record, concreteTypes);
+    TypeAliasScope aliasScope(&typeAliases);
+
+    llvm::Type* returnType = lowerReturnType(module.getContext(), record.function->returnType());
+    if (returnType == nullptr) {
+        returnType = llvm::PointerType::getUnqual(module.getContext());
+    }
+
+    std::vector<llvm::Type*> paramTypes;
+    std::vector<std::string> concreteParamTypes = collectTemplateFunctionConcreteParamTypes(record, concreteTypes);
+    if (record.function->params() != nullptr) {
+        for (auto* param : record.function->params()->param()) {
+            if (param == nullptr || param->ID() == nullptr) {
+                unsupportedReason = "template-function-parameter-metadata-missing";
+                return nullptr;
+            }
+            llvm::Type* paramType = param->typeRef() != nullptr
+                ? lowerTypeRef(module.getContext(), param->typeRef())
+                : nullptr;
+            if (paramType == nullptr) {
+                paramType = llvm::PointerType::getUnqual(module.getContext());
+            }
+            paramTypes.push_back(paramType);
+            paramNames.push_back(param->ID()->getText());
+        }
+    }
+
+    const std::string loweredName = buildApolloOverloadName(record.function->ID()->getText(), concreteParamTypes);
+    if (llvm::Function* existing = module.getFunction(loweredName)) {
+        return existing;
+    }
+
+    llvm::FunctionType* functionType = llvm::FunctionType::get(returnType, paramTypes, false);
+    llvm::Function* function = llvm::Function::Create(functionType,
+        llvm::GlobalValue::ExternalLinkage,
+        loweredName,
+        module);
+    std::size_t index = 0;
+    for (auto& arg : function->args()) {
+        arg.setName(paramNames[index++]);
+    }
+    return function;
+}
+
+bool lowerTemplateFunctionBody(llvm::Module& module,
+    llvm::Function* function,
+    const TemplateFunctionRecord& record,
+    const std::vector<std::string>& concreteTypes,
+    std::string& unsupportedReason) {
+    if (function == nullptr || record.function == nullptr || record.function->block() == nullptr) {
+        unsupportedReason = "invalid-template-body-shape";
+        return false;
+    }
+
+    TypeAliasMap typeAliases = buildTemplateTypeAliasMap(record, concreteTypes);
+    TypeAliasScope aliasScope(&typeAliases);
+
+    llvm::BasicBlock* entry = llvm::BasicBlock::Create(module.getContext(), "entry", function);
+    llvm::IRBuilder<> builder(entry);
+
+    LoweredValueMap params;
+    const auto declaredParams = record.function->params() != nullptr
+        ? record.function->params()->param()
+        : std::vector<compilerv1Parser::ParamContext*>{};
+    std::size_t paramIndex = 0;
+    for (auto& arg : function->args()) {
+        llvm::AllocaInst* address = createEntryAlloca(function, valueStorageType(&arg), arg.getName());
+        builder.CreateStore(&arg, address);
+        std::string typeText;
+        if (paramIndex < declaredParams.size() && declaredParams[paramIndex] != nullptr && declaredParams[paramIndex]->typeRef() != nullptr) {
+            typeText = resolveActiveTypeAliases(declaredParams[paramIndex]->typeRef()->getText());
+        }
+        params.emplace(std::string(arg.getName()), LoweredValue{&arg, address, arg.getType(), typeText});
+        ++paramIndex;
+    }
+    for (auto& global : module.globals()) {
+        params.emplace(std::string(global.getName()), LoweredValue{&global, &global, global.getValueType(), ""});
+    }
+    addInlineForeignGlobalBindings(module, builder, params);
+
+    auto* block = record.function->block();
+    if (!lowerBlockStatements(module, function, builder, block, params, unsupportedReason)) {
+        return false;
+    }
+
+    if (block->returnStmt().empty()) {
+        if (function->getReturnType()->isVoidTy()) {
+            builder.CreateRetVoid();
+            return true;
+        }
+        llvm::Value* defaultReturn = defaultValueForType(function->getReturnType());
+        if (defaultReturn != nullptr) {
+            builder.CreateRet(defaultReturn);
+            return true;
+        }
+        unsupportedReason = "missing-required-return";
+        return false;
+    }
+
+    if (builder.GetInsertBlock()->getTerminator() != nullptr) {
+        return true;
+    }
+
+    auto* returnStmt = block->returnStmt(block->returnStmt().size() - 1);
+    llvm::Value* returnValue = lowerReturnExpression(builder, function->getReturnType(), returnStmt != nullptr ? returnStmt->expression() : nullptr, params);
+    if (returnValue == nullptr) {
+        unsupportedReason = "return-expression-lowering-failed";
+        return false;
+    }
+    builder.CreateRet(returnValue);
+    return true;
+}
+
+llvm::Function* instantiateTemplateFunctionForCall(llvm::Module& module,
+    compilerv1Parser::FunctionCallContext* functionCall,
+    const LoweredValueMap& values) {
+    if (gActiveTemplateFunctionRegistry == nullptr || functionCall == nullptr || functionCall->ID() == nullptr) {
+        return nullptr;
+    }
+
+    const auto it = gActiveTemplateFunctionRegistry->find(functionCall->ID()->getText());
+    if (it == gActiveTemplateFunctionRegistry->end()) {
+        return nullptr;
+    }
+
+    std::vector<std::string> concreteTypes = inferTemplateFunctionTypeArgs(it->second, functionCall, values);
+    if (concreteTypes.size() != it->second.typeParams.size()) {
+        return nullptr;
+    }
+
+    const std::string loweredName = buildApolloOverloadName(functionCall->ID()->getText(), collectTemplateFunctionConcreteParamTypes(it->second, concreteTypes));
+    if (llvm::Function* existing = module.getFunction(loweredName)) {
+        return existing;
+    }
+
+    std::vector<std::string> paramNames;
+    std::string unsupportedReason;
+    llvm::Function* function = lowerTemplateFunctionPrototype(module, it->second, concreteTypes, paramNames, unsupportedReason);
+    if (function == nullptr) {
+        setSemanticError("template function `" + functionCall->ID()->getText() + "`: " + unsupportedReason);
+        return nullptr;
+    }
+
+    if (!function->empty()) {
+        return function;
+    }
+
+    if (!lowerTemplateFunctionBody(module, function, it->second, concreteTypes, unsupportedReason)) {
+        function->deleteBody();
+        setSemanticError("template function `" + functionCall->ID()->getText() + "`: " + unsupportedReason);
+        return nullptr;
+    }
+
+    return function;
+}
+
 void lowerSupportedFunctionBodies(llvm::Module& module,
     compilerv1Parser::ProgramContext* tree,
     std::vector<std::string>& unsupportedFunctions) {
@@ -6538,6 +7911,8 @@ void lowerSupportedFunctionBodies(llvm::Module& module,
         llvm::IRBuilder<> builder(entry);
 
         LoweredValueMap params;
+        TypeAliasMap typeAliases;
+        TypeAliasScope aliasScope(&typeAliases);
         for (auto& arg : function->args()) {
             llvm::AllocaInst* address = createEntryAlloca(function, valueStorageType(&arg), arg.getName());
             builder.CreateStore(&arg, address);
@@ -6933,6 +8308,24 @@ void appendPrimitiveTypeMetadata(llvm::Module& module) {
 
 } // namespace
 
+namespace {
+apollo::codegen::OptConfig g_apolloOptConfig;
+std::string g_apolloBitcodePath;
+} // namespace
+
+void ApolloIrCodegen::setOptConfig(const apollo::codegen::OptConfig& cfg) {
+    g_apolloOptConfig = cfg;
+}
+const apollo::codegen::OptConfig& ApolloIrCodegen::optConfig() {
+    return g_apolloOptConfig;
+}
+void ApolloIrCodegen::setBitcodeOutputPath(std::string path) {
+    g_apolloBitcodePath = std::move(path);
+}
+const std::string& ApolloIrCodegen::bitcodeOutputPath() {
+    return g_apolloBitcodePath;
+}
+
 void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     const std::string& moduleKey,
     const std::string& displaySourcePath,
@@ -6964,7 +8357,9 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     linkInlineForeignModules(module, sourcePath, outputPath, tree, inlineForeignBlocks);
 
     const AggregateRegistry aggregateRegistry = buildAggregateRegistry(tree);
+    const TemplateFunctionRegistry templateFunctionRegistry = buildTemplateFunctionRegistry(tree);
     AggregateRegistryScope aggregateScope(&aggregateRegistry);
+    TemplateFunctionRegistryScope templateFunctionScope(&templateFunctionRegistry);
     InlineForeignBlockScope inlineForeignScope(&inlineForeignBlocks);
     RuntimeFeatureScope runtimeFeatureScope(&runtimeFeatures);
     InlineForeignPathScope inlineForeignPathScope(&sourcePath, &outputPath);
@@ -6983,6 +8378,10 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
             unsupportedFunctionNames.push_back(separator == std::string::npos
                 ? unsupported
                 : unsupported.substr(0, separator));
+            // Surface the full "func:reason" form to stderr so semantic
+            // diagnostics (redeclaration, deref-of-reference, etc.) are
+            // visible alongside the summary thrown below.
+            llvm::errs() << "\x1b[31mapollo: error: " << unsupported << "\x1b[0m\n";
         }
         throw std::runtime_error("backend could not compile module `" + moduleKey
             + "` for function(s): " + joinStrings(unsupportedFunctionNames, ", "));
@@ -7003,6 +8402,23 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     if (!outputPath.parent_path().empty()) {
         std::filesystem::create_directories(outputPath.parent_path());
     }
+
+    // Workstream B: run PassBuilder pipeline before serializing.
+    {
+        const auto& cfg = ApolloIrCodegen::optConfig();
+        std::string optErr;
+        if (!apollo::codegen::runOptPipeline(module, cfg, optErr)) {
+            throw std::runtime_error("apollo optimizer: " + optErr);
+        }
+        const std::string bcPath = ApolloIrCodegen::bitcodeOutputPath();
+        if (!bcPath.empty()) {
+            std::string bcErr;
+            if (!apollo::codegen::writeBitcode(module, bcPath, cfg, bcErr)) {
+                throw std::runtime_error("apollo bitcode emit: " + bcErr);
+            }
+        }
+    }
+
     std::error_code fileError;
     llvm::raw_fd_ostream output(outputPath.string(), fileError, llvm::sys::fs::OF_Text);
     if (fileError) {

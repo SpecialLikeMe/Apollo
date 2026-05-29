@@ -24,21 +24,22 @@ public:
     T__56 = 57, T__57 = 58, T__58 = 59, T__59 = 60, T__60 = 61, T__61 = 62, 
     T__62 = 63, T__63 = 64, T__64 = 65, T__65 = 66, T__66 = 67, T__67 = 68, 
     T__68 = 69, T__69 = 70, T__70 = 71, T__71 = 72, T__72 = 73, T__73 = 74, 
-    IF = 75, ELSE = 76, WHILE = 77, FOR = 78, IN = 79, SWITCH = 80, CASE = 81, 
-    DEFAULT = 82, TRY = 83, CATCH = 84, TERMINALEXCEPTION = 85, AUTOCATCH = 86, 
-    SUCCESS = 87, TRUE = 88, FALSE = 89, NULL_LITERAL = 90, TYPE = 91, FTYPE = 92, 
-    CLSTYPE = 93, STATIC = 94, VIRTUAL = 95, INSTANCE_MODE = 96, INS = 97, 
-    STAT = 98, ATO = 99, SRC = 100, ASG = 101, LTO = 102, MNT = 103, INDEF = 104, 
-    ANNOT_OVERRIDE = 105, INLINE = 106, ASYNC = 107, INLINE_SEP = 108, OVERRIDE = 109, 
-    SYSCALL = 110, ALL = 111, LET = 112, APND = 113, CONST = 114, NCONST = 115, 
-    THREADMODE = 116, JOIN = 117, GLOBAL = 118, BRIDGE = 119, UNSAFE = 120, 
-    BYPASS = 121, AUTOFMTDECLARE = 122, INDUCT = 123, RELEASE = 124, COMMUNAL = 125, 
-    CMGLOBAL = 126, STDEF = 127, OPSTRUCT = 128, MEMSTRUCT = 129, SCHEDULE = 130, 
-    MANDATORY = 131, DETATCH = 132, DETACH = 133, SCHVOID = 134, GC_NAME = 135, 
-    GCMODE_NAME = 136, BORROW_CHECKER_NAME = 137, BORROW_CHECK_NAME = 138, 
-    ID = 139, NATIVE = 140, INCLUSIVE = 141, LBRACE = 142, RBRACE = 143, 
-    STRING = 144, TEMPLATE_STRING = 145, CHAR = 146, BYTE = 147, FLOAT = 148, 
-    INT = 149, WS = 150, COMMENT = 151
+    T__74 = 75, T__75 = 76, T__76 = 77, T__77 = 78, T__78 = 79, IF = 80, 
+    ELSE = 81, WHILE = 82, FOR = 83, LOOP = 84, IN = 85, SWITCH = 86, CASE = 87, 
+    DEFAULT = 88, TRY = 89, CATCH = 90, TERMINALEXCEPTION = 91, AUTOCATCH = 92, 
+    SUCCESS = 93, TRUE = 94, FALSE = 95, NULL_LITERAL = 96, TYPE = 97, FTYPE = 98, 
+    CLSTYPE = 99, STATIC = 100, VIRTUAL = 101, INSTANCE_MODE = 102, INS = 103, 
+    STAT = 104, ATO = 105, SRC = 106, ASG = 107, LTO = 108, MNT = 109, INDEF = 110, 
+    ANNOT_OVERRIDE = 111, INLINE = 112, ASYNC = 113, INLINE_SEP = 114, OVERRIDE = 115, 
+    SYSCALL = 116, ALL = 117, LET = 118, APND = 119, CONST = 120, NCONST = 121, 
+    THREADMODE = 122, JOIN = 123, GLOBAL = 124, BRIDGE = 125, UNSAFE = 126, 
+    BYPASS = 127, AUTOFMTDECLARE = 128, INDUCT = 129, RELEASE = 130, COMMUNAL = 131, 
+    CMGLOBAL = 132, STDEF = 133, OPSTRUCT = 134, MEMSTRUCT = 135, SCHEDULE = 136, 
+    MANDATORY = 137, DETATCH = 138, DETACH = 139, SCHVOID = 140, GC_NAME = 141, 
+    GCMODE_NAME = 142, BORROW_CHECKER_NAME = 143, BORROW_CHECK_NAME = 144, 
+    ID = 145, NATIVE = 146, INCLUSIVE = 147, LBRACE = 148, RBRACE = 149, 
+    STRING = 150, TEMPLATE_STRING = 151, CHAR = 152, BYTE = 153, FLOAT = 154, 
+    INT = 155, WS = 156, COMMENT = 157, BLOCK_COMMENT = 158
   };
 
   enum {
@@ -47,50 +48,54 @@ public:
     RuleSettingValue = 7, RuleImportStmt = 8, RuleInstance = 9, RuleInstancepush = 10, 
     RuleMemberaccess = 11, RuleAccessBase = 12, RuleInstanceValue = 13, 
     RuleAllocatorUseSuffix = 14, RuleImportPath = 15, RuleHeaderPath = 16, 
-    RuleHeaderPart = 17, RuleHeaderPartAtom = 18, RuleFunction = 19, RuleMethod = 20, 
-    RuleField = 21, RuleParams = 22, RuleParam = 23, RuleBorrowExpr = 24, 
-    RuleBlock = 25, RuleClassBody = 26, RuleTemplateDecl = 27, RuleTemplateParams = 28, 
-    RuleInlineForeignBlock = 29, RuleStructBody = 30, RuleScheduleDecl = 31, 
-    RuleScheduleMember = 32, RuleMandatoryScheduleMember = 33, RuleClassMember = 34, 
-    RuleStructMember = 35, RulePrint = 36, RuleNativemode = 37, RuleAsyncCall = 38, 
-    RuleSyscallStmt = 39, RuleGlobalInit = 40, RuleMalloc = 41, RuleMntDecl = 42, 
-    RuleDelalc = 43, RuleFree = 44, RulePlcnew = 45, RulePlcnewType = 46, 
-    RulePointer = 47, RuleInclude = 48, RuleReturnType = 49, RuleTypeRef = 50, 
-    RuleThread = 51, RuleTypeAtom = 52, RuleTypeModifier = 53, RuleGenericType = 54, 
-    RuleShapeType = 55, RuleFunctionType = 56, RuleFunctionTypeArgs = 57, 
-    RuleMacro = 58, RuleMacroQualifier = 59, RuleStdinStmt = 60, RuleStdinValue = 61, 
-    RuleLambda = 62, RuleClosure = 63, RuleClosureCaptureList = 64, RuleClosureCaptureSpec = 65, 
-    RuleClosureEntryPoint = 66, RuleClosureBody = 67, RuleClosureBodyItem = 68, 
-    RuleLambdaDefinition = 69, RuleLambdaLiteral = 70, RuleSrcDecl = 71, 
-    RuleCscope = 72, RuleUnsafeBlock = 73, RuleBypassBlock = 74, RuleAutofmtdeclareScope = 75, 
-    RuleBridgeInit = 76, RuleInductStmt = 77, RuleReleaseStmt = 78, RuleAttributeBlock = 79, 
-    RuleAttributeEntry = 80, RuleAttributeArgs = 81, RuleAttributeValue = 82, 
-    RuleUnsafeLineStmt = 83, RuleUnsafeLinePayload = 84, RuleStatement = 85, 
-    RuleTypedefOpstructSession = 86, RuleTypedefOpstructCreateStmt = 87, 
-    RuleTypedefOpstructPhraseStmt = 88, RuleTypedefOpstructCommand = 89, 
-    RuleTypedefOpstructCapture = 90, RuleTypedefOpstructWord = 91, RuleRdwindowStmt = 92, 
-    RuleEventHandlerStmt = 93, RuleSchedulerStartStmt = 94, RuleSchedulerStartMode = 95, 
-    RuleSchedulerInsertStmt = 96, RuleSchedulerVoidStmt = 97, RuleIfStatement = 98, 
-    RuleWhileStatement = 99, RuleForStatement = 100, RuleForInStatement = 101, 
-    RuleSwitchStatement = 102, RuleSwitchCase = 103, RuleSwitchDefault = 104, 
-    RuleTryCatchStatement = 105, RuleAutocatchStatement = 106, RuleAssignment = 107, 
-    RuleMemberAssignment = 108, RuleAssignmentCore = 109, RuleAssignTarget = 110, 
-    RuleAccessKey = 111, RuleInit = 112, RuleLtoInit = 113, RuleLtoTypesetStmt = 114, 
-    RuleEasyInit = 115, RuleInitCore = 116, RuleForInit = 117, RuleForUpdate = 118, 
-    RuleAssertStmt = 119, RuleExpression = 120, RuleOrExpr = 121, RuleAndExpr = 122, 
-    RuleBitwiseOrExpr = 123, RuleBitwiseXorExpr = 124, RuleBitwiseAndExpr = 125, 
-    RuleEqualityExpr = 126, RuleShiftExpr = 127, RuleRightShiftOperator = 128, 
-    RuleRelationalExpr = 129, RuleAddExpr = 130, RuleMultExpr = 131, RulePrimary = 132, 
-    RuleTemplateString = 133, RuleCastExpr = 134, RuleCastType = 135, RulePlacementNewExpr = 136, 
-    RuleIndexedAccess = 137, RuleCompositeLiteral = 138, RuleBraceInitializer = 139, 
-    RuleBraceInitializerElement = 140, RuleFunctionCall = 141, RuleArgs = 142, 
-    RuleReturnStmt = 143, RuleCommunalQualifier = 144, RuleClass = 145, 
-    RuleStruct = 146, RuleMemstruct = 147, RuleTypedefStruct = 148, RuleOpstruct = 149, 
-    RuleOpstructBody = 150, RuleTypedefOpstruct = 151, RuleTypedefOpstructDslBody = 152, 
-    RuleTypedefOpstructDslEntry = 153, RuleTypedefOpstructAsgEntry = 154, 
-    RuleTypedefOpstructSrcEntry = 155, RuleTypedefOpstructTemplateBody = 156, 
-    RuleTypedefOpstructTemplateBodyItem = 157, RuleInterfaceDecl = 158, 
-    RuleInheritanceClause = 159, RuleInheritedType = 160, RuleVirtualMethod = 161
+    RuleHeaderPart = 17, RuleHeaderPartAtom = 18, RuleFunction = 19, RuleTemplateFunction = 20, 
+    RuleMethod = 21, RuleField = 22, RuleParams = 23, RuleParam = 24, RuleBorrowExpr = 25, 
+    RuleBlock = 26, RuleClassBody = 27, RuleTemplateDecl = 28, RuleTemplateParams = 29, 
+    RuleInlineForeignBlock = 30, RuleStructBody = 31, RuleEnumDecl = 32, 
+    RuleEnumVariant = 33, RuleEnumVariantName = 34, RuleScheduleDecl = 35, 
+    RuleScheduleMember = 36, RuleMandatoryScheduleMember = 37, RuleClassMember = 38, 
+    RuleStructMember = 39, RulePrint = 40, RuleNativemode = 41, RuleAsyncCall = 42, 
+    RuleSyscallStmt = 43, RuleGlobalInit = 44, RuleMalloc = 45, RuleMntDecl = 46, 
+    RuleDelalc = 47, RuleFree = 48, RulePlcnew = 49, RuleNrcDecl = 50, RulePlcnewType = 51, 
+    RulePointer = 52, RuleInclude = 53, RuleReturnType = 54, RuleTypeRef = 55, 
+    RuleThread = 56, RuleTypeAtom = 57, RuleQualifiedType = 58, RuleTypePlaceholder = 59, 
+    RuleTypeModifier = 60, RuleGenericType = 61, RuleShapeType = 62, RuleFunctionType = 63, 
+    RuleFunctionTypeArgs = 64, RuleMacro = 65, RuleMacroQualifier = 66, 
+    RuleStdinStmt = 67, RuleStdinValue = 68, RuleLambda = 69, RuleClosure = 70, 
+    RuleClosureCaptureList = 71, RuleClosureCaptureSpec = 72, RuleClosureEntryPoint = 73, 
+    RuleClosureBody = 74, RuleClosureBodyItem = 75, RuleLambdaDefinition = 76, 
+    RuleLambdaLiteral = 77, RuleSrcDecl = 78, RuleCscope = 79, RuleUnsafeBlock = 80, 
+    RuleBypassBlock = 81, RuleAutofmtdeclareScope = 82, RuleBridgeInit = 83, 
+    RuleInductStmt = 84, RuleReleaseStmt = 85, RuleAttributeBlock = 86, 
+    RuleAttributeEntry = 87, RuleAttributeArgs = 88, RuleAttributeValue = 89, 
+    RuleUnsafeLineStmt = 90, RuleUnsafeLinePayload = 91, RuleStatement = 92, 
+    RuleTypedefOpstructSession = 93, RuleTypedefOpstructCreateStmt = 94, 
+    RuleTypedefOpstructPhraseStmt = 95, RuleTypedefOpstructCommand = 96, 
+    RuleTypedefOpstructCapture = 97, RuleTypedefOpstructWord = 98, RuleRdwindowStmt = 99, 
+    RuleEventHandlerStmt = 100, RuleSchedulerStartStmt = 101, RuleSchedulerStartMode = 102, 
+    RuleSchedulerInsertStmt = 103, RuleSchedulerVoidStmt = 104, RuleIfStatement = 105, 
+    RuleWhileStatement = 106, RuleLoopStatement = 107, RuleForStatement = 108, 
+    RuleForInStatement = 109, RuleForInIterable = 110, RuleSwitchStatement = 111, 
+    RuleSwitchCase = 112, RuleSwitchDefault = 113, RuleTryCatchStatement = 114, 
+    RuleAutocatchStatement = 115, RuleAssignment = 116, RuleMemberAssignment = 117, 
+    RuleAssignmentCore = 118, RuleAssignTarget = 119, RuleAccessKey = 120, 
+    RuleInit = 121, RuleLtoInit = 122, RuleLtoTypesetStmt = 123, RuleEasyInit = 124, 
+    RuleInitCore = 125, RuleForInit = 126, RuleForUpdate = 127, RuleAssertStmt = 128, 
+    RuleExpression = 129, RuleOrExpr = 130, RuleAndExpr = 131, RuleBitwiseOrExpr = 132, 
+    RuleBitwiseXorExpr = 133, RuleBitwiseAndExpr = 134, RuleEqualityExpr = 135, 
+    RuleShiftExpr = 136, RuleRightShiftOperator = 137, RuleRelationalExpr = 138, 
+    RuleAddExpr = 139, RuleMultExpr = 140, RuleUnaryExpr = 141, RulePrimary = 142, 
+    RuleTemplateString = 143, RuleCastExpr = 144, RuleCastType = 145, RulePlacementNewExpr = 146, 
+    RuleEnumConstructor = 147, RuleIndexedAccess = 148, RuleCompositeLiteral = 149, 
+    RuleBraceInitializer = 150, RuleBraceInitializerElement = 151, RuleFunctionCall = 152, 
+    RuleExplicitTypeArgs = 153, RuleArgs = 154, RuleReturnStmt = 155, RuleCommunalQualifier = 156, 
+    RuleClass = 157, RuleStruct = 158, RuleMemstruct = 159, RuleTypedefStruct = 160, 
+    RuleOpstruct = 161, RuleOpstructBody = 162, RuleTypedefOpstruct = 163, 
+    RuleTypedefOpstructDslBody = 164, RuleTypedefOpstructDslEntry = 165, 
+    RuleTypedefOpstructAsgEntry = 166, RuleTypedefOpstructSrcEntry = 167, 
+    RuleTypedefOpstructTemplateBody = 168, RuleTypedefOpstructTemplateBodyItem = 169, 
+    RuleInterfaceDecl = 170, RuleInheritanceClause = 171, RuleInheritedType = 172, 
+    RuleVirtualMethod = 173
   };
 
   explicit compilerv1Parser(antlr4::TokenStream *input);
@@ -151,6 +156,7 @@ public:
   class HeaderPartContext;
   class HeaderPartAtomContext;
   class FunctionContext;
+  class TemplateFunctionContext;
   class MethodContext;
   class FieldContext;
   class ParamsContext;
@@ -162,6 +168,9 @@ public:
   class TemplateParamsContext;
   class InlineForeignBlockContext;
   class StructBodyContext;
+  class EnumDeclContext;
+  class EnumVariantContext;
+  class EnumVariantNameContext;
   class ScheduleDeclContext;
   class ScheduleMemberContext;
   class MandatoryScheduleMemberContext;
@@ -177,6 +186,7 @@ public:
   class DelalcContext;
   class FreeContext;
   class PlcnewContext;
+  class NrcDeclContext;
   class PlcnewTypeContext;
   class PointerContext;
   class IncludeContext;
@@ -184,6 +194,8 @@ public:
   class TypeRefContext;
   class ThreadContext;
   class TypeAtomContext;
+  class QualifiedTypeContext;
+  class TypePlaceholderContext;
   class TypeModifierContext;
   class GenericTypeContext;
   class ShapeTypeContext;
@@ -231,8 +243,10 @@ public:
   class SchedulerVoidStmtContext;
   class IfStatementContext;
   class WhileStatementContext;
+  class LoopStatementContext;
   class ForStatementContext;
   class ForInStatementContext;
+  class ForInIterableContext;
   class SwitchStatementContext;
   class SwitchCaseContext;
   class SwitchDefaultContext;
@@ -263,16 +277,19 @@ public:
   class RelationalExprContext;
   class AddExprContext;
   class MultExprContext;
+  class UnaryExprContext;
   class PrimaryContext;
   class TemplateStringContext;
   class CastExprContext;
   class CastTypeContext;
   class PlacementNewExprContext;
+  class EnumConstructorContext;
   class IndexedAccessContext;
   class CompositeLiteralContext;
   class BraceInitializerContext;
   class BraceInitializerElementContext;
   class FunctionCallContext;
+  class ExplicitTypeArgsContext;
   class ArgsContext;
   class ReturnStmtContext;
   class CommunalQualifierContext;
@@ -309,6 +326,8 @@ public:
     IncludeContext* include(size_t i);
     std::vector<FunctionContext *> function();
     FunctionContext* function(size_t i);
+    std::vector<TemplateFunctionContext *> templateFunction();
+    TemplateFunctionContext* templateFunction(size_t i);
     std::vector<MacroContext *> macro();
     MacroContext* macro(size_t i);
     std::vector<TemplateDeclContext *> templateDecl();
@@ -319,6 +338,8 @@ public:
     StructContext* struct_(size_t i);
     std::vector<MemstructContext *> memstruct();
     MemstructContext* memstruct(size_t i);
+    std::vector<EnumDeclContext *> enumDecl();
+    EnumDeclContext* enumDecl(size_t i);
     std::vector<ScheduleDeclContext *> scheduleDecl();
     ScheduleDeclContext* scheduleDecl(size_t i);
     std::vector<TypedefStructContext *> typedefStruct();
@@ -351,6 +372,8 @@ public:
     InstanceContext* instance(size_t i);
     std::vector<InstancepushContext *> instancepush();
     InstancepushContext* instancepush(size_t i);
+    std::vector<NrcDeclContext *> nrcDecl();
+    NrcDeclContext* nrcDecl(size_t i);
     std::vector<MemberaccessContext *> memberaccess();
     MemberaccessContext* memberaccess(size_t i);
     std::vector<NativemodeContext *> nativemode();
@@ -676,6 +699,23 @@ public:
 
   FunctionContext* function();
 
+  class  TemplateFunctionContext : public antlr4::ParserRuleContext {
+  public:
+    TemplateFunctionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    ReturnTypeContext *returnType();
+    antlr4::tree::TerminalNode *ID();
+    BlockContext *block();
+    ParamsContext *params();
+    AttributeBlockContext *attributeBlock();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  TemplateFunctionContext* templateFunction();
+
   class  MethodContext : public antlr4::ParserRuleContext {
   public:
     MethodContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -854,6 +894,53 @@ public:
   };
 
   StructBodyContext* structBody();
+
+  class  EnumDeclContext : public antlr4::ParserRuleContext {
+  public:
+    EnumDeclContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ID();
+    antlr4::tree::TerminalNode *LBRACE();
+    std::vector<EnumVariantContext *> enumVariant();
+    EnumVariantContext* enumVariant(size_t i);
+    antlr4::tree::TerminalNode *RBRACE();
+    AttributeBlockContext *attributeBlock();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  EnumDeclContext* enumDecl();
+
+  class  EnumVariantContext : public antlr4::ParserRuleContext {
+  public:
+    EnumVariantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    EnumVariantNameContext *enumVariantName();
+    TypeRefContext *typeRef();
+    StructBodyContext *structBody();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  EnumVariantContext* enumVariant();
+
+  class  EnumVariantNameContext : public antlr4::ParserRuleContext {
+  public:
+    EnumVariantNameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ID();
+    antlr4::tree::TerminalNode *SUCCESS();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  EnumVariantNameContext* enumVariantName();
 
   class  ScheduleDeclContext : public antlr4::ParserRuleContext {
   public:
@@ -1080,6 +1167,20 @@ public:
 
   PlcnewContext* plcnew();
 
+  class  NrcDeclContext : public antlr4::ParserRuleContext {
+  public:
+    NrcDeclContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ID();
+    TypeRefContext *typeRef();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  NrcDeclContext* nrcDecl();
+
   class  PlcnewTypeContext : public antlr4::ParserRuleContext {
   public:
     PlcnewTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -1174,6 +1275,8 @@ public:
     GenericTypeContext *genericType();
     ShapeTypeContext *shapeType();
     FunctionTypeContext *functionType();
+    TypePlaceholderContext *typePlaceholder();
+    QualifiedTypeContext *qualifiedType();
     antlr4::tree::TerminalNode *TYPE();
     antlr4::tree::TerminalNode *FTYPE();
     antlr4::tree::TerminalNode *ID();
@@ -1185,10 +1288,40 @@ public:
 
   TypeAtomContext* typeAtom();
 
+  class  QualifiedTypeContext : public antlr4::ParserRuleContext {
+  public:
+    QualifiedTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ID();
+    antlr4::tree::TerminalNode *INLINE_SEP();
+    EnumVariantNameContext *enumVariantName();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  QualifiedTypeContext* qualifiedType();
+
+  class  TypePlaceholderContext : public antlr4::ParserRuleContext {
+  public:
+    TypePlaceholderContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ID();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  TypePlaceholderContext* typePlaceholder();
+
   class  TypeModifierContext : public antlr4::ParserRuleContext {
   public:
     TypeModifierContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CONST();
+    antlr4::tree::TerminalNode *NCONST();
 
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -1204,6 +1337,7 @@ public:
     antlr4::tree::TerminalNode *ID();
     std::vector<TypeRefContext *> typeRef();
     TypeRefContext* typeRef(size_t i);
+    RightShiftOperatorContext *rightShiftOperator();
 
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -1679,10 +1813,12 @@ public:
     MemberAssignmentContext *memberAssignment();
     LambdaContext *lambda();
     ClosureContext *closure();
+    NrcDeclContext *nrcDecl();
     FunctionCallContext *functionCall();
     MemberaccessContext *memberaccess();
     IfStatementContext *ifStatement();
     WhileStatementContext *whileStatement();
+    LoopStatementContext *loopStatement();
     ForStatementContext *forStatement();
     ForInStatementContext *forInStatement();
     SwitchStatementContext *switchStatement();
@@ -1924,6 +2060,20 @@ public:
 
   WhileStatementContext* whileStatement();
 
+  class  LoopStatementContext : public antlr4::ParserRuleContext {
+  public:
+    LoopStatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *LOOP();
+    BlockContext *block();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  LoopStatementContext* loopStatement();
+
   class  ForStatementContext : public antlr4::ParserRuleContext {
   public:
     ForStatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -1949,7 +2099,7 @@ public:
     TypeRefContext *typeRef();
     antlr4::tree::TerminalNode *ID();
     antlr4::tree::TerminalNode *IN();
-    ExpressionContext *expression();
+    ForInIterableContext *forInIterable();
     BlockContext *block();
     antlr4::tree::TerminalNode *CONST();
     antlr4::tree::TerminalNode *NCONST();
@@ -1960,6 +2110,20 @@ public:
   };
 
   ForInStatementContext* forInStatement();
+
+  class  ForInIterableContext : public antlr4::ParserRuleContext {
+  public:
+    ForInIterableContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ExpressionContext *> expression();
+    ExpressionContext* expression(size_t i);
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ForInIterableContext* forInIterable();
 
   class  SwitchStatementContext : public antlr4::ParserRuleContext {
   public:
@@ -2405,6 +2569,19 @@ public:
 
   MultExprContext* multExpr();
 
+  class  UnaryExprContext : public antlr4::ParserRuleContext {
+  public:
+    UnaryExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    PrimaryContext *primary();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  UnaryExprContext* unaryExpr();
+
   class  PrimaryContext : public antlr4::ParserRuleContext {
   public:
     PrimaryContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -2422,6 +2599,7 @@ public:
     StdinValueContext *stdinValue();
     CastExprContext *castExpr();
     PlacementNewExprContext *placementNewExpr();
+    EnumConstructorContext *enumConstructor();
     FunctionCallContext *functionCall();
     MemberaccessContext *memberaccess();
     IndexedAccessContext *indexedAccess();
@@ -2429,6 +2607,7 @@ public:
     BraceInitializerContext *braceInitializer();
     InstanceValueContext *instanceValue();
     BorrowExprContext *borrowExpr();
+    UnaryExprContext *unaryExpr();
     antlr4::tree::TerminalNode *INDEF();
     antlr4::tree::TerminalNode *ID();
     ExpressionContext *expression();
@@ -2494,6 +2673,21 @@ public:
 
   PlacementNewExprContext* placementNewExpr();
 
+  class  EnumConstructorContext : public antlr4::ParserRuleContext {
+  public:
+    EnumConstructorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    QualifiedTypeContext *qualifiedType();
+    BraceInitializerContext *braceInitializer();
+    ArgsContext *args();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  EnumConstructorContext* enumConstructor();
+
   class  IndexedAccessContext : public antlr4::ParserRuleContext {
   public:
     IndexedAccessContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -2558,6 +2752,7 @@ public:
     FunctionCallContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *ID();
+    ExplicitTypeArgsContext *explicitTypeArgs();
     ArgsContext *args();
 
 
@@ -2566,6 +2761,20 @@ public:
   };
 
   FunctionCallContext* functionCall();
+
+  class  ExplicitTypeArgsContext : public antlr4::ParserRuleContext {
+  public:
+    ExplicitTypeArgsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<TypeRefContext *> typeRef();
+    TypeRefContext* typeRef(size_t i);
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ExplicitTypeArgsContext* explicitTypeArgs();
 
   class  ArgsContext : public antlr4::ParserRuleContext {
   public:

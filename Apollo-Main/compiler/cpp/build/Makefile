@@ -232,38 +232,366 @@ apollo_driver_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/build
 .PHONY : apollo_driver_tests/fast
 
-C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.obj: C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
-.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.obj
+#=============================================================================
+# Target rules for targets named apollo_mir
+
+# Build rule for target.
+apollo_mir: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_mir
+.PHONY : apollo_mir
+
+# fast build rule for target.
+apollo_mir/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/build
+.PHONY : apollo_mir/fast
+
+#=============================================================================
+# Target rules for targets named apollo_mir_build
+
+# Build rule for target.
+apollo_mir_build: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_mir_build
+.PHONY : apollo_mir_build
+
+# fast build rule for target.
+apollo_mir_build/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/build
+.PHONY : apollo_mir_build/fast
+
+#=============================================================================
+# Target rules for targets named apollo_mir_opt
+
+# Build rule for target.
+apollo_mir_opt: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_mir_opt
+.PHONY : apollo_mir_opt
+
+# fast build rule for target.
+apollo_mir_opt/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/build
+.PHONY : apollo_mir_opt/fast
+
+#=============================================================================
+# Target rules for targets named apollo_mir_tests
+
+# Build rule for target.
+apollo_mir_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_mir_tests
+.PHONY : apollo_mir_tests
+
+# fast build rule for target.
+apollo_mir_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/build
+.PHONY : apollo_mir_tests/fast
+
+#=============================================================================
+# Target rules for targets named apollo_gc_concurrent
+
+# Build rule for target.
+apollo_gc_concurrent: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_gc_concurrent
+.PHONY : apollo_gc_concurrent
+
+# fast build rule for target.
+apollo_gc_concurrent/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/build
+.PHONY : apollo_gc_concurrent/fast
+
+#=============================================================================
+# Target rules for targets named apollo_gc_concurrent_tests
+
+# Build rule for target.
+apollo_gc_concurrent_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_gc_concurrent_tests
+.PHONY : apollo_gc_concurrent_tests
+
+# fast build rule for target.
+apollo_gc_concurrent_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/build
+.PHONY : apollo_gc_concurrent_tests/fast
+
+#=============================================================================
+# Target rules for targets named apollo_gc_extensions_tests
+
+# Build rule for target.
+apollo_gc_extensions_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_gc_extensions_tests
+.PHONY : apollo_gc_extensions_tests
+
+# fast build rule for target.
+apollo_gc_extensions_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/build
+.PHONY : apollo_gc_extensions_tests/fast
+
+#=============================================================================
+# Target rules for targets named apollo_gc_nursery_tests
+
+# Build rule for target.
+apollo_gc_nursery_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_gc_nursery_tests
+.PHONY : apollo_gc_nursery_tests
+
+# fast build rule for target.
+apollo_gc_nursery_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/build
+.PHONY : apollo_gc_nursery_tests/fast
+
+#=============================================================================
+# Target rules for targets named apollo_borrowck
+
+# Build rule for target.
+apollo_borrowck: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_borrowck
+.PHONY : apollo_borrowck
+
+# fast build rule for target.
+apollo_borrowck/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/build
+.PHONY : apollo_borrowck/fast
+
+#=============================================================================
+# Target rules for targets named apollo_borrowck_tests
+
+# Build rule for target.
+apollo_borrowck_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_borrowck_tests
+.PHONY : apollo_borrowck_tests
+
+# fast build rule for target.
+apollo_borrowck_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/build
+.PHONY : apollo_borrowck_tests/fast
+
+#=============================================================================
+# Target rules for targets named apollo_codegen_barriers
+
+# Build rule for target.
+apollo_codegen_barriers: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_codegen_barriers
+.PHONY : apollo_codegen_barriers
+
+# fast build rule for target.
+apollo_codegen_barriers/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/build
+.PHONY : apollo_codegen_barriers/fast
+
+#=============================================================================
+# Target rules for targets named apollo_hir_lowering
+
+# Build rule for target.
+apollo_hir_lowering: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_hir_lowering
+.PHONY : apollo_hir_lowering
+
+# fast build rule for target.
+apollo_hir_lowering/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/build
+.PHONY : apollo_hir_lowering/fast
+
+#=============================================================================
+# Target rules for targets named apollo_diag
+
+# Build rule for target.
+apollo_diag: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apollo_diag
+.PHONY : apollo_diag
+
+# fast build rule for target.
+apollo_diag/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/build
+.PHONY : apollo_diag/fast
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.obj
 
 # target to build an object file
-C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
-.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.obj
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.obj
 
-C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.i: C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
-.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.i
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.i
 
 # target to preprocess a source file
-C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
-.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.i
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.i
 
-C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.s: C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
-.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.s
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.s
 
 # target to generate assembly for a file
-C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
-.PHONY : C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.cpp.s
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent_tests.dir\build.make CMakeFiles/apollo_gc_concurrent_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_extensions_tests.dir\build.make CMakeFiles/apollo_gc_extensions_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_nursery_tests.dir\build.make CMakeFiles/apollo_gc_nursery_tests.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.s
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.obj: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.obj
+
+# target to build an object file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.obj
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.obj
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.i: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.i
+
+# target to preprocess a source file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.i
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.i
+
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.s: C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.s
+
+# target to generate assembly for a file
+C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_gc_concurrent.dir\build.make CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.s
+.PHONY : C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.cpp.s
 
 generated/compilerv1BaseVisitor.obj: generated/compilerv1BaseVisitor.cpp.obj
 .PHONY : generated/compilerv1BaseVisitor.obj
@@ -691,6 +1019,297 @@ src/apollo_source_preprocessor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/apollo_source_preprocessor.cpp.s
 .PHONY : src/apollo_source_preprocessor.cpp.s
 
+src/borrowck/legacy/borrow_checker.obj: src/borrowck/legacy/borrow_checker.cpp.obj
+.PHONY : src/borrowck/legacy/borrow_checker.obj
+
+# target to build an object file
+src/borrowck/legacy/borrow_checker.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/borrowck/legacy/borrow_checker.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/borrowck/legacy/borrow_checker.cpp.obj
+.PHONY : src/borrowck/legacy/borrow_checker.cpp.obj
+
+src/borrowck/legacy/borrow_checker.i: src/borrowck/legacy/borrow_checker.cpp.i
+.PHONY : src/borrowck/legacy/borrow_checker.i
+
+# target to preprocess a source file
+src/borrowck/legacy/borrow_checker.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/borrowck/legacy/borrow_checker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/borrowck/legacy/borrow_checker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/borrowck/legacy/borrow_checker.cpp.i
+.PHONY : src/borrowck/legacy/borrow_checker.cpp.i
+
+src/borrowck/legacy/borrow_checker.s: src/borrowck/legacy/borrow_checker.cpp.s
+.PHONY : src/borrowck/legacy/borrow_checker.s
+
+# target to generate assembly for a file
+src/borrowck/legacy/borrow_checker.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/borrowck/legacy/borrow_checker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/borrowck/legacy/borrow_checker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/borrowck/legacy/borrow_checker.cpp.s
+.PHONY : src/borrowck/legacy/borrow_checker.cpp.s
+
+src/borrowck/mir/apollo_borrowck_tests.obj: src/borrowck/mir/apollo_borrowck_tests.cpp.obj
+.PHONY : src/borrowck/mir/apollo_borrowck_tests.obj
+
+# target to build an object file
+src/borrowck/mir/apollo_borrowck_tests.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/src/borrowck/mir/apollo_borrowck_tests.cpp.obj
+.PHONY : src/borrowck/mir/apollo_borrowck_tests.cpp.obj
+
+src/borrowck/mir/apollo_borrowck_tests.i: src/borrowck/mir/apollo_borrowck_tests.cpp.i
+.PHONY : src/borrowck/mir/apollo_borrowck_tests.i
+
+# target to preprocess a source file
+src/borrowck/mir/apollo_borrowck_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/src/borrowck/mir/apollo_borrowck_tests.cpp.i
+.PHONY : src/borrowck/mir/apollo_borrowck_tests.cpp.i
+
+src/borrowck/mir/apollo_borrowck_tests.s: src/borrowck/mir/apollo_borrowck_tests.cpp.s
+.PHONY : src/borrowck/mir/apollo_borrowck_tests.s
+
+# target to generate assembly for a file
+src/borrowck/mir/apollo_borrowck_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck_tests.dir\build.make CMakeFiles/apollo_borrowck_tests.dir/src/borrowck/mir/apollo_borrowck_tests.cpp.s
+.PHONY : src/borrowck/mir/apollo_borrowck_tests.cpp.s
+
+src/borrowck/mir/borrowck.obj: src/borrowck/mir/borrowck.cpp.obj
+.PHONY : src/borrowck/mir/borrowck.obj
+
+# target to build an object file
+src/borrowck/mir/borrowck.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/borrowck.cpp.obj
+.PHONY : src/borrowck/mir/borrowck.cpp.obj
+
+src/borrowck/mir/borrowck.i: src/borrowck/mir/borrowck.cpp.i
+.PHONY : src/borrowck/mir/borrowck.i
+
+# target to preprocess a source file
+src/borrowck/mir/borrowck.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/borrowck.cpp.i
+.PHONY : src/borrowck/mir/borrowck.cpp.i
+
+src/borrowck/mir/borrowck.s: src/borrowck/mir/borrowck.cpp.s
+.PHONY : src/borrowck/mir/borrowck.s
+
+# target to generate assembly for a file
+src/borrowck/mir/borrowck.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/borrowck.cpp.s
+.PHONY : src/borrowck/mir/borrowck.cpp.s
+
+src/borrowck/mir/dataflow.obj: src/borrowck/mir/dataflow.cpp.obj
+.PHONY : src/borrowck/mir/dataflow.obj
+
+# target to build an object file
+src/borrowck/mir/dataflow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/dataflow.cpp.obj
+.PHONY : src/borrowck/mir/dataflow.cpp.obj
+
+src/borrowck/mir/dataflow.i: src/borrowck/mir/dataflow.cpp.i
+.PHONY : src/borrowck/mir/dataflow.i
+
+# target to preprocess a source file
+src/borrowck/mir/dataflow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/dataflow.cpp.i
+.PHONY : src/borrowck/mir/dataflow.cpp.i
+
+src/borrowck/mir/dataflow.s: src/borrowck/mir/dataflow.cpp.s
+.PHONY : src/borrowck/mir/dataflow.s
+
+# target to generate assembly for a file
+src/borrowck/mir/dataflow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/dataflow.cpp.s
+.PHONY : src/borrowck/mir/dataflow.cpp.s
+
+src/borrowck/mir/error_codes.obj: src/borrowck/mir/error_codes.cpp.obj
+.PHONY : src/borrowck/mir/error_codes.obj
+
+# target to build an object file
+src/borrowck/mir/error_codes.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/error_codes.cpp.obj
+.PHONY : src/borrowck/mir/error_codes.cpp.obj
+
+src/borrowck/mir/error_codes.i: src/borrowck/mir/error_codes.cpp.i
+.PHONY : src/borrowck/mir/error_codes.i
+
+# target to preprocess a source file
+src/borrowck/mir/error_codes.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/error_codes.cpp.i
+.PHONY : src/borrowck/mir/error_codes.cpp.i
+
+src/borrowck/mir/error_codes.s: src/borrowck/mir/error_codes.cpp.s
+.PHONY : src/borrowck/mir/error_codes.s
+
+# target to generate assembly for a file
+src/borrowck/mir/error_codes.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/error_codes.cpp.s
+.PHONY : src/borrowck/mir/error_codes.cpp.s
+
+src/borrowck/mir/move_paths.obj: src/borrowck/mir/move_paths.cpp.obj
+.PHONY : src/borrowck/mir/move_paths.obj
+
+# target to build an object file
+src/borrowck/mir/move_paths.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/move_paths.cpp.obj
+.PHONY : src/borrowck/mir/move_paths.cpp.obj
+
+src/borrowck/mir/move_paths.i: src/borrowck/mir/move_paths.cpp.i
+.PHONY : src/borrowck/mir/move_paths.i
+
+# target to preprocess a source file
+src/borrowck/mir/move_paths.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/move_paths.cpp.i
+.PHONY : src/borrowck/mir/move_paths.cpp.i
+
+src/borrowck/mir/move_paths.s: src/borrowck/mir/move_paths.cpp.s
+.PHONY : src/borrowck/mir/move_paths.s
+
+# target to generate assembly for a file
+src/borrowck/mir/move_paths.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_borrowck.dir\build.make CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/move_paths.cpp.s
+.PHONY : src/borrowck/mir/move_paths.cpp.s
+
+src/borrowck/mir_pipeline.obj: src/borrowck/mir_pipeline.cpp.obj
+.PHONY : src/borrowck/mir_pipeline.obj
+
+# target to build an object file
+src/borrowck/mir_pipeline.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/borrowck/mir_pipeline.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/borrowck/mir_pipeline.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/borrowck/mir_pipeline.cpp.obj
+.PHONY : src/borrowck/mir_pipeline.cpp.obj
+
+src/borrowck/mir_pipeline.i: src/borrowck/mir_pipeline.cpp.i
+.PHONY : src/borrowck/mir_pipeline.i
+
+# target to preprocess a source file
+src/borrowck/mir_pipeline.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/borrowck/mir_pipeline.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/borrowck/mir_pipeline.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/borrowck/mir_pipeline.cpp.i
+.PHONY : src/borrowck/mir_pipeline.cpp.i
+
+src/borrowck/mir_pipeline.s: src/borrowck/mir_pipeline.cpp.s
+.PHONY : src/borrowck/mir_pipeline.s
+
+# target to generate assembly for a file
+src/borrowck/mir_pipeline.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/borrowck/mir_pipeline.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/borrowck/mir_pipeline.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/borrowck/mir_pipeline.cpp.s
+.PHONY : src/borrowck/mir_pipeline.cpp.s
+
+src/codegen/barriers.obj: src/codegen/barriers.cpp.obj
+.PHONY : src/codegen/barriers.obj
+
+# target to build an object file
+src/codegen/barriers.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/src/codegen/barriers.cpp.obj
+.PHONY : src/codegen/barriers.cpp.obj
+
+src/codegen/barriers.i: src/codegen/barriers.cpp.i
+.PHONY : src/codegen/barriers.i
+
+# target to preprocess a source file
+src/codegen/barriers.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/src/codegen/barriers.cpp.i
+.PHONY : src/codegen/barriers.cpp.i
+
+src/codegen/barriers.s: src/codegen/barriers.cpp.s
+.PHONY : src/codegen/barriers.s
+
+# target to generate assembly for a file
+src/codegen/barriers.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_codegen_barriers.dir\build.make CMakeFiles/apollo_codegen_barriers.dir/src/codegen/barriers.cpp.s
+.PHONY : src/codegen/barriers.cpp.s
+
+src/codegen/optimizer.obj: src/codegen/optimizer.cpp.obj
+.PHONY : src/codegen/optimizer.obj
+
+# target to build an object file
+src/codegen/optimizer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/codegen/optimizer.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/codegen/optimizer.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/codegen/optimizer.cpp.obj
+.PHONY : src/codegen/optimizer.cpp.obj
+
+src/codegen/optimizer.i: src/codegen/optimizer.cpp.i
+.PHONY : src/codegen/optimizer.i
+
+# target to preprocess a source file
+src/codegen/optimizer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/codegen/optimizer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/codegen/optimizer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/codegen/optimizer.cpp.i
+.PHONY : src/codegen/optimizer.cpp.i
+
+src/codegen/optimizer.s: src/codegen/optimizer.cpp.s
+.PHONY : src/codegen/optimizer.s
+
+# target to generate assembly for a file
+src/codegen/optimizer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_build_driver_native.dir\build.make CMakeFiles/apollo_build_driver_native.dir/src/codegen/optimizer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_runtime_tests.dir\build.make CMakeFiles/apollo_runtime_tests.dir/src/codegen/optimizer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_driver_tests.dir\build.make CMakeFiles/apollo_driver_tests.dir/src/codegen/optimizer.cpp.s
+.PHONY : src/codegen/optimizer.cpp.s
+
+src/diag/diagnostic.obj: src/diag/diagnostic.cpp.obj
+.PHONY : src/diag/diagnostic.obj
+
+# target to build an object file
+src/diag/diagnostic.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/src/diag/diagnostic.cpp.obj
+.PHONY : src/diag/diagnostic.cpp.obj
+
+src/diag/diagnostic.i: src/diag/diagnostic.cpp.i
+.PHONY : src/diag/diagnostic.i
+
+# target to preprocess a source file
+src/diag/diagnostic.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/src/diag/diagnostic.cpp.i
+.PHONY : src/diag/diagnostic.cpp.i
+
+src/diag/diagnostic.s: src/diag/diagnostic.cpp.s
+.PHONY : src/diag/diagnostic.s
+
+# target to generate assembly for a file
+src/diag/diagnostic.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_diag.dir\build.make CMakeFiles/apollo_diag.dir/src/diag/diagnostic.cpp.s
+.PHONY : src/diag/diagnostic.cpp.s
+
+src/hir/lowering.obj: src/hir/lowering.cpp.obj
+.PHONY : src/hir/lowering.obj
+
+# target to build an object file
+src/hir/lowering.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/src/hir/lowering.cpp.obj
+.PHONY : src/hir/lowering.cpp.obj
+
+src/hir/lowering.i: src/hir/lowering.cpp.i
+.PHONY : src/hir/lowering.i
+
+# target to preprocess a source file
+src/hir/lowering.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/src/hir/lowering.cpp.i
+.PHONY : src/hir/lowering.cpp.i
+
+src/hir/lowering.s: src/hir/lowering.cpp.s
+.PHONY : src/hir/lowering.s
+
+# target to generate assembly for a file
+src/hir/lowering.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_hir_lowering.dir\build.make CMakeFiles/apollo_hir_lowering.dir/src/hir/lowering.cpp.s
+.PHONY : src/hir/lowering.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -714,6 +1333,222 @@ src/main.s: src/main.cpp.s
 src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_frontend_native.dir\build.make CMakeFiles/apollo_frontend_native.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/mir/apollo_mir_tests.obj: src/mir/apollo_mir_tests.cpp.obj
+.PHONY : src/mir/apollo_mir_tests.obj
+
+# target to build an object file
+src/mir/apollo_mir_tests.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/src/mir/apollo_mir_tests.cpp.obj
+.PHONY : src/mir/apollo_mir_tests.cpp.obj
+
+src/mir/apollo_mir_tests.i: src/mir/apollo_mir_tests.cpp.i
+.PHONY : src/mir/apollo_mir_tests.i
+
+# target to preprocess a source file
+src/mir/apollo_mir_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/src/mir/apollo_mir_tests.cpp.i
+.PHONY : src/mir/apollo_mir_tests.cpp.i
+
+src/mir/apollo_mir_tests.s: src/mir/apollo_mir_tests.cpp.s
+.PHONY : src/mir/apollo_mir_tests.s
+
+# target to generate assembly for a file
+src/mir/apollo_mir_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_tests.dir\build.make CMakeFiles/apollo_mir_tests.dir/src/mir/apollo_mir_tests.cpp.s
+.PHONY : src/mir/apollo_mir_tests.cpp.s
+
+src/mir/build/build_expr.obj: src/mir/build/build_expr.cpp.obj
+.PHONY : src/mir/build/build_expr.obj
+
+# target to build an object file
+src/mir/build/build_expr.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/src/mir/build/build_expr.cpp.obj
+.PHONY : src/mir/build/build_expr.cpp.obj
+
+src/mir/build/build_expr.i: src/mir/build/build_expr.cpp.i
+.PHONY : src/mir/build/build_expr.i
+
+# target to preprocess a source file
+src/mir/build/build_expr.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/src/mir/build/build_expr.cpp.i
+.PHONY : src/mir/build/build_expr.cpp.i
+
+src/mir/build/build_expr.s: src/mir/build/build_expr.cpp.s
+.PHONY : src/mir/build/build_expr.s
+
+# target to generate assembly for a file
+src/mir/build/build_expr.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/src/mir/build/build_expr.cpp.s
+.PHONY : src/mir/build/build_expr.cpp.s
+
+src/mir/build/builder.obj: src/mir/build/builder.cpp.obj
+.PHONY : src/mir/build/builder.obj
+
+# target to build an object file
+src/mir/build/builder.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/src/mir/build/builder.cpp.obj
+.PHONY : src/mir/build/builder.cpp.obj
+
+src/mir/build/builder.i: src/mir/build/builder.cpp.i
+.PHONY : src/mir/build/builder.i
+
+# target to preprocess a source file
+src/mir/build/builder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/src/mir/build/builder.cpp.i
+.PHONY : src/mir/build/builder.cpp.i
+
+src/mir/build/builder.s: src/mir/build/builder.cpp.s
+.PHONY : src/mir/build/builder.s
+
+# target to generate assembly for a file
+src/mir/build/builder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_build.dir\build.make CMakeFiles/apollo_mir_build.dir/src/mir/build/builder.cpp.s
+.PHONY : src/mir/build/builder.cpp.s
+
+src/mir/mir.obj: src/mir/mir.cpp.obj
+.PHONY : src/mir/mir.obj
+
+# target to build an object file
+src/mir/mir.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/mir.cpp.obj
+.PHONY : src/mir/mir.cpp.obj
+
+src/mir/mir.i: src/mir/mir.cpp.i
+.PHONY : src/mir/mir.i
+
+# target to preprocess a source file
+src/mir/mir.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/mir.cpp.i
+.PHONY : src/mir/mir.cpp.i
+
+src/mir/mir.s: src/mir/mir.cpp.s
+.PHONY : src/mir/mir.s
+
+# target to generate assembly for a file
+src/mir/mir.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/mir.cpp.s
+.PHONY : src/mir/mir.cpp.s
+
+src/mir/opt/pipeline.obj: src/mir/opt/pipeline.cpp.obj
+.PHONY : src/mir/opt/pipeline.obj
+
+# target to build an object file
+src/mir/opt/pipeline.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/src/mir/opt/pipeline.cpp.obj
+.PHONY : src/mir/opt/pipeline.cpp.obj
+
+src/mir/opt/pipeline.i: src/mir/opt/pipeline.cpp.i
+.PHONY : src/mir/opt/pipeline.i
+
+# target to preprocess a source file
+src/mir/opt/pipeline.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/src/mir/opt/pipeline.cpp.i
+.PHONY : src/mir/opt/pipeline.cpp.i
+
+src/mir/opt/pipeline.s: src/mir/opt/pipeline.cpp.s
+.PHONY : src/mir/opt/pipeline.s
+
+# target to generate assembly for a file
+src/mir/opt/pipeline.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir_opt.dir\build.make CMakeFiles/apollo_mir_opt.dir/src/mir/opt/pipeline.cpp.s
+.PHONY : src/mir/opt/pipeline.cpp.s
+
+src/mir/printer.obj: src/mir/printer.cpp.obj
+.PHONY : src/mir/printer.obj
+
+# target to build an object file
+src/mir/printer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/printer.cpp.obj
+.PHONY : src/mir/printer.cpp.obj
+
+src/mir/printer.i: src/mir/printer.cpp.i
+.PHONY : src/mir/printer.i
+
+# target to preprocess a source file
+src/mir/printer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/printer.cpp.i
+.PHONY : src/mir/printer.cpp.i
+
+src/mir/printer.s: src/mir/printer.cpp.s
+.PHONY : src/mir/printer.s
+
+# target to generate assembly for a file
+src/mir/printer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/printer.cpp.s
+.PHONY : src/mir/printer.cpp.s
+
+src/mir/source_info.obj: src/mir/source_info.cpp.obj
+.PHONY : src/mir/source_info.obj
+
+# target to build an object file
+src/mir/source_info.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/source_info.cpp.obj
+.PHONY : src/mir/source_info.cpp.obj
+
+src/mir/source_info.i: src/mir/source_info.cpp.i
+.PHONY : src/mir/source_info.i
+
+# target to preprocess a source file
+src/mir/source_info.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/source_info.cpp.i
+.PHONY : src/mir/source_info.cpp.i
+
+src/mir/source_info.s: src/mir/source_info.cpp.s
+.PHONY : src/mir/source_info.s
+
+# target to generate assembly for a file
+src/mir/source_info.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/source_info.cpp.s
+.PHONY : src/mir/source_info.cpp.s
+
+src/mir/ty.obj: src/mir/ty.cpp.obj
+.PHONY : src/mir/ty.obj
+
+# target to build an object file
+src/mir/ty.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/ty.cpp.obj
+.PHONY : src/mir/ty.cpp.obj
+
+src/mir/ty.i: src/mir/ty.cpp.i
+.PHONY : src/mir/ty.i
+
+# target to preprocess a source file
+src/mir/ty.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/ty.cpp.i
+.PHONY : src/mir/ty.cpp.i
+
+src/mir/ty.s: src/mir/ty.cpp.s
+.PHONY : src/mir/ty.s
+
+# target to generate assembly for a file
+src/mir/ty.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/ty.cpp.s
+.PHONY : src/mir/ty.cpp.s
+
+src/mir/validator.obj: src/mir/validator.cpp.obj
+.PHONY : src/mir/validator.obj
+
+# target to build an object file
+src/mir/validator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/validator.cpp.obj
+.PHONY : src/mir/validator.cpp.obj
+
+src/mir/validator.i: src/mir/validator.cpp.i
+.PHONY : src/mir/validator.i
+
+# target to preprocess a source file
+src/mir/validator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/validator.cpp.i
+.PHONY : src/mir/validator.cpp.i
+
+src/mir/validator.s: src/mir/validator.cpp.s
+.PHONY : src/mir/validator.s
+
+# target to generate assembly for a file
+src/mir/validator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\apollo_mir.dir\build.make CMakeFiles/apollo_mir.dir/src/mir/validator.cpp.s
+.PHONY : src/mir/validator.cpp.s
 
 src/visitor.obj: src/visitor.cpp.obj
 .PHONY : src/visitor.obj
@@ -761,13 +1596,47 @@ help:
 	@echo ... omp_gen
 	@echo ... target_parser_gen
 	@echo ... vt_gen
+	@echo ... apollo_borrowck
+	@echo ... apollo_borrowck_tests
 	@echo ... apollo_build_driver_native
+	@echo ... apollo_codegen_barriers
+	@echo ... apollo_diag
 	@echo ... apollo_driver_tests
 	@echo ... apollo_frontend_native
+	@echo ... apollo_gc_concurrent
+	@echo ... apollo_gc_concurrent_tests
+	@echo ... apollo_gc_extensions_tests
+	@echo ... apollo_gc_nursery_tests
+	@echo ... apollo_hir_lowering
+	@echo ... apollo_mir
+	@echo ... apollo_mir_build
+	@echo ... apollo_mir_opt
+	@echo ... apollo_mir_tests
 	@echo ... apollo_runtime_tests
-	@echo ... C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.obj
-	@echo ... C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.i
-	@echo ... C_/Users/devon/Apollo/Apollo-Main/brc/borrow_checker.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_cards.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_concurrent_tests.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_extensions_tests.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_large.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_nursery_tests.s
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.obj
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.i
+	@echo ... C_/Users/devon/Apollo/Apollo-Main/GC/apollo_gc_typedesc.s
 	@echo ... generated/compilerv1BaseVisitor.obj
 	@echo ... generated/compilerv1BaseVisitor.i
 	@echo ... generated/compilerv1BaseVisitor.s
@@ -810,9 +1679,69 @@ help:
 	@echo ... src/apollo_source_preprocessor.obj
 	@echo ... src/apollo_source_preprocessor.i
 	@echo ... src/apollo_source_preprocessor.s
+	@echo ... src/borrowck/legacy/borrow_checker.obj
+	@echo ... src/borrowck/legacy/borrow_checker.i
+	@echo ... src/borrowck/legacy/borrow_checker.s
+	@echo ... src/borrowck/mir/apollo_borrowck_tests.obj
+	@echo ... src/borrowck/mir/apollo_borrowck_tests.i
+	@echo ... src/borrowck/mir/apollo_borrowck_tests.s
+	@echo ... src/borrowck/mir/borrowck.obj
+	@echo ... src/borrowck/mir/borrowck.i
+	@echo ... src/borrowck/mir/borrowck.s
+	@echo ... src/borrowck/mir/dataflow.obj
+	@echo ... src/borrowck/mir/dataflow.i
+	@echo ... src/borrowck/mir/dataflow.s
+	@echo ... src/borrowck/mir/error_codes.obj
+	@echo ... src/borrowck/mir/error_codes.i
+	@echo ... src/borrowck/mir/error_codes.s
+	@echo ... src/borrowck/mir/move_paths.obj
+	@echo ... src/borrowck/mir/move_paths.i
+	@echo ... src/borrowck/mir/move_paths.s
+	@echo ... src/borrowck/mir_pipeline.obj
+	@echo ... src/borrowck/mir_pipeline.i
+	@echo ... src/borrowck/mir_pipeline.s
+	@echo ... src/codegen/barriers.obj
+	@echo ... src/codegen/barriers.i
+	@echo ... src/codegen/barriers.s
+	@echo ... src/codegen/optimizer.obj
+	@echo ... src/codegen/optimizer.i
+	@echo ... src/codegen/optimizer.s
+	@echo ... src/diag/diagnostic.obj
+	@echo ... src/diag/diagnostic.i
+	@echo ... src/diag/diagnostic.s
+	@echo ... src/hir/lowering.obj
+	@echo ... src/hir/lowering.i
+	@echo ... src/hir/lowering.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
+	@echo ... src/mir/apollo_mir_tests.obj
+	@echo ... src/mir/apollo_mir_tests.i
+	@echo ... src/mir/apollo_mir_tests.s
+	@echo ... src/mir/build/build_expr.obj
+	@echo ... src/mir/build/build_expr.i
+	@echo ... src/mir/build/build_expr.s
+	@echo ... src/mir/build/builder.obj
+	@echo ... src/mir/build/builder.i
+	@echo ... src/mir/build/builder.s
+	@echo ... src/mir/mir.obj
+	@echo ... src/mir/mir.i
+	@echo ... src/mir/mir.s
+	@echo ... src/mir/opt/pipeline.obj
+	@echo ... src/mir/opt/pipeline.i
+	@echo ... src/mir/opt/pipeline.s
+	@echo ... src/mir/printer.obj
+	@echo ... src/mir/printer.i
+	@echo ... src/mir/printer.s
+	@echo ... src/mir/source_info.obj
+	@echo ... src/mir/source_info.i
+	@echo ... src/mir/source_info.s
+	@echo ... src/mir/ty.obj
+	@echo ... src/mir/ty.i
+	@echo ... src/mir/ty.s
+	@echo ... src/mir/validator.obj
+	@echo ... src/mir/validator.i
+	@echo ... src/mir/validator.s
 	@echo ... src/visitor.obj
 	@echo ... src/visitor.i
 	@echo ... src/visitor.s

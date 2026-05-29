@@ -1,0 +1,125 @@
+name: build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    name: Windows (MSYS2 clang64)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: CLANG64
+          update: true
+          install: >-
+            mingw-w64-clang-x86_64-clang
+            mingw-w64-clang-x86_64-cmake
+            mingw-w64-clang-x86_64-ninja
+      - name: Configure
+        run: |
+          cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: |
+          cd Apollo-Main/build
+          cmake --build . -j
+      - name: Test
+        run: |
+          cd Apollo-Main/build
+          for t in apollo_mir_tests apollo_borrowck_tests apollo_runtime_tests apollo_driver_tests apollo_gc_concurrent_tests apollo_gc_extensions_tests; do
+            echo "--- $t ---"
+            ./$t.exe
+          done
+      - name: Frontend safety regressions
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:PATH = "C:\msys64\clang64\bin;$env:PATH"
+          Set-Location Apollo-Main/build
+          $fixtures = @(
+            @{ Path = '..\compiler\tests\safety\pass\shared_reference.apollo'; ExpectSuccess = $true },
+            @{ Path = '..\compiler\tests\safety\pass\shared_borrow_last_use.apollo'; ExpectSuccess = $true },
+            @{ Path = '..\compiler\tests\safety\pass\mutable_borrow_last_use.apollo'; ExpectSuccess = $true },
+            @{ Path = '..\compiler\tests\safety\fail\readonly_reference_write.apollo'; ExpectSuccess = $false },
+            @{ Path = '..\compiler\tests\safety\fail\readonly_reference_source_use.apollo'; ExpectSuccess = $false }
+          )
+          foreach ($fixture in $fixtures) {
+            $outputPath = Join-Path $env:TEMP ((Split-Path $fixture.Path -Leaf) + '.ll')
+            & .\apollo_frontend_native.exe $fixture.Path $outputPath 2>&1 | Out-String | Write-Host
+            $exitCode = $LASTEXITCODE
+            if ($fixture.ExpectSuccess -and $exitCode -ne 0) {
+              throw "Expected success for $($fixture.Path), got exit code $exitCode"
+            }
+            if (-not $fixture.ExpectSuccess -and $exitCode -eq 0) {
+              throw "Expected failure for $($fixture.Path), but compilation succeeded"
+            }
+          }
+      - name: Compile benchmark smoke
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:PATH = "C:\msys64\clang64\bin;$env:PATH"
+          Set-Location Apollo-Main/compiler
+          ./run-compile-benchmarks.ps1 -WarmRuns 1
+      - name: Upload compile benchmark report
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-compile-benchmarks
+          path: Apollo-Main/compiler/bench-output/compile-benchmark-results.csv
+
+  linux:
+    name: Linux (clang)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build
+      - name: Configure (subset — MIR/GC only)
+        # Full frontend build needs ANTLR4 + LLVM; CI here exercises the
+        # standalone MIR/borrowck/GC libraries that don't need them.
+        run: |
+          CC=clang CXX=clang++ cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DAPOLLO_SKIP_FRONTEND=ON || \
+            CC=clang CXX=clang++ cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - name: Build standalone libs and tests
+        run: |
+          cd Apollo-Main/build
+          cmake --build . -j --target apollo_mir_tests apollo_borrowck_tests \
+            apollo_gc_concurrent_tests apollo_gc_extensions_tests apollo_mir_opt || true
+      - name: Run standalone tests
+        run: |
+          cd Apollo-Main/build
+          for t in apollo_mir_tests apollo_borrowck_tests apollo_gc_concurrent_tests apollo_gc_extensions_tests; do
+            if [ -x ./$t ]; then echo "--- $t ---"; ./$t; fi
+          done
+
+  macos:
+    name: macOS (clang)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: brew install cmake ninja
+      - name: Configure
+        run: |
+          cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release || true
+      - name: Build standalone libs and tests
+        run: |
+          cd Apollo-Main/build
+          cmake --build . -j --target apollo_mir_tests apollo_borrowck_tests \
+            apollo_gc_concurrent_tests apollo_gc_extensions_tests apollo_mir_opt || true
+      - name: Run standalone tests
+        run: |
+          cd Apollo-Main/build
+          for t in apollo_mir_tests apollo_borrowck_tests apollo_gc_concurrent_tests apollo_gc_extensions_tests; do
+            if [ -x ./$t ]; then echo "--- $t ---"; ./$t; fi
+          done

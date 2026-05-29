@@ -1,36 +1,37 @@
-import {cmd} from './write';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
-type int = number;
 type str = string;
-type bool = boolean;
 
 export interface ctx {
     src: str;
     bin: str[];
 }
-/*
-Entry:
+
+interface metadata {
     name: str;
     version: str;
     src_exports: str[];
     bin_exports: str[];
-*/
-export function get_contents(pkg: str): ctx | str {
-    const mncl = new cmd();
-    let ret: ctx = {
-        src: '',
-        bin: []
-    };
+    url?: str;
+}
 
-    const metadata = JSON.parse(fs.readFileSync('apx_modules/manifest.json', 'utf8'))[pkg];
-    if (!metadata) return 'Package not found';
-    mncl.system(`cd apx_modules/${pkg}`);
-    for (const src of metadata.src_exports) {
-        ret.src += src;
+export function get_contents(pkg: str): ctx | str {
+    const manifestPath = path.join(process.cwd(), 'apx_modules', 'manifest.json');
+    if (!fs.existsSync(manifestPath)) {
+        return 'Package manifest not found';
     }
-    for (const bin of metadata.bin_exports) {
-        ret.bin.push(bin);
+
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as Record<string, metadata>;
+    const metadata = manifest[pkg];
+    if (!metadata) {
+        return 'Package not found';
     }
-    return ret;
+
+    const packageDir = path.join(process.cwd(), 'apx_modules', pkg);
+    const result: ctx = { src: '', bin: [...metadata.bin_exports] };
+    for (const exportedSource of metadata.src_exports) {
+        result.src += fs.readFileSync(path.join(packageDir, exportedSource), 'utf8') + '\n';
+    }
+    return result;
 }

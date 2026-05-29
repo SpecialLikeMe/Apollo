@@ -48,7 +48,7 @@ grammar compilerv1;
     }
 }
 
-program      : (stdimport | directive | importStmt | include | function | macro | templateDecl | class | struct | memstruct | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | closure | srcDecl | instance | instancepush | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
+program      : (stdimport | directive | importStmt | include | function | templateFunction | macro | templateDecl | class | struct | memstruct | enumDecl | scheduleDecl | typedefStruct | opstruct | typedefOpstruct | interfaceDecl | rdwindowStmt | eventHandlerStmt | globalInit | init | ltoInit | easyInit | lambda | closure | srcDecl | instance | instancepush | nrcDecl | memberaccess ';' | nativemode | inlineForeignBlock | asyncCall | syscallStmt | malloc | mntDecl | delalc | free | plcnew | unsafeBlock | bypassBlock | autofmtdeclareScope | inductStmt | releaseStmt | schedulerStartStmt | schedulerInsertStmt | schedulerVoidStmt)* EOF ;
 stdimport    : 'extern' 'std' ID ';'? ;
 directive    : gcDirective | borrowCheckerDirective | runtimeDirective | settingDirective ;
 gcDirective  : '#[' (GC_NAME | GCMODE_NAME) '(' ID ')' ']' ;
@@ -68,19 +68,28 @@ headerPath   : headerPart (('/' | '\\') headerPart)+ ;
 headerPart   : headerPartAtom (('.' | '-') headerPartAtom)* ;
 headerPartAtom : ID | GC_NAME | BORROW_CHECKER_NAME ;
 function     : returnType ID '(' params? ')' attributeBlock? block ;
+templateFunction : 'template' returnType ID '(' params? ')' attributeBlock? block ;
 method       : ANNOT_OVERRIDE? CLSTYPE? (STATIC? VIRTUAL? returnType ID '(' params? ')' attributeBlock? block
              | '__construct' '(' params? ')' attributeBlock? block
              | '__destruct' '(' ')' attributeBlock? block) ;
 field        : CLSTYPE? (CONST | NCONST)? typeRef ID attributeBlock? ';' ;
 params       : param (',' param)* ;
 param        : (CONST | NCONST)? typeRef? ID ;
-borrowExpr   : '&' NCONST? ID ;
+borrowExpr   : '&' NCONST? ID
+             | '.&' ID
+             ;
 block        : LBRACE (statement | returnStmt)* RBRACE ;
 classBody    : LBRACE classMember* RBRACE ;
 templateDecl : 'template' ID '(' templateParams ')' classBody ;
 templateParams : ID (',' ID)* ;
 inlineForeignBlock : INLINE INLINE_SEP (NATIVE | ID) INCLUSIVE ';'? ;
 structBody   : LBRACE structMember* RBRACE ;
+enumDecl     : 'enum' ID attributeBlock? LBRACE enumVariant (',' enumVariant)* ','? RBRACE ;
+enumVariant  : enumVariantName
+             | enumVariantName '(' typeRef ')'
+             | enumVariantName structBody
+             ;
+enumVariantName : ID | SUCCESS ;
 scheduleDecl : SCHEDULE ID LBRACE scheduleMember* RBRACE ;
 scheduleMember : mandatoryScheduleMember ;
 mandatoryScheduleMember : MANDATORY ID block ;
@@ -97,6 +106,7 @@ mntDecl      : MNT typeRef ID '=' expression ';' ;
 delalc       : 'crt null' ID ';' ;
 free         : 'void' ID ';' ;
 plcnew       : plcnewType ID '=' typeRef '[]' plcnewType ';' ;
+nrcDecl      : 'nrc' ID '=' typeRef ';' ;
 plcnewType   : typeRef | '*' ;
 pointer      : typeRef ID '_' '&' ID ';' ;
 include      : 'extern' '{' importPath '}' ';'? | 'extern' 'inc' importPath ';'? ;
@@ -106,11 +116,16 @@ thread       : (THREADMODE | JOIN) 'thread' ID functionCall ';' ;
 typeAtom     : genericType
              | shapeType
              | functionType
+             | typePlaceholder
+             | qualifiedType
              | TYPE
              | FTYPE
              | ID ;
-typeModifier : '*' | '&' ;
-genericType  : ID '<' typeRef (',' typeRef)* '>' ;
+qualifiedType : ID INLINE_SEP enumVariantName ;
+typePlaceholder : '<' ID '>' ;
+typeModifier : '*' | '&' (CONST | NCONST)? ;
+genericType  : ID ('<' typeRef (',' typeRef)* '>'
+             | '<<' typeRef (',' typeRef)* rightShiftOperator) ;
 shapeType    : LBRACE typeRef (',' typeRef)+ ','? RBRACE ;
 functionType : 'fn' '<' returnType '(' functionTypeArgs? ')' '>' ;
 functionTypeArgs : typeRef (',' typeRef)* ;
@@ -182,10 +197,12 @@ statement    : pointer
              | memberAssignment
              | lambda
              | closure
+             | nrcDecl
              | functionCall ';'
              | memberaccess ';'
              | ifStatement
              | whileStatement
+             | loopStatement
              | forStatement
              | forInStatement
              | switchStatement
@@ -230,8 +247,10 @@ schedulerVoidStmt : ID '.' (SCHVOID | 'void') '(' ')' ';' ;
 
 ifStatement    : IF '('? expression ')'? block (ELSE block)? ;
 whileStatement : WHILE '('? expression ')'? block ;
+loopStatement  : LOOP block ;
 forStatement   : FOR '('? forInit? ';' expression? ';' forUpdate? ')'? block ;
-forInStatement : FOR '('? (CONST | NCONST)? typeRef ID IN expression ')'? block ;
+forInStatement : FOR '('? (CONST | NCONST)? typeRef ID IN forInIterable ')'? block ;
+forInIterable  : expression ('..' expression)? ;
 switchStatement : SWITCH '('? expression ')'? LBRACE switchCase* switchDefault? RBRACE ;
 switchCase     : CASE expression ':' block ;
 switchDefault  : DEFAULT ':' block ;
@@ -240,7 +259,9 @@ autocatchStatement : AUTOCATCH '(' ID ')' block ;
 assignment     : assignmentCore ';' ;
 memberAssignment : accessBase '.' ID '=' expression ';' ;
 assignmentCore : assignTarget '=' expression ;
-assignTarget   : ID ('[' accessKey ']')* ;
+assignTarget   : '*' ID
+               | ID ('[' accessKey ']')*
+               ;
 accessKey      : expression
                | APND ;
 init           : initCore ';' ;
@@ -284,6 +305,8 @@ addExpr        : multExpr (('+' | '-') multExpr)* ;
 
 multExpr       : primary (('*' | '/' | '%') primary)* ;
 
+unaryExpr      : ('!' | '-' | '+' | '*') primary ;
+
 primary        : INT
                | FLOAT
                | SUCCESS
@@ -297,6 +320,7 @@ primary        : INT
                | stdinValue
                | castExpr
                | placementNewExpr
+               | enumConstructor
                | functionCall
                | memberaccess
                | indexedAccess
@@ -304,6 +328,7 @@ primary        : INT
                | braceInitializer
                | instanceValue
                | borrowExpr
+               | unaryExpr
                | INDEF
                | ID
                | '(' expression ')'
@@ -312,13 +337,15 @@ templateString : TEMPLATE_STRING ;
 castExpr      : '(' castType ')' primary ;
 castType      : typeRef ;
 placementNewExpr : 'new' '[' expression ']' typeRef ;
+enumConstructor : qualifiedType ( '(' args? ')' | braceInitializer )? ;
 indexedAccess  : ID ('[' accessKey ']')+ ;
 compositeLiteral : '<' expression (',' expression)+ '>' ;
 braceInitializer : LBRACE (braceInitializerElement (',' braceInitializerElement)* ','?)? RBRACE ;
 braceInitializerElement : '.' ID '=' expression
                         | expression
                         ;
-functionCall   : ID '(' args? ')' ;
+functionCall   : ID explicitTypeArgs? '(' args? ')' ;
+explicitTypeArgs : '<' typeRef (',' typeRef)* '>' ;
 args           : expression (',' expression)* ;
 returnStmt     : 'return' expression? ';' ;
 communalQualifier : COMMUNAL | CMGLOBAL ;
@@ -344,6 +371,7 @@ IF       : 'if' ;
 ELSE     : 'else' ;
 WHILE    : 'while' ;
 FOR      : 'for' ;
+LOOP     : 'loop' ;
 IN       : 'in' ;
 SWITCH   : 'switch' ;
 CASE     : 'case' ;
@@ -436,4 +464,5 @@ BYTE     : 'b' '\'' ( '\\' . | ~['\\\r\n] ) '\'' ;
 FLOAT    : [0-9]+ '.' [0-9]+ ([eE] [+-]? [0-9]+)? ;
 INT      : [0-9]+ ;
 WS       : [ \t\r\n]+ -> skip ;
-COMMENT  : '//' .*? '\n' -> skip ;
+COMMENT  : '//' ~[\r\n]* -> skip ;
+BLOCK_COMMENT : '/*' .*? '*/' -> skip ;

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "apollo_source_preprocessor.h"
 #include "apollo_runtime.h"
 
 namespace {
@@ -19,6 +20,14 @@ public:
     }
 };
 
+bool require(bool condition, const std::string& message) {
+    if (condition) {
+        return true;
+    }
+    std::cerr << message << '\n';
+    return false;
+}
+
 bool verifyPhaseOrder() {
     const std::vector<std::string> expected = {
         "runtime-extension-surface",
@@ -27,7 +36,8 @@ bool verifyPhaseOrder() {
         "ownership",
         "borrow",
         "memory-safety-finalize",
-        "memory-leak"
+        "memory-leak",
+        "mir-borrow-check"
     };
     const std::vector<std::string> actual = ApolloCompilerRuntimeCycle::defaultPhaseNames();
     if (expected == actual) {
@@ -138,6 +148,104 @@ bool verifySyntaxDiagnosticsAvoidDuplicateExpectations() {
     }
 }
 
+bool verifyProcMacroExpansion() {
+    const std::string sourcePath = "tests/manual/proc_macro_surface.apollo";
+    const std::string program =
+        "extern iostream;\n"
+        "\n"
+        "attr vector<token> addhelper(vector<token> __tokenstream, nrc what) {\n"
+        "    nconst vector<token> output = __tokenstream;\n"
+        "    output.insert(0, quote {\n"
+        "        void generated_helper() {\n"
+        "            sys.println(what);\n"
+        "            return;\n"
+        "        }\n"
+        "    });\n"
+        "    return output;\n"
+        "}\n"
+        "\n"
+        "derive vector<token> addafter(vector<token> __tokenstream, nrc what) {\n"
+        "    return quote {\n"
+        "        void generated_after() {\n"
+        "            sys.println(what);\n"
+        "            return;\n"
+        "        }\n"
+        "    };\n"
+        "}\n"
+        "\n"
+        "#idio addhelper(\"before\")\n"
+        "#derive addafter(\"after\")\n"
+        "int main() {\n"
+        "    generated_helper();\n"
+        "    generated_after();\n"
+        "    return 0;\n"
+        "}\n";
+
+    const std::string preprocessed = preprocessApolloSource(sourcePath, program);
+    if (!require(preprocessed.find("void generated_helper()") != std::string::npos,
+            "proc macro attr expansion should inject generated_helper")) {
+        return false;
+    }
+    if (!require(preprocessed.find("sys.println(\"before\")") != std::string::npos,
+            "proc macro attr expansion should substitute arguments inside quote blocks")) {
+        return false;
+    }
+    if (!require(preprocessed.find("void generated_after()") != std::string::npos,
+            "proc macro derive expansion should append generated_after")) {
+        return false;
+    }
+    if (!require(preprocessed.find("sys.println(\"after\")") != std::string::npos,
+            "proc macro derive expansion should substitute arguments inside appended quote blocks")) {
+        return false;
+    }
+    if (!require(preprocessed.find("attr vector<token>") == std::string::npos,
+            "proc macro declarations should be stripped before parsing")) {
+        return false;
+    }
+    if (!require(preprocessed.find("derive vector<token>") == std::string::npos,
+            "derive proc macro declarations should be stripped before parsing")) {
+        return false;
+    }
+    if (!require(preprocessed.find("#idio") == std::string::npos && preprocessed.find("#derive") == std::string::npos,
+            "proc macro invocation directives should be removed from preprocessed output")) {
+        return false;
+    }
+
+    ApolloCompilerRuntimeCycle cycle = ApolloCompilerRuntimeCycle::create(sourcePath, preprocessed);
+    try {
+        cycle.runPreCodegenPhases();
+    } catch (const std::exception& ex) {
+        std::cerr << "proc macro expansion should leave valid Apollo source\n";
+        std::cerr << "actual: " << ex.what() << '\n';
+        return false;
+    }
+    return true;
+}
+
+bool verifyUnknownProcMacroFailsClearly() {
+    const std::string sourcePath = "tests/manual/proc_macro_missing.apollo";
+    const std::string program =
+        "#idio missing_macro(\"x\")\n"
+        "int main() {\n"
+        "    return 0;\n"
+        "}\n";
+
+    try {
+        const std::string ignored = preprocessApolloSource(sourcePath, program);
+        (void)ignored;
+        std::cerr << "unknown proc macro should fail preprocessing\n";
+        return false;
+    } catch (const std::exception& ex) {
+        const std::string message = ex.what();
+        if (message.find("unknown proc macro `missing_macro`") == std::string::npos) {
+            std::cerr << "unknown proc macro diagnostic changed unexpectedly\n";
+            std::cerr << "actual: " << message << '\n';
+            return false;
+        }
+        return true;
+    }
+}
+
 } // namespace
 
 int main() {
@@ -152,6 +260,12 @@ int main() {
             return 1;
         }
         if (!verifySyntaxDiagnosticsAvoidDuplicateExpectations()) {
+            return 1;
+        }
+        if (!verifyProcMacroExpansion()) {
+            return 1;
+        }
+        if (!verifyUnknownProcMacroFailsClearly()) {
             return 1;
         }
         return 0;

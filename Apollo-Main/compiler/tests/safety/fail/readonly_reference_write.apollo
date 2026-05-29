@@ -1,0 +1,6 @@
+int main() {
+    nconst int value = 1;
+    const int& alias = &value;
+    *alias = 2;
+    return alias;
+}

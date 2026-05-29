@@ -1053,4 +1053,8 @@ CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver.cpp.obj: \
   C:/msys64/clang64/include/antlr4-runtime/tree/xpath/XPathWildcardAnywhereElement.h \
   C:/msys64/clang64/include/antlr4-runtime/tree/xpath/XPathWildcardElement.h \
   C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.h \
-  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.h
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/generated/compilerv1Parser.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/codegen/optimizer.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/visitor.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.h \
+  C:/Users/devon/Apollo/Apollo-Main/compiler/cpp/src/apollo_codegen_optimization_plan.h

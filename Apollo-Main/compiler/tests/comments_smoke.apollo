@@ -1,0 +1,10 @@
+// line comment at start
+/* block comment */
+/* multi
+   line
+   block */
+i32 main() {
+    /* before */ i32 x = 1; // trailing
+    /* mid */ i32 y = x + 2 /* inline */;
+    return y;
+} // EOF comment with no newline

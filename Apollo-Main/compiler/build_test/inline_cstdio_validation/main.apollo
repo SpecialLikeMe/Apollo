@@ -1,0 +1,11 @@
+@unsafe {
+    inl::cxx {
+        #include <cstdio>
+    }
+}
+
+int main() {
+    puts("Hello, world");
+    printf("%s %i\n", "value", 7);
+    return 0;
+}

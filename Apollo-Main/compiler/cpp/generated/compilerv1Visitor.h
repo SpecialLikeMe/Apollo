@@ -59,6 +59,8 @@ public:
 
     virtual std::any visitFunction(compilerv1Parser::FunctionContext *context) = 0;
 
+    virtual std::any visitTemplateFunction(compilerv1Parser::TemplateFunctionContext *context) = 0;
+
     virtual std::any visitMethod(compilerv1Parser::MethodContext *context) = 0;
 
     virtual std::any visitField(compilerv1Parser::FieldContext *context) = 0;
@@ -80,6 +82,12 @@ public:
     virtual std::any visitInlineForeignBlock(compilerv1Parser::InlineForeignBlockContext *context) = 0;
 
     virtual std::any visitStructBody(compilerv1Parser::StructBodyContext *context) = 0;
+
+    virtual std::any visitEnumDecl(compilerv1Parser::EnumDeclContext *context) = 0;
+
+    virtual std::any visitEnumVariant(compilerv1Parser::EnumVariantContext *context) = 0;
+
+    virtual std::any visitEnumVariantName(compilerv1Parser::EnumVariantNameContext *context) = 0;
 
     virtual std::any visitScheduleDecl(compilerv1Parser::ScheduleDeclContext *context) = 0;
 
@@ -111,6 +119,8 @@ public:
 
     virtual std::any visitPlcnew(compilerv1Parser::PlcnewContext *context) = 0;
 
+    virtual std::any visitNrcDecl(compilerv1Parser::NrcDeclContext *context) = 0;
+
     virtual std::any visitPlcnewType(compilerv1Parser::PlcnewTypeContext *context) = 0;
 
     virtual std::any visitPointer(compilerv1Parser::PointerContext *context) = 0;
@@ -124,6 +134,10 @@ public:
     virtual std::any visitThread(compilerv1Parser::ThreadContext *context) = 0;
 
     virtual std::any visitTypeAtom(compilerv1Parser::TypeAtomContext *context) = 0;
+
+    virtual std::any visitQualifiedType(compilerv1Parser::QualifiedTypeContext *context) = 0;
+
+    virtual std::any visitTypePlaceholder(compilerv1Parser::TypePlaceholderContext *context) = 0;
 
     virtual std::any visitTypeModifier(compilerv1Parser::TypeModifierContext *context) = 0;
 
@@ -219,9 +233,13 @@ public:
 
     virtual std::any visitWhileStatement(compilerv1Parser::WhileStatementContext *context) = 0;
 
+    virtual std::any visitLoopStatement(compilerv1Parser::LoopStatementContext *context) = 0;
+
     virtual std::any visitForStatement(compilerv1Parser::ForStatementContext *context) = 0;
 
     virtual std::any visitForInStatement(compilerv1Parser::ForInStatementContext *context) = 0;
+
+    virtual std::any visitForInIterable(compilerv1Parser::ForInIterableContext *context) = 0;
 
     virtual std::any visitSwitchStatement(compilerv1Parser::SwitchStatementContext *context) = 0;
 
@@ -283,6 +301,8 @@ public:
 
     virtual std::any visitMultExpr(compilerv1Parser::MultExprContext *context) = 0;
 
+    virtual std::any visitUnaryExpr(compilerv1Parser::UnaryExprContext *context) = 0;
+
     virtual std::any visitPrimary(compilerv1Parser::PrimaryContext *context) = 0;
 
     virtual std::any visitTemplateString(compilerv1Parser::TemplateStringContext *context) = 0;
@@ -293,6 +313,8 @@ public:
 
     virtual std::any visitPlacementNewExpr(compilerv1Parser::PlacementNewExprContext *context) = 0;
 
+    virtual std::any visitEnumConstructor(compilerv1Parser::EnumConstructorContext *context) = 0;
+
     virtual std::any visitIndexedAccess(compilerv1Parser::IndexedAccessContext *context) = 0;
 
     virtual std::any visitCompositeLiteral(compilerv1Parser::CompositeLiteralContext *context) = 0;
@@ -302,6 +324,8 @@ public:
     virtual std::any visitBraceInitializerElement(compilerv1Parser::BraceInitializerElementContext *context) = 0;
 
     virtual std::any visitFunctionCall(compilerv1Parser::FunctionCallContext *context) = 0;
+
+    virtual std::any visitExplicitTypeArgs(compilerv1Parser::ExplicitTypeArgsContext *context) = 0;
 
     virtual std::any visitArgs(compilerv1Parser::ArgsContext *context) = 0;
 

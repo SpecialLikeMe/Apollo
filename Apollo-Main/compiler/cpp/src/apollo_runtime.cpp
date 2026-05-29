@@ -1,17 +1,21 @@
 #include "apollo_runtime.h"
 
-#include "brc/borrow_checker.h"
+#include "borrowck/legacy/borrow_checker.h"
+#include "borrowck/mir_pipeline.h"
 
 #include <cctype>
 #include <algorithm>
 #include <any>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <memory>
 #include <sstream>
+#include <system_error>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+#include <vector>
 
 #include "antlr4-runtime.h"
 #include "compilerv1BaseVisitor.h"
@@ -472,7 +476,48 @@ public:
     }
 
     std::any visitStdimport(compilerv1Parser::StdimportContext* ctx) override {
-        //TODO: add helper to import from include folder
+        // `extern std <name>;` — resolve the named module under the
+        // Apollo standard-library include folder. Search order:
+        //   1. $APOLLO_INCLUDE_DIR/<name>.apollo
+        //   2. $APOLLO_HOME/include/<name>.apollo
+        //   3. <cwd>/include/<name>.apollo
+        //   4. <cwd>/Apollo-Main/include/<name>.apollo
+        // If none exist we record a `stdimport` rule diagnostic so the
+        // user is told which module is missing; on success we emit a
+        // single-line warning preview noting the resolved path so
+        // downstream phases can pick it up from the cycle's diagnostic
+        // channel.
+        if (ctx != nullptr && ctx->ID() != nullptr) {
+            const std::string moduleName = ctx->ID()->getText();
+            namespace fs = std::filesystem;
+            std::vector<fs::path> candidates;
+            const auto pushEnv = [&](const char* var, const char* suffix) {
+                if (const char* v = std::getenv(var); v != nullptr && *v != '\0') {
+                    candidates.emplace_back(fs::path(v) / suffix / (moduleName + ".apollo"));
+                }
+            };
+            pushEnv("APOLLO_INCLUDE_DIR", "");
+            pushEnv("APOLLO_HOME", "include");
+            candidates.emplace_back(fs::current_path() / "include" / (moduleName + ".apollo"));
+            candidates.emplace_back(fs::current_path() / "Apollo-Main" / "include" / (moduleName + ".apollo"));
+
+            fs::path resolved;
+            std::error_code ec;
+            for (const auto& cand : candidates) {
+                if (fs::exists(cand, ec) && !ec) {
+                    resolved = fs::weakly_canonical(cand, ec);
+                    if (ec) resolved = cand;
+                    break;
+                }
+            }
+            if (resolved.empty()) {
+                cycle_.recordRuleDiagnostic("stdimport", ctx,
+                    "extern std '" + moduleName + "' could not be resolved under include/");
+            } else {
+                cycle_.recordWarningMessage(
+                    "stdimport: '" + moduleName + "' -> " + resolved.string());
+            }
+        }
         return visitChildren(ctx);
     }
 
@@ -1297,6 +1342,8 @@ std::vector<std::shared_ptr<const ApolloRuntimePhase>> defaultPhases() {
     };
     auto brcPhases = borrowCheckerPhases();
     phases.insert(phases.end(), brcPhases.begin(), brcPhases.end());
+    auto mirBrcPhases = apollo::borrowck::mirBorrowCheckerPhases();
+    phases.insert(phases.end(), mirBrcPhases.begin(), mirBrcPhases.end());
     return phases;
 }
 

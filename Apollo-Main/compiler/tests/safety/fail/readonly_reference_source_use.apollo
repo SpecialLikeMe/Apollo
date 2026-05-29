@@ -1,0 +1,12 @@
+void inspect(const str& value) {
+    sys.println(value);
+    return;
+}
+
+int main() {
+    str message = "ok";
+    const str& alias = &message;
+    sys.println(message);
+    inspect(alias);
+    return 0;
+}

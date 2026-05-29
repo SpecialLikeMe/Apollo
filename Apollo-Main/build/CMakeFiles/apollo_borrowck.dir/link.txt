@@ -1,0 +1,2 @@
+C:\msys64\clang64\bin\llvm-ar.exe qc libapollo_borrowck.a CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/dataflow.cpp.obj CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/move_paths.cpp.obj CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/error_codes.cpp.obj CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/borrowck.cpp.obj
+C:\msys64\clang64\bin\llvm-ranlib.exe libapollo_borrowck.a

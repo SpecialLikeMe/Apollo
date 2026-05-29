@@ -1,0 +1,2 @@
+C:\msys64\clang64\bin\llvm-ar.exe qc libapollo_mir_opt.a CMakeFiles/apollo_mir_opt.dir/src/mir/opt/pipeline.cpp.obj
+C:\msys64\clang64\bin\llvm-ranlib.exe libapollo_mir_opt.a
