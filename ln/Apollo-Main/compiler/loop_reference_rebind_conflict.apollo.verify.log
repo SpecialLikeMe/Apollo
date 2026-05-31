@@ -1,0 +1,12 @@
+Compilation aborted with 2 memory-safety errors:
+error [memory-safety] loop_reference_rebind_conflict.apollo:17:5
+error[memory-safety] ? cannot use reference binding `alias` after control-flow merge with incompatible borrow origins
+offending token: touch
+  17 |     touch(alias);
+     |     ^~~~~
+
+error [memory-safety] loop_reference_rebind_conflict.apollo:17:5
+error[memory-safety] ? cannot use reference binding `alias` after control-flow merge with incompatible borrow origins
+offending token: touch
+  17 |     touch(alias);
+     |     ^~~~~

@@ -1,0 +1,10 @@
+=== Apollo AST: cpp_fallback_allowed.apollo ===
+program
+Γö£ΓöÇΓöÇΓöÇdirective #[fallback(allow)]
+Γö£ΓöÇΓöÇΓöÇimport "cstdio"
+ΓööΓöÇΓöÇΓöÇfn main -> int
+    ΓööΓöÇΓöÇΓöÇbody
+        Γö£ΓöÇΓöÇΓöÇcall puts("hello from fallback")
+        ΓööΓöÇΓöÇΓöÇreturn
+            ΓööΓöÇΓöÇΓöÇint 0
+=== End Apollo AST ===

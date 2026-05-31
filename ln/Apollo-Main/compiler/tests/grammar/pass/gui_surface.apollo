@@ -1,0 +1,19 @@
+extern iostream;
+
+int main() {
+    rdwindow stage;
+    stage.show();
+    stage.render("hero", "assets/hero.png", 10, 20);
+    stage.render("enemy", "assets/enemy.png", 30, 20);
+    if (KEYPRESS("A")) {
+        stage.hide();
+    }
+    stage.event(MOUSECLICK) {
+        if (hero.touches(enemy)) {
+            sys.println(touchedObject);
+        }
+        sys.println(mouseX);
+        sys.println(mouseY);
+    }
+    return 0;
+}

@@ -25,14 +25,14 @@ jobs:
             mingw-w64-clang-x86_64-ninja
       - name: Configure
         run: |
-          cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake -S ln/Apollo-Main/compiler/cpp -B ln/Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: |
-          cd Apollo-Main/build
+          cd ln/Apollo-Main/build
           cmake --build . -j
       - name: Test
         run: |
-          cd Apollo-Main/build
+          cd ln/Apollo-Main/build
           for t in apollo_mir_tests apollo_borrowck_tests apollo_runtime_tests apollo_driver_tests apollo_gc_concurrent_tests apollo_gc_extensions_tests; do
             echo "--- $t ---"
             ./$t.exe
@@ -42,7 +42,7 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $env:PATH = "C:\msys64\clang64\bin;$env:PATH"
-          Set-Location Apollo-Main/build
+          Set-Location ln/Apollo-Main/build
           $fixtures = @(
             @{ Path = '..\compiler\tests\safety\pass\shared_reference.apollo'; ExpectSuccess = $true },
             @{ Path = '..\compiler\tests\safety\pass\shared_borrow_last_use.apollo'; ExpectSuccess = $true },
@@ -66,13 +66,13 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $env:PATH = "C:\msys64\clang64\bin;$env:PATH"
-          Set-Location Apollo-Main/compiler
+          Set-Location ln/Apollo-Main/compiler
           ./run-compile-benchmarks.ps1 -WarmRuns 1
       - name: Upload compile benchmark report
         uses: actions/upload-artifact@v4
         with:
           name: windows-compile-benchmarks
-          path: Apollo-Main/compiler/bench-output/compile-benchmark-results.csv
+          path: ln/Apollo-Main/compiler/bench-output/compile-benchmark-results.csv
 
   linux:
     name: Linux (clang)
@@ -87,17 +87,17 @@ jobs:
         # Full frontend build needs ANTLR4 + LLVM; CI here exercises the
         # standalone MIR/borrowck/GC libraries that don't need them.
         run: |
-          CC=clang CXX=clang++ cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+          CC=clang CXX=clang++ cmake -S ln/Apollo-Main/compiler/cpp -B ln/Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release \
             -DAPOLLO_SKIP_FRONTEND=ON || \
-            CC=clang CXX=clang++ cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+            CC=clang CXX=clang++ cmake -S ln/Apollo-Main/compiler/cpp -B ln/Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release
       - name: Build standalone libs and tests
         run: |
-          cd Apollo-Main/build
+          cd ln/Apollo-Main/build
           cmake --build . -j --target apollo_mir_tests apollo_borrowck_tests \
             apollo_gc_concurrent_tests apollo_gc_extensions_tests apollo_mir_opt || true
       - name: Run standalone tests
         run: |
-          cd Apollo-Main/build
+          cd ln/Apollo-Main/build
           for t in apollo_mir_tests apollo_borrowck_tests apollo_gc_concurrent_tests apollo_gc_extensions_tests; do
             if [ -x ./$t ]; then echo "--- $t ---"; ./$t; fi
           done
@@ -111,15 +111,15 @@ jobs:
         run: brew install cmake ninja
       - name: Configure
         run: |
-          cmake -S Apollo-Main/compiler/cpp -B Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release || true
+          cmake -S ln/Apollo-Main/compiler/cpp -B ln/Apollo-Main/build -G Ninja -DCMAKE_BUILD_TYPE=Release || true
       - name: Build standalone libs and tests
         run: |
-          cd Apollo-Main/build
+          cd ln/Apollo-Main/build
           cmake --build . -j --target apollo_mir_tests apollo_borrowck_tests \
             apollo_gc_concurrent_tests apollo_gc_extensions_tests apollo_mir_opt || true
       - name: Run standalone tests
         run: |
-          cd Apollo-Main/build
+          cd ln/Apollo-Main/build
           for t in apollo_mir_tests apollo_borrowck_tests apollo_gc_concurrent_tests apollo_gc_extensions_tests; do
             if [ -x ./$t ]; then echo "--- $t ---"; ./$t; fi
           done

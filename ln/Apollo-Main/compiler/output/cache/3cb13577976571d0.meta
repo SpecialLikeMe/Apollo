@@ -1,0 +1,11 @@
+version=apollo-native-cache-v1
+compilerSignature=48c6a181876973f8
+sourceHash=f7810dddd468408c
+outputHash=0c00b088374eed7e
+sourceSize=2655
+sourceWriteTime=1779484130197169100
+outputSize=15504
+outputWriteTime=1780259878471072700
+dependency=iostream
+dependency=vector
+dependency=array

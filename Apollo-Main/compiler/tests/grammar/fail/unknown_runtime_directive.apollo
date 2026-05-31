@@ -1,5 +1,0 @@
-#[unknown(runtime)]
-
-int main() {
-    return 0;
-}

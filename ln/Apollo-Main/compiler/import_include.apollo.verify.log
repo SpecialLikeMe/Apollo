@@ -1,0 +1,19 @@
+=== Apollo AST: import_include.apollo ===
+program
+Γö£ΓöÇΓöÇΓöÇinclude support.helper
+Γö£ΓöÇΓöÇΓöÇimport gc/gc_cpp.h
+ΓööΓöÇΓöÇΓöÇfn main -> int
+    ΓööΓöÇΓöÇΓöÇbody
+        Γö£ΓöÇΓöÇΓöÇcall helper_value()
+        ΓööΓöÇΓöÇΓöÇreturn
+            ΓööΓöÇΓöÇΓöÇint 0
+=== End Apollo AST ===
+=== Apollo AST: support/helper.apollo ===
+program
+ΓööΓöÇΓöÇΓöÇfn helper_value -> int
+    ΓööΓöÇΓöÇΓöÇbody
+        Γö£ΓöÇΓöÇΓöÇprint
+        Γöé   ΓööΓöÇΓöÇΓöÇint 11
+        ΓööΓöÇΓöÇΓöÇreturn
+            ΓööΓöÇΓöÇΓöÇint 11
+=== End Apollo AST ===

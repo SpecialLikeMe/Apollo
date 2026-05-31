@@ -1,0 +1,33 @@
+namespace sys {
+    i32 hash_fnv1a_32(nconst str& value) {
+        return sys__native_hash_fnv1a_32(value);
+    }
+
+    long hash_fnv1a_64(nconst str& value) {
+        return sys__native_hash_fnv1a_64(value);
+    }
+
+    i32 hash_adler32(nconst str& value) {
+        return sys__native_hash_adler32(value);
+    }
+
+    i32 hash_crc32(nconst str& value) {
+        return sys__native_hash_crc32(value);
+    }
+
+    i32 hash_murmur3_32(nconst str& value) {
+        return sys__native_hash_murmur3_32(value);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_stdlib_runtime.hpp"
+
+        int sys__native_hash_fnv1a_32(const char* value) { return static_cast<int>(__apo_stdlib::hash_fnv1a_32(__apo_stdlib::view_or_empty(value))); }
+        long sys__native_hash_fnv1a_64(const char* value) { return static_cast<long>(__apo_stdlib::hash_fnv1a_64(__apo_stdlib::view_or_empty(value))); }
+        int sys__native_hash_adler32(const char* value) { return static_cast<int>(__apo_stdlib::hash_adler32(__apo_stdlib::view_or_empty(value))); }
+        int sys__native_hash_crc32(const char* value) { return static_cast<int>(__apo_stdlib::hash_crc32(__apo_stdlib::view_or_empty(value))); }
+        int sys__native_hash_murmur3_32(const char* value) { return static_cast<int>(__apo_stdlib::hash_murmur3_32(__apo_stdlib::view_or_empty(value))); }
+    }
+}

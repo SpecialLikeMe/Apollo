@@ -1,0 +1,518 @@
+[
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir.dir\\src\\mir\\source_info.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\source_info.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/source_info.cpp",
+  "output": "CMakeFiles/apollo_mir.dir/src/mir/source_info.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir.dir\\src\\mir\\ty.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\ty.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/ty.cpp",
+  "output": "CMakeFiles/apollo_mir.dir/src/mir/ty.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir.dir\\src\\mir\\mir.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\mir.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/mir.cpp",
+  "output": "CMakeFiles/apollo_mir.dir/src/mir/mir.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir.dir\\src\\mir\\printer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\printer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/printer.cpp",
+  "output": "CMakeFiles/apollo_mir.dir/src/mir/printer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir.dir\\src\\mir\\validator.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\validator.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/validator.cpp",
+  "output": "CMakeFiles/apollo_mir.dir/src/mir/validator.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir_build.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir_build.dir\\src\\mir\\build\\builder.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\build\\builder.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/build/builder.cpp",
+  "output": "CMakeFiles/apollo_mir_build.dir/src/mir/build/builder.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir_build.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir_build.dir\\src\\mir\\build\\build_expr.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\build\\build_expr.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/build/build_expr.cpp",
+  "output": "CMakeFiles/apollo_mir_build.dir/src/mir/build/build_expr.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_codegen_barriers.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_codegen_barriers.dir\\src\\codegen\\barriers.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\codegen\\barriers.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/codegen/barriers.cpp",
+  "output": "CMakeFiles/apollo_codegen_barriers.dir/src/codegen/barriers.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS @CMakeFiles/apollo_hir_lowering.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_hir_lowering.dir\\src\\hir\\lowering.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\hir\\lowering.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/hir/lowering.cpp",
+  "output": "CMakeFiles/apollo_hir_lowering.dir/src/hir/lowering.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_concurrent.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_concurrent.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_concurrent.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_concurrent.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_concurrent.cpp",
+  "output": "CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_concurrent.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_concurrent.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_concurrent.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_cards.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_cards.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_cards.cpp",
+  "output": "CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_cards.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_concurrent.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_concurrent.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_typedesc.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_typedesc.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_typedesc.cpp",
+  "output": "CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_typedesc.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_concurrent.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_concurrent.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_large.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_large.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_large.cpp",
+  "output": "CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_large.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_concurrent.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_concurrent.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_nursery.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_nursery.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_nursery.cpp",
+  "output": "CMakeFiles/apollo_gc_concurrent.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_nursery.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir_opt.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir_opt.dir\\src\\mir\\opt\\pipeline.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\opt\\pipeline.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/opt/pipeline.cpp",
+  "output": "CMakeFiles/apollo_mir_opt.dir/src/mir/opt/pipeline.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_borrowck.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_borrowck.dir\\src\\borrowck\\mir\\dataflow.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir\\dataflow.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir/dataflow.cpp",
+  "output": "CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/dataflow.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_borrowck.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_borrowck.dir\\src\\borrowck\\mir\\move_paths.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir\\move_paths.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir/move_paths.cpp",
+  "output": "CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/move_paths.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_borrowck.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_borrowck.dir\\src\\borrowck\\mir\\error_codes.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir\\error_codes.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir/error_codes.cpp",
+  "output": "CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/error_codes.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_borrowck.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_borrowck.dir\\src\\borrowck\\mir\\borrowck.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir\\borrowck.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir/borrowck.cpp",
+  "output": "CMakeFiles/apollo_borrowck.dir/src/borrowck/mir/borrowck.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS @CMakeFiles/apollo_diag.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_diag.dir\\src\\diag\\diagnostic.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\diag\\diagnostic.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/diag/diagnostic.cpp",
+  "output": "CMakeFiles/apollo_diag.dir/src/diag/diagnostic.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\main.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\main.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/main.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\apollo_driver.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_driver.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_driver.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/apollo_driver.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\apollo_codegen_optimization_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_codegen_optimization_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_codegen_optimization_plan.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/apollo_codegen_optimization_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\apollo_inline_foreign.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_inline_foreign.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_inline_foreign.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/apollo_inline_foreign.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/visitor.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\codegen\\optimizer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\codegen\\optimizer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/codegen/optimizer.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/codegen/optimizer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\apollo_ir_layout_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_ir_layout_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/apollo_ir_layout_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\apollo_runtime.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_runtime.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_runtime.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/apollo_runtime.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\apollo_source_preprocessor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_source_preprocessor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/apollo_source_preprocessor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\borrowck\\legacy\\borrow_checker.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\legacy\\borrow_checker.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/legacy/borrow_checker.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\src\\borrowck\\mir_pipeline.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir_pipeline.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir_pipeline.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/src/borrowck/mir_pipeline.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\generated\\compilerv1BaseVisitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1BaseVisitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1BaseVisitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\generated\\compilerv1Lexer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Lexer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Lexer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\generated\\compilerv1Parser.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Parser.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Parser.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_frontend_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_frontend_native.dir\\generated\\compilerv1Visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.cpp",
+  "output": "CMakeFiles/apollo_frontend_native.dir/generated/compilerv1Visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_build_driver.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_build_driver.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_build_driver.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_build_driver_main.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_build_driver_main.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_build_driver_main.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver_main.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_driver.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_driver.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_driver.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_driver.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_codegen_optimization_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_codegen_optimization_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_codegen_optimization_plan.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_codegen_optimization_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_inline_foreign.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_inline_foreign.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_inline_foreign.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_inline_foreign.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/visitor.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\codegen\\optimizer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\codegen\\optimizer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/codegen/optimizer.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/codegen/optimizer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_ir_layout_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_ir_layout_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_ir_layout_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_runtime.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_runtime.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_runtime.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_runtime.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\apollo_source_preprocessor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_source_preprocessor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\borrowck\\legacy\\borrow_checker.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\legacy\\borrow_checker.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/legacy/borrow_checker.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\src\\borrowck\\mir_pipeline.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir_pipeline.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir_pipeline.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/src/borrowck/mir_pipeline.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\generated\\compilerv1BaseVisitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1BaseVisitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1BaseVisitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\generated\\compilerv1Lexer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Lexer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Lexer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\generated\\compilerv1Parser.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Parser.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Parser.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_build_driver_native.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_build_driver_native.dir\\generated\\compilerv1Visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.cpp",
+  "output": "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_runtime_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_runtime_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_runtime_tests.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_runtime_tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_driver.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_driver.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_driver.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_driver.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_codegen_optimization_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_codegen_optimization_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_codegen_optimization_plan.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_codegen_optimization_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_inline_foreign.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_inline_foreign.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_inline_foreign.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_inline_foreign.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/visitor.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\codegen\\optimizer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\codegen\\optimizer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/codegen/optimizer.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/codegen/optimizer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_ir_layout_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_ir_layout_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_ir_layout_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_runtime.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_runtime.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_runtime.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_runtime.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\apollo_source_preprocessor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_source_preprocessor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/apollo_source_preprocessor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\borrowck\\legacy\\borrow_checker.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\legacy\\borrow_checker.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/legacy/borrow_checker.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/borrowck/legacy/borrow_checker.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\src\\borrowck\\mir_pipeline.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir_pipeline.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir_pipeline.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/src/borrowck/mir_pipeline.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\generated\\compilerv1BaseVisitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1BaseVisitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/generated/compilerv1BaseVisitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\generated\\compilerv1Lexer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Lexer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/generated/compilerv1Lexer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\generated\\compilerv1Parser.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Parser.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/generated/compilerv1Parser.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_runtime_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_runtime_tests.dir\\generated\\compilerv1Visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.cpp",
+  "output": "CMakeFiles/apollo_runtime_tests.dir/generated/compilerv1Visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_driver_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_driver_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_driver_tests.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_driver_tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_driver.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_driver.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_driver.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_driver.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_codegen_optimization_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_codegen_optimization_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_codegen_optimization_plan.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_codegen_optimization_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_inline_foreign.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_inline_foreign.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_inline_foreign.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_inline_foreign.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/visitor.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\codegen\\optimizer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\codegen\\optimizer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/codegen/optimizer.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/codegen/optimizer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_ir_layout_plan.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_ir_layout_plan.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_ir_layout_plan.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_ir_layout_plan.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_runtime.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_runtime.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_runtime.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_runtime.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\apollo_source_preprocessor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\apollo_source_preprocessor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/apollo_source_preprocessor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\borrowck\\legacy\\borrow_checker.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\legacy\\borrow_checker.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/legacy/borrow_checker.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/borrowck/legacy/borrow_checker.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\src\\borrowck\\mir_pipeline.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir_pipeline.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir_pipeline.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/src/borrowck/mir_pipeline.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\generated\\compilerv1BaseVisitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1BaseVisitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1BaseVisitor.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/generated/compilerv1BaseVisitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\generated\\compilerv1Lexer.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Lexer.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Lexer.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/generated/compilerv1Lexer.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\generated\\compilerv1Parser.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Parser.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Parser.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/generated/compilerv1Parser.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe -DANTLR4CPP_EXPORTS -DAPOLLO_CODEGEN_BARRIERS=1 -DAPOLLO_GC_CONCURRENT @CMakeFiles/apollo_driver_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_driver_tests.dir\\generated\\compilerv1Visitor.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\generated\\compilerv1Visitor.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/generated/compilerv1Visitor.cpp",
+  "output": "CMakeFiles/apollo_driver_tests.dir/generated/compilerv1Visitor.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_mir_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_mir_tests.dir\\src\\mir\\apollo_mir_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\mir\\apollo_mir_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/mir/apollo_mir_tests.cpp",
+  "output": "CMakeFiles/apollo_mir_tests.dir/src/mir/apollo_mir_tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_concurrent_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_concurrent_tests.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_concurrent_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_concurrent_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp",
+  "output": "CMakeFiles/apollo_gc_concurrent_tests.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_concurrent_tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_extensions_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_extensions_tests.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_extensions_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_extensions_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_extensions_tests.cpp",
+  "output": "CMakeFiles/apollo_gc_extensions_tests.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_extensions_tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_gc_nursery_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_gc_nursery_tests.dir\\C_\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_nursery_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\GC\\apollo_gc_nursery_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_nursery_tests.cpp",
+  "output": "CMakeFiles/apollo_gc_nursery_tests.dir/C_/Users/devon/Apollo/ln/Apollo-Main/GC/apollo_gc_nursery_tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/build",
+  "command": "C:\\msys64\\clang64\\bin\\clang++.exe  @CMakeFiles/apollo_borrowck_tests.dir/includes_CXX.rsp -std=c++20 -o CMakeFiles\\apollo_borrowck_tests.dir\\src\\borrowck\\mir\\apollo_borrowck_tests.cpp.obj -c C:\\Users\\devon\\Apollo\\ln\\Apollo-Main\\compiler\\cpp\\src\\borrowck\\mir\\apollo_borrowck_tests.cpp",
+  "file": "C:/Users/devon/Apollo/ln/Apollo-Main/compiler/cpp/src/borrowck/mir/apollo_borrowck_tests.cpp",
+  "output": "CMakeFiles/apollo_borrowck_tests.dir/src/borrowck/mir/apollo_borrowck_tests.cpp.obj"
+}
+]

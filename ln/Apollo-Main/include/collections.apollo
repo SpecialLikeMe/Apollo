@@ -1,0 +1,763 @@
+namespace sys {
+    i32 first_index() {
+        return 0;
+    }
+
+    i32 next_index(i32 index) {
+        return index + 1;
+    }
+
+    i32 previous_index(i32 index) {
+        return index - 1;
+    }
+
+    i32 missing_i32() {
+        return 0;
+    }
+
+    vector vec_new() {
+        return sys__native_vec_new();
+    }
+
+    vector vec_with_capacity(i32 capacity) {
+        return sys__native_vec_with_capacity(capacity);
+    }
+
+    i32 vec_len(nconst vector& value) {
+        return sys__native_vec_len(value);
+    }
+
+    void vec_push(nconst vector& value, nconst str& item) {
+        sys__native_vec_push(value, item);
+    }
+
+    str vec_pop(nconst vector& value) {
+        return sys__native_vec_pop(value);
+    }
+
+    str vec_get(nconst vector& value, i32 index) {
+        return sys__native_vec_get(value, index);
+    }
+
+    void vec_set(nconst vector& value, i32 index, nconst str& item) {
+        sys__native_vec_set(value, index, item);
+    }
+
+    void vec_insert(nconst vector& value, i32 index, nconst str& item) {
+        sys__native_vec_insert(value, index, item);
+    }
+
+    str vec_remove(nconst vector& value, i32 index) {
+        return sys__native_vec_remove(value, index);
+    }
+
+    str vec_swap_remove(nconst vector& value, i32 index) {
+        return sys__native_vec_swap_remove(value, index);
+    }
+
+    void vec_clear(nconst vector& value) {
+        sys__native_vec_clear(value);
+    }
+
+    void vec_truncate(nconst vector& value, i32 length) {
+        sys__native_vec_truncate(value, length);
+    }
+
+    void vec_reserve(nconst vector& value, i32 additional) {
+        sys__native_vec_reserve(value, additional);
+    }
+
+    void vec_shrink_to_fit(nconst vector& value) {
+        sys__native_vec_shrink_to_fit(value);
+    }
+
+    void vec_resize(nconst vector& value, i32 new_length, nconst str& item) {
+        sys__native_vec_resize(value, new_length, item);
+    }
+
+    void vec_dedup(nconst vector& value) {
+        sys__native_vec_dedup(value);
+    }
+
+    str vec_join(nconst vector& value, nconst str& delimiter) {
+        return sys__native_vec_join(value, delimiter);
+    }
+
+    i32 vec_contains(nconst vector& value, nconst str& item) {
+        return sys__native_vec_contains(value, item);
+    }
+
+    map map_new() {
+        return sys__native_map_new();
+    }
+
+    map map_with_capacity(i32 capacity) {
+        return sys__native_map_with_capacity(capacity);
+    }
+
+    i32 map_len(nconst map& value) {
+        return sys__native_map_len(value);
+    }
+
+    void map_insert(nconst map& value, nconst str& key, nconst str& item) {
+        sys__native_map_insert(value, key, item);
+    }
+
+    str map_get(nconst map& value, nconst str& key) {
+        return sys__native_map_get(value, key);
+    }
+
+    str map_get_mut(nconst map& value, nconst str& key) {
+        return sys__native_map_get_mut(value, key);
+    }
+
+    str map_remove(nconst map& value, nconst str& key) {
+        return sys__native_map_remove(value, key);
+    }
+
+    i32 map_contains_key(nconst map& value, nconst str& key) {
+        return sys__native_map_contains_key(value, key);
+    }
+
+    void map_clear(nconst map& value) {
+        sys__native_map_clear(value);
+    }
+
+    void map_reserve(nconst map& value, i32 capacity) {
+        sys__native_map_reserve(value, capacity);
+    }
+
+    str map_entry_or_insert(nconst map& value, nconst str& key, nconst str& default_value) {
+        return sys__native_map_entry_or_insert(value, key, default_value);
+    }
+
+    void map_rehash(nconst map& value) {
+        sys__native_map_rehash(value);
+    }
+
+    str map_keys(nconst map& value, nconst str& delimiter) {
+        return sys__native_map_keys(value, delimiter);
+    }
+
+    str map_values(nconst map& value, nconst str& delimiter) {
+        return sys__native_map_values(value, delimiter);
+    }
+
+    str map_entries(nconst map& value, nconst str& delimiter) {
+        return sys__native_map_entries(value, delimiter);
+    }
+
+    tmap tmap_new() {
+        return sys__native_tmap_new();
+    }
+
+    i32 tmap_len(nconst tmap& value) {
+        return sys__native_tmap_len(value);
+    }
+
+    void tmap_insert(nconst tmap& value, nconst str& key, nconst str& item) {
+        sys__native_tmap_insert(value, key, item);
+    }
+
+    str tmap_get(nconst tmap& value, nconst str& key) {
+        return sys__native_tmap_get(value, key);
+    }
+
+    i32 tmap_contains_key(nconst tmap& value, nconst str& key) {
+        return sys__native_tmap_contains_key(value, key);
+    }
+
+    str tmap_remove(nconst tmap& value, nconst str& key) {
+        return sys__native_tmap_remove(value, key);
+    }
+
+    str tmap_first_key(nconst tmap& value) {
+        return sys__native_tmap_first_key(value);
+    }
+
+    str tmap_last_key(nconst tmap& value) {
+        return sys__native_tmap_last_key(value);
+    }
+
+    str tmap_floor_key(nconst tmap& value, nconst str& key) {
+        return sys__native_tmap_floor_key(value, key);
+    }
+
+    str tmap_ceiling_key(nconst tmap& value, nconst str& key) {
+        return sys__native_tmap_ceiling_key(value, key);
+    }
+
+    entry tmap_pop_first(nconst tmap& value) {
+        return sys__native_tmap_pop_first(value);
+    }
+
+    entry tmap_pop_last(nconst tmap& value) {
+        return sys__native_tmap_pop_last(value);
+    }
+
+    entry_iter tmap_iter(nconst tmap& value) {
+        return sys__native_tmap_iter(value);
+    }
+
+    entry_iter tmap_range_iter(nconst tmap& value, nconst str& start_key, nconst str& end_key) {
+        return sys__native_tmap_range_iter(value, start_key, end_key);
+    }
+
+    str entry_key(nconst entry& value) {
+        return sys__native_entry_key(value);
+    }
+
+    str entry_value(nconst entry& value) {
+        return sys__native_entry_value(value);
+    }
+
+    i32 entry_iter_has_next(nconst entry_iter& value) {
+        return sys__native_entry_iter_has_next(value);
+    }
+
+    entry entry_iter_next(nconst entry_iter& value) {
+        return sys__native_entry_iter_next(value);
+    }
+
+    set set_new() {
+        return sys__native_set_new();
+    }
+
+    i32 set_insert(nconst set& value, nconst str& item) {
+        return sys__native_set_insert(value, item);
+    }
+
+    i32 set_remove(nconst set& value, nconst str& item) {
+        return sys__native_set_remove(value, item);
+    }
+
+    i32 set_contains(nconst set& value, nconst str& item) {
+        return sys__native_set_contains(value, item);
+    }
+
+    i32 set_len(nconst set& value) {
+        return sys__native_set_len(value);
+    }
+
+    void set_clear(nconst set& value) {
+        sys__native_set_clear(value);
+    }
+
+    str set_values(nconst set& value, nconst str& delimiter) {
+        return sys__native_set_values(value, delimiter);
+    }
+
+    set set_union(nconst set& left, nconst set& right) {
+        return sys__native_set_union(left, right);
+    }
+
+    set set_intersection(nconst set& left, nconst set& right) {
+        return sys__native_set_intersection(left, right);
+    }
+
+    set set_difference(nconst set& left, nconst set& right) {
+        return sys__native_set_difference(left, right);
+    }
+
+    set set_symmetric_difference(nconst set& left, nconst set& right) {
+        return sys__native_set_symmetric_difference(left, right);
+    }
+
+    i32 set_is_subset(nconst set& left, nconst set& right) {
+        return sys__native_set_is_subset(left, right);
+    }
+
+    i32 set_is_superset(nconst set& left, nconst set& right) {
+        return sys__native_set_is_superset(left, right);
+    }
+
+    queue queue_new() {
+        return sys__native_queue_new();
+    }
+
+    void queue_enqueue(nconst queue& value, nconst str& item) {
+        sys__native_queue_enqueue(value, item);
+    }
+
+    str queue_dequeue(nconst queue& value) {
+        return sys__native_queue_dequeue(value);
+    }
+
+    i32 queue_len(nconst queue& value) {
+        return sys__native_queue_len(value);
+    }
+
+    deque deque_new() {
+        return sys__native_deque_new();
+    }
+
+    void deque_push_front(nconst deque& value, nconst str& item) {
+        sys__native_deque_push_front(value, item);
+    }
+
+    void deque_push_back(nconst deque& value, nconst str& item) {
+        sys__native_deque_push_back(value, item);
+    }
+
+    str deque_pop_front(nconst deque& value) {
+        return sys__native_deque_pop_front(value);
+    }
+
+    str deque_pop_back(nconst deque& value) {
+        return sys__native_deque_pop_back(value);
+    }
+
+    i32 deque_len(nconst deque& value) {
+        return sys__native_deque_len(value);
+    }
+
+    heap heap_new_max() {
+        return sys__native_heap_new_max();
+    }
+
+    heap heap_new_min() {
+        return sys__native_heap_new_min();
+    }
+
+    void heap_push(nconst heap& value, i32 item) {
+        sys__native_heap_push(value, item);
+    }
+
+    i32 heap_pop(nconst heap& value) {
+        return sys__native_heap_pop(value);
+    }
+
+    i32 heap_peek(nconst heap& value) {
+        return sys__native_heap_peek(value);
+    }
+
+    i32 heap_len(nconst heap& value) {
+        return sys__native_heap_len(value);
+    }
+
+    list list_new() {
+        return sys__native_list_new();
+    }
+
+    void list_push_front(nconst list& value, nconst str& item) {
+        sys__native_list_push_front(value, item);
+    }
+
+    void list_push_back(nconst list& value, nconst str& item) {
+        sys__native_list_push_back(value, item);
+    }
+
+    str list_pop_front(nconst list& value) {
+        return sys__native_list_pop_front(value);
+    }
+
+    str list_pop_back(nconst list& value) {
+        return sys__native_list_pop_back(value);
+    }
+
+    str list_front(nconst list& value) {
+        return sys__native_list_front(value);
+    }
+
+    str list_back(nconst list& value) {
+        return sys__native_list_back(value);
+    }
+
+    i32 list_len(nconst list& value) {
+        return sys__native_list_len(value);
+    }
+
+    void list_clear(nconst list& value) {
+        sys__native_list_clear(value);
+    }
+
+    str list_values(nconst list& value, nconst str& delimiter) {
+        return sys__native_list_values(value, delimiter);
+    }
+
+    ring_buffer ring_buffer_new(i32 capacity) {
+        return sys__native_ring_buffer_new(capacity);
+    }
+
+    void ring_buffer_push_back(nconst ring_buffer& value, nconst str& item) {
+        sys__native_ring_buffer_push_back(value, item);
+    }
+
+    void ring_buffer_push_front(nconst ring_buffer& value, nconst str& item) {
+        sys__native_ring_buffer_push_front(value, item);
+    }
+
+    str ring_buffer_pop_front(nconst ring_buffer& value) {
+        return sys__native_ring_buffer_pop_front(value);
+    }
+
+    str ring_buffer_pop_back(nconst ring_buffer& value) {
+        return sys__native_ring_buffer_pop_back(value);
+    }
+
+    str ring_buffer_front(nconst ring_buffer& value) {
+        return sys__native_ring_buffer_front(value);
+    }
+
+    str ring_buffer_back(nconst ring_buffer& value) {
+        return sys__native_ring_buffer_back(value);
+    }
+
+    i32 ring_buffer_len(nconst ring_buffer& value) {
+        return sys__native_ring_buffer_len(value);
+    }
+
+    i32 ring_buffer_capacity(nconst ring_buffer& value) {
+        return sys__native_ring_buffer_capacity(value);
+    }
+
+    void ring_buffer_clear(nconst ring_buffer& value) {
+        sys__native_ring_buffer_clear(value);
+    }
+
+    str ring_buffer_values(nconst ring_buffer& value, nconst str& delimiter) {
+        return sys__native_ring_buffer_values(value, delimiter);
+    }
+
+    bitvec bitvec_new() {
+        return sys__native_bitvec_new();
+    }
+
+    void bitvec_push(nconst bitvec& value, i32 bit) {
+        sys__native_bitvec_push(value, bit);
+    }
+
+    i32 bitvec_get(nconst bitvec& value, i32 index) {
+        return sys__native_bitvec_get(value, index);
+    }
+
+    void bitvec_set(nconst bitvec& value, i32 index, i32 bit) {
+        sys__native_bitvec_set(value, index, bit);
+    }
+
+    i32 bitvec_len(nconst bitvec& value) {
+        return sys__native_bitvec_len(value);
+    }
+
+    i32 bitvec_count_ones(nconst bitvec& value) {
+        return sys__native_bitvec_count_ones(value);
+    }
+
+    void bitvec_clear(nconst bitvec& value) {
+        sys__native_bitvec_clear(value);
+    }
+
+    str bitvec_text(nconst bitvec& value) {
+        return sys__native_bitvec_text(value);
+    }
+
+    multimap multimap_new() {
+        return sys__native_multimap_new();
+    }
+
+    void multimap_insert(nconst multimap& value, nconst str& key, nconst str& item) {
+        sys__native_multimap_insert(value, key, item);
+    }
+
+    vector multimap_get_all(nconst multimap& value, nconst str& key) {
+        return sys__native_multimap_get_all(value, key);
+    }
+
+    i32 multimap_remove_all(nconst multimap& value, nconst str& key) {
+        return sys__native_multimap_remove_all(value, key);
+    }
+
+    i32 multimap_contains_key(nconst multimap& value, nconst str& key) {
+        return sys__native_multimap_contains_key(value, key);
+    }
+
+    i32 multimap_len(nconst multimap& value) {
+        return sys__native_multimap_len(value);
+    }
+
+    void multimap_clear(nconst multimap& value) {
+        sys__native_multimap_clear(value);
+    }
+
+    str multimap_entries(nconst multimap& value, nconst str& delimiter) {
+        return sys__native_multimap_entries(value, delimiter);
+    }
+
+    weak_map weak_map_new() {
+        return sys__native_weak_map_new();
+    }
+
+    void weak_map_insert(nconst weak_map& value, nconst str& key, nconst str& item) {
+        sys__native_weak_map_insert(value, key, item);
+    }
+
+    str weak_map_get(nconst weak_map& value, nconst str& key) {
+        return sys__native_weak_map_get(value, key);
+    }
+
+    str weak_map_remove(nconst weak_map& value, nconst str& key) {
+        return sys__native_weak_map_remove(value, key);
+    }
+
+    i32 weak_map_contains_key(nconst weak_map& value, nconst str& key) {
+        return sys__native_weak_map_contains_key(value, key);
+    }
+
+    i32 weak_map_len(nconst weak_map& value) {
+        return sys__native_weak_map_len(value);
+    }
+
+    void weak_map_clear(nconst weak_map& value) {
+        sys__native_weak_map_clear(value);
+    }
+
+    lru_cache lru_cache_new(i32 capacity) {
+        return sys__native_lru_cache_new(capacity);
+    }
+
+    void lru_cache_put(nconst lru_cache& value, nconst str& key, nconst str& item) {
+        sys__native_lru_cache_put(value, key, item);
+    }
+
+    str lru_cache_get(nconst lru_cache& value, nconst str& key) {
+        return sys__native_lru_cache_get(value, key);
+    }
+
+    i32 lru_cache_contains_key(nconst lru_cache& value, nconst str& key) {
+        return sys__native_lru_cache_contains_key(value, key);
+    }
+
+    i32 lru_cache_len(nconst lru_cache& value) {
+        return sys__native_lru_cache_len(value);
+    }
+
+    void lru_cache_clear(nconst lru_cache& value) {
+        sys__native_lru_cache_clear(value);
+    }
+
+    str lru_cache_keys(nconst lru_cache& value, nconst str& delimiter) {
+        return sys__native_lru_cache_keys(value, delimiter);
+    }
+
+    enum_set enum_set_new() {
+        return sys__native_enum_set_new();
+    }
+
+    i32 enum_set_insert(nconst enum_set& value, nconst str& item) {
+        return sys__native_enum_set_insert(value, item);
+    }
+
+    i32 enum_set_remove(nconst enum_set& value, nconst str& item) {
+        return sys__native_enum_set_remove(value, item);
+    }
+
+    i32 enum_set_contains(nconst enum_set& value, nconst str& item) {
+        return sys__native_enum_set_contains(value, item);
+    }
+
+    i32 enum_set_len(nconst enum_set& value) {
+        return sys__native_enum_set_len(value);
+    }
+
+    void enum_set_clear(nconst enum_set& value) {
+        sys__native_enum_set_clear(value);
+    }
+
+    str enum_set_values(nconst enum_set& value, nconst str& delimiter) {
+        return sys__native_enum_set_values(value, delimiter);
+    }
+
+    grid2d grid2d_new(i32 rows, i32 cols, nconst str& fill_value) {
+        return sys__native_grid2d_new(rows, cols, fill_value);
+    }
+
+    i32 grid2d_rows(nconst grid2d& value) {
+        return sys__native_grid2d_rows(value);
+    }
+
+    i32 grid2d_cols(nconst grid2d& value) {
+        return sys__native_grid2d_cols(value);
+    }
+
+    str grid2d_get(nconst grid2d& value, i32 row, i32 col) {
+        return sys__native_grid2d_get(value, row, col);
+    }
+
+    void grid2d_set(nconst grid2d& value, i32 row, i32 col, nconst str& item) {
+        sys__native_grid2d_set(value, row, col, item);
+    }
+
+    void grid2d_fill(nconst grid2d& value, nconst str& item) {
+        sys__native_grid2d_fill(value, item);
+    }
+
+    str grid2d_row_text(nconst grid2d& value, i32 row, nconst str& delimiter) {
+        return sys__native_grid2d_row_text(value, row, delimiter);
+    }
+}
+
+@unsafe {
+    inline::cpp {
+        #include "apo_std_object_runtime.hpp"
+
+        void* sys__native_vec_new() { return __apo_stdlib::vec_new(); }
+        void* sys__native_vec_with_capacity(int capacity) { return __apo_stdlib::vec_with_capacity(capacity); }
+        int sys__native_vec_len(void* value) { return __apo_stdlib::vec_len(value); }
+        void sys__native_vec_push(void* value, const char* item) { __apo_stdlib::vec_push(value, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_vec_pop(void* value) { return __apo_stdlib::vec_pop(value); }
+        const char* sys__native_vec_get(void* value, int index) { return __apo_stdlib::vec_get(value, index); }
+        void sys__native_vec_set(void* value, int index, const char* item) { __apo_stdlib::vec_set(value, index, __apo_stdlib::text_or_empty(item)); }
+        void sys__native_vec_insert(void* value, int index, const char* item) { __apo_stdlib::vec_insert(value, index, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_vec_remove(void* value, int index) { return __apo_stdlib::vec_remove(value, index); }
+        const char* sys__native_vec_swap_remove(void* value, int index) { return __apo_stdlib::vec_swap_remove(value, index); }
+        void sys__native_vec_clear(void* value) { __apo_stdlib::vec_clear(value); }
+        void sys__native_vec_truncate(void* value, int length) { __apo_stdlib::vec_truncate(value, length); }
+        void sys__native_vec_reserve(void* value, int additional) { __apo_stdlib::vec_reserve(value, additional); }
+        void sys__native_vec_shrink_to_fit(void* value) { __apo_stdlib::vec_shrink_to_fit(value); }
+        void sys__native_vec_resize(void* value, int new_length, const char* item) { __apo_stdlib::vec_resize(value, new_length, __apo_stdlib::text_or_empty(item)); }
+        void sys__native_vec_dedup(void* value) { __apo_stdlib::vec_dedup(value); }
+        const char* sys__native_vec_join(void* value, const char* delimiter) { return __apo_stdlib::vec_join(value, __apo_stdlib::view_or_empty(delimiter)); }
+        int sys__native_vec_contains(void* value, const char* item) { return __apo_stdlib::vec_contains(value, __apo_stdlib::view_or_empty(item)); }
+
+        void* sys__native_map_new() { return __apo_stdlib::map_new(); }
+        void* sys__native_map_with_capacity(int capacity) { return __apo_stdlib::map_with_capacity(capacity); }
+        int sys__native_map_len(void* value) { return __apo_stdlib::map_len(value); }
+        void sys__native_map_insert(void* value, const char* key, const char* item) { __apo_stdlib::map_insert(value, __apo_stdlib::text_or_empty(key), __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_map_get(void* value, const char* key) { return __apo_stdlib::map_get(value, __apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_map_get_mut(void* value, const char* key) { return __apo_stdlib::map_get_mut(value, __apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_map_remove(void* value, const char* key) { return __apo_stdlib::map_remove(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_map_contains_key(void* value, const char* key) { return __apo_stdlib::map_contains_key(value, __apo_stdlib::view_or_empty(key)); }
+        void sys__native_map_clear(void* value) { __apo_stdlib::map_clear(value); }
+        void sys__native_map_reserve(void* value, int capacity) { __apo_stdlib::map_reserve(value, capacity); }
+        const char* sys__native_map_entry_or_insert(void* value, const char* key, const char* default_value) { return __apo_stdlib::map_entry_or_insert(value, __apo_stdlib::text_or_empty(key), __apo_stdlib::text_or_empty(default_value)); }
+        void sys__native_map_rehash(void* value) { __apo_stdlib::map_rehash(value); }
+        const char* sys__native_map_keys(void* value, const char* delimiter) { return __apo_stdlib::map_keys(value, __apo_stdlib::view_or_empty(delimiter)); }
+        const char* sys__native_map_values(void* value, const char* delimiter) { return __apo_stdlib::map_values(value, __apo_stdlib::view_or_empty(delimiter)); }
+        const char* sys__native_map_entries(void* value, const char* delimiter) { return __apo_stdlib::map_entries(value, __apo_stdlib::view_or_empty(delimiter)); }
+
+        void* sys__native_tmap_new() { return __apo_stdlib::tmap_new(); }
+        int sys__native_tmap_len(void* value) { return __apo_stdlib::tmap_len(value); }
+        void sys__native_tmap_insert(void* value, const char* key, const char* item) { __apo_stdlib::tmap_insert(value, __apo_stdlib::text_or_empty(key), __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_tmap_get(void* value, const char* key) { return __apo_stdlib::tmap_get(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_tmap_contains_key(void* value, const char* key) { return __apo_stdlib::tmap_contains_key(value, __apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_tmap_remove(void* value, const char* key) { return __apo_stdlib::tmap_remove(value, __apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_tmap_first_key(void* value) { return __apo_stdlib::tmap_first_key(value); }
+        const char* sys__native_tmap_last_key(void* value) { return __apo_stdlib::tmap_last_key(value); }
+        const char* sys__native_tmap_floor_key(void* value, const char* key) { return __apo_stdlib::tmap_floor_key(value, __apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_tmap_ceiling_key(void* value, const char* key) { return __apo_stdlib::tmap_ceiling_key(value, __apo_stdlib::view_or_empty(key)); }
+        void* sys__native_tmap_pop_first(void* value) { return __apo_stdlib::tmap_pop_first(value); }
+        void* sys__native_tmap_pop_last(void* value) { return __apo_stdlib::tmap_pop_last(value); }
+        void* sys__native_tmap_iter(void* value) { return __apo_stdlib::tmap_iter(value); }
+        void* sys__native_tmap_range_iter(void* value, const char* start_key, const char* end_key) { return __apo_stdlib::tmap_range_iter(value, __apo_stdlib::view_or_empty(start_key), __apo_stdlib::view_or_empty(end_key)); }
+        const char* sys__native_entry_key(void* value) { return __apo_stdlib::entry_key(value); }
+        const char* sys__native_entry_value(void* value) { return __apo_stdlib::entry_value(value); }
+        int sys__native_entry_iter_has_next(void* value) { return __apo_stdlib::entry_iter_has_next(value); }
+        void* sys__native_entry_iter_next(void* value) { return __apo_stdlib::entry_iter_next(value); }
+
+        void* sys__native_set_new() { return __apo_stdlib::set_new(); }
+        int sys__native_set_insert(void* value, const char* item) { return __apo_stdlib::set_insert(value, __apo_stdlib::text_or_empty(item)); }
+        int sys__native_set_remove(void* value, const char* item) { return __apo_stdlib::set_remove(value, __apo_stdlib::view_or_empty(item)); }
+        int sys__native_set_contains(void* value, const char* item) { return __apo_stdlib::set_contains(value, __apo_stdlib::view_or_empty(item)); }
+        int sys__native_set_len(void* value) { return __apo_stdlib::set_len(value); }
+        void sys__native_set_clear(void* value) { __apo_stdlib::set_clear(value); }
+        const char* sys__native_set_values(void* value, const char* delimiter) { return __apo_stdlib::set_values(value, __apo_stdlib::view_or_empty(delimiter)); }
+        void* sys__native_set_union(void* left, void* right) { return __apo_stdlib::set_union(left, right); }
+        void* sys__native_set_intersection(void* left, void* right) { return __apo_stdlib::set_intersection(left, right); }
+        void* sys__native_set_difference(void* left, void* right) { return __apo_stdlib::set_difference(left, right); }
+        void* sys__native_set_symmetric_difference(void* left, void* right) { return __apo_stdlib::set_symmetric_difference(left, right); }
+        int sys__native_set_is_subset(void* left, void* right) { return __apo_stdlib::set_is_subset(left, right); }
+        int sys__native_set_is_superset(void* left, void* right) { return __apo_stdlib::set_is_superset(left, right); }
+
+        void* sys__native_queue_new() { return __apo_stdlib::queue_new(); }
+        void sys__native_queue_enqueue(void* value, const char* item) { __apo_stdlib::queue_enqueue(value, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_queue_dequeue(void* value) { return __apo_stdlib::queue_dequeue(value); }
+        int sys__native_queue_len(void* value) { return __apo_stdlib::queue_len(value); }
+
+        void* sys__native_deque_new() { return __apo_stdlib::deque_new(); }
+        void sys__native_deque_push_front(void* value, const char* item) { __apo_stdlib::deque_push_front(value, __apo_stdlib::text_or_empty(item)); }
+        void sys__native_deque_push_back(void* value, const char* item) { __apo_stdlib::deque_push_back(value, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_deque_pop_front(void* value) { return __apo_stdlib::deque_pop_front(value); }
+        const char* sys__native_deque_pop_back(void* value) { return __apo_stdlib::deque_pop_back(value); }
+        int sys__native_deque_len(void* value) { return __apo_stdlib::deque_len(value); }
+
+        void* sys__native_heap_new_max() { return __apo_stdlib::heap_new_max(); }
+        void* sys__native_heap_new_min() { return __apo_stdlib::heap_new_min(); }
+        void sys__native_heap_push(void* value, int item) { __apo_stdlib::heap_push(value, item); }
+        int sys__native_heap_pop(void* value) { return __apo_stdlib::heap_pop(value); }
+        int sys__native_heap_peek(void* value) { return __apo_stdlib::heap_peek(value); }
+        int sys__native_heap_len(void* value) { return __apo_stdlib::heap_len(value); }
+
+        void* sys__native_list_new() { return __apo_stdlib::list_new(); }
+        void sys__native_list_push_front(void* value, const char* item) { __apo_stdlib::list_push_front(value, __apo_stdlib::text_or_empty(item)); }
+        void sys__native_list_push_back(void* value, const char* item) { __apo_stdlib::list_push_back(value, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_list_pop_front(void* value) { return __apo_stdlib::list_pop_front(value); }
+        const char* sys__native_list_pop_back(void* value) { return __apo_stdlib::list_pop_back(value); }
+        const char* sys__native_list_front(void* value) { return __apo_stdlib::list_front(value); }
+        const char* sys__native_list_back(void* value) { return __apo_stdlib::list_back(value); }
+        int sys__native_list_len(void* value) { return __apo_stdlib::list_len(value); }
+        void sys__native_list_clear(void* value) { __apo_stdlib::list_clear(value); }
+        const char* sys__native_list_values(void* value, const char* delimiter) { return __apo_stdlib::list_values(value, __apo_stdlib::view_or_empty(delimiter)); }
+
+        void* sys__native_ring_buffer_new(int capacity) { return __apo_stdlib::ring_buffer_new(capacity); }
+        void sys__native_ring_buffer_push_back(void* value, const char* item) { __apo_stdlib::ring_buffer_push_back(value, __apo_stdlib::text_or_empty(item)); }
+        void sys__native_ring_buffer_push_front(void* value, const char* item) { __apo_stdlib::ring_buffer_push_front(value, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_ring_buffer_pop_front(void* value) { return __apo_stdlib::ring_buffer_pop_front(value); }
+        const char* sys__native_ring_buffer_pop_back(void* value) { return __apo_stdlib::ring_buffer_pop_back(value); }
+        const char* sys__native_ring_buffer_front(void* value) { return __apo_stdlib::ring_buffer_front(value); }
+        const char* sys__native_ring_buffer_back(void* value) { return __apo_stdlib::ring_buffer_back(value); }
+        int sys__native_ring_buffer_len(void* value) { return __apo_stdlib::ring_buffer_len(value); }
+        int sys__native_ring_buffer_capacity(void* value) { return __apo_stdlib::ring_buffer_capacity(value); }
+        void sys__native_ring_buffer_clear(void* value) { __apo_stdlib::ring_buffer_clear(value); }
+        const char* sys__native_ring_buffer_values(void* value, const char* delimiter) { return __apo_stdlib::ring_buffer_values(value, __apo_stdlib::view_or_empty(delimiter)); }
+
+        void* sys__native_bitvec_new() { return __apo_stdlib::bitvec_new(); }
+        void sys__native_bitvec_push(void* value, int bit) { __apo_stdlib::bitvec_push(value, bit); }
+        int sys__native_bitvec_get(void* value, int index) { return __apo_stdlib::bitvec_get(value, index); }
+        void sys__native_bitvec_set(void* value, int index, int bit) { __apo_stdlib::bitvec_set(value, index, bit); }
+        int sys__native_bitvec_len(void* value) { return __apo_stdlib::bitvec_len(value); }
+        int sys__native_bitvec_count_ones(void* value) { return __apo_stdlib::bitvec_count_ones(value); }
+        void sys__native_bitvec_clear(void* value) { __apo_stdlib::bitvec_clear(value); }
+        const char* sys__native_bitvec_text(void* value) { return __apo_stdlib::bitvec_text(value); }
+
+        void* sys__native_multimap_new() { return __apo_stdlib::multimap_new(); }
+        void sys__native_multimap_insert(void* value, const char* key, const char* item) { __apo_stdlib::multimap_insert(value, __apo_stdlib::text_or_empty(key), __apo_stdlib::text_or_empty(item)); }
+        void* sys__native_multimap_get_all(void* value, const char* key) { return __apo_stdlib::multimap_get_all(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_multimap_remove_all(void* value, const char* key) { return __apo_stdlib::multimap_remove_all(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_multimap_contains_key(void* value, const char* key) { return __apo_stdlib::multimap_contains_key(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_multimap_len(void* value) { return __apo_stdlib::multimap_len(value); }
+        void sys__native_multimap_clear(void* value) { __apo_stdlib::multimap_clear(value); }
+        const char* sys__native_multimap_entries(void* value, const char* delimiter) { return __apo_stdlib::multimap_entries(value, __apo_stdlib::view_or_empty(delimiter)); }
+
+        void* sys__native_weak_map_new() { return __apo_stdlib::weak_map_new(); }
+        void sys__native_weak_map_insert(void* value, const char* key, const char* item) { __apo_stdlib::weak_map_insert(value, __apo_stdlib::text_or_empty(key), __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_weak_map_get(void* value, const char* key) { return __apo_stdlib::weak_map_get(value, __apo_stdlib::view_or_empty(key)); }
+        const char* sys__native_weak_map_remove(void* value, const char* key) { return __apo_stdlib::weak_map_remove(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_weak_map_contains_key(void* value, const char* key) { return __apo_stdlib::weak_map_contains_key(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_weak_map_len(void* value) { return __apo_stdlib::weak_map_len(value); }
+        void sys__native_weak_map_clear(void* value) { __apo_stdlib::weak_map_clear(value); }
+
+        void* sys__native_lru_cache_new(int capacity) { return __apo_stdlib::lru_cache_new(capacity); }
+        void sys__native_lru_cache_put(void* value, const char* key, const char* item) { __apo_stdlib::lru_cache_put(value, __apo_stdlib::text_or_empty(key), __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_lru_cache_get(void* value, const char* key) { return __apo_stdlib::lru_cache_get(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_lru_cache_contains_key(void* value, const char* key) { return __apo_stdlib::lru_cache_contains_key(value, __apo_stdlib::view_or_empty(key)); }
+        int sys__native_lru_cache_len(void* value) { return __apo_stdlib::lru_cache_len(value); }
+        void sys__native_lru_cache_clear(void* value) { __apo_stdlib::lru_cache_clear(value); }
+        const char* sys__native_lru_cache_keys(void* value, const char* delimiter) { return __apo_stdlib::lru_cache_keys(value, __apo_stdlib::view_or_empty(delimiter)); }
+
+        void* sys__native_enum_set_new() { return __apo_stdlib::enum_set_new(); }
+        int sys__native_enum_set_insert(void* value, const char* item) { return __apo_stdlib::enum_set_insert(value, __apo_stdlib::text_or_empty(item)); }
+        int sys__native_enum_set_remove(void* value, const char* item) { return __apo_stdlib::enum_set_remove(value, __apo_stdlib::view_or_empty(item)); }
+        int sys__native_enum_set_contains(void* value, const char* item) { return __apo_stdlib::enum_set_contains(value, __apo_stdlib::view_or_empty(item)); }
+        int sys__native_enum_set_len(void* value) { return __apo_stdlib::enum_set_len(value); }
+        void sys__native_enum_set_clear(void* value) { __apo_stdlib::enum_set_clear(value); }
+        const char* sys__native_enum_set_values(void* value, const char* delimiter) { return __apo_stdlib::enum_set_values(value, __apo_stdlib::view_or_empty(delimiter)); }
+
+        void* sys__native_grid2d_new(int rows, int cols, const char* fill_value) { return __apo_stdlib::grid2d_new(rows, cols, __apo_stdlib::text_or_empty(fill_value)); }
+        int sys__native_grid2d_rows(void* value) { return __apo_stdlib::grid2d_rows(value); }
+        int sys__native_grid2d_cols(void* value) { return __apo_stdlib::grid2d_cols(value); }
+        const char* sys__native_grid2d_get(void* value, int row, int col) { return __apo_stdlib::grid2d_get(value, row, col); }
+        void sys__native_grid2d_set(void* value, int row, int col, const char* item) { __apo_stdlib::grid2d_set(value, row, col, __apo_stdlib::text_or_empty(item)); }
+        void sys__native_grid2d_fill(void* value, const char* item) { __apo_stdlib::grid2d_fill(value, __apo_stdlib::text_or_empty(item)); }
+        const char* sys__native_grid2d_row_text(void* value, int row, const char* delimiter) { return __apo_stdlib::grid2d_row_text(value, row, __apo_stdlib::view_or_empty(delimiter)); }
+    }
+}

@@ -1,0 +1,6 @@
+Compilation aborted with 1 memory-safety error:
+error [memory-safety] call_mutable_reference_conflict.apollo:11:5
+error[memory-safety] ? cannot mutably borrow `value` while shared borrows are active
+offending token: bump
+  11 |     bump(&nconst value);
+     |     ^~~~

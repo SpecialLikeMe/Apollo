@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1BaseVisitor.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1BaseVisitor.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Lexer.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Lexer.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Parser.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Parser.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Visitor.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/generated/compilerv1Visitor.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver_main.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_build_driver_main.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_codegen_optimization_plan.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_codegen_optimization_plan.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_driver.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_driver.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_inline_foreign.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_inline_foreign.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_ir_layout_plan.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_ir_layout_plan.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_runtime.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_runtime.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/apollo_source_preprocessor.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/borrowck/legacy/borrow_checker.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/borrowck/mir_pipeline.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/borrowck/mir_pipeline.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/codegen/optimizer.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/codegen/optimizer.cpp.obj.d"
+  "CMakeFiles/apollo_build_driver_native.dir/src/visitor.cpp.obj"
+  "CMakeFiles/apollo_build_driver_native.dir/src/visitor.cpp.obj.d"
+  "apollo_build_driver_native.exe"
+  "apollo_build_driver_native.exe.manifest"
+  "apollo_build_driver_native.pdb"
+  "libapollo_build_driver_native.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/apollo_build_driver_native.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

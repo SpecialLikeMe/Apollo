@@ -1,0 +1,6 @@
+Compilation aborted with 1 memory-safety error:
+error [memory-safety] assign_while_shared_borrowed.apollo:4:5
+error[memory-safety] 4 cannot assign to `value` while it is still borrowed
+offending token: value
+  4 |     value = 2;
+    |     ^~~~~
