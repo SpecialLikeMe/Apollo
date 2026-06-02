@@ -4,10 +4,10 @@ i32 main() {
     task ready_bool = sys.task_ready_bool(true);
     task ready_f64 = sys.task_ready_f64(2.5);
 
-    mutex gate = sys.mutex_new();
-    condvar wake = sys.condvar_new();
-    channel inbox = sys.channel_unbounded();
-    channel limited = sys.channel_bounded(1);
+    nconst mutex gate = sys.mutex_new();
+    nconst condvar wake = sys.condvar_new();
+    nconst channel inbox = sys.channel_unbounded();
+    nconst channel limited = sys.channel_bounded(1);
 
     if (sys.mutex_lock(gate) == 0) {
         return 1;

@@ -1,0 +1,10 @@
+version=apollo-native-cache-v1
+compilerSignature=5bdda499f6990488
+sourceHash=e816ee76ff36f717
+outputHash=ae3db5f587f20f9d
+sourceSize=100
+sourceWriteTime=1778701776393168200
+outputSize=1434
+outputWriteTime=1780443170980186200
+dependency=gc/gc_cpp.h
+dependency=support/helper.apollo

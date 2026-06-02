@@ -2,16 +2,16 @@
 
 ## What it is
 
-A composite literal builds an aggregate value inline. The single syntax `<a, b, c>` constructs vectors, arrays, shape values, and struct values depending on the destination type. The compiler infers the kind of aggregate from where the literal appears.
+A composite literal builds a positional aggregate value inline. The single syntax `<a, b, c>` constructs vectors, arrays, and shape values depending on the destination type. The compiler infers the kind of aggregate from where the literal appears.
 
-The composite literal is Apollo's one-stop builder. Where many languages distinguish `[...]` for arrays, `(...)` for tuples, `{...}` for objects, Apollo unifies them under `<...>`.
+Composite literals are the angle-bracket form. Named aggregate construction such as struct and struct-like enum values uses brace initializers instead.
 
 ## When you use it
 
 - Building a fixed-size array: `nconst i32[3] a = <1, 2, 3>;`
 - Building a vector: `nconst vector<int> v = <1, 2, 3>;`
 - Building a shape value: `nconst {i32, str} pair = <1, "one">;`
-- Building a struct value (alternative to the call-style constructor): supplied where the struct type is expected.
+- Feeding a positional aggregate into another initializer, such as a struct field whose type is a vector or shape.
 
 ## Syntax
 
@@ -28,7 +28,6 @@ The literal has no fixed type on its own. The destination context determines the
 - Array context → array literal; element count must match the array's size.
 - Vector context → vector with the literal's elements.
 - Shape context → shape with slots matched to the literal's positions.
-- Struct context → struct with fields matched to the declared field order.
 
 Each element is type-checked against the destination's expected element/field type.
 
@@ -126,7 +125,9 @@ struct Bag {
 };
 
 int main() {
-    nconst Bag b = Bag(<10, 20, 30>);
+    Bag b {
+        .items = <10, 20, 30>
+    };
     for (nconst int v : b.items) {
         sys.println(v);
     }
@@ -134,14 +135,14 @@ int main() {
 }
 ```
 
-The composite literal flows into the struct constructor's argument and from there into the field of type `vector<int>`.
+The composite literal fills the `vector<int>` field, while the outer `Bag` value is still built with a brace initializer.
 
 ## Common mistakes
 
 - **Empty literal.** `<>` has no destination cue and is rejected. Use a typed constructor instead.
 - **Wrong element count for array.** `i32[3] a = <1, 2>;` is rejected.
 - **Mixed element types.** All elements of a vector literal must share one type. For mixed-type tuples, use a shape value.
-- **Using `[...]` or `{...}` instead.** Apollo's literal is `<...>` exclusively.
+- **Using `<...>` for named fields.** Composite literals are positional. Use a brace initializer for named struct fields such as `Point { .x = 1, .y = 2 }`.
 - **Destination cannot be inferred.** A literal as a bare function argument may need a type hint via a cast.
 
 ## See also
@@ -149,4 +150,5 @@ The composite literal flows into the struct constructor's argument and from ther
 - `docs/language/types/docs/array-type.md` — fixed-size arrays.
 - `docs/language/types/docs/shape-type.md` — shape values.
 - `docs/stdlib/data/docs/collections.md` — vector and friends.
-- `docs/language/declarations/docs/struct.md` — struct construction.
+- `docs/language/expressions/docs/brace-initializer.md` — designated and aggregate brace construction.
+- `docs/language/declarations/docs/struct.md` — struct declarations and field layout.

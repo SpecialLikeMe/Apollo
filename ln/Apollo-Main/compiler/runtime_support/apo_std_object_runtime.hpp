@@ -1791,6 +1791,19 @@ inline const char* set_values(void* rawHandle, std::string_view delimiter) {
     return store_string(join_strings(values, delimiter));
 }
 
+inline void* set_items_handle(void* rawHandle) {
+    auto* handle = checked_handle<unordered_set_handle>(rawHandle, handle_kind::UnorderedSet);
+    std::vector<std::string> values;
+    if (handle != nullptr) {
+        values.reserve(handle->items.size());
+        for (const auto& item : handle->items) {
+            values.push_back(item);
+        }
+        std::sort(values.begin(), values.end());
+    }
+    return vec_from_items(std::move(values));
+}
+
 inline void* set_union(void* leftHandle, void* rightHandle) {
     auto* left = checked_handle<unordered_set_handle>(leftHandle, handle_kind::UnorderedSet);
     auto* right = checked_handle<unordered_set_handle>(rightHandle, handle_kind::UnorderedSet);

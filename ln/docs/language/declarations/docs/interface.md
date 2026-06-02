@@ -2,228 +2,186 @@
 
 ## What it is
 
-An interface is a named contract describing a set of method signatures. A class satisfies an interface when it provides matching public methods. Code that takes an `Interface&` parameter can accept any class instance that satisfies the contract, with calls dispatched through a vtable at runtime.
+Apollo's current interface declaration keyword is `itr`.
 
-Interfaces are Apollo's mechanism for polymorphism without inheritance. They let you write code that depends on capabilities rather than concrete types.
+An `itr` declares a named virtual-method contract that classes can attach in their inheritance clause. Older documentation that uses the keyword `interface` or C++-style access blocks such as `public:` is out of date.
 
 ## When you use it
 
-You declare an interface when:
+Use an `itr` when:
 
-- Multiple unrelated classes provide the same conceptual operation and you want code to use any of them interchangeably.
-- You want to swap implementations at runtime (test doubles, plugins, configuration-driven backends).
-- You want to enforce a method-shape contract across a hierarchy of cooperating types.
+- Multiple classes should expose the same virtual method surface.
+- You want a class hierarchy to promise a specific set of overridable operations.
+- You need one named contract that several concrete classes can share.
 
-You do not need an interface when there is only one implementation. Just call the class's methods directly.
+If you only need one concrete implementation and no shared virtual surface, a plain class method is simpler.
 
 ## Syntax
 
-```
-'interface' ID genericParams? '{'
-    (returnType ID '(' params? ')' ';')*
-'}' ';'?
+```apollo
+itr Name inheritanceClause? attributeBlock? {
+    virtual ReturnType methodName(params?);
+    virtual ReturnType otherMethod(params?);
+}
 ```
 
-An interface body is a sequence of method signatures terminated by semicolons. There are no method bodies, no fields, and no access modifiers — every interface method is implicitly public.
+Classes attach an interface in their inheritance clause:
+
+```apollo
+class Dog * public Speaker {
+    public virtual void speak() {
+        sys.println("dog");
+        return;
+    }
+}
+```
 
 ## Semantics
 
-An interface declares a type. Values of that type are references — you cannot construct an interface value directly, only borrow an instance of a class that satisfies it.
+- The parser accepts `itr`, not `interface`.
+- Interface bodies contain only virtual method signatures terminated with `;`.
+- Implementing classes list the interface in the `* public ...` or `* private ...` inheritance clause.
+- Implementing methods should match the declared signature and are written as `public virtual` methods.
+- Subclasses may use `@Override` when overriding inherited virtual methods.
 
-A class satisfies an interface when, for every method signature in the interface, the class has a public method with the same name and signature. The matching method should be marked `virtual` so dispatch can go through the vtable; non-virtual methods can still satisfy an interface for compile-time-known cases but cannot be reached through an interface borrow.
-
-When you call a method on an interface reference, the call dispatches through the vtable: the interface reference carries both the underlying instance pointer and the vtable for the concrete class, and the call uses the vtable slot for that method name.
+The examples below are patterned after the current grammar test surface.
 
 ## Examples
 
-### A single-method interface
+### Minimal interface declaration
 
 ```apollo
-interface Greeter {
-    void greet(str name);
-};
-
-class English {
-    public:
-    virtual void greet(str name) {
-        sys.printf("Hello, %s!\n", name);
-    }
-};
-
-class Japanese {
-    public:
-    virtual void greet(str name) {
-        sys.printf("Konnichiwa, %s!\n", name);
-    }
-};
-
-void run(nconst Greeter& g) {
-    g.greet("Apollo");
+itr Speaker {
+    virtual void speak();
 }
 
 int main() {
-    nconst English e = English();
-    nconst Japanese j = Japanese();
-    run(&nconst e);
-    run(&nconst j);
     return 0;
 }
 ```
 
-Both classes satisfy `Greeter`. The `run` function accepts either through the same parameter type.
+This declares only the interface surface. There are no method bodies inside `itr`.
 
-### Multi-method interface
+### A class implementing one interface
 
 ```apollo
-interface Storage {
-    void put(str key, str value);
-    str  get(str key);
-    bool contains(str key);
-};
+itr Speaker {
+    virtual void speak();
+}
 
-class MemoryStore {
-    private:
-    nconst map<str, str> data;
-
-    public:
-    virtual void put(str key, str value) {
-        collections.map.insert(self.data, key, value);
+class Dog * public Speaker {
+    public virtual void speak() {
+        sys.println("dog");
+        return;
     }
-
-    virtual str get(str key) {
-        return collections.map.get(self.data, key);
-    }
-
-    virtual bool contains(str key) {
-        return collections.map.has(self.data, key);
-    }
-};
-
-extern std collections;
+}
 
 int main() {
-    nconst MemoryStore m = MemoryStore();
-    m.put("name", "Ada");
-    nconst Storage& s = &nconst m;
-    if (s.contains("name")) {
-        sys.println(s.get("name"));
-    }
+    stat pet = Dog{};
+    pet.speak();
     return 0;
 }
 ```
 
-A class satisfying a multi-method interface must provide all the methods. Missing one is a compile-time error at the point the class is used through the interface.
+`Dog` lists `Speaker` in its inheritance clause and provides the matching `public virtual` method.
 
-### Interface as a function parameter
+### One class implementing multiple interfaces
 
 ```apollo
-interface Logger {
-    void log(str message);
-};
+itr Speaker {
+    virtual void speak();
+}
 
-class ConsoleLogger {
-    public:
-    virtual void log(str message) {
-        sys.println(message);
+itr Walker {
+    virtual void walk();
+}
+
+class Animal * public Speaker; public Walker {
+    public virtual void speak() {
+        sys.println("animal");
+        return;
     }
-};
 
-void process(nconst Logger& log, nconst vector<str>& items) {
-    for (nconst str item : items) {
-        log.log(item);
+    public virtual void walk() {
+        sys.println("walk");
+        return;
     }
 }
 
-extern std collections;
-
 int main() {
-    nconst ConsoleLogger cl = ConsoleLogger();
-    nconst vector<str> data = <"alpha", "beta", "gamma">;
-    process(&nconst cl, &nconst data);
+    stat animal = Animal{};
+    animal.speak();
+    animal.walk();
     return 0;
 }
 ```
 
-`process` knows nothing about `ConsoleLogger` — it only requires a `Logger`. Another implementation (a file logger, a network logger, a test sink) could be supplied without changing `process`.
+Apollo separates inherited types with `;` inside the `* ...` clause.
 
-### Storing interface references
+### Overriding an inherited virtual method
 
 ```apollo
-interface Tickable {
-    void tick();
-};
+itr Speaker {
+    virtual void speak();
+}
 
-class Engine {
-    public:
-    virtual void tick() { sys.println("engine tick"); }
-};
+class Animal * public Speaker {
+    public virtual void speak() {
+        sys.println("animal");
+        return;
+    }
+}
 
-class Brake {
-    public:
-    virtual void tick() { sys.println("brake tick"); }
-};
-
-extern std collections;
+class Dog * public Animal {
+    @Override
+    public void speak() {
+        sys.println("dog");
+        return;
+    }
+}
 
 int main() {
-    nconst Engine e = Engine();
-    nconst Brake  b = Brake();
-    nconst vector<Tickable&> subsystems = <&nconst e, &nconst b>;
-    for (nconst Tickable& s : &nconst subsystems) {
-        s.tick();
-    }
+    stat pet = Dog{};
+    pet.speak();
     return 0;
 }
 ```
 
-A vector of interface references can hold values from any class that satisfies the interface. Iteration dispatches each call through the underlying vtable.
+`@Override` belongs on the subclass override. The interface declaration itself still uses `virtual` signatures.
 
-### Generic interface
+### Interface methods with parameters
 
 ```apollo
-interface Comparator<T> {
-    bool less(T a, T b);
-};
+itr Greeter {
+    virtual void greet(str name);
+}
 
-class IntAsc {
-    public:
-    virtual bool less(int a, int b) {
-        return a < b;
+class ConsoleGreeter * public Greeter {
+    public virtual void greet(str name) {
+        sys.println(name);
+        return;
     }
-};
-
-extern std collections;
-
-void sort(nconst vector<int>& items, nconst Comparator<int>& cmp) {
-    collections.vector.sort_by(items, closure [&nconst cmp] (int a, int b) -> bool {
-        return cmp.less(a, b);
-    });
 }
 
 int main() {
-    nconst IntAsc cmp = IntAsc();
-    nconst vector<int> data = <3, 1, 4, 1, 5>;
-    sort(&nconst data, &nconst cmp);
-    for (nconst int v : data) {
-        sys.println(v);
-    }
+    stat greeter = ConsoleGreeter{};
+    greeter.greet("Apollo");
     return 0;
 }
 ```
 
-Generic interfaces let the contract depend on a type parameter. The class then provides the implementation for that specific parameter.
+Method parameters are declared in the interface signature and repeated exactly in the implementation.
 
 ## Common mistakes
 
-- **Forgetting `virtual` on the implementing method.** Without `virtual`, the method cannot be reached through the interface reference.
-- **Mismatched signature.** Parameter types, parameter order, and return type must match exactly. There is no covariance.
-- **Trying to construct an interface directly.** Interfaces have no constructor. Always work through a reference to an implementing class.
-- **Forgetting `public` on the implementing methods.** Interface satisfaction requires public methods; private methods do not count.
-- **Adding fields to an interface.** Interfaces declare only method signatures. State belongs in the implementing class.
+- **Using `interface` instead of `itr`.** The current parser rejects `interface Greeter { ... }`.
+- **Writing C++-style access sections.** Apollo uses `public virtual void speak()` and `public i32 value;`, not `public:` blocks.
+- **Omitting `virtual` inside the interface body.** Interface members are declared as virtual method signatures.
+- **Forgetting to list the interface in the class inheritance clause.** Use `class Name * public InterfaceName { ... }`.
+- **Changing the signature in the implementation.** Parameter and return types still need to match the interface declaration.
 
 ## See also
 
-- `docs/language/declarations/docs/class.md` — how classes are structured.
-- `docs/language/declarations/docs/method.md` — `virtual` modifier and dispatch.
-- `docs/language/declarations/docs/template.md` — generic parameters on interfaces and classes.
-- `docs/language/memory-and-storage/docs/borrow-expression.md` — borrow rules for interface references.
+- `docs/language/declarations/docs/class.md` — class declaration syntax.
+- `docs/language/declarations/docs/method.md` — virtual methods and overrides.
+- `docs/language/declarations/docs/template.md` — other declaration forms.

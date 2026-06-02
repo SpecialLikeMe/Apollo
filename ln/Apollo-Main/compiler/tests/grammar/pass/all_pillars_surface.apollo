@@ -19,13 +19,13 @@ i32 main() {
     nominal<i32, str> bad = parse_value(false);
     nominal<str, str> label = read_label(true);
 
-    buffer log = sys.buffer();
+    nconst buffer log = sys.buffer();
     sys.buffer_push_str(log, "value=");
     sys.buffer_push_i32(log, sys.unwrap_i32(good));
     sys.buffer_push_str(log, ", label=");
     sys.buffer_push_str(log, sys.unwrap_str(label));
 
-    file out = sys.file_open(sys.path_join("output", "all_pillars.txt"), "w");
+    nconst file out = sys.file_open(sys.path_join("output", "all_pillars.txt"), "w");
     sys.file_write(out, sys.buffer_text(log));
     sys.file_close(out);
 

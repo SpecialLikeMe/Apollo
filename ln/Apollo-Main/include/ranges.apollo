@@ -1,7 +1,7 @@
 namespace sys {
     i32 count_up(i32 start, i32 stop) {
-        i32 count = 0;
-        i32 current = start;
+        nconst i32 count = 0;
+        nconst i32 current = start;
         while (current < stop) {
             count = count + 1;
             current = current + 1;
@@ -13,8 +13,8 @@ namespace sys {
         if (start > stop) {
             return 0;
         }
-        i32 current = start;
-        i32 total = 0;
+        nconst i32 current = start;
+        nconst i32 total = 0;
         while (current <= stop) {
             total = total + current;
             current = current + 1;
@@ -26,8 +26,8 @@ namespace sys {
         if (step == 0) {
             return 0;
         }
-        i32 current = start;
-        i32 total = 0;
+        nconst i32 current = start;
+        nconst i32 total = 0;
         if (step > 0) {
             while (current <= stop) {
                 total = total + current;
@@ -43,8 +43,8 @@ namespace sys {
     }
 
     i32 repeat_add(i32 value, i32 times) {
-        i32 remaining = times;
-        i32 total = 0;
+        nconst i32 remaining = times;
+        nconst i32 total = 0;
         while (remaining > 0) {
             total = total + value;
             remaining = remaining - 1;

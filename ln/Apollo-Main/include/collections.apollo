@@ -661,6 +661,7 @@ namespace sys {
         int sys__native_set_len(void* value) { return __apo_stdlib::set_len(value); }
         void sys__native_set_clear(void* value) { __apo_stdlib::set_clear(value); }
         const char* sys__native_set_values(void* value, const char* delimiter) { return __apo_stdlib::set_values(value, __apo_stdlib::view_or_empty(delimiter)); }
+        void* sys__native_set_items(void* value) { return __apo_stdlib::set_items_handle(value); }
         void* sys__native_set_union(void* left, void* right) { return __apo_stdlib::set_union(left, right); }
         void* sys__native_set_intersection(void* left, void* right) { return __apo_stdlib::set_intersection(left, right); }
         void* sys__native_set_difference(void* left, void* right) { return __apo_stdlib::set_difference(left, right); }

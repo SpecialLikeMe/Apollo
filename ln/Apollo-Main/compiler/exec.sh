@@ -46,10 +46,15 @@ if [ "${1-}" = "--update" ]; then
     exec "$MANAGE_SH" update "$RESOLVED_APOLLO_DIR"
 fi
 
+if [ "${1-}" = "repair" ] && [ -z "${2-}" ]; then
+    exec "$MANAGE_SH" repair "$RESOLVED_APOLLO_DIR"
+fi
+
 if [ "${1-}" = "help" ] || [ "${1-}" = "--help" ] || [ "${1-}" = "-h" ]; then
     printf 'Usage: apollo [-bin] <run|ctall> [filename] [outputname]\n'
     printf '                      apollo -analyze [filename]\n'
     printf '                      apollo [filename.apollo] -[L|W|M] outputname\n'
+    printf '                      apollo repair\n'
     printf '                      apollo --version\n'
     printf '                      apollo --update\n'
     printf '                      apollo -m uninstall\n'
@@ -57,10 +62,13 @@ if [ "${1-}" = "help" ] || [ "${1-}" = "--help" ] || [ "${1-}" = "-h" ]; then
 fi
 
 if [ "${1-}" = "-m" ]; then
+    if [ "${2-}" = "repair" ] && [ -z "${3-}" ]; then
+        exec "$MANAGE_SH" repair "$RESOLVED_APOLLO_DIR"
+    fi
     if [ "${2-}" = "uninstall" ] && [ -z "${3-}" ]; then
         exec "$MANAGE_SH" uninstall "$RESOLVED_APOLLO_DIR"
     fi
-    printf 'Unknown management command. Usage: apollo -m uninstall\n' >&2
+    printf 'Unknown management command. Usage: apollo -m <repair|uninstall>\n' >&2
     exit 1
 fi
 
@@ -622,6 +630,7 @@ case "$COMMAND" in
         printf 'Unknown command. Usage: apollo [-bin] <run|ctall> [filename] [outputname]\n' >&2
         printf '                      apollo -analyze [filename]\n' >&2
         printf '                      apollo [filename.apollo] -[L|W|M] outputname\n' >&2
+        printf '                      apollo repair\n' >&2
         printf '                      apollo --version\n' >&2
         printf '                      apollo --update\n' >&2
         printf '                      apollo -m uninstall\n' >&2

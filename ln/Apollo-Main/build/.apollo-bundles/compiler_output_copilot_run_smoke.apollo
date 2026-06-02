@@ -1,0 +1,4 @@
+// apx bundle: C:/Users/devon/Apollo/ln/Apollo-Main/compiler/output/copilot_run_smoke.apollo
+int main() { sys.println("run-smoke"); return 0; }
+
+

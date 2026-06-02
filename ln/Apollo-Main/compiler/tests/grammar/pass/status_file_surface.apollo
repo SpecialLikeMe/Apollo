@@ -1,12 +1,12 @@
 isc write_log() {
-    file handle = open("output/status_file.txt", "w");
+    nconst file handle = open("output/status_file.txt", "w");
     handle.write("hello");
     handle.close();
     return terminalcerr("disk full");
 }
 
 isc read_log() {
-    file handle = open("output/status_file.txt");
+    nconst file handle = open("output/status_file.txt");
     str contents = handle.read();
     handle.close();
     sys.println(contents);

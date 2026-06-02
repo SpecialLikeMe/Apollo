@@ -1,0 +1,15 @@
+extern std prelude;
+
+int main() {
+    nconst unordered_set<int> seen;
+    seen.insert(7);
+
+    nconst set<str> names;
+    names.insert("a");
+
+    for (const str item in names) {
+        return (item == "a" && seen.contains(7)) ? 0 : 1;
+    }
+
+    return 2;
+}

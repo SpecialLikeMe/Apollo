@@ -1,6 +1,80 @@
 $ErrorActionPreference = 'Stop'
 
 $compilerDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+function Import-BatchEnvironment {
+    param(
+        [string]$BatchPath
+    )
+
+    if (-not (Test-Path $BatchPath)) {
+        return
+    }
+
+    $cmdExe = if ($env:ComSpec -and (Test-Path $env:ComSpec)) {
+        $env:ComSpec
+    }
+    else {
+        Join-Path $env:SystemRoot 'System32\cmd.exe'
+    }
+
+    $captured = & $cmdExe /d /c "call `"$BatchPath`" >nul && set"
+    foreach ($line in $captured) {
+        $separator = $line.IndexOf('=')
+        if ($separator -lt 1) {
+            continue
+        }
+
+        $name = $line.Substring(0, $separator)
+        $value = $line.Substring($separator + 1)
+        Set-Item -Path ("Env:{0}" -f $name) -Value $value
+    }
+}
+
+function Initialize-NativeToolchainEnvironment {
+    $toolchainEnv = Join-Path $compilerDir 'toolchain-env.bat'
+    Import-BatchEnvironment -BatchPath $toolchainEnv
+
+    if (-not $env:APOLLO_MSYS64_ROOT -and (Test-Path 'C:\msys64')) {
+        $env:APOLLO_MSYS64_ROOT = 'C:\msys64'
+    }
+
+    if (-not $env:APOLLO_MINGW_BIN -and $env:APOLLO_MSYS64_ROOT) {
+        $defaultMingwBin = Join-Path $env:APOLLO_MSYS64_ROOT 'clang64\bin'
+        if (Test-Path $defaultMingwBin) {
+            $env:APOLLO_MINGW_BIN = $defaultMingwBin
+        }
+    }
+
+    if (-not $env:APOLLO_NATIVE_GENERATOR -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        $env:APOLLO_NATIVE_GENERATOR = 'MinGW Makefiles'
+    }
+    if (-not $env:APOLLO_NATIVE_C_COMPILER -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'clang.exe'))) {
+        $env:APOLLO_NATIVE_C_COMPILER = Join-Path $env:APOLLO_MINGW_BIN 'clang.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_CXX_COMPILER -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'clang++.exe'))) {
+        $env:APOLLO_NATIVE_CXX_COMPILER = Join-Path $env:APOLLO_MINGW_BIN 'clang++.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_MAKE_PROGRAM -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        $env:APOLLO_NATIVE_MAKE_PROGRAM = Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_CMAKE_PREFIX -and $env:APOLLO_MSYS64_ROOT) {
+        $defaultCmakePrefix = Join-Path $env:APOLLO_MSYS64_ROOT 'clang64'
+        if (Test-Path (Join-Path $defaultCmakePrefix 'lib\cmake\antlr4-runtime')) {
+            $env:APOLLO_NATIVE_CMAKE_PREFIX = $defaultCmakePrefix
+        }
+    }
+
+    if ($env:APOLLO_MINGW_BIN) {
+        $pathEntries = @($env:PATH -split ';')
+        if ($pathEntries -notcontains $env:APOLLO_MINGW_BIN) {
+            $env:PATH = "$($env:APOLLO_MINGW_BIN);$($env:PATH)"
+        }
+    }
+}
+
+Initialize-NativeToolchainEnvironment
+$env:APOLLO_HIDE_AST = '1'
 Set-Location $compilerDir
 
 function Resolve-NativeBuildDriver {

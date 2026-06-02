@@ -28,8 +28,8 @@ namespace sys {
 
     i32 square(i32 value) {
         i32 magnitude = sys.abs(value);
-        i32 factor = magnitude;
-        i32 result = 0;
+        nconst i32 factor = magnitude;
+        nconst i32 result = 0;
         while (factor > 0) {
             result = result + magnitude;
             factor = factor - 1;
@@ -38,8 +38,8 @@ namespace sys {
     }
 
     i32 pow2(i32 exponent) {
-        i32 remaining = exponent;
-        i32 value = 1;
+        nconst i32 remaining = exponent;
+        nconst i32 value = 1;
         while (remaining > 0) {
             value = value + value;
             remaining = remaining - 1;
@@ -48,8 +48,8 @@ namespace sys {
     }
 
     i32 triangular(i32 limit) {
-        i32 current = 1;
-        i32 total = 0;
+        nconst i32 current = 1;
+        nconst i32 total = 0;
         while (current <= limit) {
             total = total + current;
             current = current + 1;
@@ -58,8 +58,8 @@ namespace sys {
     }
 
     i32 gcd(i32 left, i32 right) {
-        i32 a = sys.abs(left);
-        i32 b = sys.abs(right);
+        nconst i32 a = sys.abs(left);
+        nconst i32 b = sys.abs(right);
         if (a == 0) {
             return b;
         }

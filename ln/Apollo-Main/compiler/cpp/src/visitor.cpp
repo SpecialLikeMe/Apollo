@@ -85,6 +85,7 @@ struct LoweredValue {
     llvm::Type* storageType = nullptr;
     std::string typeText;
     bool ownsHeapStorage = false;
+    bool isMutable = false;
 };
 
 using LoweredValueMap = std::unordered_map<std::string, LoweredValue>;
@@ -452,6 +453,56 @@ std::string canonicalApolloTypeText(std::string_view text) {
     std::string trimmed = resolveActiveTypeAliases(text);
     trimmed.erase(std::remove(trimmed.begin(), trimmed.end(), '&'), trimmed.end());
     trimmed = trimCopy(std::move(trimmed));
+    if (const std::size_t genericStart = trimmed.find('<'); genericStart != std::string::npos && !trimmed.empty() && trimmed.back() == '>') {
+        std::vector<std::string> arguments;
+        std::string current;
+        int depth = 0;
+        bool valid = true;
+        for (std::size_t index = genericStart + 1; index + 1 < trimmed.size(); ++index) {
+            const char ch = trimmed[index];
+            if (ch == '<') {
+                ++depth;
+                current.push_back(ch);
+                continue;
+            }
+            if (ch == '>') {
+                if (depth == 0) {
+                    valid = false;
+                    break;
+                }
+                --depth;
+                current.push_back(ch);
+                continue;
+            }
+            if (ch == ',' && depth == 0) {
+                arguments.push_back(trimCopy(current));
+                current.clear();
+                continue;
+            }
+            current.push_back(ch);
+        }
+        if (valid && depth == 0) {
+            arguments.push_back(trimCopy(current));
+            std::string canonical = canonicalApolloTypeText(trimmed.substr(0, genericStart));
+            canonical.push_back('<');
+            bool first = true;
+            for (const std::string& argument : arguments) {
+                if (argument.empty()) {
+                    valid = false;
+                    break;
+                }
+                if (!first) {
+                    canonical += ',';
+                }
+                canonical += canonicalApolloTypeText(argument);
+                first = false;
+            }
+            if (valid) {
+                canonical.push_back('>');
+                return canonical;
+            }
+        }
+    }
     if (trimmed == "bool") {
         return "bool";
     }
@@ -1447,6 +1498,7 @@ llvm::Type* lowerReturnType(llvm::LLVMContext& context, compilerv1Parser::Return
 }
 
 std::string inferExpressionTypeText(compilerv1Parser::ExpressionContext* expression, const LoweredValueMap& values);
+extern std::unordered_map<std::string, std::string> gLoweredFunctionReturnTypeTexts;
 
 std::vector<std::string> collectCanonicalFunctionParamTypes(compilerv1Parser::FunctionContext* functionCtx) {
     std::vector<std::string> paramTypes;
@@ -1797,10 +1849,14 @@ llvm::Function* lowerFunctionPrototype(llvm::Module& module,
     }
 
     llvm::FunctionType* functionType = llvm::FunctionType::get(returnType, paramTypes, false);
+    const std::string loweredName = loweredApolloFunctionName(module, functionCtx);
     llvm::Function* function = llvm::Function::Create(functionType,
         llvm::GlobalValue::ExternalLinkage,
-        loweredApolloFunctionName(module, functionCtx),
+        loweredName,
         module);
+    if (functionCtx->returnType() != nullptr && functionCtx->returnType()->typeRef() != nullptr) {
+        gLoweredFunctionReturnTypeTexts[loweredName] = canonicalApolloTypeText(functionCtx->returnType()->typeRef()->getText());
+    }
     size_t index = 0;
     for (auto& arg : function->args()) {
         arg.setName(paramNames[index++]);
@@ -2026,6 +2082,47 @@ struct AggregateRegistry {
 const AggregateRegistry* gActiveAggregateRegistry = nullptr;
 std::unordered_set<std::string> gGuiWindowGlobals;
 std::unordered_map<std::string, std::string> gGlobalTypeTexts;
+std::unordered_map<std::string, std::string> gLoweredFunctionReturnTypeTexts;
+std::unordered_set<std::string> gMutableGlobalBindings;
+
+bool hasDirectToken(const antlr4::ParserRuleContext* ctx, const size_t tokenType) {
+    if (ctx == nullptr || ctx->children.empty()) {
+        return false;
+    }
+
+    for (auto* child : ctx->children) {
+        auto* terminal = dynamic_cast<antlr4::tree::TerminalNode*>(child);
+        if (terminal != nullptr && terminal->getSymbol() != nullptr && terminal->getSymbol()->getType() == tokenType) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool isMutableBinding(compilerv1Parser::InitCoreContext* initCore) {
+    return hasDirectToken(initCore, compilerv1Parser::NCONST);
+}
+
+bool isMutableBinding(compilerv1Parser::EasyInitContext* easyInit) {
+    return hasDirectToken(easyInit, compilerv1Parser::NCONST);
+}
+
+bool isMutableBinding(compilerv1Parser::ParamContext* param) {
+    return hasDirectToken(param, compilerv1Parser::NCONST);
+}
+
+bool isMutableBinding(compilerv1Parser::LtoInitContext* ltoInit) {
+    return hasDirectToken(ltoInit, compilerv1Parser::NCONST);
+}
+
+bool isMutableBinding(compilerv1Parser::ForInStatementContext* forInStatement) {
+    return hasDirectToken(forInStatement, compilerv1Parser::NCONST);
+}
+
+bool isMutableBinding(compilerv1Parser::SrcDeclContext* srcDecl) {
+    return hasDirectToken(srcDecl, compilerv1Parser::NCONST);
+}
 
 class AggregateRegistryScope final {
 public:
@@ -2828,6 +2925,13 @@ llvm::Value* lowerConstructedInstanceValue(llvm::IRBuilder<>& builder,
         return nullptr;
     }
 
+    if (instanceValue->braceInitializer() != nullptr) {
+        if (!applyAggregateBraceInitializerToValue(builder, aggregateName, aggregateValue, instanceValue->braceInitializer(), values)) {
+            return nullptr;
+        }
+        return aggregateValue;
+    }
+
     if (!lowerAggregateConstructorCall(builder, aggregateName, aggregateValue, instanceValue->args(), values)) {
         return nullptr;
     }
@@ -3149,9 +3253,15 @@ std::string inferIndexedAccessTypeText(compilerv1Parser::IndexedAccessContext* i
     }
 
     const std::string containerType = canonicalApolloTypeText(it->second.typeText);
+    if (containerType == "vector<str>") {
+        return "str";
+    }
     if (containerType == "vector<i32>"
+        || containerType == "map<i32,i32>"
         || containerType == "unordered_map<i32,i32>"
         || containerType == "hsh<i32,i32>"
+        || containerType == "map<str,i32>"
+        || containerType == "unordered_map<str,i32>"
         || containerType == "hsh<str,i32>") {
         return "i32";
     }
@@ -3197,6 +3307,123 @@ std::string inferMemberAccessTypeText(compilerv1Parser::MemberaccessContext* mem
     return canonicalApolloTypeText(fieldIt->typeText);
 }
 
+std::string inferKnownStdBridgeReturnTypeText(std::string_view functionName) {
+    if (functionName == "sys__printf"
+        || functionName == "sys__hash_fnv1a_32"
+        || functionName == "sys__hash_adler32"
+        || functionName == "sys__hash_crc32"
+        || functionName == "sys__hash_murmur3_32"
+        || functionName == "sys__json_parse_bool") {
+        return "i32";
+    }
+    if (functionName == "sys__hash_fnv1a_64" || functionName == "sys__json_parse_int") {
+        return "i64";
+    }
+    if (functionName == "sys__json_parse_float") {
+        return "f64";
+    }
+    if (functionName == "sys__json_parse_str"
+        || functionName == "sys__json_write_bool"
+        || functionName == "sys__json_write_int"
+        || functionName == "sys__json_write_float"
+        || functionName == "sys__json_write_str"
+        || functionName == "sys__json_write_array_start"
+        || functionName == "sys__json_write_array_end"
+        || functionName == "sys__json_write_object_start"
+        || functionName == "sys__json_write_object_end") {
+        return "str";
+    }
+
+    return {};
+}
+
+std::string lookupLoweredFunctionReturnTypeText(std::string_view loweredName) {
+    const auto it = gLoweredFunctionReturnTypeTexts.find(std::string(loweredName));
+    if (it != gLoweredFunctionReturnTypeTexts.end()) {
+        return canonicalApolloTypeText(it->second);
+    }
+
+    return inferKnownStdBridgeReturnTypeText(loweredName);
+}
+
+std::string inferFunctionCallReturnTypeText(compilerv1Parser::FunctionCallContext* functionCall,
+    const LoweredValueMap& values) {
+    if (functionCall == nullptr || functionCall->ID() == nullptr) {
+        return {};
+    }
+
+    const std::string functionName = functionCall->ID()->getText();
+    if (functionName == "KEYPRESS") {
+        return "bool";
+    }
+
+    std::vector<std::string> inferredArgTypes;
+    if (auto* argsCtx = functionCall->args(); argsCtx != nullptr) {
+        for (auto* expression : argsCtx->expression()) {
+            inferredArgTypes.push_back(inferExpressionTypeText(expression, values));
+        }
+    }
+
+    const bool allArgsInferred = std::all_of(inferredArgTypes.begin(), inferredArgTypes.end(), [](const std::string& typeText) {
+        return !typeText.empty();
+    });
+    if (allArgsInferred) {
+        if (const std::string overloadedType = lookupLoweredFunctionReturnTypeText(buildApolloOverloadName(functionName, inferredArgTypes)); !overloadedType.empty()) {
+            return overloadedType;
+        }
+    }
+
+    return lookupLoweredFunctionReturnTypeText(functionName);
+}
+
+std::string inferMemberAccessCallReturnTypeText(compilerv1Parser::MemberaccessContext* memberAccess,
+    const LoweredValueMap& values) {
+    if (memberAccess == nullptr || memberAccess->functionCall() == nullptr || memberAccess->functionCall()->ID() == nullptr) {
+        return {};
+    }
+
+    const std::string methodName = memberAccess->functionCall()->ID()->getText();
+    const std::string baseText = memberAccess->accessBase() != nullptr ? memberAccess->accessBase()->getText() : std::string();
+    if (baseText == "sys") {
+        const std::string resolvedName = "sys__" + methodName;
+        std::vector<std::string> inferredArgTypes;
+        if (auto* argsCtx = memberAccess->functionCall()->args(); argsCtx != nullptr) {
+            for (auto* expression : argsCtx->expression()) {
+                inferredArgTypes.push_back(inferExpressionTypeText(expression, values));
+            }
+        }
+
+        const bool allArgsInferred = std::all_of(inferredArgTypes.begin(), inferredArgTypes.end(), [](const std::string& typeText) {
+            return !typeText.empty();
+        });
+        if (allArgsInferred) {
+            if (const std::string overloadedType = lookupLoweredFunctionReturnTypeText(buildApolloOverloadName(resolvedName, inferredArgTypes)); !overloadedType.empty()) {
+                return overloadedType;
+            }
+        }
+
+        return lookupLoweredFunctionReturnTypeText(resolvedName);
+    }
+
+    if (gActiveAggregateRegistry == nullptr) {
+        return {};
+    }
+
+    const std::string aggregateName = resolveAggregateTypeName(values, baseText);
+    if (aggregateName.empty()) {
+        return {};
+    }
+
+    if (const AggregateMethodRecord* method = findAggregateMethod(*gActiveAggregateRegistry, aggregateName, methodName)) {
+        if (method->method != nullptr && method->method->returnType() != nullptr && method->method->returnType()->typeRef() != nullptr) {
+            return canonicalApolloTypeText(method->method->returnType()->typeRef()->getText());
+        }
+        return "void";
+    }
+
+    return {};
+}
+
 std::string inferExpressionTypeText(compilerv1Parser::ExpressionContext* expression, const LoweredValueMap& values) {
     std::string inferred = inferExpressionTypeText(expression);
     if (!inferred.empty()) {
@@ -3225,7 +3452,17 @@ std::string inferExpressionTypeText(compilerv1Parser::ExpressionContext* express
             return inferIndexedAccessTypeText(primary->indexedAccess(), values);
         }
         if (primary->memberaccess() != nullptr) {
+            if (primary->memberaccess()->functionCall() != nullptr) {
+                if (const std::string callType = inferMemberAccessCallReturnTypeText(primary->memberaccess(), values); !callType.empty()) {
+                    return canonicalApolloTypeText(callType);
+                }
+            }
             return inferMemberAccessTypeText(primary->memberaccess(), values);
+        }
+        if (primary->functionCall() != nullptr) {
+            if (const std::string returnType = inferFunctionCallReturnTypeText(primary->functionCall(), values); !returnType.empty()) {
+                return canonicalApolloTypeText(returnType);
+            }
         }
         if (primary->functionCall() != nullptr && primary->functionCall()->ID() != nullptr
             && primary->functionCall()->ID()->getText() == "unwrap_enum") {
@@ -3257,7 +3494,13 @@ bool isStringLikeComparisonOperand(antlr4::ParserRuleContext* expression, const 
         return it != values.end() && canonicalApolloTypeText(it->second.typeText) == "str";
     }
     if (primary->memberaccess() != nullptr) {
+        if (primary->memberaccess()->functionCall() != nullptr) {
+            return canonicalApolloTypeText(inferMemberAccessCallReturnTypeText(primary->memberaccess(), values)) == "str";
+        }
         return canonicalApolloTypeText(inferMemberAccessTypeText(primary->memberaccess(), values)) == "str";
+    }
+    if (primary->functionCall() != nullptr) {
+        return canonicalApolloTypeText(inferFunctionCallReturnTypeText(primary->functionCall(), values)) == "str";
     }
     return false;
 }
@@ -3270,6 +3513,9 @@ llvm::Value* createGlobalCString(llvm::Module& module,
 llvm::FunctionCallee getApolloVectorStrCreateDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloVectorI32CreateDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloVectorStrPushDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorStrGetDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorStrSetDeclaration(llvm::Module& module);
+llvm::FunctionCallee getApolloVectorStrSizeDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloVectorI32PushDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloVectorI32GetDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloVectorI32SetDeclaration(llvm::Module& module);
@@ -3284,6 +3530,10 @@ llvm::FunctionCallee getApolloHashI32I32GetDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloNestedHashCreateDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloNestedHashSetDeclaration(llvm::Module& module);
 llvm::FunctionCallee getApolloNestedHashGetDeclaration(llvm::Module& module);
+bool isApolloTypeText(const std::string& actual, std::string_view expected);
+llvm::Value* lowerIntegerToCString(llvm::IRBuilder<>& builder, llvm::Value* value);
+bool isStrSetType(std::string_view typeText);
+bool isI32SetType(std::string_view typeText);
 llvm::Function* getApolloStdinReadLineFunction(llvm::Module& module);
 llvm::FunctionCallee getApolloExecuteApolloPayloadDeclaration(llvm::Module& module);
 llvm::AllocaInst* createEntryAlloca(llvm::Function* function, llvm::Type* type, llvm::StringRef name);
@@ -3703,6 +3953,40 @@ llvm::Value* lowerInterpolatedStringValue(llvm::IRBuilder<>& builder,
     writeArgs.push_back(formatValue);
     writeArgs.insert(writeArgs.end(), formatArgs.begin(), formatArgs.end());
     builder.CreateCall(snprintfDecl, writeArgs);
+    return buffer;
+}
+
+llvm::Value* lowerIntegerToCString(llvm::IRBuilder<>& builder, llvm::Value* value) {
+    if (value == nullptr || !value->getType()->isIntegerTy()) {
+        return nullptr;
+    }
+
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
+        return nullptr;
+    }
+
+    llvm::LLVMContext& context = builder.getContext();
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(context);
+    llvm::Type* i64Ty = llvm::Type::getInt64Ty(context);
+    llvm::Type* charPtrTy = llvm::PointerType::getUnqual(context);
+
+    llvm::Value* formatValue = createGlobalCString(*module, builder, "%lld", "apollo.int.fmt");
+    llvm::FunctionCallee snprintfDecl = module->getOrInsertFunction(
+        "snprintf",
+        llvm::FunctionType::get(i32Ty, {charPtrTy, i64Ty, charPtrTy}, true));
+    llvm::FunctionCallee mallocDecl = module->getOrInsertFunction(
+        "malloc",
+        llvm::FunctionType::get(charPtrTy, {i64Ty}, false));
+
+    llvm::Value* extended = builder.CreateSExtOrBitCast(value, i64Ty);
+    llvm::Value* nullBuffer = llvm::ConstantPointerNull::get(llvm::cast<llvm::PointerType>(charPtrTy));
+    llvm::Value* zeroSize = llvm::ConstantInt::get(i64Ty, 0);
+    llvm::Value* requiredLength = builder.CreateCall(snprintfDecl, {nullBuffer, zeroSize, formatValue, extended});
+    llvm::Value* requiredLength64 = builder.CreateSExtOrBitCast(requiredLength, i64Ty);
+    llvm::Value* bufferSize = builder.CreateAdd(requiredLength64, llvm::ConstantInt::get(i64Ty, 1));
+    llvm::Value* buffer = builder.CreateCall(mallocDecl, {bufferSize});
+    builder.CreateCall(snprintfDecl, {buffer, bufferSize, formatValue, extended});
     return buffer;
 }
 
@@ -4204,6 +4488,147 @@ llvm::Value* lowerMemberAccessValue(llvm::IRBuilder<>& builder,
         || gGuiWindowGlobals.contains(baseText);
     const bool isFileBase = valueIt != values.end() && canonicalApolloTypeText(valueIt->second.typeText) == "file";
 
+    if (valueIt != values.end() && memberAccess->functionCall() != nullptr && memberAccess->functionCall()->ID() != nullptr) {
+        const std::string& baseTypeText = valueIt->second.typeText;
+        const std::string methodName = memberAccess->functionCall()->ID()->getText();
+        auto* argList = memberAccess->functionCall()->args();
+        const std::size_t argCount = argList == nullptr ? 0 : argList->expression().size();
+        llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
+        llvm::Type* charPtrTy = llvm::PointerType::getUnqual(builder.getContext());
+
+        auto lowerOpaqueHandle = [&]() -> llvm::Value* {
+            if (baseValue == nullptr) {
+                return nullptr;
+            }
+            if (baseValue->getType() == opaquePtrTy) {
+                return baseValue;
+            }
+            if (!baseValue->getType()->isPointerTy()) {
+                return nullptr;
+            }
+            return builder.CreateBitCast(baseValue, opaquePtrTy);
+        };
+
+        if (isApolloTypeText(baseTypeText, "vector<str>")) {
+            llvm::Value* handle = lowerOpaqueHandle();
+            if (handle != nullptr && (methodName == "append" || methodName == "push") && argCount == 1) {
+                if (!valueIt->second.isMutable) {
+                    setSemanticError("cannot assign to immutable binding `" + baseText + "`");
+                    return nullptr;
+                }
+                llvm::Value* item = lowerExpressionForExpectedType(builder, argList->expression(0), charPtrTy, values);
+                if (item == nullptr) {
+                    return nullptr;
+                }
+                return builder.CreateCall(getApolloVectorStrPushDeclaration(*module), {handle, item});
+            }
+        }
+
+        if (isApolloTypeText(baseTypeText, "vector<i32>")) {
+            llvm::Value* handle = lowerOpaqueHandle();
+            if (handle != nullptr && (methodName == "append" || methodName == "push") && argCount == 1) {
+                if (!valueIt->second.isMutable) {
+                    setSemanticError("cannot assign to immutable binding `" + baseText + "`");
+                    return nullptr;
+                }
+                llvm::Value* item = lowerExpressionValue(builder, argList->expression(0), values);
+                if (item == nullptr) {
+                    return nullptr;
+                }
+                if (!item->getType()->isIntegerTy(32)) {
+                    item = castToCommonInteger(builder, item, llvm::Type::getInt32Ty(builder.getContext()));
+                }
+                if (item == nullptr || !item->getType()->isIntegerTy(32)) {
+                    return nullptr;
+                }
+                return builder.CreateCall(getApolloVectorI32PushDeclaration(*module), {handle, item});
+            }
+        }
+
+        if (isStrSetType(baseTypeText) || isI32SetType(baseTypeText)) {
+            llvm::Value* handle = lowerOpaqueHandle();
+            if (handle == nullptr) {
+                return nullptr;
+            }
+
+            auto lowerSetItemText = [&]() -> llvm::Value* {
+                if (argCount != 1) {
+                    return nullptr;
+                }
+                if (isStrSetType(baseTypeText)) {
+                    return lowerExpressionForExpectedType(builder, argList->expression(0), charPtrTy, values);
+                }
+                llvm::Value* item = lowerExpressionValue(builder, argList->expression(0), values);
+                if (item == nullptr) {
+                    return nullptr;
+                }
+                if (!item->getType()->isIntegerTy()) {
+                    return nullptr;
+                }
+                return lowerIntegerToCString(builder, item);
+            };
+
+            if (methodName == "insert" && argCount == 1) {
+                if (!valueIt->second.isMutable) {
+                    setSemanticError("cannot assign to immutable binding `" + baseText + "`");
+                    return nullptr;
+                }
+                llvm::Value* itemText = lowerSetItemText();
+                if (itemText == nullptr) {
+                    return nullptr;
+                }
+                llvm::FunctionCallee callee = module->getOrInsertFunction(
+                    "sys__native_set_insert",
+                    llvm::FunctionType::get(llvm::Type::getInt32Ty(builder.getContext()), {opaquePtrTy, charPtrTy}, false));
+                return builder.CreateCall(callee, {handle, itemText});
+            }
+
+            if (methodName == "remove" && argCount == 1) {
+                if (!valueIt->second.isMutable) {
+                    setSemanticError("cannot assign to immutable binding `" + baseText + "`");
+                    return nullptr;
+                }
+                llvm::Value* itemText = lowerSetItemText();
+                if (itemText == nullptr) {
+                    return nullptr;
+                }
+                llvm::FunctionCallee callee = module->getOrInsertFunction(
+                    "sys__native_set_remove",
+                    llvm::FunctionType::get(llvm::Type::getInt32Ty(builder.getContext()), {opaquePtrTy, charPtrTy}, false));
+                return builder.CreateCall(callee, {handle, itemText});
+            }
+
+            if (methodName == "contains" && argCount == 1) {
+                llvm::Value* itemText = lowerSetItemText();
+                if (itemText == nullptr) {
+                    return nullptr;
+                }
+                llvm::FunctionCallee callee = module->getOrInsertFunction(
+                    "sys__native_set_contains",
+                    llvm::FunctionType::get(llvm::Type::getInt32Ty(builder.getContext()), {opaquePtrTy, charPtrTy}, false));
+                return builder.CreateCall(callee, {handle, itemText});
+            }
+
+            if (methodName == "len" && argCount == 0) {
+                llvm::FunctionCallee callee = module->getOrInsertFunction(
+                    "sys__native_set_len",
+                    llvm::FunctionType::get(llvm::Type::getInt32Ty(builder.getContext()), {opaquePtrTy}, false));
+                return builder.CreateCall(callee, {handle});
+            }
+
+            if (methodName == "clear" && argCount == 0) {
+                if (!valueIt->second.isMutable) {
+                    setSemanticError("cannot assign to immutable binding `" + baseText + "`");
+                    return nullptr;
+                }
+                llvm::FunctionCallee callee = module->getOrInsertFunction(
+                    "sys__native_set_clear",
+                    llvm::FunctionType::get(llvm::Type::getVoidTy(builder.getContext()), {opaquePtrTy}, false));
+                return builder.CreateCall(callee, {handle});
+            }
+        }
+    }
+
     if (isFileBase && memberAccess->functionCall() != nullptr && memberAccess->functionCall()->ID() != nullptr) {
         if (baseValue == nullptr) {
             return nullptr;
@@ -4584,7 +5009,31 @@ llvm::Value* lowerCastValue(llvm::IRBuilder<>& builder,
 }
 
 bool isApolloTypeText(const std::string& actual, std::string_view expected) {
-    return actual == expected;
+    return canonicalApolloTypeText(actual) == canonicalApolloTypeText(expected);
+}
+
+bool isStrI32MapType(std::string_view typeText) {
+    return isApolloTypeText(std::string(typeText), "map<str,i32>")
+        || isApolloTypeText(std::string(typeText), "hsh<str,i32>")
+        || isApolloTypeText(std::string(typeText), "unordered_map<str,i32>");
+}
+
+bool isI32I32MapType(std::string_view typeText) {
+    return isApolloTypeText(std::string(typeText), "map<i32,i32>")
+        || isApolloTypeText(std::string(typeText), "hsh<i32,i32>")
+        || isApolloTypeText(std::string(typeText), "unordered_map<i32,i32>");
+}
+
+bool isStrSetType(std::string_view typeText) {
+    return isApolloTypeText(std::string(typeText), "set<str>")
+        || isApolloTypeText(std::string(typeText), "unordered_set<str>");
+}
+
+bool isI32SetType(std::string_view typeText) {
+    return isApolloTypeText(std::string(typeText), "set<i32>")
+    || isApolloTypeText(std::string(typeText), "unordered_set<i32>")
+    || isApolloTypeText(std::string(typeText), "set<int>")
+    || isApolloTypeText(std::string(typeText), "unordered_set<int>");
 }
 
 bool extractCompositeLiteralParts(compilerv1Parser::ExpressionContext* expression,
@@ -4686,26 +5135,34 @@ bool extractCompositeLiteralParts(compilerv1Parser::ExpressionContext* expressio
 llvm::Value* createOpaqueContainerDefault(llvm::Module& module,
     llvm::IRBuilder<>& builder,
     std::string_view typeText) {
-    if (const std::string symbolStem = soaVectorSymbolStem(typeText); !symbolStem.empty()) {
+    const std::string canonicalType = canonicalApolloTypeText(typeText);
+    if (const std::string symbolStem = soaVectorSymbolStem(canonicalType); !symbolStem.empty()) {
         llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
         llvm::FunctionCallee createDecl = module.getOrInsertFunction(
             symbolStem + "_create",
             llvm::FunctionType::get(opaquePtrTy, {}, false));
         return builder.CreateCall(createDecl);
     }
-    if (typeText == "vector<str>") {
+    if (canonicalType == "vector<str>") {
         return builder.CreateCall(getApolloVectorStrCreateDeclaration(module));
     }
-    if (typeText == "vector<i32>") {
+    if (canonicalType == "vector<i32>") {
         return builder.CreateCall(getApolloVectorI32CreateDeclaration(module));
     }
-    if (typeText == "hsh<str,i32>") {
+    if (isStrI32MapType(canonicalType)) {
         return builder.CreateCall(getApolloHashStrI32CreateDeclaration(module));
     }
-    if (typeText == "unordered_map<i32,i32>" || typeText == "hsh<i32,i32>") {
+    if (isI32I32MapType(canonicalType)) {
         return builder.CreateCall(getApolloHashI32I32CreateDeclaration(module));
     }
-    if (typeText == "hsh<hsh<i32,str>,hsh<str,i32>>") {
+    if (isStrSetType(canonicalType) || isI32SetType(canonicalType)) {
+        llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+        llvm::FunctionCallee createDecl = module.getOrInsertFunction(
+            "sys__native_set_new",
+            llvm::FunctionType::get(opaquePtrTy, {}, false));
+        return builder.CreateCall(createDecl);
+    }
+    if (canonicalType == "hsh<hsh<i32,str>,hsh<str,i32>>") {
         return builder.CreateCall(getApolloNestedHashCreateDeclaration(module));
     }
     return nullptr;
@@ -4741,12 +5198,20 @@ llvm::Value* lowerIndexedAccessValue(llvm::IRBuilder<>& builder,
         }
     }
 
-    if (isApolloTypeText(it->second.typeText, "hsh<str,i32>") && keys.size() == 1 && keys[0] != nullptr && keys[0]->APND() == nullptr) {
+    if (isStrI32MapType(it->second.typeText) && keys.size() == 1 && keys[0] != nullptr && keys[0]->APND() == nullptr) {
         llvm::Value* keyValue = lowerExpressionValue(builder, keys[0]->expression(), values);
         if (keyValue == nullptr) {
             return nullptr;
         }
         return builder.CreateCall(getApolloHashStrI32GetDeclaration(*module), {handle, keyValue});
+    }
+
+    if (isApolloTypeText(it->second.typeText, "vector<str>") && keys.size() == 1 && keys[0] != nullptr && keys[0]->APND() == nullptr) {
+        llvm::Value* indexValue = lowerI32IndexValue(builder, keys[0]->expression(), values);
+        if (indexValue == nullptr) {
+            return nullptr;
+        }
+        return builder.CreateCall(getApolloVectorStrGetDeclaration(*module), {handle, indexValue});
     }
 
     if (isApolloTypeText(it->second.typeText, "vector<i32>") && keys.size() == 1 && keys[0] != nullptr && keys[0]->APND() == nullptr) {
@@ -4757,7 +5222,7 @@ llvm::Value* lowerIndexedAccessValue(llvm::IRBuilder<>& builder,
         return builder.CreateCall(getApolloVectorI32GetDeclaration(*module), {handle, indexValue});
     }
 
-    if ((isApolloTypeText(it->second.typeText, "unordered_map<i32,i32>") || isApolloTypeText(it->second.typeText, "hsh<i32,i32>"))
+    if (isI32I32MapType(it->second.typeText)
         && keys.size() == 1 && keys[0] != nullptr && keys[0]->APND() == nullptr) {
         llvm::Value* keyValue = lowerI32IndexValue(builder, keys[0]->expression(), values);
         if (keyValue == nullptr) {
@@ -5354,6 +5819,11 @@ bool lowerAssignmentStatement(llvm::IRBuilder<>& builder,
         return false;
     }
 
+    if (!it->second.isMutable) {
+        setSemanticError("cannot assign to immutable binding `" + target->ID()->getText() + "`");
+        return false;
+    }
+
     if (!target->accessKey().empty()) {
         llvm::Value* handle = loadIfAddressable(builder, it->second);
         if (handle == nullptr) {
@@ -5409,6 +5879,19 @@ bool lowerAssignmentStatement(llvm::IRBuilder<>& builder,
             return true;
         }
 
+        if (isApolloTypeText(it->second.typeText, "vector<str>")
+            && target->accessKey().size() == 1
+            && target->accessKey()[0] != nullptr
+            && target->accessKey()[0]->APND() == nullptr) {
+            llvm::Value* indexValue = lowerI32IndexValue(builder, target->accessKey()[0]->expression(), values);
+            llvm::Value* newValue = lowerExpressionValue(builder, assignment->assignmentCore()->expression(), values);
+            if (indexValue == nullptr || newValue == nullptr) {
+                return false;
+            }
+            builder.CreateCall(getApolloVectorStrSetDeclaration(*module), {handle, indexValue, newValue});
+            return true;
+        }
+
         if (const std::string symbolStem = soaVectorSymbolStem(it->second.typeText); !symbolStem.empty()) {
             llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
             llvm::Type* elementType = lowerSoaVectorElementType(builder.getContext(), it->second.typeText);
@@ -5448,7 +5931,7 @@ bool lowerAssignmentStatement(llvm::IRBuilder<>& builder,
             }
         }
 
-        if (isApolloTypeText(it->second.typeText, "hsh<str,i32>")
+        if (isStrI32MapType(it->second.typeText)
             && target->accessKey().size() == 1
             && target->accessKey()[0] != nullptr
             && target->accessKey()[0]->APND() == nullptr) {
@@ -5461,7 +5944,7 @@ bool lowerAssignmentStatement(llvm::IRBuilder<>& builder,
             return true;
         }
 
-        if ((isApolloTypeText(it->second.typeText, "unordered_map<i32,i32>") || isApolloTypeText(it->second.typeText, "hsh<i32,i32>"))
+        if (isI32I32MapType(it->second.typeText)
             && target->accessKey().size() == 1
             && target->accessKey()[0] != nullptr
             && target->accessKey()[0]->APND() == nullptr) {
@@ -5668,6 +6151,14 @@ bool lowerInitStatement(llvm::IRBuilder<>& builder,
                 return false;
             }
         }
+    } else if (initCore->braceInitializer() != nullptr && gActiveAggregateRegistry != nullptr) {
+        const std::string aggregateName = trimAggregateTypeName(typeText);
+        if (gActiveAggregateRegistry->find(aggregateName) != nullptr) {
+            initialValue = lowerAggregateBraceInitializerValue(builder, aggregateName, initCore->braceInitializer(), values);
+            if (initialValue == nullptr) {
+                return false;
+            }
+        }
     } else {
         initialValue = createOpaqueContainerDefault(*builder.GetInsertBlock()->getModule(), builder, typeText);
         if (initialValue == nullptr && gActiveAggregateRegistry != nullptr) {
@@ -5684,7 +6175,7 @@ bool lowerInitStatement(llvm::IRBuilder<>& builder,
         }
     }
     builder.CreateStore(initialValue, address);
-    values[initCore->ID()->getText()] = {initialValue, address, type, typeText};
+    values[initCore->ID()->getText()] = {initialValue, address, type, typeText, false, isMutableBinding(initCore)};
     return true;
 }
 
@@ -5704,7 +6195,7 @@ bool lowerLtoInitStatement(llvm::IRBuilder<>& builder,
     llvm::Type* type = initialValue->getType();
     llvm::AllocaInst* address = createEntryAlloca(function, type, ltoInit->ID()->getText());
     builder.CreateStore(initialValue, address);
-    values[ltoInit->ID()->getText()] = {initialValue, address, type, "lto"};
+    values[ltoInit->ID()->getText()] = {initialValue, address, type, "lto", false, isMutableBinding(ltoInit)};
     return true;
 }
 
@@ -6012,7 +6503,7 @@ bool lowerEasyInitStatement(llvm::IRBuilder<>& builder,
         llvm::AllocaInst* address = createEntryAlloca(function, type, easyInit->ID()->getText());
         llvm::Value* zeroValue = llvm::ConstantInt::get(type, 0);
         builder.CreateStore(zeroValue, address);
-        values[easyInit->ID()->getText()] = {zeroValue, address, type, inferExpressionTypeText(easyInit->expression(), values)};
+        values[easyInit->ID()->getText()] = {zeroValue, address, type, inferExpressionTypeText(easyInit->expression(), values), false, isMutableBinding(easyInit)};
         return true;
     }
 
@@ -6020,7 +6511,7 @@ bool lowerEasyInitStatement(llvm::IRBuilder<>& builder,
     llvm::Type* type = initialValue->getType();
     llvm::AllocaInst* address = createEntryAlloca(function, type, name);
     builder.CreateStore(initialValue, address);
-    values[name] = {initialValue, address, type, inferExpressionTypeText(easyInit->expression(), values)};
+    values[name] = {initialValue, address, type, inferExpressionTypeText(easyInit->expression(), values), false, isMutableBinding(easyInit)};
     return true;
 }
 
@@ -6234,6 +6725,14 @@ bool lowerInitCoreStatement(llvm::IRBuilder<>& builder,
                 return false;
             }
         }
+    } else if (initCore->braceInitializer() != nullptr && gActiveAggregateRegistry != nullptr) {
+        const std::string aggregateName = trimAggregateTypeName(typeText);
+        if (gActiveAggregateRegistry->find(aggregateName) != nullptr) {
+            initialValue = lowerAggregateBraceInitializerValue(builder, aggregateName, initCore->braceInitializer(), values);
+            if (initialValue == nullptr) {
+                return false;
+            }
+        }
     } else {
         initialValue = createOpaqueContainerDefault(*builder.GetInsertBlock()->getModule(), builder, typeText);
         if (initialValue == nullptr && gActiveAggregateRegistry != nullptr) {
@@ -6408,7 +6907,7 @@ bool lowerForInStatement(llvm::Module& module,
         llvm::AllocaInst* endAddr = createEntryAlloca(function, elementType, forInStatement->ID()->getText() + ".end");
         builder.CreateStore(loValue, iAddr);
         builder.CreateStore(hiValue, endAddr);
-        values[forInStatement->ID()->getText()] = {nullptr, iAddr, elementType, forInStatement->typeRef()->getText()};
+        values[forInStatement->ID()->getText()] = {nullptr, iAddr, elementType, forInStatement->typeRef()->getText(), false, isMutableBinding(forInStatement)};
 
         llvm::BasicBlock* rcond = llvm::BasicBlock::Create(module.getContext(), "forin.range.cond", function);
         llvm::BasicBlock* rbody = llvm::BasicBlock::Create(module.getContext(), "forin.range.body", function);
@@ -6439,9 +6938,12 @@ bool lowerForInStatement(llvm::Module& module,
     }
 
     const auto sourceIt = values.find(iterableExpr->getText());
+    const bool isStrVector = sourceIt != values.end() && isApolloTypeText(sourceIt->second.typeText, "vector<str>");
     const bool isI32Vector = sourceIt != values.end() && isApolloTypeText(sourceIt->second.typeText, "vector<i32>");
+    const bool isStrSet = sourceIt != values.end() && isStrSetType(sourceIt->second.typeText);
+    const bool isI32Set = sourceIt != values.end() && isI32SetType(sourceIt->second.typeText);
     const std::string soaSymbolStem = sourceIt == values.end() ? std::string() : soaVectorSymbolStem(sourceIt->second.typeText);
-    if (sourceIt == values.end() || (!isI32Vector && soaSymbolStem.empty())) {
+    if (sourceIt == values.end() || (!isStrVector && !isI32Vector && !isStrSet && !isI32Set && soaSymbolStem.empty())) {
         unsupportedReason = "for-in-source-not-iterable";
         return false;
     }
@@ -6452,8 +6954,13 @@ bool lowerForInStatement(llvm::Module& module,
         return false;
     }
 
+    if ((isStrSet && !elementType->isPointerTy()) || (isI32Set && !elementType->isIntegerTy())) {
+        unsupportedReason = "for-in-element-type-mismatch";
+        return false;
+    }
+
     llvm::AllocaInst* elementAddress = createEntryAlloca(function, elementType, forInStatement->ID()->getText());
-    values[forInStatement->ID()->getText()] = {nullptr, elementAddress, elementType, forInStatement->typeRef()->getText()};
+    values[forInStatement->ID()->getText()] = {nullptr, elementAddress, elementType, forInStatement->typeRef()->getText(), false, isMutableBinding(forInStatement)};
 
     llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
     llvm::AllocaInst* indexAddress = createEntryAlloca(function, i32Ty, forInStatement->ID()->getText() + ".index");
@@ -6464,14 +6971,36 @@ bool lowerForInStatement(llvm::Module& module,
     llvm::BasicBlock* updateBlock = llvm::BasicBlock::Create(module.getContext(), "forin.update", function);
     llvm::BasicBlock* endBlock = llvm::BasicBlock::Create(module.getContext(), "forin.end", function);
 
+    llvm::AllocaInst* setItemsAddress = nullptr;
+    if (isStrSet || isI32Set) {
+        llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+        setItemsAddress = createEntryAlloca(function, opaquePtrTy, forInStatement->ID()->getText() + ".set.items");
+        llvm::Value* setHandle = loadIfAddressable(builder, sourceIt->second);
+        llvm::FunctionCallee setItemsDecl = module.getOrInsertFunction(
+            "sys__native_set_items",
+            llvm::FunctionType::get(opaquePtrTy, {opaquePtrTy}, false));
+        llvm::Value* setItemsValue = builder.CreateCall(setItemsDecl, {setHandle});
+        builder.CreateStore(setItemsValue, setItemsAddress);
+    }
+
     builder.CreateBr(condBlock);
 
     llvm::IRBuilder<> condBuilder(condBlock);
-    llvm::Value* handle = loadIfAddressable(condBuilder, sourceIt->second);
+    llvm::Value* handle = (isStrSet || isI32Set)
+        ? condBuilder.CreateLoad(llvm::PointerType::getUnqual(module.getContext()), setItemsAddress)
+        : loadIfAddressable(condBuilder, sourceIt->second);
     llvm::Value* indexValue = condBuilder.CreateLoad(i32Ty, indexAddress);
     llvm::Value* sizeValue = nullptr;
-    if (isI32Vector) {
+    if (isStrVector) {
+        sizeValue = condBuilder.CreateCall(getApolloVectorStrSizeDeclaration(module), {handle});
+    } else if (isI32Vector) {
         sizeValue = condBuilder.CreateCall(getApolloVectorI32SizeDeclaration(module), {handle});
+    } else if (isStrSet || isI32Set) {
+        llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+        llvm::FunctionCallee sizeDecl = module.getOrInsertFunction(
+            "sys__native_vec_len",
+            llvm::FunctionType::get(i32Ty, {opaquePtrTy}, false));
+        sizeValue = condBuilder.CreateCall(sizeDecl, {handle});
     } else {
         llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
         llvm::FunctionCallee sizeDecl = module.getOrInsertFunction(
@@ -6482,11 +7011,30 @@ bool lowerForInStatement(llvm::Module& module,
     condBuilder.CreateCondBr(condBuilder.CreateICmpSLT(indexValue, sizeValue), bodyBlock, endBlock);
 
     llvm::IRBuilder<> bodyBuilder(bodyBlock);
-    handle = loadIfAddressable(bodyBuilder, sourceIt->second);
+    handle = (isStrSet || isI32Set)
+        ? bodyBuilder.CreateLoad(llvm::PointerType::getUnqual(module.getContext()), setItemsAddress)
+        : loadIfAddressable(bodyBuilder, sourceIt->second);
     indexValue = bodyBuilder.CreateLoad(i32Ty, indexAddress);
     llvm::Value* elementValue = nullptr;
-    if (isI32Vector) {
+    if (isStrVector) {
+        elementValue = bodyBuilder.CreateCall(getApolloVectorStrGetDeclaration(module), {handle, indexValue});
+    } else if (isI32Vector) {
         elementValue = bodyBuilder.CreateCall(getApolloVectorI32GetDeclaration(module), {handle, indexValue});
+    } else if (isStrSet || isI32Set) {
+        llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+        llvm::Type* charPtrTy = llvm::PointerType::getUnqual(module.getContext());
+        llvm::FunctionCallee getDecl = module.getOrInsertFunction(
+            "sys__native_vec_get",
+            llvm::FunctionType::get(charPtrTy, {opaquePtrTy, i32Ty}, false));
+        llvm::Value* itemText = bodyBuilder.CreateCall(getDecl, {handle, indexValue});
+        if (isStrSet) {
+            elementValue = itemText;
+        } else {
+            llvm::FunctionCallee parseDecl = module.getOrInsertFunction(
+                "sys__native_parse_int",
+                llvm::FunctionType::get(llvm::Type::getInt64Ty(module.getContext()), {charPtrTy, i32Ty}, false));
+            elementValue = bodyBuilder.CreateCall(parseDecl, {itemText, llvm::ConstantInt::get(i32Ty, 10)});
+        }
     } else {
         llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
         llvm::FunctionCallee getDecl = module.getOrInsertFunction(
@@ -6661,7 +7209,7 @@ bool lowerSrcDeclStatement(llvm::Module& module,
         return false;
     }
 
-    values[srcDecl->ID()->getText()] = {loweredSrc, nullptr, loweredSrc->getType(), "src"};
+    values[srcDecl->ID()->getText()] = {loweredSrc, nullptr, loweredSrc->getType(), "src", false, isMutableBinding(srcDecl)};
     return true;
 }
 
@@ -6911,7 +7459,7 @@ bool lowerGlobalInitStatement(llvm::Module& module,
         }
     }
 
-    values.insert_or_assign(initCore->ID()->getText(), LoweredValue{global, global, global->getValueType(), initCore->typeRef()->getText()});
+    values.insert_or_assign(initCore->ID()->getText(), LoweredValue{global, global, global->getValueType(), initCore->typeRef()->getText(), false, isMutableBinding(initCore)});
     return true;
 }
 
@@ -7460,7 +8008,7 @@ bool lowerCallableBody(llvm::Module& module,
     for (auto& global : module.globals()) {
         const std::string name = global.getName().str();
         const auto globalTypeIt = gGlobalTypeTexts.find(name);
-        values.emplace(name, LoweredValue{&global, &global, global.getValueType(), gGuiWindowGlobals.contains(name) ? "rdwindow" : (globalTypeIt != gGlobalTypeTexts.end() ? globalTypeIt->second : "")});
+        values.emplace(name, LoweredValue{&global, &global, global.getValueType(), gGuiWindowGlobals.contains(name) ? "rdwindow" : (globalTypeIt != gGlobalTypeTexts.end() ? globalTypeIt->second : ""), false, gMutableGlobalBindings.contains(name)});
     }
     addInlineForeignGlobalBindings(module, builder, values);
 
@@ -7630,6 +8178,9 @@ llvm::Function* lowerAggregateMethodPrototype(llvm::Module& module,
         llvm::GlobalValue::InternalLinkage,
         methodRecord.loweredName,
         module);
+    if (methodRecord.method->returnType() != nullptr && methodRecord.method->returnType()->typeRef() != nullptr) {
+        gLoweredFunctionReturnTypeTexts[methodRecord.loweredName] = canonicalApolloTypeText(methodRecord.method->returnType()->typeRef()->getText());
+    }
     std::size_t index = 0;
     for (auto& arg : function->args()) {
         arg.setName(paramNames[index++]);
@@ -8051,6 +8602,26 @@ llvm::FunctionCallee getApolloVectorStrPushDeclaration(llvm::Module& module) {
     return module.getOrInsertFunction("apollo_vector_str_push", llvm::FunctionType::get(llvm::Type::getVoidTy(module.getContext()), {opaquePtrTy, charPtrTy}, false));
 }
 
+llvm::FunctionCallee getApolloVectorStrGetDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* charPtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_str_get", llvm::FunctionType::get(charPtrTy, {opaquePtrTy, i32Ty}, false));
+}
+
+llvm::FunctionCallee getApolloVectorStrSetDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* charPtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_str_set", llvm::FunctionType::get(llvm::Type::getVoidTy(module.getContext()), {opaquePtrTy, i32Ty, charPtrTy}, false));
+}
+
+llvm::FunctionCallee getApolloVectorStrSizeDeclaration(llvm::Module& module) {
+    llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
+    llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
+    return module.getOrInsertFunction("apollo_vector_str_size", llvm::FunctionType::get(i32Ty, {opaquePtrTy}, false));
+}
+
 llvm::FunctionCallee getApolloVectorI32PushDeclaration(llvm::Module& module) {
     llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(module.getContext());
     llvm::Type* i32Ty = llvm::Type::getInt32Ty(module.getContext());
@@ -8386,6 +8957,9 @@ llvm::Function* lowerTemplateFunctionPrototype(llvm::Module& module,
         llvm::GlobalValue::ExternalLinkage,
         loweredName,
         module);
+    if (record.function->returnType() != nullptr && record.function->returnType()->typeRef() != nullptr) {
+        gLoweredFunctionReturnTypeTexts[loweredName] = canonicalApolloTypeText(record.function->returnType()->typeRef()->getText());
+    }
     std::size_t index = 0;
     for (auto& arg : function->args()) {
         arg.setName(paramNames[index++]);
@@ -8421,11 +8995,14 @@ bool lowerTemplateFunctionBody(llvm::Module& module,
         if (paramIndex < declaredParams.size() && declaredParams[paramIndex] != nullptr && declaredParams[paramIndex]->typeRef() != nullptr) {
             typeText = resolveActiveTypeAliases(declaredParams[paramIndex]->typeRef()->getText());
         }
-        params.emplace(std::string(arg.getName()), LoweredValue{&arg, address, arg.getType(), typeText});
+        const bool mutableBinding = paramIndex < declaredParams.size() && declaredParams[paramIndex] != nullptr
+            ? isMutableBinding(declaredParams[paramIndex])
+            : false;
+        params.emplace(std::string(arg.getName()), LoweredValue{&arg, address, arg.getType(), typeText, false, mutableBinding});
         ++paramIndex;
     }
     for (auto& global : module.globals()) {
-        params.emplace(std::string(global.getName()), LoweredValue{&global, &global, global.getValueType(), ""});
+        params.emplace(std::string(global.getName()), LoweredValue{&global, &global, global.getValueType(), "", false, gMutableGlobalBindings.contains(std::string(global.getName()))});
     }
     addInlineForeignGlobalBindings(module, builder, params);
 
@@ -8566,13 +9143,26 @@ void lowerSupportedFunctionBodies(llvm::Module& module,
         LoweredValueMap params;
         TypeAliasMap typeAliases;
         TypeAliasScope aliasScope(&typeAliases);
+        std::size_t paramIndex = 0;
         for (auto& arg : function->args()) {
             llvm::AllocaInst* address = createEntryAlloca(function, valueStorageType(&arg), arg.getName());
             builder.CreateStore(&arg, address);
-            params.emplace(std::string(arg.getName()), LoweredValue{&arg, address, arg.getType(), ""});
+            const bool mutableBinding = functionCtx->params() != nullptr
+                && paramIndex < functionCtx->params()->param().size()
+                && functionCtx->params()->param(paramIndex) != nullptr
+                && isMutableBinding(functionCtx->params()->param(paramIndex));
+            std::string typeText;
+            if (functionCtx->params() != nullptr
+                && paramIndex < functionCtx->params()->param().size()
+                && functionCtx->params()->param(paramIndex) != nullptr
+                && functionCtx->params()->param(paramIndex)->typeRef() != nullptr) {
+                typeText = functionCtx->params()->param(paramIndex)->typeRef()->getText();
+            }
+            params.emplace(std::string(arg.getName()), LoweredValue{&arg, address, arg.getType(), typeText, false, mutableBinding});
+            ++paramIndex;
         }
         for (auto& global : module.globals()) {
-            params.emplace(std::string(global.getName()), LoweredValue{&global, &global, global.getValueType(), ""});
+            params.emplace(std::string(global.getName()), LoweredValue{&global, &global, global.getValueType(), "", false, gMutableGlobalBindings.contains(std::string(global.getName()))});
         }
         addInlineForeignGlobalBindings(module, builder, params);
 
@@ -8873,6 +9463,9 @@ void lowerGlobalVariables(llvm::Module& module,
             continue;
         }
         gGlobalTypeTexts[initCore->ID()->getText()] = initCore->typeRef() != nullptr ? initCore->typeRef()->getText() : std::string();
+        if (isMutableBinding(initCore)) {
+            gMutableGlobalBindings.insert(initCore->ID()->getText());
+        }
     }
 
     for (auto* init : tree->init()) {
@@ -8886,6 +9479,9 @@ void lowerGlobalVariables(llvm::Module& module,
             continue;
         }
         gGlobalTypeTexts[initCore->ID()->getText()] = initCore->typeRef() != nullptr ? initCore->typeRef()->getText() : std::string();
+        if (isMutableBinding(initCore)) {
+            gMutableGlobalBindings.insert(initCore->ID()->getText());
+        }
     }
 
     for (auto* rdwindowStmt : tree->rdwindowStmt()) {
@@ -9049,6 +9645,8 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     LayoutPlanScope layoutPlanScope(&layoutPlan);
     gGuiWindowGlobals.clear();
     gGlobalTypeTexts.clear();
+    gLoweredFunctionReturnTypeTexts.clear();
+    gMutableGlobalBindings.clear();
     std::vector<std::string> unsupportedFunctions;
     lowerGlobalVariables(module, tree, unsupportedFunctions);
     lowerAggregateMethodBodies(module, aggregateRegistry, unsupportedFunctions);

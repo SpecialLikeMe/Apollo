@@ -1,70 +1,56 @@
 # Macro declaration — implementation
 
-This page covers `extern [&macro]` and `__preprocess [&macro]` callable macros.
-For the new `attr` / `derive` proc-macro surface, see `proc-macro.md` in the same directory.
+This page covers the current callable macro declaration surface:
+
+- `extern [&macro]`
+- `__preprocess [&macro]`
+- `extern [&dynamic_macro]`
+- `__preprocess [&dynamic_macro]`
+
+For the separate tokenstream proc-macro surface, see `proc-macro.md` in the same directory.
 
 ## Grammar surface
 
 From `Apollo-Main/compiler/compilerv1.g4`:
 
 ```antlr
-macroDecl
-    : 'macro' ID '(' macroParams? ')' '{' macroBody '}' ';'?
+macro        : macroQualifier ID '(' params? ')' block ;
+macroQualifier
+    : 'extern [&macro]'
+    | '__preprocess [&macro]'
+    | 'extern [&dynamic_macro]'
+    | '__preprocess [&dynamic_macro]'
     ;
-macroParams : macroParam (',' macroParam)* ;
-macroParam  : ('expr' | 'type' | 'ident' | 'stmt' | 'block') ID ;
-macroBody   : (statement | declaration)* ;
 ```
 
-`macroDecl` is reachable from `program`. The body is grammar-equivalent to a function body plus declarations, but it is held as an unanalyzed template until expansion.
+The declaration uses the normal Apollo `params` rule and a normal block body. There is no grammar support here for the older `macro name(expr value)` splice-style surface.
 
-## Parse tree shape
+## What the frontend currently does
 
-A `MacroDeclContext` exposes:
+`Apollo-Main/compiler/cpp/src/apollo_runtime.cpp` currently treats dynamic macros as a runtime-extension signal:
 
-- `ID()` — the macro name.
-- `macroParams()` — optional parameter list.
-- `macroBody()` — the body context, preserved verbatim until expansion.
+- when a `macroQualifier` contains `dynamic_macro`, the runtime records that the compilation needs runtime extensions
+- plain `[&macro]` declarations do not currently trigger additional macro-specific lowering paths there
 
-Each `MacroParamContext` exposes the kind keyword (`expr`/`type`/`ident`/`stmt`/`block`) and the parameter name.
+## Preprocessor interaction
 
-## Frontend validation (declaration site)
+`Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp` recognizes these qualified macro declarations when it rewrites namespace-scoped declarations. That code matches both plain and dynamic macro qualifiers.
 
-At declaration time, `Apollo-Main/compiler/cpp/src/apollo_runtime.cpp`:
+The same preprocessor file also implements the separate `attr` / `derive` proc-macro system. That proc-macro path is where tokenstream rewriting and `quote { ... }` support currently live.
 
-1. Registers the macro name in the macro namespace.
-2. Records the parameter list with kinds.
-3. Records the body AST without type-checking it. Type checking is deferred to expansion sites because the body contains parameter splices whose meaning depends on the call-site arguments.
-4. Performs lightweight checks: parameter names are unique, the body only references parameters via their declared kinds, hygiene rewrites do not collide with reserved identifiers.
+## Dynamic macro runtime wiring
 
-## Expansion
+Dynamic macro declarations are exercised by `Apollo-Main/compiler/tests/grammar/pass/opstruct_runtime_surface.apollo` and the grammar harness checks that the generated C++ registers and invokes them through `runtime_support/apo_runtime_extensions.hpp`.
 
-At each call site `macro_name(arg1, arg2, ...)`:
+That makes `[&dynamic_macro]` a runtime-extension hook, not the old compile-time AST-expansion model described in earlier docs.
 
-1. The frontend parses each argument according to its parameter's kind. An `expr` argument is parsed as an expression; a `block` argument is parsed as a brace block; and so on.
-2. The macro body is cloned and the parameter splices are replaced with the parsed argument ASTs.
-3. Identifiers introduced *inside* the macro body (locals, labels) are renamed with a fresh suffix so they cannot collide with any identifier at the call site.
-4. The expanded AST is spliced into the call site and validated as ordinary code. Any type errors point to the expanded form, with both the call site and the macro declaration referenced in the diagnostic.
+## Practical reading
 
-## Lowering
+If you are trying to understand what is implemented today, use these files as the source of truth:
 
-The expanded AST flows through the standard lowering in `Apollo-Main/compiler/cpp/src/visitor.cpp`. Macros leave no trace in the lowered IR — every macro use becomes the equivalent expanded code.
-
-## Runtime support
-
-None. Macros are a compile-time construct.
-
-## Edges and gotchas
-
-- A macro that short-circuits control flow with `return`/`break`/`continue` operates in the enclosing function's scope after expansion. That is what makes patterns like `try_or_return` work.
-- Macro parameters of kind `expr` are evaluated once per appearance in the expansion. If the body splices `value` twice and the caller passes a side-effecting expression, that expression runs twice. The macro author can bind the parameter to a local first to evaluate it once.
-- Hygiene renames apply only to identifiers introduced by the macro body. Parameter splices preserve their original names, so passing an `ident` argument captures the caller-supplied name.
-- Macros cannot recurse without bound. The expansion engine enforces a depth limit and reports a diagnostic naming the recursion point if it is exceeded.
-- The grammar makes macros parse-time constructs. They cannot consult run-time values or types.
-
-## Source of truth
-
-- Grammar: `Apollo-Main/compiler/compilerv1.g4` (`macroDecl`, `macroParams`, `macroParam`, `macroBody`)
-- Frontend validation and expansion: `Apollo-Main/compiler/cpp/src/apollo_runtime.cpp`
-- Lowering of expanded forms: `Apollo-Main/compiler/cpp/src/visitor.cpp`
-- Example macros: `Apollo-Main/include/assertions.apollo`
+- `Apollo-Main/compiler/compilerv1.g4`
+- `Apollo-Main/compiler/cpp/src/apollo_runtime.cpp`
+- `Apollo-Main/compiler/cpp/src/apollo_source_preprocessor.cpp`
+- `Apollo-Main/compiler/tests/grammar/pass/language_surface.apollo`
+- `Apollo-Main/compiler/tests/grammar/pass/syntax_surface.apollo`
+- `Apollo-Main/compiler/tests/grammar/pass/opstruct_runtime_surface.apollo`

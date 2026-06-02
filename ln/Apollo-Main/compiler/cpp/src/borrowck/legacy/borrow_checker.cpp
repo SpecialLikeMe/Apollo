@@ -80,11 +80,15 @@ private:
     };
 
     bool isMutableBinding(compilerv1Parser::InitCoreContext* ctx) const {
-        return ctx == nullptr || ctx->CONST() == nullptr;
+        return ctx != nullptr && ctx->NCONST() != nullptr;
     }
 
     bool isMutableBinding(compilerv1Parser::ParamContext* ctx) const {
-        return ctx == nullptr || ctx->CONST() == nullptr;
+        return ctx != nullptr && ctx->NCONST() != nullptr;
+    }
+
+    bool isMutableBinding(compilerv1Parser::EasyInitContext* ctx) const {
+        return ctx != nullptr && ctx->NCONST() != nullptr;
     }
 
     SafetyType typeFromContext(compilerv1Parser::TypeRefContext* ctx) const {
@@ -125,6 +129,34 @@ private:
 
     bool isMoveTrackedType(const SafetyType& type) const {
         return !type.reference && type.pointerDepth == 0 && !isPrimitive(type) && type.name != "fn" && type.name != "auto";
+    }
+
+    std::string containerBaseName(const SafetyType& type) const {
+        const auto genericStart = type.name.find('<');
+        if (genericStart == std::string::npos) {
+            return type.name;
+        }
+        return type.name.substr(0, genericStart);
+    }
+
+    bool isMutatingMemberCall(const SafetyType& type, std::string_view methodName) const {
+        const std::string baseName = containerBaseName(type);
+        if (baseName == "vector") {
+            return methodName == "append"
+                || methodName == "push"
+                || methodName == "remove"
+                || methodName == "swap_remove"
+                || methodName == "clear";
+        }
+        if (baseName == "set" || baseName == "unordered_set") {
+            return methodName == "insert"
+                || methodName == "remove"
+                || methodName == "clear";
+        }
+        if (baseName == "map" || baseName == "unordered_map" || baseName == "tmap") {
+            return methodName == "remove" || methodName == "clear";
+        }
+        return false;
     }
 
     void collectGlobals(compilerv1Parser::ProgramContext* tree) {
@@ -1173,6 +1205,9 @@ private:
         }
         if (!core->assignTarget()->getText().empty() && core->assignTarget()->getText().front() == '*') {
             ensureReadable(target, ctx);
+            if (!target->type.reference && target->type.pointerDepth > 0) {
+                return;
+            }
             if (target->type.reference && target->writeRestrictedReference) {
                 addDiagnostic(ctx, "cannot assign through read-only reference `" + target->name + "`");
                 return;
@@ -1250,6 +1285,53 @@ private:
         }
     }
 
+    void analyzeMemberAccess(compilerv1Parser::MemberaccessContext* ctx, State& state) {
+        analyzeExpressionReads(ctx, state);
+        if (ctx == nullptr || ctx->accessBase() == nullptr || ctx->accessBase()->ID() == nullptr
+            || ctx->functionCall() == nullptr || ctx->functionCall()->ID() == nullptr) {
+            return;
+        }
+
+        auto* target = resolve(state, ctx->accessBase()->ID()->getText());
+        if (target == nullptr) {
+            return;
+        }
+
+        ensureReadable(target, ctx);
+
+        BindingState* writeTarget = target;
+        if (target->type.reference) {
+            if (target->writeRestrictedReference) {
+                addDiagnostic(ctx, "cannot assign through read-only reference `" + target->name + "`");
+                return;
+            }
+            writeTarget = resolveBorrowSource(state, target);
+        }
+        if (writeTarget == nullptr) {
+            return;
+        }
+
+        const std::string methodName = ctx->functionCall()->ID()->getText();
+        if (!isMutatingMemberCall(writeTarget->type, methodName)) {
+            return;
+        }
+
+        if (!writeTarget->mutableBinding) {
+            addDiagnostic(ctx, "cannot assign to immutable binding `" + writeTarget->name + "`");
+        }
+        if (writeTarget->sharedBorrowCount > 0) {
+            addDiagnostic(ctx, "cannot assign to `" + writeTarget->name + "` while it is still borrowed");
+        }
+        if (!writeTarget->mutableBorrowHolder.empty()) {
+            BindingState* holder = resolve(state, writeTarget->mutableBorrowHolder);
+            if (isSharedBorrowAlias(holder) && holder->borrowedFrom == writeTarget->name) {
+                addDiagnostic(ctx, "cannot assign to `" + writeTarget->name + "` while it is still borrowed");
+            } else if (writeTarget->mutableBorrowHolder != target->name) {
+                addDiagnostic(ctx, "cannot assign to `" + writeTarget->name + "` while it is mutably borrowed");
+            }
+        }
+    }
+
     void analyzeInit(compilerv1Parser::InitContext* ctx, State& state) {
         auto* initCore = ctx->initCore();
         if (initCore == nullptr) {
@@ -1301,7 +1383,7 @@ private:
         BindingState binding;
         binding.name = ctx->ID()->getText();
         binding.type = inferExpressionType(ctx->expression(), state);
-        binding.mutableBinding = true;
+        binding.mutableBinding = isMutableBinding(ctx);
         binding.ownerScopeId = currentOwnerScope(state);
         binding.ctx = ctx;
         analyzeExpressionReads(ctx->expression(), state);
@@ -1433,7 +1515,7 @@ private:
             return;
         }
         if (ctx->memberaccess() != nullptr) {
-            analyzeExpressionReads(ctx->memberaccess(), state);
+            analyzeMemberAccess(ctx->memberaccess(), state);
             return;
         }
         if (ctx->print() != nullptr) {

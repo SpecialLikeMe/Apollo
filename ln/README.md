@@ -43,3 +43,18 @@ Apollo is a borrow checked language.
 Examples live under `Apollo-Main/examples/`.
 `readonly_alias.apollo` shows the new read-only reference rules: the alias is read-only and exclusive while live, but the root becomes writable again after the alias's last use.
 `mutable_reborrow.apollo` shows mutable reborrow chaining through helper calls.
+
+### Running a program
+
+Use `apollo run` from the project directory you want Apollo to treat as the root.
+
+- `apollo run` looks for `main.apollo` in the current working directory.
+- `apollo run path\to\entry.apollo` uses the path you pass, but still treats the current working directory as the project root for build output and bundled sources.
+- The launcher writes bundled sources under `build/.apollo-bundles/` and the produced executable under `build/`, then runs that executable from the same working directory.
+- Add `--notree` to suppress AST streaming while keeping the same compile-and-run behavior.
+
+Examples:
+
+- `apollo run`
+- `apollo run src\main.apollo`
+- `apollo run --notree`

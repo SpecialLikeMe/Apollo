@@ -1,0 +1,8 @@
+extern std prelude;
+
+i32 main() {
+    global nconst unordered_map<str, int> mymap;
+    mymap["dog"] = 1;
+    sys.printf("%i\n", mymap["dog"]);
+    return 0;
+}

@@ -6,7 +6,7 @@ i32 main() {
         return 1;
     }
 
-    file created = sys.file_create(sys.path_join(root, "sample.txt"));
+    nconst file created = sys.file_create(sys.path_join(root, "sample.txt"));
     if (sys.file_write(created, "apollo") == 0) {
         return 2;
     }
@@ -28,7 +28,7 @@ i32 main() {
         return 7;
     }
 
-    str link_path = sys.path_join(root, "sample-link.txt");
+    nconst str link_path = sys.path_join(root, "sample-link.txt");
     sys.fs_remove_file(link_path);
     sys.fs_symlink(sys.file_path(created), link_path);
 

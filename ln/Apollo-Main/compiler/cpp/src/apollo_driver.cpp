@@ -375,7 +375,11 @@ AstDisplayNode summarizePrimary(compilerv1Parser::PrimaryContext* primary) {
         return {truncateDisplayLabel("brace " + primary->braceInitializer()->getText(), 72), {}};
     }
     if (primary->instanceValue() != nullptr) {
-        return {truncateDisplayLabel("instance " + primary->instanceValue()->getText(), 72), {}};
+        AstDisplayNode node{truncateDisplayLabel("instance " + primary->instanceValue()->getText(), 72), {}};
+        if (primary->instanceValue()->braceInitializer() != nullptr) {
+            node.children.push_back({truncateDisplayLabel("brace " + primary->instanceValue()->braceInitializer()->getText(), 72), {}});
+        }
+        return node;
     }
     if (primary->borrowExpr() != nullptr) {
         return {truncateDisplayLabel("borrow " + primary->borrowExpr()->getText(), 72), {}};
@@ -1651,6 +1655,10 @@ std::string ApolloDriver::currentCompilerSignature() {
             cppRoot / "src" / "apollo_driver.h",
             cppRoot / "src" / "apollo_inline_foreign.cpp",
             cppRoot / "src" / "apollo_inline_foreign.h",
+            cppRoot / "src" / "borrowck" / "legacy" / "borrow_checker.cpp",
+            cppRoot / "src" / "borrowck" / "legacy" / "borrow_checker.h",
+            cppRoot / "src" / "borrowck" / "mir_pipeline.cpp",
+            cppRoot / "src" / "borrowck" / "mir_pipeline.h",
             cppRoot / "src" / "visitor.cpp",
             cppRoot / "src" / "visitor.h",
             cppRoot / "src" / "apollo_ir_layout_plan.cpp",
@@ -1679,14 +1687,34 @@ std::string ApolloDriver::currentCompilerSignature() {
 
 void ApolloDriver::writeCleanupManifest(const std::set<std::string>& generatedFiles) {
     const auto manifestPath = std::filesystem::absolute(std::filesystem::path("output") / "cleanup-manifest.txt").lexically_normal();
+    const auto tempPath = manifestPath.string() + ".tmp";
+    std::error_code error;
     if (manifestPath.has_parent_path()) {
-        std::filesystem::create_directories(manifestPath.parent_path());
+        std::filesystem::create_directories(manifestPath.parent_path(), error);
     }
-    std::ofstream output(manifestPath, std::ios::binary | std::ios::trunc);
-    if (!output) {
-        throw std::runtime_error("failed to write cleanup manifest: " + manifestPath.string());
+    {
+        std::ofstream output(tempPath, std::ios::binary | std::ios::trunc);
+        if (!output) {
+            return;
+        }
+        for (const auto& file : generatedFiles) {
+            output << file << '\n';
+        }
+        output.flush();
+        if (!output) {
+            output.close();
+            std::filesystem::remove(tempPath, error);
+            return;
+        }
     }
-    for (const auto& file : generatedFiles) {
-        output << file << '\n';
+    std::filesystem::rename(tempPath, manifestPath, error);
+    if (error) {
+        error.clear();
+        std::filesystem::remove(manifestPath, error);
+        error.clear();
+        std::filesystem::rename(tempPath, manifestPath, error);
+        if (error) {
+            std::filesystem::remove(tempPath, error);
+        }
     }
 }

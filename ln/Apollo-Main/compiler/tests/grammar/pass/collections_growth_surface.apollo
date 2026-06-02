@@ -1,7 +1,7 @@
 extern std prelude;
 
 i32 main() {
-    vector items = sys.vec_new();
+    nconst vector items = sys.vec_new();
     sys.vec_push(items, "alpha");
     sys.vec_push(items, "beta");
     sys.vec_push(items, "beta");
@@ -10,7 +10,7 @@ i32 main() {
     sys.vec_resize(items, 4, "pad");
     sys.vec_dedup(items);
 
-    map table = sys.map_new();
+    nconst map table = sys.map_new();
     sys.map_insert(table, "greeting", "hello");
     sys.map_reserve(table, 8);
     str existing = sys.map_get_mut(table, "greeting");

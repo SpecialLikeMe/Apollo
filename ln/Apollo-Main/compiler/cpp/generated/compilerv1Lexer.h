@@ -52,6 +52,16 @@ public:
       bool pendingInlineSeparator = false;
       bool awaitingInlinePayloadLanguage = false;
 
+      bool isLoopStatementAhead() {
+        int lookahead = 1;
+        int ch = _input->LA(lookahead);
+        while (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+          lookahead++;
+          ch = _input->LA(lookahead);
+        }
+        return ch == '{';
+      }
+
       bool shouldExpectInclusiveAfterInlinePayload() {
         int lookahead = 1;
         int ch = _input->LA(lookahead);
@@ -106,6 +116,7 @@ private:
   void INCLUSIVEAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
+  bool LOOPSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool INCLUSIVESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
 
 };

@@ -1,0 +1,7 @@
+extern std prelude;
+
+i32 main() {
+    global nconst map<str, int> mymap;
+    mymap["dog"] = 1;
+    return mymap["dog"] - 1;
+}

@@ -5,25 +5,25 @@ i32 main() {
     {f64, i32} exponent_parts = sys.frexp(8.0);
     {f64, f64} mod_parts = sys.modf(3.5);
 
-    vector items = sys.vec_new();
+    nconst vector items = sys.vec_new();
     sys.vec_push(items, "alpha");
     sys.vec_push(items, "beta");
 
-    map table = sys.map_new();
+    nconst map table = sys.map_new();
     sys.map_insert(table, "joined", sys.vec_join(items, ","));
 
-    set tags = sys.set_new();
+    nconst set tags = sys.set_new();
     sys.set_insert(tags, "alpha");
 
-    queue work = sys.queue_new();
+    nconst queue work = sys.queue_new();
     sys.queue_enqueue(work, sys.map_get(table, "joined"));
 
-    heap numbers = sys.heap_new_max();
+    nconst heap numbers = sys.heap_new_max();
     sys.heap_push(numbers, 7);
     sys.heap_push(numbers, 2);
 
     regex matcher = sys.regex_compile("ap.*");
-    random rng = sys.rand_new();
+    nconst random rng = sys.rand_new();
     sys.rand_seed(rng, 1234);
 
     str encoded = sys.hex_encode("apollo");

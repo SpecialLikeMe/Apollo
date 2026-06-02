@@ -119,9 +119,11 @@ set "APOLLO_LINK_FLAGS="
 
 if /I "%COMMAND%"=="--version" goto :manage_version
 if /I "%COMMAND%"=="--update" goto :manage_update
+if /I "%COMMAND%"=="repair" goto :manage_repair
 if /I "%COMMAND%"=="-m" (
+    if /I "%RAW_INPUT%"=="repair" goto :manage_repair
     if /I "%RAW_INPUT%"=="uninstall" goto :manage_uninstall
-    echo Unknown management command. Usage: apollo -m uninstall
+    echo Unknown management command. Usage: apollo -m ^<repair^|uninstall^>
     exit /b 1
 )
 
@@ -230,6 +232,7 @@ if /I "%COMMAND%"=="clean" goto :clean
 echo Unknown command. Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
 echo                       apollo -analyze [filename]
 echo                       apollo [filename.apollo] -[^L^|^W^|^M^] outputname
+echo                       apollo repair
 echo                       apollo --version
 echo                       apollo --update
 echo                       apollo -m uninstall
@@ -239,6 +242,7 @@ exit /b 1
 echo Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
 echo                       apollo -analyze [filename]
 echo                       apollo [filename.apollo] -[^L^|^W^|^M^] outputname
+echo                       apollo repair
 echo                       apollo --version
 echo                       apollo --update
 echo                       apollo -m uninstall
@@ -248,6 +252,7 @@ exit /b 1
 echo Usage: apollo [-bin] ^<run^|ctall^> [filename] [outputname]
 echo                       apollo -analyze [filename]
 echo                       apollo [filename.apollo] -[^L^|^W^|^M^] outputname
+echo                       apollo repair
 echo                       apollo --version
 echo                       apollo --update
 echo                       apollo -m uninstall
@@ -424,6 +429,10 @@ exit /b %errorlevel%
 
 :manage_update
 call :invoke_manage_script update
+exit /b %errorlevel%
+
+:manage_repair
+call :invoke_manage_script repair
 exit /b %errorlevel%
 
 :manage_uninstall

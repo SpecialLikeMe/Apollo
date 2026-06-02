@@ -1,0 +1,60 @@
+; ModuleID = 'quoted_string_member_interpolation_surface'
+source_filename = "quoted_string_member_interpolation_surface.apollo"
+
+@apollo.str.literal = private unnamed_addr constant [14 x i8] c"Hello, world!\00"
+
+; Function Attrs: nofree nounwind
+define noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %0 = tail call dereferenceable_or_null(14) ptr @malloc(i64 14)
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(14) %0, ptr noundef nonnull align 1 dereferenceable(14) @apollo.str.literal, i64 14, i1 false)
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) %0)
+  ret i32 0
+}
+
+; Function Attrs: mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite)
+declare noalias noundef ptr @malloc(i64 noundef) local_unnamed_addr #1
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #0
+
+attributes #0 = { nofree nounwind }
+attributes #1 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" }
+attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.layouts = !{!3}
+!apollo.layout.fields = !{!4, !5}
+!apollo.primitive.types = !{!6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21, !22, !23, !24, !25}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"quoted_string_member_interpolation_surface"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 true}
+!3 = !{!"jjl", !"full-soa", i32 2, i1 false, i1 false, i1 false, !"full-soa-eligible"}
+!4 = !{!"jjl", !"id", !"i32", i1 true}
+!5 = !{!"jjl", !"q", !"str", i1 true}
+!6 = !{!"float", !"float"}
+!7 = !{!"long", !"i64"}
+!8 = !{!"isize", !"i64"}
+!9 = !{!"i64", !"i64"}
+!10 = !{!"short", !"i16"}
+!11 = !{!"u32", !"i32"}
+!12 = !{!"bool", !"i1"}
+!13 = !{!"int", !"i32"}
+!14 = !{!"void", !"void"}
+!15 = !{!"u16", !"i16"}
+!16 = !{!"i16", !"i16"}
+!17 = !{!"u64", !"i64"}
+!18 = !{!"u8", !"i8"}
+!19 = !{!"f64", !"double"}
+!20 = !{!"i32", !"i32"}
+!21 = !{!"double", !"double"}
+!22 = !{!"usize", !"i64"}
+!23 = !{!"byte", !"i8"}
+!24 = !{!"i8", !"i8"}
+!25 = !{!"char", !"i32"}

@@ -602,8 +602,9 @@ public:
     antlr4::tree::TerminalNode *ID();
     antlr4::tree::TerminalNode *LBRACE();
     antlr4::tree::TerminalNode *RBRACE();
-    ArgsContext *args();
+    BraceInitializerContext *braceInitializer();
     AllocatorUseSuffixContext *allocatorUseSuffix();
+    ArgsContext *args();
 
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -2345,10 +2346,10 @@ public:
     TypeRefContext *typeRef();
     antlr4::tree::TerminalNode *ID();
     ExpressionContext *expression();
+    BraceInitializerContext *braceInitializer();
     antlr4::tree::TerminalNode *CONST();
     antlr4::tree::TerminalNode *NCONST();
     InstanceValueContext *instanceValue();
-    BraceInitializerContext *braceInitializer();
     antlr4::tree::TerminalNode *LET();
 
 

@@ -747,6 +747,10 @@ struct ApolloVectorI32Handle {
     std::vector<std::int32_t> items;
 };
 
+struct ApolloVectorStrHandle {
+    std::vector<std::string> items;
+};
+
 struct ApolloHashStrI32Handle {
     std::unordered_map<std::string, std::int32_t> items;
 };
@@ -763,12 +767,45 @@ extern "C" void* apollo_vector_i32_create() {
     return new ApolloVectorI32Handle();
 }
 
+extern "C" void* apollo_vector_str_create() {
+    return new ApolloVectorStrHandle();
+}
+
 extern "C" void apollo_vector_i32_push(void* rawHandle, std::int32_t value) {
     auto* handle = static_cast<ApolloVectorI32Handle*>(rawHandle);
     if (handle == nullptr) {
         return;
     }
     handle->items.push_back(value);
+}
+
+extern "C" void apollo_vector_str_push(void* rawHandle, const char* value) {
+    auto* handle = static_cast<ApolloVectorStrHandle*>(rawHandle);
+    if (handle == nullptr) {
+        return;
+    }
+    handle->items.emplace_back(value != nullptr ? value : "");
+}
+
+extern "C" void apollo_vector_str_set(void* rawHandle, std::int32_t index, const char* value) {
+    auto* handle = static_cast<ApolloVectorStrHandle*>(rawHandle);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->items.size()) {
+        return;
+    }
+    handle->items[static_cast<std::size_t>(index)] = value != nullptr ? value : "";
+}
+
+extern "C" const char* apollo_vector_str_get(void* rawHandle, std::int32_t index) {
+    auto* handle = static_cast<ApolloVectorStrHandle*>(rawHandle);
+    if (handle == nullptr || index < 0 || static_cast<std::size_t>(index) >= handle->items.size()) {
+        return "";
+    }
+    return handle->items[static_cast<std::size_t>(index)].c_str();
+}
+
+extern "C" std::int32_t apollo_vector_str_size(void* rawHandle) {
+    auto* handle = static_cast<ApolloVectorStrHandle*>(rawHandle);
+    return handle != nullptr ? static_cast<std::int32_t>(handle->items.size()) : 0;
 }
 
 extern "C" void apollo_vector_i32_set(void* rawHandle, std::int32_t index, std::int32_t value) {

@@ -1,8 +1,8 @@
 extern std prelude;
 
 i32 main() {
-    global unordered_map<i32, i32> mymap;
-    global vector<i32> myvec;
+    global nconst unordered_map<i32, i32> mymap;
+    global nconst vector<i32> myvec;
     mymap[90] = 1;
     myvec.append(7);
     myvec[0] = 9;

@@ -17,6 +17,7 @@ constexpr const char* kCoreUsageText =
     "Usage: apollo [-bin] <run|ctall> [filename] [outputname]\n"
     "                      apollo -analyze [filename]\n"
     "                      apollo [filename.apollo] -[L|W|M] outputname\n"
+    "                      apollo repair\n"
     "                      apollo --version\n"
     "                      apollo --update\n"
     "                      apollo -m uninstall";
@@ -33,6 +34,7 @@ constexpr const char* kExtendedUsageText =
     "                      apollo test [project-root] [--notree]\n"
     "                      apollo bench [project-root] [--notree]\n"
     "                      apollo apx <init|install|uninstall|deinit> ...\n"
+    "                      apollo repair\n"
     "                      apollo --version\n"
     "                      apollo --update\n"
     "                      apollo -m uninstall";
@@ -737,7 +739,8 @@ ReplSnippet classifyReplSnippet(const std::string& rawSnippet) {
         return {ReplSnippet::Kind::Statement, trimCopy(trimmed.substr(5))};
     }
     if (trimmed.rfind("extern ", 0) == 0 || trimmed.rfind("enum ", 0) == 0 || trimmed.rfind("struct ", 0) == 0
-        || trimmed.rfind("class ", 0) == 0 || trimmed.rfind("template ", 0) == 0 || trimmed.rfind("macro ", 0) == 0) {
+        || trimmed.rfind("class ", 0) == 0 || trimmed.rfind("template ", 0) == 0 || trimmed.rfind("macro ", 0) == 0
+        || trimmed.rfind("itr ", 0) == 0) {
         return {ReplSnippet::Kind::Declaration, trimmed};
     }
     if (trimmed.back() == ';' || trimmed.back() == '}') {
@@ -1086,6 +1089,13 @@ int main(int argc, char* argv[]) {
             return runNodeApx(apolloRoot,
                 std::vector<std::string>(parsedArgs.values.begin() + 1, parsedArgs.values.end()),
                 std::filesystem::current_path());
+        }
+        if (parsedArgs.values.front() == "repair") {
+            if (parsedArgs.values.size() != 1) {
+                std::cerr << "Error: repair does not accept extra arguments." << std::endl;
+                return 1;
+            }
+            return runExecScript(execScript, {"repair"}, std::filesystem::current_path(), false);
         }
         if (parsedArgs.values.front() == "build") {
             return handleBuildCommand(apolloRoot, execScript, std::vector<std::string>(parsedArgs.values.begin() + 1, parsedArgs.values.end()), parsedArgs.showTree);

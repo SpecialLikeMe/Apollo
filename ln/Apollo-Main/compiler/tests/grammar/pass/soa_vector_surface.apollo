@@ -18,7 +18,7 @@ int main() {
     pairs[apnd] = second;
 
     Pair loaded = pairs[0];
-    i32 total = loaded.left + loaded.right;
+    nconst i32 total = loaded.left + loaded.right;
 
     for (const Pair entry in pairs) {
         total = total + entry.left;

@@ -1,0 +1,49 @@
+; ModuleID = 'main'
+source_filename = "main.apollo"
+target triple = "x86_64-w64-windows-gnu"
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define noundef range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
+entry:
+  ret i32 0
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define i32 @"identity$i32"(i32 returned %x) local_unnamed_addr #0 {
+entry:
+  ret i32 %x
+}
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) }
+
+!apollo.backend = !{!0}
+!apollo.runtime.features = !{!1}
+!apollo.soa.mode = !{!2}
+!apollo.layouts = !{!3, !4}
+!apollo.primitive.types = !{!5, !6, !7, !8, !9, !10, !11, !12, !13, !14, !15, !16, !17, !18, !19, !20, !21, !22, !23, !24}
+
+!0 = !{!"direct-ir-prototype", !"llvm-cpp-api", !"main"}
+!1 = !{!"autofmt", i1 false, !"gui", i1 false, !"go_async", i1 false, !"ir_runtime", i1 false, !"isc", i1 false, !"file", i1 false, !"memstruct", i1 false, !"scheduler", i1 false, !"runtime_extensions", i1 false, !"total_program_gc", i1 false, !"borrow_checker_off", i1 false}
+!2 = !{!"default_full_soa", i1 true, !"uses_full_soa_layouts", i1 false}
+!3 = !{!"Animal", !"aos", i32 0, i1 true, i1 true, i1 true, !"inheritance"}
+!4 = !{!"Dog", !"aos", i32 0, i1 true, i1 true, i1 false, !"inheritance"}
+!5 = !{!"float", !"float"}
+!6 = !{!"long", !"i64"}
+!7 = !{!"isize", !"i64"}
+!8 = !{!"i64", !"i64"}
+!9 = !{!"short", !"i16"}
+!10 = !{!"u32", !"i32"}
+!11 = !{!"bool", !"i1"}
+!12 = !{!"int", !"i32"}
+!13 = !{!"void", !"void"}
+!14 = !{!"u16", !"i16"}
+!15 = !{!"i16", !"i16"}
+!16 = !{!"u64", !"i64"}
+!17 = !{!"u8", !"i8"}
+!18 = !{!"f64", !"double"}
+!19 = !{!"i32", !"i32"}
+!20 = !{!"double", !"double"}
+!21 = !{!"usize", !"i64"}
+!22 = !{!"byte", !"i8"}
+!23 = !{!"i8", !"i8"}
+!24 = !{!"char", !"i32"}

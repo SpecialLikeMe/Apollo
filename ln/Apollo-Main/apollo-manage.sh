@@ -71,6 +71,23 @@ refresh_posix_installation() {
     return 0
 }
 
+repair_apollo() {
+    installer_script="$INSTALL_DIR/install-posix.sh"
+    if [ -f "$installer_script" ]; then
+        APOLLO_INSTALL_CORE_DEPS=0 APOLLO_INSTALL_FEATURE_DEPS=0 sh "$installer_script"
+        return 0
+    fi
+
+    parent_installer="$INSTALL_DIR/../install.sh"
+    if [ -f "$parent_installer" ]; then
+        APOLLO_INSTALL_CORE_DEPS=0 APOLLO_INSTALL_FEATURE_DEPS=0 sh "$parent_installer"
+        return 0
+    fi
+
+    printf 'Apollo repair could not find install-posix.sh or install.sh under %s\n' "$INSTALL_DIR" >&2
+    exit 1
+}
+
 resolve_official_branch() {
     if command -v git >/dev/null 2>&1; then
         branch=$(git ls-remote --symref "$OFFICIAL_REPO" HEAD 2>/dev/null | awk '/^ref:/ {sub("refs/heads/", "", $2); print $2; exit}')
@@ -193,11 +210,14 @@ case "$ACTION" in
     update)
         update_apollo
         ;;
+    repair)
+        repair_apollo
+        ;;
     uninstall)
         uninstall_apollo
         ;;
     *)
-        printf 'Usage: apollo-manage.sh [version|update|uninstall] [install-dir]\n' >&2
+        printf 'Usage: apollo-manage.sh [version|update|repair|uninstall] [install-dir]\n' >&2
         exit 1
         ;;
 esac

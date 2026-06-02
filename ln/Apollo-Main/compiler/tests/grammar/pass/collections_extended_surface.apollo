@@ -1,7 +1,7 @@
 extern std prelude;
 
 i32 main() {
-    tmap ordered = sys.tmap_new();
+    nconst tmap ordered = sys.tmap_new();
     sys.tmap_insert(ordered, "b", "bee");
     sys.tmap_insert(ordered, "a", "aye");
     sys.tmap_insert(ordered, "c", "see");
@@ -20,14 +20,14 @@ i32 main() {
         return 3;
     }
 
-    list names = sys.list_new();
+    nconst list names = sys.list_new();
     sys.list_push_back(names, "red");
     sys.list_push_front(names, "blue");
     if (sys.list_front(names) != "blue") {
         return 4;
     }
 
-    ring_buffer ring = sys.ring_buffer_new(2);
+    nconst ring_buffer ring = sys.ring_buffer_new(2);
     sys.ring_buffer_push_back(ring, "one");
     sys.ring_buffer_push_back(ring, "two");
     sys.ring_buffer_push_back(ring, "three");
@@ -35,7 +35,7 @@ i32 main() {
         return 5;
     }
 
-    bitvec bits = sys.bitvec_new();
+    nconst bitvec bits = sys.bitvec_new();
     sys.bitvec_push(bits, 1);
     sys.bitvec_push(bits, 0);
     sys.bitvec_push(bits, 1);
@@ -43,7 +43,7 @@ i32 main() {
         return 6;
     }
 
-    multimap aliases = sys.multimap_new();
+    nconst multimap aliases = sys.multimap_new();
     sys.multimap_insert(aliases, "lang", "apollo");
     sys.multimap_insert(aliases, "lang", "apo");
     vector alias_values = sys.multimap_get_all(aliases, "lang");
@@ -51,13 +51,13 @@ i32 main() {
         return 7;
     }
 
-    weak_map weak = sys.weak_map_new();
+    nconst weak_map weak = sys.weak_map_new();
     sys.weak_map_insert(weak, "session", "open");
     if (sys.weak_map_get(weak, "session") != "open") {
         return 8;
     }
 
-    lru_cache cache = sys.lru_cache_new(2);
+    nconst lru_cache cache = sys.lru_cache_new(2);
     sys.lru_cache_put(cache, "a", "1");
     sys.lru_cache_put(cache, "b", "2");
     sys.lru_cache_put(cache, "c", "3");
@@ -65,13 +65,13 @@ i32 main() {
         return 9;
     }
 
-    enum_set modes = sys.enum_set_new();
+    nconst enum_set modes = sys.enum_set_new();
     sys.enum_set_insert(modes, "fast");
     if (sys.enum_set_contains(modes, "fast") == 0) {
         return 10;
     }
 
-    grid2d board = sys.grid2d_new(2, 2, ".");
+    nconst grid2d board = sys.grid2d_new(2, 2, ".");
     sys.grid2d_set(board, 1, 1, "X");
     if (sys.grid2d_get(board, 1, 1) != "X") {
         return 11;

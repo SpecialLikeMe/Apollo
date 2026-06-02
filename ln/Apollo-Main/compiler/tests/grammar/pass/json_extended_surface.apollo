@@ -21,14 +21,14 @@ i32 main() {
         return 3;
     }
 
-    vector out_items = sys.vec_new();
+    nconst vector out_items = sys.vec_new();
     sys.vec_push(out_items, sys.json_write_int(7));
     sys.vec_push(out_items, sys.json_write_str("hi"));
     if (sys.json_write_array(out_items) != sys.str_concat("[7,", sys.str_concat(quoted_hi, "]"))) {
         return 4;
     }
 
-    map out_obj = sys.map_new();
+    nconst map out_obj = sys.map_new();
     sys.map_insert(out_obj, "count", sys.json_write_int(3));
     sys.map_insert(out_obj, "label", sys.json_write_str("ok"));
     if (sys.str_contains(sys.json_write_object(out_obj), count_fragment) == 0) {

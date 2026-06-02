@@ -90,23 +90,23 @@ namespace sys {
         sys__native_term_reset();
     }
 
-    void log_info(nconst str& value) {
+    void log_info(const str& value) {
         sys__native_log_info(value);
     }
 
-    void log_warn(nconst str& value) {
+    void log_warn(const str& value) {
         sys__native_log_warn(value);
     }
 
-    void log_error(nconst str& value) {
+    void log_error(const str& value) {
         sys__native_log_error(value);
     }
 
-    void log_debug(nconst str& value) {
+    void log_debug(const str& value) {
         sys__native_log_debug(value);
     }
 
-    void log_trace(nconst str& value) {
+    void log_trace(const str& value) {
         sys__native_log_trace(value);
     }
 }

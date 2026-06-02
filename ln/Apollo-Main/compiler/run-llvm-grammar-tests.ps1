@@ -2,6 +2,80 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $false
 
 $compilerDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+function Import-BatchEnvironment {
+    param(
+        [string]$BatchPath
+    )
+
+    if (-not (Test-Path $BatchPath)) {
+        return
+    }
+
+    $cmdExe = if ($env:ComSpec -and (Test-Path $env:ComSpec)) {
+        $env:ComSpec
+    }
+    else {
+        Join-Path $env:SystemRoot 'System32\cmd.exe'
+    }
+
+    $captured = & $cmdExe /d /c "call `"$BatchPath`" >nul && set"
+    foreach ($line in $captured) {
+        $separator = $line.IndexOf('=')
+        if ($separator -lt 1) {
+            continue
+        }
+
+        $name = $line.Substring(0, $separator)
+        $value = $line.Substring($separator + 1)
+        Set-Item -Path ("Env:{0}" -f $name) -Value $value
+    }
+}
+
+function Initialize-NativeToolchainEnvironment {
+    $toolchainEnv = Join-Path $compilerDir 'toolchain-env.bat'
+    Import-BatchEnvironment -BatchPath $toolchainEnv
+
+    if (-not $env:APOLLO_MSYS64_ROOT -and (Test-Path 'C:\msys64')) {
+        $env:APOLLO_MSYS64_ROOT = 'C:\msys64'
+    }
+
+    if (-not $env:APOLLO_MINGW_BIN -and $env:APOLLO_MSYS64_ROOT) {
+        $defaultMingwBin = Join-Path $env:APOLLO_MSYS64_ROOT 'clang64\bin'
+        if (Test-Path $defaultMingwBin) {
+            $env:APOLLO_MINGW_BIN = $defaultMingwBin
+        }
+    }
+
+    if (-not $env:APOLLO_NATIVE_GENERATOR -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        $env:APOLLO_NATIVE_GENERATOR = 'MinGW Makefiles'
+    }
+    if (-not $env:APOLLO_NATIVE_C_COMPILER -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'clang.exe'))) {
+        $env:APOLLO_NATIVE_C_COMPILER = Join-Path $env:APOLLO_MINGW_BIN 'clang.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_CXX_COMPILER -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'clang++.exe'))) {
+        $env:APOLLO_NATIVE_CXX_COMPILER = Join-Path $env:APOLLO_MINGW_BIN 'clang++.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_MAKE_PROGRAM -and $env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        $env:APOLLO_NATIVE_MAKE_PROGRAM = Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'
+    }
+    if (-not $env:APOLLO_NATIVE_CMAKE_PREFIX -and $env:APOLLO_MSYS64_ROOT) {
+        $defaultCmakePrefix = Join-Path $env:APOLLO_MSYS64_ROOT 'clang64'
+        if (Test-Path (Join-Path $defaultCmakePrefix 'lib\cmake\antlr4-runtime')) {
+            $env:APOLLO_NATIVE_CMAKE_PREFIX = $defaultCmakePrefix
+        }
+    }
+
+    if ($env:APOLLO_MINGW_BIN) {
+        $pathEntries = @($env:PATH -split ';')
+        if ($pathEntries -notcontains $env:APOLLO_MINGW_BIN) {
+            $env:PATH = "$($env:APOLLO_MINGW_BIN);$($env:PATH)"
+        }
+    }
+}
+
+Initialize-NativeToolchainEnvironment
+$env:APOLLO_HIDE_AST = '1'
 Set-Location $compilerDir
 
 $nativeSourceDir = Join-Path $compilerDir 'cpp'
@@ -58,15 +132,46 @@ function Invoke-CapturedProcess {
     )
 
     $resolvedFilePath = Resolve-CommandPath -Name $FilePath
-    $output = if ($Arguments.Count -gt 0) {
-        [string]((& $resolvedFilePath @Arguments 2>&1) | Out-String)
+    $quotedArguments = @(
+        foreach ($argument in $Arguments) {
+        if ($null -eq $argument) {
+            '""'
+            continue
+        }
+
+        if ($argument -notmatch '[\s"]') {
+            $argument
+            continue
+        }
+
+        '"' + (($argument -replace '(\\*)"', '$1$1\\"') -replace '(\\+)$', '$1$1') + '"'
+        }
+    )
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = $resolvedFilePath
+    $startInfo.Arguments = [string]::Join(' ', $quotedArguments)
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+    $startInfo.WorkingDirectory = $compilerDir
+
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $startInfo
+    [void]$process.Start()
+    $stdout = $process.StandardOutput.ReadToEnd()
+    $stderr = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+
+    $output = if ([string]::IsNullOrEmpty($stderr)) {
+        [string]$stdout
     }
     else {
-        [string]((& $resolvedFilePath 2>&1) | Out-String)
+        [string]($stdout + $stderr)
     }
 
     return [pscustomobject]@{
-        ExitCode = $LASTEXITCODE
+        ExitCode = $process.ExitCode
         Output = $output
     }
 }

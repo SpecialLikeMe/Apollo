@@ -112,10 +112,22 @@ namespace {
 
         const std::filesystem::path apolloRoot = payloadRoot(installDir);
         const std::filesystem::path compilerDir = apolloRoot / "compiler";
+        const std::filesystem::path apolloExe = apolloRoot / "apollo.exe";
+        const std::filesystem::path execScript = compilerDir / "exec.bat";
         wrapper << "@echo off\r\n";
         wrapper << "setlocal\r\n";
         wrapper << "set \"APOLLO_DIR=" << apolloRoot.string() << "\"\r\n";
         wrapper << "set \"APOLLO_COMPILER_DIR=" << compilerDir.string() << "\"\r\n";
+        wrapper << "if not exist \"%APOLLO_DIR%\\apollo.exe\" (\r\n";
+        wrapper << "  echo Apollo Windows shim is stale: \"" << apolloExe.string() << "\" was not found.\r\n";
+        wrapper << "  echo Re-run install.exe from the current Apollo checkout to refresh the command shim.\r\n";
+        wrapper << "  exit /b 1\r\n";
+        wrapper << ")\r\n";
+        wrapper << "if not exist \"%APOLLO_COMPILER_DIR%\\exec.bat\" (\r\n";
+        wrapper << "  echo Apollo Windows shim is stale: \"" << execScript.string() << "\" was not found.\r\n";
+        wrapper << "  echo Re-run install.exe from the current Apollo checkout to refresh the command shim.\r\n";
+        wrapper << "  exit /b 1\r\n";
+        wrapper << ")\r\n";
         wrapper << "\"%APOLLO_DIR%\\apollo.exe\" %*\r\n";
         wrapper << "exit /b %ERRORLEVEL%\r\n";
         return wrapper.good();
@@ -220,6 +232,7 @@ int main() {
 
     std::string windowsApps = windowsAppsDir.string();
     std::vector<std::string> updatedEntries;
+    updatedEntries.push_back(installDir);
     updatedEntries.push_back(windowsApps);
     for (const std::string& entry : splitPathEntries(currentPath)) {
         if (!equalsIgnoreCase(entry, installDir) && !equalsIgnoreCase(entry, windowsApps)) {

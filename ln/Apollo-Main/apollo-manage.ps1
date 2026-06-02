@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('version', 'update', 'uninstall')]
+    [ValidateSet('version', 'update', 'repair', 'uninstall')]
     [string]$Action,
 
     [string]$InstallDir = $PSScriptRoot
@@ -10,6 +10,113 @@ $ErrorActionPreference = 'Stop'
 
 $OfficialRepo = 'https://github.com/SpecialLikeMe/Apollo.git'
 $InstallDir = [System.IO.Path]::GetFullPath($InstallDir)
+
+function Get-WindowsAppsWrapperPath {
+    $windowsAppsDir = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps'
+    return Join-Path $windowsAppsDir 'apollo.cmd'
+}
+
+function Write-ApolloWrapper {
+    $wrapperPath = Get-WindowsAppsWrapperPath
+    $wrapperDir = Split-Path -Parent $wrapperPath
+    $apolloRoot = $InstallDir
+    $compilerDir = Join-Path $apolloRoot 'compiler'
+    $apolloExe = Join-Path $apolloRoot 'apollo.exe'
+    $execScript = Join-Path $compilerDir 'exec.bat'
+
+    New-Item -ItemType Directory -Force -Path $wrapperDir | Out-Null
+
+    @(
+        '@echo off'
+        'setlocal'
+        ('set "APOLLO_DIR={0}"' -f $apolloRoot)
+        ('set "APOLLO_COMPILER_DIR={0}"' -f $compilerDir)
+        'if not exist "%APOLLO_DIR%\apollo.exe" ('
+        ('  echo Apollo Windows shim is stale: "{0}" was not found.' -f $apolloExe)
+        '  echo Re-run install.exe from the current Apollo checkout to refresh the command shim.'
+        '  exit /b 1'
+        ')'
+        'if not exist "%APOLLO_COMPILER_DIR%\exec.bat" ('
+        ('  echo Apollo Windows shim is stale: "{0}" was not found.' -f $execScript)
+        '  echo Re-run install.exe from the current Apollo checkout to refresh the command shim.'
+        '  exit /b 1'
+        ')'
+        '"%APOLLO_DIR%\apollo.exe" %*'
+        'exit /b %ERRORLEVEL%'
+    ) | Set-Content -Path $wrapperPath -Encoding Ascii
+}
+
+function Update-UserPathEntries {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$PreferredEntries,
+
+        [string[]]$RemoveEntries = @()
+    )
+
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $entries = New-Object System.Collections.Generic.List[string]
+    $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+    $normalizedRemove = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+
+    foreach ($entry in $RemoveEntries) {
+        if ([string]::IsNullOrWhiteSpace($entry)) {
+            continue
+        }
+
+        $normalized = try {
+            [System.IO.Path]::GetFullPath([Environment]::ExpandEnvironmentVariables($entry)).TrimEnd('\\')
+        } catch {
+            ([Environment]::ExpandEnvironmentVariables($entry)).TrimEnd('\\')
+        }
+
+        [void]$normalizedRemove.Add($normalized)
+    }
+
+    foreach ($entry in $PreferredEntries) {
+        if ([string]::IsNullOrWhiteSpace($entry)) {
+            continue
+        }
+
+        $normalized = try {
+            [System.IO.Path]::GetFullPath([Environment]::ExpandEnvironmentVariables($entry)).TrimEnd('\\')
+        } catch {
+            ([Environment]::ExpandEnvironmentVariables($entry)).TrimEnd('\\')
+        }
+
+        if ($normalizedRemove.Contains($normalized)) {
+            continue
+        }
+
+        if ($seen.Add($normalized)) {
+            $entries.Add($normalized)
+        }
+    }
+
+    foreach ($entry in ($userPath -split ';')) {
+        if ([string]::IsNullOrWhiteSpace($entry)) {
+            continue
+        }
+
+        $expandedEntry = [Environment]::ExpandEnvironmentVariables($entry)
+        $candidate = try {
+            [System.IO.Path]::GetFullPath($expandedEntry).TrimEnd('\\')
+        } catch {
+            $expandedEntry.TrimEnd('\\')
+        }
+
+        if ($normalizedRemove.Contains($candidate)) {
+            continue
+        }
+
+        if ($seen.Add($candidate)) {
+            $entries.Add($entry)
+        }
+    }
+
+    [Environment]::SetEnvironmentVariable('Path', ($entries -join ';'), 'User')
+    Start-Process -FilePath 'rundll32.exe' -ArgumentList 'user32.dll,UpdatePerUserSystemParameters' -WindowStyle Hidden | Out-Null
+}
 
 function Resolve-GitCommand {
     $git = Get-Command git -ErrorAction SilentlyContinue
@@ -220,6 +327,9 @@ function Update-Apollo {
         throw (($mergeResult.Output | Out-String).Trim())
     }
 
+    Write-ApolloWrapper
+    $windowsAppsDir = Split-Path -Parent (Get-WindowsAppsWrapperPath)
+    Update-UserPathEntries -PreferredEntries @($InstallDir, $windowsAppsDir)
     $metadata = Get-GitMetadata
     if ($null -ne $metadata) {
         Write-Output ("Apollo updated to {0}@{1}" -f $metadata.Branch, $metadata.Commit)
@@ -228,40 +338,30 @@ function Update-Apollo {
     }
 }
 
+function Repair-Apollo {
+    $apolloExe = Join-Path $InstallDir 'apollo.exe'
+    $execScript = Join-Path $InstallDir 'compiler\exec.bat'
+
+    if (-not (Test-Path $apolloExe)) {
+        throw ("Apollo repair failed: missing apollo.exe at {0}" -f $apolloExe)
+    }
+
+    if (-not (Test-Path $execScript)) {
+        throw ("Apollo repair failed: missing compiler script at {0}" -f $execScript)
+    }
+
+    Write-ApolloWrapper
+    $windowsAppsDir = Split-Path -Parent (Get-WindowsAppsWrapperPath)
+    Update-UserPathEntries -PreferredEntries @($InstallDir, $windowsAppsDir)
+    Write-Output ("Apollo repair refreshed PATH and the Windows shim for {0}." -f $InstallDir)
+}
+
 function Remove-InstallDirFromPath {
-    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
-    if ([string]::IsNullOrEmpty($userPath)) {
-        return
-    }
-
-    $normalizedInstallDir = $InstallDir.TrimEnd('\\')
-    $entries = New-Object System.Collections.Generic.List[string]
-    foreach ($entry in ($userPath -split ';')) {
-        if ([string]::IsNullOrWhiteSpace($entry)) {
-            continue
-        }
-
-        $expandedEntry = [Environment]::ExpandEnvironmentVariables($entry)
-        $candidate = try {
-            [System.IO.Path]::GetFullPath($expandedEntry).TrimEnd('\\')
-        } catch {
-            $expandedEntry.TrimEnd('\\')
-        }
-
-        if ($candidate -ieq $normalizedInstallDir) {
-            continue
-        }
-
-        $entries.Add($entry)
-    }
-
-    [Environment]::SetEnvironmentVariable('Path', ($entries -join ';'), 'User')
-    Start-Process -FilePath 'rundll32.exe' -ArgumentList 'user32.dll,UpdatePerUserSystemParameters' -WindowStyle Hidden | Out-Null
+    Update-UserPathEntries -PreferredEntries @() -RemoveEntries @($InstallDir)
 }
 
 function Uninstall-Apollo {
-    $windowsAppsDir = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps'
-    $wrapperPath = Join-Path $windowsAppsDir 'apollo.cmd'
+    $wrapperPath = Get-WindowsAppsWrapperPath
     if (Test-Path $wrapperPath) {
         Remove-Item $wrapperPath -Force
     }
@@ -288,6 +388,9 @@ switch ($Action) {
     }
     'update' {
         Update-Apollo
+    }
+    'repair' {
+        Repair-Apollo
     }
     'uninstall' {
         Uninstall-Apollo

@@ -1,0 +1,22 @@
+extern std io
+
+struct x {
+    int i;
+}
+
+void consume(x value) {
+}
+
+int main() {
+    nconst vector<x> y;
+    y.append(x {
+        .i = 3
+    });
+    x z {
+        .i = 4
+    };
+    consume(x {
+        .i = z.i
+    });
+    return z.i;
+}

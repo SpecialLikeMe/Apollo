@@ -544,6 +544,14 @@ ExprPtr AstLowerer::lowerExpr(const AstNode* node) {
             a->kind = ExprKind::Aggregate;
             a->agg_kind = AggregateKind::Struct;
             a->ty = tcx_.mkUnit();
+            if (auto* bi = iv->braceInitializer()) {
+                for (auto* item : bi->braceInitializerElement()) {
+                    if (auto* ex = item->expression()) {
+                        if (auto e = lowerExpr(asNode(ex))) a->args.push_back(std::move(e));
+                    }
+                }
+                return a;
+            }
             if (auto* args = iv->args()) {
                 for (auto* ex : args->expression()) {
                     if (auto e = lowerExpr(asNode(ex))) a->args.push_back(std::move(e));

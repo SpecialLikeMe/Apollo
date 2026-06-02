@@ -71,7 +71,7 @@ instance     : ((INSTANCE_MODE 'instance') | INS | STAT) ID ('='? instanceValue)
 instancepush : ID '.' 'push' '(' instanceValue ')' ';' ;
 memberaccess : accessBase '.' (functionCall|ID) ;
 accessBase   : ID | INDEF | 'sys' ;
-instanceValue: ID LBRACE args? RBRACE allocatorUseSuffix? ;
+instanceValue: ID (LBRACE args? RBRACE | braceInitializer) allocatorUseSuffix? ;
 allocatorUseSuffix : '.' 'uses' '(' expression ')' ;
 importPath   : (ID | '*') ('.' (ID | '*'))* ;
 headerPath   : headerPart (('/' | '\\') headerPart)+ ;
@@ -280,7 +280,7 @@ ltoTypesetStmt : ID '.' 'typeset' '(' typeRef ')' ('.' 'cast' '(' ')')? ';' ;
 easyInit       : (((CONST | NCONST)? ATO ID '=' expression)
                | ((CONST | NCONST)? ID ':=' expression)) ';'
                ;
-initCore       : (CONST | NCONST)? typeRef ID ( '=' expression )?
+initCore       : (CONST | NCONST)? typeRef ID ( '=' expression | braceInitializer )?
                | (CONST | NCONST)? instanceValue ID ( '=' braceInitializer )?
                | LET (CONST | NCONST)? ID ':' typeRef ( '=' expression )?
                ;

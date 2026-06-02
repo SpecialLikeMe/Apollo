@@ -1,0 +1,13 @@
+extern std prelude;
+
+int main() {
+    nconst vector<str> xs;
+    xs.append("a");
+    xs[0] = "b";
+
+    for (const str item in xs) {
+        return item == "b" ? 0 : 1;
+    }
+
+    return 2;
+}

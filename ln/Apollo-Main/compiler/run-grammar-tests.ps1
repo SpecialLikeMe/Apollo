@@ -132,16 +132,89 @@ function Invoke-CapturedProcess {
     )
 
     $resolvedFilePath = Resolve-CommandPath -Name $FilePath
-    $output = if ($Arguments.Count -gt 0) {
-        [string]((& $resolvedFilePath @Arguments 2>&1) | Out-String)
+    $quotedArguments = @(
+        foreach ($argument in $Arguments) {
+        if ($null -eq $argument) {
+            '""'
+            continue
+        }
+
+        if ($argument -notmatch '[\s"]') {
+            $argument
+            continue
+        }
+
+        '"' + (($argument -replace '(\\*)"', '$1$1\\"') -replace '(\\+)$', '$1$1') + '"'
+        }
+    )
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = $resolvedFilePath
+    $startInfo.Arguments = [string]::Join(' ', $quotedArguments)
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+    $startInfo.WorkingDirectory = $compilerDir
+
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $startInfo
+    [void]$process.Start()
+    $stdout = $process.StandardOutput.ReadToEnd()
+    $stderr = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+
+    $output = if ([string]::IsNullOrEmpty($stderr)) {
+        [string]$stdout
     }
     else {
-        [string]((& $resolvedFilePath 2>&1) | Out-String)
+        [string]($stdout + $stderr)
     }
 
     return [pscustomobject]@{
-        ExitCode = $LASTEXITCODE
+        ExitCode = $process.ExitCode
         Output = $output
+    }
+}
+
+function Ensure-NativeGrammarGenerated {
+    $grammarPath = Join-Path $compilerDir 'compilerv1.g4'
+    if (-not (Test-Path $grammarPath)) {
+        throw "Apollo grammar not found: $grammarPath"
+    }
+
+    $generatedPaths = @(
+        (Join-Path $compilerDir 'cpp\generated\compilerv1Lexer.cpp'),
+        (Join-Path $compilerDir 'cpp\generated\compilerv1Parser.cpp'),
+        (Join-Path $compilerDir 'cpp\generated\compilerv1BaseVisitor.cpp'),
+        (Join-Path $compilerDir 'cpp\generated\compilerv1Visitor.cpp')
+    )
+
+    $grammarTimestamp = (Get-Item $grammarPath).LastWriteTimeUtc
+    $needsRegen = $false
+    foreach ($generatedPath in $generatedPaths) {
+        if (-not (Test-Path $generatedPath) -or (Get-Item $generatedPath).LastWriteTimeUtc -lt $grammarTimestamp) {
+            $needsRegen = $true
+            break
+        }
+    }
+
+    if (-not $needsRegen) {
+        return
+    }
+
+    $makeProgram = if ($env:APOLLO_NATIVE_MAKE_PROGRAM) {
+        $env:APOLLO_NATIVE_MAKE_PROGRAM
+    }
+    elseif ($env:APOLLO_MINGW_BIN -and (Test-Path (Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'))) {
+        Join-Path $env:APOLLO_MINGW_BIN 'mingw32-make.exe'
+    }
+    else {
+        'mingw32-make'
+    }
+
+    $regenResult = Invoke-CapturedProcess -FilePath $makeProgram -Arguments @('regen')
+    if ($regenResult.ExitCode -ne 0) {
+        throw "Failed to regenerate Apollo grammar outputs.`n$($regenResult.Output)"
     }
 }
 
@@ -218,11 +291,59 @@ function Resolve-NativeExecutable {
 }
 
 function Build-NativeTooling {
-    Ensure-NativeBuild -Targets @('apollo_frontend_native', 'apollo_build_driver_native', 'apollo_runtime_tests', 'apollo_driver_tests')
+    Ensure-NativeGrammarGenerated
+    Ensure-NativeBuild -Targets @('apollo_frontend_native', 'apollo_build_driver_native', 'apollo_runtime_tests')
     $script:apolloFrontendExe = Resolve-NativeExecutable -Name 'apollo_frontend_native'
     $script:apolloBuildDriverExe = Resolve-NativeExecutable -Name 'apollo_build_driver_native'
     $script:apolloRuntimeTestsExe = Resolve-NativeExecutable -Name 'apollo_runtime_tests'
-    $script:apolloDriverTestsExe = Resolve-NativeExecutable -Name 'apollo_driver_tests'
+}
+
+function Test-IncrementalCompileCache {
+    $workspace = Join-Path $env:TEMP ('apollo-cache-test-' + [guid]::NewGuid().ToString('N'))
+    $source = Join-Path $workspace 'main.apollo'
+    $output = Join-Path $workspace 'cached-output.ll'
+
+    try {
+        New-Item -ItemType Directory -Path $workspace | Out-Null
+        Set-Content -Path $source -Value "int main() { return 1; }`n" -NoNewline
+
+        $firstResult = Invoke-CapturedProcess -FilePath $apolloFrontendExe -Arguments @($source, $output)
+        if ($firstResult.ExitCode -ne 0 -or -not (Test-Path $output)) {
+            throw "Initial cached compile failed.`n$($firstResult.Output)"
+        }
+
+        $firstOutput = Get-Content -Path $output -Raw
+        $preservedWriteTime = [datetime]::UtcNow.AddMinutes(-5)
+        (Get-Item $output).LastWriteTimeUtc = $preservedWriteTime
+
+        $secondResult = Invoke-CapturedProcess -FilePath $apolloFrontendExe -Arguments @($source, $output)
+        if ($secondResult.ExitCode -ne 0) {
+            throw "Unchanged cached compile failed.`n$($secondResult.Output)"
+        }
+        if ((Get-Item $output).LastWriteTimeUtc -ne $preservedWriteTime) {
+            throw 'Unchanged sources should reuse cached LLVM IR output.'
+        }
+
+        Set-Content -Path $source -Value "int main() { return 2; }`n" -NoNewline
+        $invalidatedWriteTime = [datetime]::UtcNow.AddMinutes(-4)
+        (Get-Item $output).LastWriteTimeUtc = $invalidatedWriteTime
+
+        $thirdResult = Invoke-CapturedProcess -FilePath $apolloFrontendExe -Arguments @($source, $output)
+        if ($thirdResult.ExitCode -ne 0) {
+            throw "Edited cached compile failed.`n$($thirdResult.Output)"
+        }
+
+        $thirdOutput = Get-Content -Path $output -Raw
+        if ($thirdOutput -eq $firstOutput) {
+            throw 'Editing the source should invalidate the cache.'
+        }
+        if ((Get-Item $output).LastWriteTimeUtc -eq $invalidatedWriteTime) {
+            throw 'Editing the source should rewrite the cached LLVM IR output.'
+        }
+    }
+    finally {
+        Remove-Item $workspace -Recurse -Force -ErrorAction SilentlyContinue
+    }
 }
 
 function Invoke-ApolloCompile {
@@ -324,6 +445,12 @@ $tests = @(
         )
     },
     [pscustomobject]@{
+        Name = 'struct-literal-expression-surface'
+        Path = 'tests\grammar\pass\struct_literal_expression_surface.apollo'
+        ShouldPass = $true
+        Covers = 'direct brace struct literals can appear in expression position, container append calls, and typed declarations without ='
+    },
+    [pscustomobject]@{
         Name = 'alias-sugar-surface'
         Path = 'tests\grammar\pass\alias_sugar_surface.apollo'
         ShouldPass = $true
@@ -395,7 +522,7 @@ $tests = @(
             'call i32 (ptr, ...) @sys__printf(ptr @apollo.str.literal.',
             'load i32, ptr %'
         )
-    },
+    }, 
     [pscustomobject]@{
         Name = 'any-binding-surface'
         Path = 'tests\grammar\pass\any_binding_surface.apollo'
@@ -913,6 +1040,20 @@ $tests = @(
         Covers = 'const bindings stay immutable'
     },
     [pscustomobject]@{
+        Name = 'default-immutable-reassignment'
+        Path = 'tests\safety\fail\default_immutable_reassignment.apollo'
+        ShouldPass = $false
+        Expected = 'cannot assign to immutable binding `value`'
+        Covers = 'unqualified bindings are immutable by default'
+    },
+    [pscustomobject]@{
+        Name = 'default-immutable-vector-append'
+        Path = 'tests\safety\fail\default_immutable_vector_append.apollo'
+        ShouldPass = $false
+        Expected = 'cannot assign to immutable binding `value`'
+        Covers = 'immutable-by-default also rejects mutating collection member calls'
+    },
+    [pscustomobject]@{
         Name = 'nconst-immutable-borrow-conflict'
         Path = 'tests\safety\fail\nconst_immutable_borrow_conflict.apollo'
         ShouldPass = $false
@@ -1227,10 +1368,7 @@ if ($phaseOrderResult.ExitCode -ne 0) {
 }
 Write-Host 'PASS runtime-phase-order :: runtime cycle registration order is stable'
 
-$incrementalCacheResult = Invoke-CapturedProcess -FilePath $apolloDriverTestsExe
-if ($incrementalCacheResult.ExitCode -ne 0) {
-    throw "Incremental compile cache validation failed.`n$($incrementalCacheResult.Output)"
-}
+Test-IncrementalCompileCache
 Write-Host 'PASS runtime-phase-failure-wrap :: unexpected runtime phase errors become Apollo diagnostics'
 Write-Host 'PASS incremental-compile-cache :: unchanged sources reuse cached output and edits invalidate the cache'
 

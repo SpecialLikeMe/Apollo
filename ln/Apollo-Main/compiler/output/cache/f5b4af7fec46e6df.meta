@@ -1,0 +1,10 @@
+version=apollo-native-cache-v1
+compilerSignature=5bdda499f6990488
+sourceHash=fb790d3825f360ef
+outputHash=d4072317cc9b5349
+sourceSize=270
+sourceWriteTime=1780443478695810500
+outputSize=2003
+outputWriteTime=1780443480293655300
+dependency=cstdio
+dependency=q/qwety.apollo

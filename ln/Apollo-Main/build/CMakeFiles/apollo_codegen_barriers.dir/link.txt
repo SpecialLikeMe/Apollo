@@ -1,0 +1,2 @@
+C:\msys64\clang64\bin\llvm-ar.exe qc libapollo_codegen_barriers.a CMakeFiles/apollo_codegen_barriers.dir/src/codegen/barriers.cpp.obj
+C:\msys64\clang64\bin\llvm-ranlib.exe libapollo_codegen_barriers.a
