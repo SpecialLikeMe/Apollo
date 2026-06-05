@@ -562,7 +562,7 @@ public:
             std::any result = visitChildren(ctx);
             --suppressLocalInitDeclarationDepth_;
             if (ctx != nullptr && ctx->init() != nullptr && ctx->init()->initCore() != nullptr && ctx->init()->initCore()->ID() != nullptr) {
-                declareLocalBinding(ctx->init()->initCore()->ID()->getText(), true, false);
+                declareLocalBinding(ctx->init()->initCore()->ID()->getText(), inferDeclaredBindingType(ctx->init()->initCore()), true, false);
             }
             return result;
         } catch (...) {
@@ -573,11 +573,15 @@ public:
 
     std::any visitFunction(compilerv1Parser::FunctionContext* ctx) override {
         ++callableDepth_;
+        pushLocalScope();
         try {
+            declareParamBindings(ctx != nullptr ? ctx->params() : nullptr);
             std::any result = visitChildren(ctx);
+            popLocalScope(false);
             --callableDepth_;
             return result;
         } catch (...) {
+            popLocalScope(false);
             --callableDepth_;
             throw;
         }
@@ -585,11 +589,15 @@ public:
 
     std::any visitMethod(compilerv1Parser::MethodContext* ctx) override {
         ++callableDepth_;
+        pushLocalScope();
         try {
+            declareParamBindings(ctx != nullptr ? ctx->params() : nullptr);
             std::any result = visitChildren(ctx);
+            popLocalScope(false);
             --callableDepth_;
             return result;
         } catch (...) {
+            popLocalScope(false);
             --callableDepth_;
             throw;
         }
@@ -622,7 +630,17 @@ public:
             return result;
         }
 
-        declareLocalBinding(ctx->initCore()->ID()->getText(), false, autoreleasepoolDepth_ > 0);
+        declareLocalBinding(ctx->initCore()->ID()->getText(), inferDeclaredBindingType(ctx->initCore()), false, autoreleasepoolDepth_ > 0);
+        return result;
+    }
+
+    std::any visitEasyInit(compilerv1Parser::EasyInitContext* ctx) override {
+        std::any result = visitChildren(ctx);
+        if (callableDepth_ == 0 || suppressLocalInitDeclarationDepth_ > 0 || ctx == nullptr || ctx->ID() == nullptr) {
+            return result;
+        }
+
+        declareLocalBinding(ctx->ID()->getText(), inferExpressionTypeText(ctx->expression()), false, autoreleasepoolDepth_ > 0);
         return result;
     }
 
@@ -774,10 +792,67 @@ public:
     }
 
     std::any visitFunctionCall(compilerv1Parser::FunctionCallContext* ctx) override {
-        if (fallbackAllowed_ && ctx != nullptr && ctx->ID() != nullptr) {
+        if (ctx != nullptr && ctx->ID() != nullptr) {
             const std::string functionName = ctx->ID()->getText();
-            if (blockedFallbackSymbols_.contains(functionName) && !declaredCallables_.contains(functionName)) {
+            if (fallbackAllowed_ && blockedFallbackSymbols_.contains(functionName) && !declaredCallables_.contains(functionName)) {
                 addDiagnostic(ctx, "fallback call to blocked symbol `" + functionName + "` is not allowed");
+            }
+
+            const auto actualArgs = ctx->args() != nullptr
+                ? ctx->args()->expression()
+                : std::vector<compilerv1Parser::ExpressionContext*>{};
+            const auto signatureIt = callableSignatures_.find(functionName);
+            if (signatureIt != callableSignatures_.end()) {
+                bool sawSameArity = false;
+                std::optional<std::size_t> mismatchedIndex;
+                std::optional<std::string> mismatchedExpectedType;
+                std::optional<std::string> mismatchedActualType;
+
+                for (const auto& signature : signatureIt->second) {
+                    if (signature.parameterTypes.size() != actualArgs.size()) {
+                        continue;
+                    }
+                    sawSameArity = true;
+
+                    bool matches = true;
+                    for (std::size_t index = 0; index < actualArgs.size(); ++index) {
+                        const auto& declaredType = signature.parameterTypes[index];
+                        const auto actualType = inferExpressionTypeText(actualArgs[index]);
+                        if (!declaredType.has_value() || !actualType.has_value()) {
+                            continue;
+                        }
+                        if (!areTypesCompatible(*declaredType, *actualType)) {
+                            if (!mismatchedIndex.has_value()) {
+                                mismatchedIndex = index;
+                                mismatchedExpectedType = *declaredType;
+                                mismatchedActualType = *actualType;
+                            }
+                            matches = false;
+                            break;
+                        }
+                    }
+
+                    if (matches) {
+                        return visitChildren(ctx);
+                    }
+                }
+
+                if (!sawSameArity) {
+                    std::ostringstream builder;
+                    builder << "function `" << functionName << "` argument count mismatch: call provides "
+                            << actualArgs.size() << " but no overload accepts that arity";
+                    addDiagnostic(ctx, builder.str());
+                    return visitChildren(ctx);
+                }
+
+                if (mismatchedIndex.has_value() && mismatchedExpectedType.has_value() && mismatchedActualType.has_value()) {
+                    std::ostringstream builder;
+                    builder << "function `" << functionName << "` argument " << *mismatchedIndex
+                            << " type mismatch: expected `" << *mismatchedExpectedType
+                            << "` but call provides `" << *mismatchedActualType << "`";
+                    addDiagnostic(ctx, builder.str());
+                    return visitChildren(ctx);
+                }
             }
         }
         return visitChildren(ctx);
@@ -789,6 +864,11 @@ public:
     }
 
 private:
+    struct CallableSignature {
+        std::vector<std::optional<std::string>> parameterTypes;
+        std::optional<std::string> returnType;
+    };
+
     struct TypedefOpstructDslPattern {
         std::string rawText;
         ParsedTypedefOpstructPattern parsed;
@@ -804,12 +884,14 @@ private:
             if (auto* functionCtx = dynamic_cast<compilerv1Parser::FunctionContext*>(child)) {
                 if (functionCtx->ID() != nullptr) {
                     declaredCallables_.insert(functionCtx->ID()->getText());
+                    callableSignatures_[functionCtx->ID()->getText()].push_back(buildCallableSignature(functionCtx->params(), functionCtx->returnType()));
                 }
                 continue;
             }
             if (auto* macroCtx = dynamic_cast<compilerv1Parser::MacroContext*>(child)) {
                 if (macroCtx->ID() != nullptr) {
                     declaredCallables_.insert(macroCtx->ID()->getText());
+                    callableSignatures_[macroCtx->ID()->getText()].push_back(buildCallableSignature(macroCtx->params(), nullptr));
                 }
                 continue;
             }
@@ -1025,8 +1107,253 @@ private:
         return false;
     }
 
+    static std::string canonicalTypeText(std::string typeText) {
+        while (!typeText.empty() && std::isspace(static_cast<unsigned char>(typeText.back()))) {
+            typeText.pop_back();
+        }
+        while (!typeText.empty() && typeText.back() == '&') {
+            typeText.pop_back();
+            while (!typeText.empty() && std::isspace(static_cast<unsigned char>(typeText.back()))) {
+                typeText.pop_back();
+            }
+        }
+        if (typeText == "int") {
+            return "i32";
+        }
+        if (typeText == "short") {
+            return "i16";
+        }
+        if (typeText == "long" || typeText == "isize") {
+            return "i64";
+        }
+        if (typeText == "float" || typeText == "double") {
+            return "f64";
+        }
+        return typeText;
+    }
+
+    static bool isNumericTypeText(const std::string& typeText) {
+        static const std::unordered_set<std::string> numericTypes = {
+            "bool", "i8", "u8", "i16", "u16", "i32", "u32", "i64", "u64", "usize", "isize", "f64", "char", "byte"
+        };
+        return numericTypes.contains(canonicalTypeText(typeText));
+    }
+
+    std::string resolveTypeAlias(std::string typeText) const {
+        std::unordered_set<std::string> seen;
+        while (seen.insert(typeText).second) {
+            const auto aliasIt = typedefOpstructAliases_.find(typeText);
+            if (aliasIt == typedefOpstructAliases_.end()) {
+                return typeText;
+            }
+            typeText = canonicalTypeText(aliasIt->second);
+        }
+        return typeText;
+    }
+
+    bool areTypesCompatible(const std::string& declaredType, const std::string& actualType) const {
+        const std::string declaredCanonical = canonicalTypeText(declaredType);
+        const std::string actualCanonical = canonicalTypeText(actualType);
+        if (declaredCanonical == actualCanonical) {
+            return true;
+        }
+        if (resolveTypeAlias(declaredCanonical) == resolveTypeAlias(actualCanonical)) {
+            return true;
+        }
+        if (isNumericTypeText(declaredCanonical) && isNumericTypeText(actualCanonical)) {
+            return true;
+        }
+        return false;
+    }
+
+    static CallableSignature buildCallableSignature(compilerv1Parser::ParamsContext* params, compilerv1Parser::ReturnTypeContext* returnType) {
+        CallableSignature signature;
+        if (params != nullptr) {
+            for (auto* param : params->param()) {
+                if (param != nullptr && param->typeRef() != nullptr) {
+                    signature.parameterTypes.push_back(param->typeRef()->getText());
+                } else {
+                    signature.parameterTypes.push_back(std::nullopt);
+                }
+            }
+        }
+        if (returnType != nullptr) {
+            signature.returnType = returnType->getText();
+        }
+        return signature;
+    }
+
+    static std::optional<std::string> inferDeclaredBindingType(compilerv1Parser::InitCoreContext* initCore) {
+        if (initCore == nullptr) {
+            return std::nullopt;
+        }
+        if (initCore->typeRef() != nullptr) {
+            return initCore->typeRef()->getText();
+        }
+        if (initCore->instanceValue() != nullptr && initCore->instanceValue()->ID() != nullptr) {
+            return initCore->instanceValue()->ID()->getText();
+        }
+        return std::nullopt;
+    }
+
+    void declareParamBindings(compilerv1Parser::ParamsContext* params) {
+        if (params == nullptr) {
+            return;
+        }
+        for (auto* param : params->param()) {
+            if (param == nullptr || param->ID() == nullptr) {
+                continue;
+            }
+            declareLocalBinding(param->ID()->getText(), param->typeRef() != nullptr ? std::optional<std::string>(param->typeRef()->getText()) : std::nullopt, false, false);
+        }
+    }
+
+    std::optional<std::string> lookupLocalBindingType(const std::string& name) const {
+        if (name.empty()) {
+            return std::nullopt;
+        }
+        for (auto scopeIt = localScopes_.rbegin(); scopeIt != localScopes_.rend(); ++scopeIt) {
+            for (auto bindingIt = scopeIt->bindings.rbegin(); bindingIt != scopeIt->bindings.rend(); ++bindingIt) {
+                if (bindingIt->name == name) {
+                    return bindingIt->typeText;
+                }
+            }
+        }
+        return std::nullopt;
+    }
+
+    template <typename NodeT>
+    std::optional<std::string> inferExpressionTypeText(NodeT* node) const {
+        if (node == nullptr) {
+            return std::nullopt;
+        }
+
+        if (auto* expression = dynamic_cast<compilerv1Parser::ExpressionContext*>(node)) {
+            if (expression->orExpr() == nullptr) {
+                return std::nullopt;
+            }
+            if (expression->children.size() > 1) {
+                auto trueType = inferExpressionTypeText(expression->expression(0));
+                auto falseType = inferExpressionTypeText(expression->expression(1));
+                if (trueType.has_value() && falseType.has_value() && areTypesCompatible(*trueType, *falseType)) {
+                    return trueType;
+                }
+                return std::nullopt;
+            }
+            return inferExpressionTypeText(expression->orExpr());
+        }
+        if (auto* orExpr = dynamic_cast<compilerv1Parser::OrExprContext*>(node)) {
+            return orExpr->andExpr().size() > 1 ? std::optional<std::string>("bool") : inferExpressionTypeText(orExpr->andExpr(0));
+        }
+        if (auto* andExpr = dynamic_cast<compilerv1Parser::AndExprContext*>(node)) {
+            return andExpr->bitwiseOrExpr().size() > 1 ? std::optional<std::string>("bool") : inferExpressionTypeText(andExpr->bitwiseOrExpr(0));
+        }
+        if (auto* equalityExpr = dynamic_cast<compilerv1Parser::EqualityExprContext*>(node)) {
+            return equalityExpr->shiftExpr().size() > 1 ? std::optional<std::string>("bool") : inferExpressionTypeText(equalityExpr->shiftExpr(0));
+        }
+        if (auto* relationalExpr = dynamic_cast<compilerv1Parser::RelationalExprContext*>(node)) {
+            return relationalExpr->addExpr().size() > 1 ? std::optional<std::string>("bool") : inferExpressionTypeText(relationalExpr->addExpr(0));
+        }
+        if (auto* shiftExpr = dynamic_cast<compilerv1Parser::ShiftExprContext*>(node)) {
+            return shiftExpr->relationalExpr().empty() ? std::nullopt : inferExpressionTypeText(shiftExpr->relationalExpr(0));
+        }
+        if (auto* bitwiseOrExpr = dynamic_cast<compilerv1Parser::BitwiseOrExprContext*>(node)) {
+            return bitwiseOrExpr->bitwiseXorExpr().empty() ? std::nullopt : inferExpressionTypeText(bitwiseOrExpr->bitwiseXorExpr(0));
+        }
+        if (auto* bitwiseXorExpr = dynamic_cast<compilerv1Parser::BitwiseXorExprContext*>(node)) {
+            return bitwiseXorExpr->bitwiseAndExpr().empty() ? std::nullopt : inferExpressionTypeText(bitwiseXorExpr->bitwiseAndExpr(0));
+        }
+        if (auto* bitwiseAndExpr = dynamic_cast<compilerv1Parser::BitwiseAndExprContext*>(node)) {
+            return bitwiseAndExpr->equalityExpr().empty() ? std::nullopt : inferExpressionTypeText(bitwiseAndExpr->equalityExpr(0));
+        }
+        if (auto* addExpr = dynamic_cast<compilerv1Parser::AddExprContext*>(node)) {
+            return addExpr->multExpr().empty() ? std::nullopt : inferExpressionTypeText(addExpr->multExpr(0));
+        }
+        if (auto* multExpr = dynamic_cast<compilerv1Parser::MultExprContext*>(node)) {
+            return multExpr->primary().empty() ? std::nullopt : inferExpressionTypeText(multExpr->primary(0));
+        }
+        if (auto* unaryExpr = dynamic_cast<compilerv1Parser::UnaryExprContext*>(node)) {
+            const std::string text = unaryExpr->getText();
+            if (!text.empty() && text.front() == '!') {
+                return std::optional<std::string>("bool");
+            }
+            return inferExpressionTypeText(unaryExpr->primary());
+        }
+        if (auto* functionCall = dynamic_cast<compilerv1Parser::FunctionCallContext*>(node)) {
+            if (functionCall->ID() == nullptr) {
+                return std::nullopt;
+            }
+            const auto actualArgs = functionCall->args() != nullptr
+                ? functionCall->args()->expression()
+                : std::vector<compilerv1Parser::ExpressionContext*>{};
+            const auto signatureIt = callableSignatures_.find(functionCall->ID()->getText());
+            if (signatureIt == callableSignatures_.end()) {
+                return std::nullopt;
+            }
+            for (const auto& signature : signatureIt->second) {
+                if (signature.parameterTypes.size() != actualArgs.size()) {
+                    continue;
+                }
+                bool matches = true;
+                for (std::size_t index = 0; index < actualArgs.size(); ++index) {
+                    const auto& declaredType = signature.parameterTypes[index];
+                    const auto actualType = inferExpressionTypeText(actualArgs[index]);
+                    if (!declaredType.has_value() || !actualType.has_value()) {
+                        continue;
+                    }
+                    if (!areTypesCompatible(*declaredType, *actualType)) {
+                        matches = false;
+                        break;
+                    }
+                }
+                if (matches) {
+                    return signature.returnType;
+                }
+            }
+            return signatureIt->second.empty() ? std::nullopt : signatureIt->second.front().returnType;
+        }
+        if (auto* instanceValue = dynamic_cast<compilerv1Parser::InstanceValueContext*>(node)) {
+            return instanceValue->ID() != nullptr ? std::optional<std::string>(instanceValue->ID()->getText()) : std::nullopt;
+        }
+        if (auto* primary = dynamic_cast<compilerv1Parser::PrimaryContext*>(node)) {
+            if (primary->INT() != nullptr) {
+                return std::optional<std::string>("int");
+            }
+            if (primary->FLOAT() != nullptr) {
+                return std::optional<std::string>("f64");
+            }
+            if (primary->STRING() != nullptr || primary->templateString() != nullptr) {
+                return std::optional<std::string>("str");
+            }
+            if (primary->TRUE() != nullptr || primary->FALSE() != nullptr) {
+                return std::optional<std::string>("bool");
+            }
+            if (primary->CHAR() != nullptr) {
+                return std::optional<std::string>("char");
+            }
+            if (primary->BYTE() != nullptr) {
+                return std::optional<std::string>("byte");
+            }
+            if (primary->ID() != nullptr) {
+                return lookupLocalBindingType(primary->ID()->getText());
+            }
+            if (primary->functionCall() != nullptr) {
+                return inferExpressionTypeText(primary->functionCall());
+            }
+            if (primary->instanceValue() != nullptr) {
+                return inferExpressionTypeText(primary->instanceValue());
+            }
+            if (primary->expression() != nullptr) {
+                return inferExpressionTypeText(primary->expression());
+            }
+        }
+
+        return std::nullopt;
+    }
+
     struct LocalBinding {
         std::string name;
+        std::optional<std::string> typeText;
         bool expiresWithAutoreleasepool = false;
     };
 
@@ -1060,7 +1387,7 @@ private:
         }
     }
 
-    void declareLocalBinding(const std::string& name, bool bridgedOut, bool expiresWithAutoreleasepool) {
+    void declareLocalBinding(const std::string& name, std::optional<std::string> typeText, bool bridgedOut, bool expiresWithAutoreleasepool) {
         if (name.empty() || callableDepth_ == 0 || localScopes_.empty()) {
             return;
         }
@@ -1068,7 +1395,7 @@ private:
         const std::size_t targetIndex = bridgedOut && localScopes_.size() > 1
             ? localScopes_.size() - 2
             : localScopes_.size() - 1;
-        localScopes_[targetIndex].bindings.push_back(LocalBinding{name, expiresWithAutoreleasepool && !bridgedOut});
+        localScopes_[targetIndex].bindings.push_back(LocalBinding{name, std::move(typeText), expiresWithAutoreleasepool && !bridgedOut});
         activeLocalBindings_[name] += 1;
         expiredAutoreleaseBindings_.erase(name);
     }
@@ -1093,6 +1420,7 @@ private:
     ApolloCompilerRuntimeCycle& cycle_;
     std::vector<std::string> diagnostics_;
     std::unordered_set<std::string> declaredCallables_;
+    std::unordered_map<std::string, std::vector<CallableSignature>> callableSignatures_;
     std::unordered_set<std::string> declaredMemstructs_;
     std::unordered_set<std::string> declaredOpstructs_;
     std::unordered_map<std::string, std::string> typedefOpstructAliases_;

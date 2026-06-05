@@ -745,6 +745,7 @@ public:
     TypeRefContext *typeRef();
     antlr4::tree::TerminalNode *ID();
     antlr4::tree::TerminalNode *CLSTYPE();
+    antlr4::tree::TerminalNode *STATIC();
     AttributeBlockContext *attributeBlock();
     antlr4::tree::TerminalNode *CONST();
     antlr4::tree::TerminalNode *NCONST();
@@ -993,8 +994,8 @@ public:
   public:
     ClassMemberContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    MethodContext *method();
     FieldContext *field();
+    MethodContext *method();
     TemplateDeclContext *templateDecl();
     ClassContext *class_();
     StructContext *struct_();
@@ -1010,8 +1011,8 @@ public:
   public:
     StructMemberContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    MethodContext *method();
     FieldContext *field();
+    MethodContext *method();
     TemplateDeclContext *templateDecl();
     ClassContext *class_();
     StructContext *struct_();

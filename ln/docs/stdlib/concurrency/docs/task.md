@@ -2,19 +2,19 @@
 
 ## What it is
 
-The `task` module exposes Apollo's typed task primitives: a `task` is an opaque handle representing a future-like value. The module provides `task_ready_<type>(v)` to create a task already holding a value, `task_done(t)` to check completion, `task_await_<type>(t)` to extract the value (blocking until ready), and `task_is_<type>(t)` to query the task's value type.
+The `task` module exposes Apollo's task handle primitives: a `task` is an opaque runtime handle representing a typed future-like value. The module provides `task_ready_<type>(v)` to create a task already holding a value, `task_done(t)` to check completion, `task_await_<type>(t)` to extract the value (blocking until ready), and `task_is_<type>(t)` to query the task's stored value type.
 
 The module supports `i32`, `bool`, `str`, and `f64` task value types.
 
-This module complements the language-level `async`/`await` surface — `async` produces a task; `await` is sugar for `task_await_*`.
+This module is an explicit stdlib/runtime surface. The current language-level `async foo();` statement does not produce a task handle, and there is no language `await` keyword in the current grammar.
 
 ## When you use it
 
 - Returning a value from a producer that may not yet have computed it.
-- Implementing fork/join over independent units of work.
-- Bridging callback-style APIs into await-based code (`task_ready_*` wraps a synchronous value as a task).
+- Polling or awaiting task handles returned by runtime-backed APIs.
+- Bridging callback-style or already-computed values into task-shaped code with `task_ready_*`.
 
-For real concurrent execution, pair with the language's `async` form or with threads from `std thread`.
+`task_ready_*` itself does not create parallel work; it creates an already-completed handle.
 
 ## API surface
 
@@ -104,58 +104,16 @@ int main() {
 
 When you don't know a task's type up front, query before awaiting.
 
-### Combining with async
-
-```apollo
-extern std task;
-
-async i32 compute_async(i32 x) {
-    return x * x;
-}
-
-int main() {
-    nconst task t = compute_async(7);          // returns a task
-    sys.println(sys.task_await_i32(t));        // 49
-    return 0;
-}
-```
-
-`async` functions return tasks; the same `task_await_*` helpers extract the result.
-
-### Fork/join
-
-```apollo
-extern std task;
-
-async i32 a() { return 1; }
-async i32 b() { return 2; }
-async i32 c() { return 3; }
-
-int main() {
-    nconst task ta = a();
-    nconst task tb = b();
-    nconst task tc = c();
-    nconst i32 sum = sys.task_await_i32(ta)
-                   + sys.task_await_i32(tb)
-                   + sys.task_await_i32(tc);
-    sys.println(sum);
-    return 0;
-}
-```
-
-Three independent computations; join their results.
-
 ## Common mistakes
 
 - **Calling the wrong typed `await`.** `task_await_str` on an `i32` task is undefined behavior. Query type first with `task_is_*` if uncertain.
-- **Awaiting in a tight loop without yielding.** Tasks from `task_ready_*` are instantly done, but real async tasks need the scheduler to run; blocking the caller without yielding may deadlock.
+- **Expecting `async foo();` to return a task.** In the current backend it lowers like an ordinary statement call and does not produce a handle.
 - **Treating tasks as values.** They are handles; passing by value shares state.
-- **Forgetting that `task_done` is informational.** It does not advance the task; only `await` waits.
+- **Forgetting that `task_done` is informational.** It does not advance the task; `task_await_*` is the blocking operation.
 - **Mixing task types incorrectly.** A handle can only carry one type; you cannot retype a task.
 
 ## See also
 
 - `docs/language/functions-and-interop/docs/async-call.md` — language-level async.
-- `docs/language/functions-and-interop/docs/await.md` — language-level await.
 - `docs/stdlib/concurrency/docs/sync.md` — locks, condvars, channels.
 - `Apollo-Main/include/task.apollo` — source.

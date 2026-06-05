@@ -1,0 +1,10 @@
+version=apollo-native-cache-v1
+compilerSignature=5bdda499f6990488
+sourceHash=b2724f1297719121
+outputHash=73b94c8bf4df0ade
+sourceSize=113
+sourceWriteTime=1780520070636057500
+outputSize=1709
+outputWriteTime=1780520070678540100
+dependency=bogus.bogus
+dependency=bogus.apollo

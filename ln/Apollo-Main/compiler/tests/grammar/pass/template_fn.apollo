@@ -1,0 +1,8 @@
+T run<T>(T x) {
+    return x;
+}
+
+int main() {
+    sys.println(run(12));
+    return 0;
+}

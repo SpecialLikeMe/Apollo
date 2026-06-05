@@ -1,0 +1,10 @@
+class z {
+    private static int x = 0;
+    protected static int y = 0;
+}
+
+int main() {
+  int a = z.x;
+  int b = z.y;
+  return 1;
+  } 

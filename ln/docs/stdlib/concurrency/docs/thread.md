@@ -136,7 +136,7 @@ The raw id is stable for the lifetime of a thread.
 - **Treating `thread_get_raw_id` as portable across platforms.** It is an opaque integer; do not parse it.
 - **Expecting `thread_yield` to do scheduling work.** It's a hint; the platform may ignore it. Don't rely on it for correctness.
 - **Using `thread_yield` in tight inner loops without thinking about cost.** It can dominate work in microbenchmarks; yield with throttling.
-- **Looking here for thread creation.** Use `std task` plus `async` for that surface.
+- **Looking here for thread creation.** This module does not currently expose thread spawn/join primitives; use the scheduler/task/runtime surfaces that actually exist in the current tree.
 - **Assuming thread ids are reused.** Some platforms reuse ids; others don't. Don't use the id as a long-term identity key.
 
 ## See also

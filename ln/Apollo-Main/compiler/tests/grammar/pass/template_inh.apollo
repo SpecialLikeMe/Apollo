@@ -1,0 +1,17 @@
+class y {
+    protected int run() {
+        return 0;
+    }
+}
+
+template x(T) * y {
+    int randomfunction(T q) {
+        return indef.run();
+    }  
+}
+
+int main() {
+    x runner;
+    runner.randomfunction();
+    return 0;
+}

@@ -1,0 +1,8 @@
+int main() [
+    ncosnt int x = 0;
+    nconst int i = 0;
+    nconst int& y = &nconst x;
+    y = &nconst z;
+
+    
+]

@@ -1,0 +1,7 @@
+int main() {
+    int x = 0;
+    int z = 0;
+    int& y = &nconst x;
+    *y = 1; //good
+    y = &nconst z; //bad, pointer is mutating x, pointer itself cant be mutated
+}

@@ -1,0 +1,6 @@
+int main() {
+    nconst int x = 0;
+    int& i = &x;
+    *i = 1;
+    return x;
+}

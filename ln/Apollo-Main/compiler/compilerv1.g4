@@ -82,7 +82,7 @@ templateFunction : 'template' returnType ID '(' params? ')' attributeBlock? bloc
 method       : ANNOT_OVERRIDE? CLSTYPE? (STATIC? VIRTUAL? returnType ID '(' params? ')' attributeBlock? block
              | '__construct' '(' params? ')' attributeBlock? block
              | '__destruct' '(' ')' attributeBlock? block) ;
-field        : CLSTYPE? (CONST | NCONST)? typeRef ID attributeBlock? ';' ;
+field        : CLSTYPE? STATIC? (CONST | NCONST)? typeRef ID attributeBlock? ';' ;
 params       : param (',' param)* ;
 param        : (CONST | NCONST)? typeRef? ID ;
 borrowExpr   : '&' NCONST? ID
@@ -103,8 +103,8 @@ enumVariantName : ID | SUCCESS ;
 scheduleDecl : SCHEDULE ID LBRACE scheduleMember* RBRACE ;
 scheduleMember : mandatoryScheduleMember ;
 mandatoryScheduleMember : MANDATORY ID block ;
-classMember  : method | field | templateDecl | class | struct ;
-structMember : method | field | templateDecl | class | struct ;
+classMember  : field | method | templateDecl | class | struct ;
+structMember : field | method | templateDecl | class | struct ;
 print        : 'sys' '.' ('stdout' | 'println') '(' expression ')' ';' ;
 nativemode   : ASYNC ('-' OVERRIDE)? INCLUSIVE (NATIVE | ID) ';' ;
 asyncCall    : ASYNC functionCall ';' ;
@@ -396,7 +396,7 @@ FALSE    : 'false' ;
 NULL_LITERAL : 'null' ;
 TYPE     : 'bool' | 'byte' | 'char' | 'i8' | 'i16' | 'i32' | 'i64' | 'isize' | 'u8' | 'u16' | 'u32' | 'u64' | 'usize' | 'str' | 'f64' ;
 FTYPE    : 'int' | 'short' | 'long' | 'float' | 'double' ;
-CLSTYPE  : 'public' | 'private' ;
+CLSTYPE  : 'public' | 'private' | 'protected' ;
 STATIC   : 'static' ;
 VIRTUAL  : 'virtual' ;
 INSTANCE_MODE : 'crt' | 'staticx' ;

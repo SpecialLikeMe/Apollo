@@ -23,7 +23,9 @@ All in `namespace sys`:
 
 ## Lowering
 
-Standard inline-foreign call lowering. The Apollo-level `async` keyword on a function lowers to a task-returning function whose body is wrapped in the runtime's task machinery; from the caller's perspective the result is a `task` handle interchangeable with one returned from `task_ready_*`.
+There is no special compiler lowering for `std task` beyond ordinary function-call lowering. The task helpers are normal Apollo wrappers around the inline C++ shims defined in `Apollo-Main/include/task.apollo`.
+
+This module is also not wired to statement-form `async foo();`. The current async-call lowering path in `Apollo-Main/compiler/cpp/src/visitor.cpp` just lowers the nested call as a statement and does not create or return a `task`.
 
 ## Runtime support
 
@@ -31,17 +33,20 @@ Standard inline-foreign call lowering. The Apollo-level `async` keyword on a fun
 
 - A future-like wrapper holding `(tag, value)` plus completion state.
 - Ready tasks are immediately completed.
-- Async-produced tasks are completed by the scheduler when their body returns.
-- `await_<type>` reads the value, blocking until completion. Type mismatch is undefined behavior at this layer; the language frontend prevents mismatch when `async`/`await` are used directly.
+- `await_<type>` reads the value, blocking until completion.
+- `task_is_<type>` inspects the stored payload tag without consuming the value.
+
+Type mismatch is a runtime contract here: the wrapper expects callers to use the matching `task_await_<type>` function for the stored payload.
 
 ## Edges and gotchas
 
 - The current surface supports only the four primitive value types. For complex types, build a wrapper that boxes the value behind a string or composite handle.
 - Tasks are reference-counted by the runtime; the Apollo handle holds a strong reference.
 - `task_done` is a non-blocking poll; `task_await_*` is blocking. There is no cancellation surface in this module.
+- Do not read language-level async semantics into this page; `std task` is an explicit library/runtime API, not the implementation of an `await` keyword.
 
 ## Source of truth
 
 - Source: `Apollo-Main/include/task.apollo`
 - C++ helpers: `Apollo-Main/compiler/runtime_support/apo_std_object_runtime.hpp`
-- `async`/`await` lowering: `Apollo-Main/compiler/cpp/src/visitor.cpp`
+- Async-call lowering: `Apollo-Main/compiler/cpp/src/visitor.cpp`

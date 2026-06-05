@@ -2,7 +2,7 @@
 
 ## What it is
 
-The `result` module documents and surfaces Apollo's canonical result-carrying types: `nominal<T, E>`, `option<T>`, and `option<T, E>`. All three lower to the same tagged result layout. The constructors `nominal(...)`, `cerr(...)`, and `terminalcerr(...)` produce values of these types, and `std result` provides the test/unwrap helpers (`sys.is_nominal`, `sys.is_cerr`, `sys.is_terminal`, `sys.unwrap_*`, `sys.error_message`).
+The `result` module surfaces Apollo's canonical value-or-error carriers: `nominal<T, E>`, `option<T>`, and `option<T, E>`. All three lower to the same tagged aggregate shape. The constructors `nominal(...)`, `cerr(...)`, and `terminalcerr(...)` produce values of these types, and `std result` provides predicate and inspection helpers in `namespace sys`.
 
 These types let Apollo code return a value-or-error pair from a single function without throwing.
 
@@ -14,25 +14,34 @@ These types let Apollo code return a value-or-error pair from a single function 
 
 ## API surface
 
-Result tag predicates (overloaded by value type and error type):
+Carrier types:
 
-- `sys.is_nominal(value)` — returns 1 if the result holds a value.
-- `sys.is_cerr(value)` — returns 1 if the result holds a non-terminal error.
-- `sys.is_terminal(value)` — returns 1 if the result holds a terminal error.
+- `nominal<T, E>` — success payload `T`, error payload `E`.
+- `option<T>` — alias of `nominal<T, str>`.
+- `option<T, E>` — same carrier layout with custom error type `E`.
 
-Unwrap helpers (one per primitive value type):
-
-- `sys.unwrap_i32(value)`, `sys.unwrap_bool(value)`, `sys.unwrap_f64(value)`, `sys.unwrap_str(value)` — extract the success value.
-
-Error inspection:
-
-- `sys.error_message(value)` — returns the error string, or empty when the result is nominal.
-
-Constructors are language-level keywords lowered by the frontend:
+Constructors:
 
 - `nominal(v)` — produce a success result.
 - `cerr(msg)` — produce a recoverable error.
 - `terminalcerr(msg)` — produce a terminal error.
+
+Result tag predicates in `namespace sys`:
+
+- `sys.is_nominal(value)` — returns `1` if the carrier holds a success payload.
+- `sys.is_cerr(value)` — returns `1` if the carrier holds a recoverable error.
+- `sys.is_terminal(value)` — returns `1` if the carrier holds a terminal error.
+
+These helpers are overloaded only for the primitive success payloads currently declared in `Apollo-Main/include/result.apollo`: `i32`, `bool`, `f64`, and `str`, with `str` or `cerr` error payloads.
+
+Unwrap surfaces:
+
+- `value.unwrap()` — compiler-provided zero-argument member sugar for `nominal<T, E>` and `option<...>` carriers. It returns the success payload type `T`.
+- `sys.unwrap_i32(value)`, `sys.unwrap_bool(value)`, `sys.unwrap_f64(value)`, `sys.unwrap_str(value)` — typed stdlib helpers for the primitive overloads above.
+
+Error inspection:
+
+- `sys.error_message(value)` — returns the error string, or empty when the result is nominal.
 
 ## Examples
 
@@ -51,7 +60,7 @@ nominal<i32, str> parse_positive(i32 raw) {
 int main() {
     nconst auto r = parse_positive(7);
     if (sys.is_nominal(r) == 1) {
-        sys.println(sys.unwrap_i32(r));
+        sys.println(r.unwrap());
     } else {
         sys.println(sys.error_message(r));
     }
@@ -78,7 +87,7 @@ int main() {
     nconst vector<i32> v = <10, 20, 30>;
     nconst auto r = find(&nconst v, 20);
     if (sys.is_nominal(r) == 1) {
-        sys.printf("index = %d\n", sys.unwrap_i32(r));
+        sys.printf("index = %d\n", r.unwrap());
     }
     return 0;
 }
@@ -128,9 +137,9 @@ int main() {
         sys.println(sys.error_message(a));
         return 1;
     }
-    nconst auto b = step_b(sys.unwrap_i32(a));
+    nconst auto b = step_b(a.unwrap());
     if (sys.is_nominal(b) == 1) {
-        sys.println(sys.unwrap_i32(b));
+        sys.println(b.unwrap());
     }
     return 0;
 }
@@ -152,7 +161,7 @@ nominal<bool, str> is_admin(i32 user_id) {
 int main() {
     nconst auto r = is_admin(1);
     if (sys.is_nominal(r) == 1) {
-        sys.println(sys.unwrap_bool(r) ? "admin" : "not admin");
+        sys.println(r.unwrap() ? "admin" : "not admin");
     }
     return 0;
 }
@@ -171,7 +180,7 @@ nominal<str, str> lookup_name(i32 id) {
 int main() {
     nconst auto r = lookup_name(1);
     if (sys.is_nominal(r) == 1) {
-        sys.println(sys.unwrap_str(r));
+        sys.println(r.unwrap());
     } else {
         sys.println(sys.error_message(r));
     }
@@ -181,11 +190,11 @@ int main() {
 
 ## Common mistakes
 
-- **Unwrapping without checking.** `sys.unwrap_i32(r)` on a non-nominal result is undefined; always check `sys.is_nominal` first.
+- **Unwrapping without checking.** `r.unwrap()` and `sys.unwrap_*` do not verify the tag; call `sys.is_nominal(r)` first unless earlier control flow already proved success.
 - **Confusing `cerr` vs `terminalcerr`.** They differ in caller intent: `cerr` is recoverable, `terminalcerr` says "stop".
 - **Mixing result handling with exceptions.** Pick one strategy per layer of your code; mixing makes both harder to reason about.
-- **Forgetting `extern std result`.** Without the import, the predicates are not in scope.
-- **Using the wrong `unwrap_*`.** `sys.unwrap_str` on an `i32` result is a type error caught by the frontend, but watch for confusion when refactoring.
+- **Forgetting `extern std result`.** Without the import, the helper functions are not in scope.
+- **Assuming every helper is fully generic.** `value.unwrap()` works for carrier types broadly, but `sys.is_*`, `sys.unwrap_*`, and `sys.error_message` are only declared for the overloads provided by `std result`.
 
 ## See also
 

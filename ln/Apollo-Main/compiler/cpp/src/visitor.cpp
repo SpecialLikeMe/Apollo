@@ -2033,6 +2033,7 @@ void addInlineForeignGlobalBindings(llvm::Module& module,
 struct AggregateFieldRecord {
     std::string name;
     std::string typeText;
+    bool isStatic = false;
 };
 
 struct AggregateMethodRecord {
@@ -2266,6 +2267,42 @@ std::optional<std::string> extractGenericTypeArgument(std::string_view typeText,
     return inner;
 }
 
+std::optional<std::string> extractFirstGenericTypeArgument(std::string_view typeText, std::string_view genericName) {
+    std::string trimmed = trimCopy(std::string(typeText));
+    const std::string prefix = std::string(genericName) + "<";
+    if (!trimmed.starts_with(prefix) || trimmed.back() != '>') {
+        return std::nullopt;
+    }
+
+    const std::string inner = trimmed.substr(prefix.size(), trimmed.size() - prefix.size() - 1);
+    int depth = 0;
+    for (std::size_t index = 0; index < inner.size(); ++index) {
+        const char ch = inner[index];
+        if (ch == '<') {
+            ++depth;
+            continue;
+        }
+        if (ch == '>') {
+            --depth;
+            if (depth < 0) {
+                return std::nullopt;
+            }
+            continue;
+        }
+        if (ch == ',' && depth == 0) {
+            const std::string first = trimCopy(inner.substr(0, index));
+            return first.empty() ? std::nullopt : std::optional<std::string>(first);
+        }
+    }
+
+    if (depth != 0) {
+        return std::nullopt;
+    }
+
+    const std::string first = trimCopy(inner);
+    return first.empty() ? std::nullopt : std::optional<std::string>(first);
+}
+
 std::string resolveAggregateLayoutName(std::string_view aggregateName) {
     std::string resolved = trimAggregateTypeName(std::string(aggregateName));
     if (gActiveAggregateRegistry == nullptr) {
@@ -2362,6 +2399,10 @@ std::string loweredAggregateMethodName(std::string_view aggregateName, std::stri
     return "apollo$" + std::string(aggregateName) + "$" + std::string(methodName);
 }
 
+std::string loweredAggregateStaticFieldName(std::string_view aggregateName, std::string_view fieldName) {
+    return "apollo$" + std::string(aggregateName) + "$field$" + std::string(fieldName);
+}
+
 AggregateRecord makeAggregateRecord(std::string name,
     compilerv1Parser::InheritanceClauseContext* inheritanceClause,
     const std::vector<compilerv1Parser::FieldContext*>& fields,
@@ -2376,7 +2417,7 @@ AggregateRecord makeAggregateRecord(std::string name,
         if (field == nullptr || field->ID() == nullptr || field->typeRef() == nullptr) {
             continue;
         }
-        record.ownFields.push_back({field->ID()->getText(), field->typeRef()->getText()});
+        record.ownFields.push_back({field->ID()->getText(), field->typeRef()->getText(), hasDirectToken(field, compilerv1Parser::STATIC)});
     }
     for (auto* method : methods) {
         const std::string sourceName = aggregateMethodSourceName(method);
@@ -2586,8 +2627,32 @@ bool collectAggregateFields(const AggregateRegistry& registry,
         && !collectAggregateFields(registry, record->baseName, fields)) {
         return false;
     }
-    fields.insert(fields.end(), record->ownFields.begin(), record->ownFields.end());
+    for (const auto& field : record->ownFields) {
+        if (!field.isStatic) {
+            fields.push_back(field);
+        }
+    }
     return true;
+}
+
+const AggregateFieldRecord* findAggregateField(const AggregateRegistry& registry,
+    std::string_view aggregateName,
+    std::string_view fieldName) {
+    const AggregateRecord* record = registry.find(aggregateName);
+    if (record == nullptr) {
+        return nullptr;
+    }
+    if (!record->baseName.empty() && registry.find(record->baseName) != nullptr) {
+        if (const AggregateFieldRecord* inherited = findAggregateField(registry, record->baseName, fieldName)) {
+            return inherited;
+        }
+    }
+    for (const auto& field : record->ownFields) {
+        if (field.name == fieldName) {
+            return &field;
+        }
+    }
+    return nullptr;
 }
 
 const AggregateMethodRecord* findAggregateMethod(const AggregateRegistry& registry,
@@ -2749,6 +2814,17 @@ llvm::Value* lowerAggregateFieldAddress(llvm::IRBuilder<>& builder,
     std::string_view aggregateName,
     std::string_view fieldName,
     const AggregateRegistry& registry);
+
+llvm::Value* lowerAggregateStaticFieldAddress(llvm::Module& module,
+    std::string_view aggregateName,
+    std::string_view fieldName,
+    const AggregateRegistry& registry) {
+    const AggregateFieldRecord* field = findAggregateField(registry, aggregateName, fieldName);
+    if (field == nullptr || !field->isStatic) {
+        return nullptr;
+    }
+    return module.getNamedGlobal(loweredAggregateStaticFieldName(aggregateName, fieldName));
+}
 
 llvm::Value* instantiateAggregateValue(llvm::IRBuilder<>& builder,
     std::string_view aggregateName,
@@ -3292,19 +3368,16 @@ std::string inferMemberAccessTypeText(compilerv1Parser::MemberaccessContext* mem
         return {};
     }
 
-    std::vector<AggregateFieldRecord> fields;
-    if (!collectAggregateFields(*gActiveAggregateRegistry, aggregateName, fields)) {
+    const AggregateFieldRecord* field = findAggregateField(*gActiveAggregateRegistry, aggregateName, memberAccess->ID()->getText());
+    if (field == nullptr) {
+        return {};
+    }
+    const std::string baseText = memberAccess->accessBase() != nullptr ? memberAccess->accessBase()->getText() : std::string();
+    if (!field->isStatic && baseText != "indef" && !values.contains(baseText)) {
         return {};
     }
 
-    const auto fieldIt = std::find_if(fields.begin(), fields.end(), [&](const AggregateFieldRecord& field) {
-        return field.name == memberAccess->ID()->getText();
-    });
-    if (fieldIt == fields.end()) {
-        return {};
-    }
-
-    return canonicalApolloTypeText(fieldIt->typeText);
+    return canonicalApolloTypeText(field->typeText);
 }
 
 std::string inferKnownStdBridgeReturnTypeText(std::string_view functionName) {
@@ -3384,6 +3457,23 @@ std::string inferMemberAccessCallReturnTypeText(compilerv1Parser::MemberaccessCo
 
     const std::string methodName = memberAccess->functionCall()->ID()->getText();
     const std::string baseText = memberAccess->accessBase() != nullptr ? memberAccess->accessBase()->getText() : std::string();
+    const auto valueIt = values.find(baseText);
+    const std::string baseTypeText = valueIt != values.end()
+        ? valueIt->second.typeText
+        : (gGlobalTypeTexts.contains(baseText) ? gGlobalTypeTexts.at(baseText) : std::string());
+    const std::size_t argCount = memberAccess->functionCall()->args() != nullptr
+        ? memberAccess->functionCall()->args()->expression().size()
+        : 0;
+
+    if (methodName == "unwrap" && argCount == 0) {
+        if (const auto okType = extractFirstGenericTypeArgument(baseTypeText, "nominal"); okType.has_value()) {
+            return canonicalApolloTypeText(*okType);
+        }
+        if (const auto okType = extractFirstGenericTypeArgument(baseTypeText, "option"); okType.has_value()) {
+            return canonicalApolloTypeText(*okType);
+        }
+    }
+
     if (baseText == "sys") {
         const std::string resolvedName = "sys__" + methodName;
         std::vector<std::string> inferredArgTypes;
@@ -3415,6 +3505,9 @@ std::string inferMemberAccessCallReturnTypeText(compilerv1Parser::MemberaccessCo
     }
 
     if (const AggregateMethodRecord* method = findAggregateMethod(*gActiveAggregateRegistry, aggregateName, methodName)) {
+        if (!method->isStatic && baseText != "indef" && !values.contains(baseText)) {
+            return {};
+        }
         if (method->method != nullptr && method->method->returnType() != nullptr && method->method->returnType()->typeRef() != nullptr) {
             return canonicalApolloTypeText(method->method->returnType()->typeRef()->getText());
         }
@@ -4496,6 +4589,10 @@ llvm::Value* lowerMemberAccessValue(llvm::IRBuilder<>& builder,
         llvm::Type* opaquePtrTy = llvm::PointerType::getUnqual(builder.getContext());
         llvm::Type* charPtrTy = llvm::PointerType::getUnqual(builder.getContext());
 
+        if (methodName == "unwrap" && argCount == 0 && isNominalStructType(baseValue != nullptr ? baseValue->getType() : nullptr)) {
+            return builder.CreateExtractValue(baseValue, {2});
+        }
+
         auto lowerOpaqueHandle = [&]() -> llvm::Value* {
             if (baseValue == nullptr) {
                 return nullptr;
@@ -4816,11 +4913,18 @@ llvm::Value* lowerMemberAccessValue(llvm::IRBuilder<>& builder,
         return builder.CreateCall(callee, args);
     }
 
-    if (memberAccess->ID() == nullptr || baseValue == nullptr) {
+    if (memberAccess->ID() == nullptr) {
         return nullptr;
     }
 
-    llvm::Value* fieldAddress = lowerAggregateFieldAddress(builder, baseValue, aggregateName, memberAccess->ID()->getText(), *gActiveAggregateRegistry);
+    const AggregateFieldRecord* field = findAggregateField(*gActiveAggregateRegistry, aggregateName, memberAccess->ID()->getText());
+    if (field == nullptr) {
+        return nullptr;
+    }
+
+    llvm::Value* fieldAddress = field->isStatic
+        ? lowerAggregateStaticFieldAddress(*module, aggregateName, field->name, *gActiveAggregateRegistry)
+        : lowerAggregateFieldAddress(builder, baseValue, aggregateName, field->name, *gActiveAggregateRegistry);
     if (fieldAddress == nullptr) {
         return nullptr;
     }
@@ -4829,16 +4933,8 @@ llvm::Value* lowerMemberAccessValue(llvm::IRBuilder<>& builder,
         return fieldAddress;
     }
 
-    std::vector<AggregateFieldRecord> fields;
-    if (!collectAggregateFields(*gActiveAggregateRegistry, aggregateName, fields)) {
-        return nullptr;
-    }
-    for (const auto& field : fields) {
-        if (field.name == memberAccess->ID()->getText()) {
-            return builder.CreateLoad(lowerSourceTypeText(builder.getContext(), field.typeText), fieldAddress);
-        }
-    }
-    return nullptr;
+    llvm::Type* fieldType = lowerSourceTypeText(builder.getContext(), field->typeText);
+    return fieldType == nullptr ? nullptr : builder.CreateLoad(fieldType, fieldAddress);
 }
 
 struct RuntimeInlineForeignCaptureValue {
@@ -6027,6 +6123,11 @@ bool lowerMemberAssignmentStatement(llvm::IRBuilder<>& builder,
         return false;
     }
 
+    const AggregateFieldRecord* field = findAggregateField(*gActiveAggregateRegistry, aggregateName, memberAssignment->ID()->getText());
+    if (field == nullptr) {
+        return false;
+    }
+
     llvm::Value* baseValue = nullptr;
     const auto valueIt = values.find(baseText);
     if (baseText == "indef") {
@@ -6037,29 +6138,24 @@ bool lowerMemberAssignmentStatement(llvm::IRBuilder<>& builder,
     } else if (valueIt != values.end()) {
         baseValue = loadIfAddressable(builder, valueIt->second);
     }
-    if (baseValue == nullptr) {
+    if (!field->isStatic && baseValue == nullptr) {
         return false;
     }
 
-    std::vector<AggregateFieldRecord> fields;
-    if (!collectAggregateFields(*gActiveAggregateRegistry, aggregateName, fields)) {
+    llvm::Module* module = builder.GetInsertBlock() != nullptr ? builder.GetInsertBlock()->getModule() : nullptr;
+    if (module == nullptr) {
         return false;
     }
 
-    const auto fieldIt = std::find_if(fields.begin(), fields.end(), [&](const AggregateFieldRecord& field) {
-        return field.name == memberAssignment->ID()->getText();
-    });
-    if (fieldIt == fields.end()) {
-        return false;
-    }
-
-    llvm::Value* fieldAddress = lowerAggregateFieldAddress(builder, baseValue, aggregateName, fieldIt->name, *gActiveAggregateRegistry);
-    llvm::Type* fieldType = lowerSourceTypeText(builder.getContext(), fieldIt->typeText);
+    llvm::Value* fieldAddress = field->isStatic
+        ? lowerAggregateStaticFieldAddress(*module, aggregateName, field->name, *gActiveAggregateRegistry)
+        : lowerAggregateFieldAddress(builder, baseValue, aggregateName, field->name, *gActiveAggregateRegistry);
+    llvm::Type* fieldType = lowerSourceTypeText(builder.getContext(), field->typeText);
     if (fieldAddress == nullptr || fieldType == nullptr) {
         return false;
     }
 
-    const bool loadReferences = fieldIt->typeText.find('&') == std::string::npos;
+    const bool loadReferences = field->typeText.find('&') == std::string::npos;
     llvm::Value* newValue = lowerExpressionForExpectedType(builder, memberAssignment->expression(), fieldType, values, loadReferences);
     if (newValue == nullptr) {
         return false;
@@ -9445,6 +9541,48 @@ bool lowerGlobalVariable(llvm::Module& module,
     return true;
 }
 
+bool lowerAggregateStaticField(llvm::Module& module,
+    std::string_view aggregateName,
+    const AggregateFieldRecord& field) {
+    if (!field.isStatic) {
+        return true;
+    }
+
+    llvm::Type* loweredType = lowerSourceTypeText(module.getContext(), field.typeText);
+    if (loweredType == nullptr) {
+        return false;
+    }
+
+    const std::string loweredName = loweredAggregateStaticFieldName(aggregateName, field.name);
+    if (module.getNamedGlobal(loweredName) == nullptr) {
+        new llvm::GlobalVariable(module,
+            loweredType,
+            false,
+            llvm::GlobalValue::InternalLinkage,
+            llvm::Constant::getNullValue(loweredType),
+            loweredName);
+    }
+
+    gGlobalTypeTexts[loweredName] = field.typeText;
+    gMutableGlobalBindings.insert(loweredName);
+    return true;
+}
+
+void lowerAggregateStaticFields(llvm::Module& module,
+    const AggregateRegistry& registry,
+    std::vector<std::string>& unsupportedGlobals) {
+    for (const auto& [aggregateName, aggregate] : registry.records) {
+        for (const auto& field : aggregate.ownFields) {
+            if (!field.isStatic) {
+                continue;
+            }
+            if (!lowerAggregateStaticField(module, aggregateName, field)) {
+                unsupportedGlobals.push_back("static-field:" + std::string(aggregateName) + "." + field.name);
+            }
+        }
+    }
+}
+
 void lowerGlobalVariables(llvm::Module& module,
     compilerv1Parser::ProgramContext* tree,
     std::vector<std::string>& unsupportedGlobals) {
@@ -9648,6 +9786,7 @@ void ApolloIrCodegen::emitModule(const std::filesystem::path& outputPath,
     gLoweredFunctionReturnTypeTexts.clear();
     gMutableGlobalBindings.clear();
     std::vector<std::string> unsupportedFunctions;
+    lowerAggregateStaticFields(module, aggregateRegistry, unsupportedFunctions);
     lowerGlobalVariables(module, tree, unsupportedFunctions);
     lowerAggregateMethodBodies(module, aggregateRegistry, unsupportedFunctions);
     lowerSupportedMacroBodies(module, tree, unsupportedFunctions);

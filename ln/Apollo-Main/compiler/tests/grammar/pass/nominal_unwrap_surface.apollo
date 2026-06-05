@@ -1,0 +1,28 @@
+extern std prelude;
+
+option<i32> parse_value(bool flag) {
+    if (flag) {
+        return nominal(7);
+    }
+    return cerr("bad");
+}
+
+nominal<str, str> read_label(bool flag) {
+    if (flag) {
+        return nominal("ready");
+    }
+    return terminalcerr("missing");
+}
+
+i32 main() {
+    option<i32> good = parse_value(true);
+    nominal<str, str> label = read_label(true);
+
+    if (good.unwrap() != 7) {
+        return 1;
+    }
+    if (label.unwrap() != "ready") {
+        return 2;
+    }
+    return 0;
+}

@@ -1,0 +1,11 @@
+extern bogus.bogus;
+extern {bogus}
+
+int xyz(str x) {
+    return 0;
+}
+
+int main() {
+    x := xyz(12);
+    return 0;
+}

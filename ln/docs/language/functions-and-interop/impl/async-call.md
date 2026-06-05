@@ -3,45 +3,37 @@
 ## Grammar surface
 
 ```antlr
-asyncCallExpr : 'async' expression '(' callArgs? ')' ;
+asyncCall : ASYNC functionCall ';' ;
 ```
 
-`async` is a reserved keyword prefixing any call expression.
+The current grammar accepts only statement-form `async` calls such as `async worker();`.
 
 ## Parse tree shape
 
-An `AsyncCallExprContext` exposes the underlying call expression's parts: the callable and the argument list.
+ANTLR generates an `AsyncCallContext` that owns the nested `FunctionCallContext`. There is no expression-form async node and no task-valued `async` expression in the current grammar.
 
 ## Frontend validation
 
-`Apollo-Main/compiler/cpp/src/apollo_runtime.cpp`:
-
-1. Validates the call as if it were synchronous (argument count, types).
-2. Wraps the call's return type `R` in `task<R>`.
-3. Confirms `R` is a heap-storable type (most types are; some unsized forms may not be).
+`Apollo-Main/compiler/cpp/src/apollo_runtime.cpp` does not add a separate async type system here. The underlying function call is validated exactly like an ordinary call, so normal argument-count and argument-type diagnostics still apply.
 
 ## Lowering
 
-In `Apollo-Main/compiler/cpp/src/visitor.cpp`:
+In `Apollo-Main/compiler/cpp/src/visitor.cpp`, `lowerAsyncCallStatement(...)` simply lowers the nested `functionCall` through the ordinary call path and discards any returned value.
 
-- The call is rewritten to a closure that captures the resolved callable and arguments by value.
-- The closure is submitted to the runtime's task scheduler via `task_spawn`.
-- The expression value is the task handle returned by `task_spawn`.
+There is no task creation, no task handle result, and no dedicated scheduler hookup in this lowering path.
 
 ## Runtime support
 
-The task runtime lives in `Apollo-Main/compiler/runtime_support/` and underpins `Apollo-Main/include/task.apollo`. It maintains a worker thread pool, a task queue, and per-task result slots.
+None beyond whatever the callee itself already uses. Statement-form `async` does not introduce a separate runtime object.
 
 ## Edges and gotchas
 
-- Async calls always allocate (a task record, the result slot). For very short work, the overhead may outweigh the parallelism gain.
-- The argument list is evaluated synchronously *before* the task is scheduled. Side effects in argument expressions happen on the caller's thread.
-- Discarding the task handle is allowed; the work runs to completion regardless.
+- `async foo();` is currently a statement-only spelling, not a task-producing expression.
+- Because lowering reuses the normal call path, side effects and argument evaluation happen exactly as they would for `foo();`.
+- This syntax is distinct from `async` native payload syntax such as `async inclusive cpp;`.
 
 ## Source of truth
 
-- Grammar: `Apollo-Main/compiler/compilerv1.g4` (`asyncCallExpr`)
+- Grammar: `Apollo-Main/compiler/compilerv1.g4` (`asyncCall`)
 - Frontend: `Apollo-Main/compiler/cpp/src/apollo_runtime.cpp`
 - Lowering: `Apollo-Main/compiler/cpp/src/visitor.cpp`
-- Runtime: `Apollo-Main/compiler/runtime_support/`
-- Module: `Apollo-Main/include/task.apollo`

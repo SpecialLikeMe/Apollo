@@ -1,0 +1,17 @@
+struct xyz {
+    static int a;
+}
+
+class access_demo {
+    public static int shown;
+    public static int widened;
+    public static int hidden;
+}
+
+int main() {
+    xyz.a = 7;
+    access_demo.shown = xyz.a;
+    access_demo.widened = access_demo.shown + 1;
+    access_demo.hidden = access_demo.widened;
+    return access_demo.hidden == 8 ? 0 : 1;
+}

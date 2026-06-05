@@ -357,7 +357,61 @@ function Invoke-ApolloCompile {
     return Invoke-CapturedProcess -FilePath $script:apolloFrontendExe -Arguments @($resolvedPath, $generatedOutputPath)
 }
 
-$tests = @(
+$tests = @( 
+    [pscustomobject]@{
+        Name = 'mut borrow through mut ptr'
+        Path = 'tests\grammar\pass\mut_and_mut.apollo'
+        ShouldPass = $true
+        Covers = 'changing where mut ptr points'
+    }
+    [pscustomobject]@{
+        Name = 'changed immut ptr'
+        Path = 'tests\grammar\fail\immut_change_ptr.apollo'
+        ShouldPass = $false
+        Covers = 'changing where immut ptr points'
+    },
+    [pscustomobject]@{
+        Name = 'mut borrow through immut pointer'
+        Path = 'tests\grammar\pass\borrow_deref.apollo'
+        ShouldPass = $true
+        Covers = 'edited sources invalidate cache, unchanged sources reuse cache'
+    },
+    [pscustomobject]@{
+        Name = 'access-modifiers'
+        Path = 'tests\grammar\pass\acess_mod.apollo'
+        ShouldPass = $true
+        Covers = 'class and struct access modifiers'
+    },
+    [pscustomobject]@{
+        Name = 'immutable mod'
+        Path = 'tests\grammar\fail\mod_immut.apollo'
+        ShouldPass = $false
+        Covers = 'immutability'
+    },
+    [pscustomobject]@{
+        Name = 'template fn'
+        Path = 'tests\grammar\pass\template_fn.apollo'
+        ShouldPass = $true
+        Covers = 'template functions'
+    },
+    [pscustomobject]@{
+        Name = 'template class'
+        Path = 'tests\grammar\pass\template_inh.apollo'
+        ShouldPass = $true
+        Covers = 'templates'
+    },
+    [pscustomobject]@{
+        Name = 'immutable ref'
+        Path = 'tests\grammar\fail\write_immut.apollo'
+        ShouldPass = $false
+        Covers = 'immutability'
+    },
+    [pscustomobject]@{
+        Name = 'bad access modifier'
+        Path = 'tests\grammar\fail\bad_mod.apollo'
+        ShouldPass = $false
+        Covers = 'access modifiers'
+    },
     [pscustomobject]@{
         Name = 'language-surface'
         Path = 'tests\grammar\pass\language_surface.apollo'
@@ -935,6 +989,12 @@ $tests = @(
         Covers = 'nominal and cerr result values, opaque-handle stdlib objects, portability helpers, and the expanded sys prelude lower through the native frontend'
     },
     [pscustomobject]@{
+        Name = 'nominal-unwrap-surface'
+        Path = 'tests\grammar\pass\nominal_unwrap_surface.apollo'
+        ShouldPass = $true
+        Covers = 'nominal<T, E> and option<T, E> values expose member-form unwrap() sugar over the existing tagged result payload'
+    },
+    [pscustomobject]@{
         Name = 'sys-memberaccess-statement-surface'
         Path = 'tests\grammar\pass\sys_memberaccess_statement_surface.apollo'
         ShouldPass = $true
@@ -996,6 +1056,13 @@ $tests = @(
         ShouldPass = $false
         Expected = 'unknown function `missing_fn`'
         Covers = 'undefined functions fail during lowering even when they appear inside an initializer expression'
+    },
+    [pscustomobject]@{
+        Name = 'function-call-type-mismatch'
+        Path = 'tests\grammar\fail\function_call_type_mismatch.apollo'
+        ShouldPass = $false
+        Expected = 'function `xyz` argument 0 type mismatch: expected `str` but call provides `int`'
+        Covers = 'declared function parameter types are validated against inferred call argument types before lowering'
     },
     [pscustomobject]@{
         Name = 'unsafe-required'
