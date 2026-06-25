@@ -362,7 +362,7 @@ $tests = @(
         Name = 'mut borrow through mut ptr'
         Path = 'tests\grammar\pass\mut_and_mut.apollo'
         ShouldPass = $true
-        Covers = 'changing where mut ptr points'
+        Covers = 'changing where mut     ptr points'
     }
     [pscustomobject]@{
         Name = 'changed immut ptr'
